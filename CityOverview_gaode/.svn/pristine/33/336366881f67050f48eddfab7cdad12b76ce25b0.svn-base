@@ -1,0 +1,88 @@
+package com.cetc28.idata.model;
+
+/**
+ * Created by linyu on 2017/8/17.
+ */
+public class JxJczb {
+    private String mc;   //指标名称
+    private String pxxh;   //排序序号
+    private String state;  //监测状态
+    private String bh;     //编号
+    private String sjbh;   //上级编号
+    private String subindex; //下级页面索引
+    private String subflag;  //下级页面标识（0--转入index；1--转入外部页面）
+    private String mltp;     //目录图片
+    private String mldz;     //目录地址
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+
+    public String getPxxh() {
+        return pxxh;
+    }
+
+    public void setPxxh(String pxxh) {
+        this.pxxh = pxxh;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getSjbh() {
+        return sjbh;
+    }
+
+    public void setSjbh(String sjbh) {
+        this.sjbh = sjbh;
+    }
+
+    public String getMldz() {
+        return mldz;
+    }
+
+    public void setMldz(String mldz) {
+        this.mldz = mldz;
+    }
+
+    public String getMltp() {
+        return mltp;
+    }
+
+    public void setMltp(String mltp) {
+        this.mltp = mltp;
+    }
+
+    public String getSubindex() {
+        return subindex;
+    }
+
+    public void setSubindex(String subindex) {
+        this.subindex = subindex;
+    }
+
+    public String getSubflag() {
+        return subflag;
+    }
+
+    public void setSubflag(String subflag) {
+        this.subflag = subflag;
+    }
+}

@@ -1,0 +1,145 @@
+package com.cetc28.idata.model;
+
+import java.math.BigDecimal;
+
+public class JxUtilityElecStatistics {
+    private BigDecimal id;
+
+    private BigDecimal elecPowerLoadingRate;
+
+    private BigDecimal publicUtility;
+
+    private BigDecimal finantialRealest;
+
+    private BigDecimal commerce;
+
+    private BigDecimal information;
+
+    private BigDecimal industry;
+
+    private BigDecimal agriculture;
+
+    private BigDecimal transpoStorPostTelecom;
+
+    private BigDecimal construction;
+
+    private BigDecimal residents;
+
+    private BigDecimal elecSupplyAll;
+
+    private String bh;
+
+    private String dateYm;
+
+    public BigDecimal getId() {
+        return id;
+    }
+
+    public void setId(BigDecimal id) {
+        this.id = id;
+    }
+
+    public BigDecimal getElecPowerLoadingRate() {
+        return elecPowerLoadingRate;
+    }
+
+    public void setElecPowerLoadingRate(BigDecimal elecPowerLoadingRate) {
+        this.elecPowerLoadingRate = elecPowerLoadingRate;
+    }
+
+    public BigDecimal getPublicUtility() {
+        return publicUtility;
+    }
+
+    public void setPublicUtility(BigDecimal publicUtility) {
+        this.publicUtility = publicUtility;
+    }
+
+    public BigDecimal getFinantialRealest() {
+        return finantialRealest;
+    }
+
+    public void setFinantialRealest(BigDecimal finantialRealest) {
+        this.finantialRealest = finantialRealest;
+    }
+
+    public BigDecimal getCommerce() {
+        return commerce;
+    }
+
+    public void setCommerce(BigDecimal commerce) {
+        this.commerce = commerce;
+    }
+
+    public BigDecimal getInformation() {
+        return information;
+    }
+
+    public void setInformation(BigDecimal information) {
+        this.information = information;
+    }
+
+    public BigDecimal getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(BigDecimal industry) {
+        this.industry = industry;
+    }
+
+    public BigDecimal getAgriculture() {
+        return agriculture;
+    }
+
+    public void setAgriculture(BigDecimal agriculture) {
+        this.agriculture = agriculture;
+    }
+
+    public BigDecimal getTranspoStorPostTelecom() {
+        return transpoStorPostTelecom;
+    }
+
+    public void setTranspoStorPostTelecom(BigDecimal transpoStorPostTelecom) {
+        this.transpoStorPostTelecom = transpoStorPostTelecom;
+    }
+
+    public BigDecimal getConstruction() {
+        return construction;
+    }
+
+    public void setConstruction(BigDecimal construction) {
+        this.construction = construction;
+    }
+
+    public BigDecimal getResidents() {
+        return residents;
+    }
+
+    public void setResidents(BigDecimal residents) {
+        this.residents = residents;
+    }
+
+    public BigDecimal getElecSupplyAll() {
+        return elecSupplyAll;
+    }
+
+    public void setElecSupplyAll(BigDecimal elecSupplyAll) {
+        this.elecSupplyAll = elecSupplyAll;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh == null ? null : bh.trim();
+    }
+
+    public String getDateYm() {
+        return dateYm;
+    }
+
+    public void setDateYm(String dateYm) {
+        this.dateYm = dateYm == null ? null : dateYm.trim();
+    }
+}

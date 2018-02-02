@@ -1,0 +1,855 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: TongHao
+  Date: 2017/8/21
+  Time: 13:43
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<%--<link rel="stylesheet" href="myCss/entironment.css"/>--%>
+	<style>
+		*{
+			font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+			font-size: 16px;
+		}
+		.modal-dialog,.modal-content{
+			width:100%;
+			box-shadow:none;
+			border:none;
+		}
+		.areaChange{
+			float: right;
+		}
+		.kqzljcAra{
+			display: inline-block;
+			background-image:url("images/listTitle.png") ;
+			color: #fff;
+			background-size: 100% 100%;
+			cursor: pointer;
+			padding-left: 15px;
+			width:60px;
+			height: 26px;
+			line-height: 26px;
+			margin-left:20px;
+		}
+		.modal-dialog{
+			margin: 0;
+		}
+		.modal-content{
+			padding: 10px;
+		}
+		#airTitle{
+			font-size: 22px;
+			width: 100%;
+			height: 8%;
+			line-height: 50px;
+			color: #FEFEFE;
+			background-color: #494949;
+			padding-left: 10px;
+		}
+		.kqzljcAra.active{
+			background-image:url("images/listTitleActive.png") ;
+			background-size: 100% 100%;
+		}
+		.kqzljcProgressBox .scBox{
+			cursor: pointer;
+			margin-bottom: 5px;
+		}
+		.kqzljcProgressBox .scBox p{
+			font-size: 16px;
+			color: #FEFEFE;
+		}
+		#kqzljc .modal-body{
+			padding: 5px 0 0 10px;
+		}
+		#kqzljc .modal-body .progress{
+			border: 2px solid #049CD4;
+			background-color: #2D2D2C;
+			height: 16px;
+			margin-top:3px;
+			margin-bottom: 8px;
+		}
+		#yll{
+			width: 98%;
+			height: 360px;
+			display: none;
+			margin-top: 60px;
+			border-top: 2px solid #049CD4;
+		  }
+		#yll p{
+			color: #fff;
+			width: 100%;
+			font-size: 22px;
+			padding-top: 8%;
+		}
+		#countt{
+			width:100%;
+			height: 80%;
+		}
+		/*#townspeople{*/
+			/*width: 95%;*/
+			/*height: 15px;*/
+			/*background-color: #1F4E79;*/
+			/*border: 1px solid #41719C;*/
+		/*}*/
+		/*.bar_pro{*/
+			/*width: 0;*/
+			/*height: 100%;*/
+			/*background-color: #5B9BD5;*/
+			/*box-shadow: -2px 0 6px 9px #204079;*/
+		/*}*/
+		/*.addRed{*/
+			/*color: red;*/
+			/*font-size: 26px;*/
+		/*}*/
+		.kqzljcRltqh{
+			padding:5px 10px;
+			cursor: pointer;
+		}
+		.kqzljcRltqh .point{
+			display: inline-block;
+			width:15px;
+			height:15px;
+			border:1px solid #fff;
+			border-radius: 7px;
+			vertical-align:middle;
+			margin-right: 10px;
+		}
+		.kqzljcRltqh.active .point{
+			border:1px solid red;
+		}
+		.kqzljcRltqh.active span{
+			color:red;
+		}
+		.areaChange{
+			float: right;
+		}
+		.kqzljcZBchange ul li{
+			cursor: pointer;
+			line-height: 32px;
+		}
+		.kqzljcZBchange ul li.active{
+			cursor: pointer;
+			color:#FFC000;
+			font-size: 20px;
+		}
+		.hjzb {
+			background-image: url("images/listTitle.png");
+			background-size: 100% 100%;
+			cursor:pointer;
+			padding:5px 10px;
+			color:#fff;
+			display: inline-block;
+			width:90px;
+			text-align: center;
+			margin-left: 10px;
+		}
+		.hjzb.active{
+			background-image: url('images/listTitleActive.png');
+			background-size: 100% 100%;
+		}
+		#areaQc.modal{
+			background-color: transparent;
+		}
+	</style>
+</head>
+<body>
+
+<div class="modal fade"
+     style="height:89%;width: 20%;top:10%;left: 10px;display:none;position: absolute;overflow: hidden"
+     id="kqzljc" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<%--<div class="modal-header">--%>
+			<p id="airTitle">空气质量监测</p>
+			<%--<img style="float:right;display:inline-block" class="close" data-dismiss="modal" aria-label="close" style="" src="images/close.png" >--%>
+			<%--</div>--%>
+			<div class="modal-body">
+				<p class="areaChange" clearfix ><span class="kqzljcAra active">站点</span><span class="kqzljcAra ">区县</span></p>
+				<br/>
+				<div class="kqzljcProgressBox">
+
+				</div>
+				<div id="yll">
+					<p>区域环境空气质量优良率</p>
+				    <%--<div id="townspeople">--%>
+					    <%--<div class="bar_pro"></div>--%>
+				    <%--</div>--%>
+					<div id="countt"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="modal fade"
+		   style="height:60px; width:120px;top:calc(100% - 400px); left:85%;display:none;position: absolute"
+		   id="kqzljcRltChange" tabindex="-1" role="dialog" aria-hidden="true"
+		   aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div >
+		<p class="kqzljcRltqh" ><span  class="point"></span><span  style="font-size: 14px">监测站点</span></p>
+		<p class="kqzljcRltqh" ><span  class="point"></span><span  style="font-size: 14px">热力图</span></p>
+	</div>
+
+</div>
+
+<div class="modal fade"
+	 style="height:33%; width:calc(100% - 23%);top:66%; left:21%;display:none;position: absolute"
+	 id="kqzljcEcharts" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content" style="position: relative;margin:0;" >
+			<p style="padding-left: 6%">
+				<span  class="hjzb active">每小时</span>
+				<span  class="hjzb ">每日</span>
+			</p>
+
+			<div id="kqzljcEcharts0001" style="width:90%;height:263px;"></div>
+			<div class="kqzljcZBchange" style="position: absolute;left:88%;top:40px;">
+				<ul>
+					<li dw="" class="" zs="150">AQI指数</li>
+					<li dw="ug/m³">SO2</li>
+					<li dw="mg/m³">NO2</li>
+					<li dw="ug/m³">O3</li>
+					<li dw="ug/m³">PM10</li>
+					<li dw="ug/m³">PM2.5</li>
+					<li dw="mg/m³">CO</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade"
+	 style="height:50px; width:450px;top:61%; left:21%;display:none;position: absolute"
+	 id="areaQc" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<p style="padding:0px">
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">优</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">良</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">轻度污染</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">中度污染</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">重度污染</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">严重污染</span>
+	</p>
+	<div >
+		<div style="display: inline-block; width:60px; height:10px; background-color:#00ff00" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#ffff00" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#ff7e00" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#ff0000" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#99004c" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#7e0023" ></div>
+	</div>
+
+</div>
+<%--<script type="text/javascript" src="map/js/echarts.js"></script>--%>
+<script>
+	var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+	//区县和站点切换事件
+	$(".kqzljcAra").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		if($(this).text()=="站点"){
+            $('.kqzljcRltqh:first').addClass("active");
+            $(".kqzljcRltqh:last").removeClass("active");
+            if(heatLayer != null){
+                map.removeLayer(heatLayer);
+            }
+			kqzljcAjaxccc(qhbh);
+			$("#yll").css('display','none');
+		}
+		if($(this).text()=="区县"){
+			kqzljcAjaxQX(qhbh);
+			$.ajax({
+				type:"POST",
+				url:'jxenvir/AirQuality.do',
+				dataType:'json',
+				success:function(data){
+					var len=data.length;
+					var yData=[];
+					for(var i=0;i<len;i++){
+						yData.push(data[i].airquality_LV);
+					}
+					certificate(yData);
+				}
+			});
+			$("#yll").css('display','block');
+		}
+
+	});
+
+	//初始化页面调用站点aqi指数接口
+	function kqzljcAjax(qhbh){
+		$("#kqzljcRltChange").modal("show");
+		$.ajax({
+			type: 'post',
+			url: "jxenvir/queryEnvirMapAirJcdInfo.do?qhbh="+qhbh,
+			dataType: 'JSON',
+			success: function (data) {
+				console.log(data)
+				kqzljcShowdata(data);	//生成左侧区县 站点信息
+				drawMapPoint(data);	//绘制地图上的点
+				var datapre={};
+				var datapre24hour={};
+				//初始化页面下方图表
+				$.ajax({
+					type: 'post',
+					url: "jxenvir/Kqzljc30Day.do?bh="+data[0].bh,
+					dataType: 'JSON',
+					success: function (data) {
+						$.ajax({
+							type: 'post',
+							url: "jxenvir/queryPreData.do",
+							data:{
+								gap:20,
+								preNum:2,
+								bh:data[0].bh
+							},
+							dataType: 'JSON',
+							success: function (data1) {
+								datapre = data1;
+								kqzljcEchartsData30DayDispose(data,datapre)  //处理30日数据方法
+							}
+						})
+					}
+				});
+				//请求24小时数据
+				$.ajax({
+					type: 'post',
+					url: "jxenvir/Kqzljc24Hour.do?bh="+data[0].bh,
+					dataType: 'JSON',
+					success: function (data) {
+						$.ajax({
+							type: 'post',
+							url: "jxenvir/queryPre24HourData.do",
+							data:{
+								gap:20,
+								preNum:2,
+								bh:data[0].bh
+							},
+							dataType: 'JSON',
+							success: function (data1) {
+								datapre24hour = data1;
+								kqzljcEchartsData24HourDispose(data,datapre24hour);  //处理24小时数据方法
+							}
+						})
+					}
+				});
+				//默认30日图表数据显示
+				$("#areaQc").modal("show");
+			}
+		})
+	}
+
+	function certificate(yData){
+		var myChart = echarts.init(document.getElementById("countt"));
+		var option = {
+			color: ['#ffdb32'],
+			tooltip: {
+				trigger: 'axis'
+
+			},
+			calculable: false,
+			legend: {
+				data: ['优良率'],
+				show: false
+			},
+			grid: {
+				x: '8%',
+				y: '12%',
+				x2: '8%',
+				y2: '10%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			xAxis: [
+				{
+					type: 'category',
+					boundaryGap: false,
+					axisLabel: {show: true, textStyle: text_style},
+					splitLine:{show:false},
+					axisTick: {show: false},
+					axisLine: {show: true,lineStyle: {color: '#bfbfbf'}},
+					data: ['周一','周二','周三','周四','周五','周六','周日']
+				}
+			],
+			yAxis: [
+				{
+					type: 'value',
+					axisLabel: {show: false},
+					axisLine: {show: false},
+					axisTick: {show: false},
+					splitLine:{show:false}
+				}
+			],
+			series: [
+				{
+					name: '优良率',
+					type: 'line',
+
+					itemStyle:{
+						normal: {
+							areaStyle: {
+								type: 'default',
+								color: 'rgba(255,219,50,0.2)'
+							},
+							label:{
+								position: 'top',
+								show: true,
+								formatter:'{c}%',
+								textStyle: text_style
+							}
+						}
+					},
+					data: yData
+				}
+			]
+		};
+		myChart.setOption(option);
+	}
+
+	//区县数据
+	function kqzljcAjaxQX(qhbh){
+		$.ajax({
+			type: 'post',
+			url: "jxenvir/AirQXMonitor.do?qhbh="+qhbh,
+			dataType: 'JSON',
+			success: function (data) {
+				kqzljcShowdata(data);
+			}
+		})
+	}
+	function kqzljcShowdata(data){
+		var len=data.length;
+		var str="" ;
+		for(var i=0;i<len;i++){
+			if(0<=data[i].aqi&&data[i].aqi<=50){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+'class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" Role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#00ff00; width:'+ data[i].aqi/3+'%;">'+
+				'</div></div> </div>'
+			}//progress-bar-warning
+			if(51<=data[i].aqi&&data[i].aqi<=100){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar " Role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#ffff00; width:'+ data[i].aqi/3+'%;">'+
+				'</div></div> </div>'
+			}
+			if(101<=data[i].aqi&&data[i].aqi<=150){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" Role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#ff7e00;width:'+ data[i].aqi/3+'%;">'+
+				'</div></div> </div>'
+			}
+			if(151<=data[i].aqi&&data[i].aqi<=200){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" Role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#ff0000;width:'+ data[i].aqi/3+'%;">'+
+				'</div></div> </div>'
+			}
+			if(201<=data[i].aqi&&data[i].aqi<=300){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" Role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#99004c;width:'+ data[i].aqi/3+'%;">'+
+				'</div></div> </div>'
+			}
+			if(301<=data[i].aqi){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" Role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#7e0023;width:'+ data[i].aqi/3+'%;">'+
+				'</div></div> </div>'
+			}
+		}
+		$(".kqzljcProgressBox").html(str);
+	}
+
+	function kqzljcAjaxccc(qhbh){
+		$.ajax({
+			type: 'post',
+			url: "jxenvir/queryEnvirMapAirJcdInfo.do?qhbh="+qhbh,
+			dataType: 'JSON',
+			success: function (data) {
+				kqzljcShowdata(data)
+				drawMapPoint(data);
+			}
+		})
+	}
+
+
+
+
+	//根据初始化数据，绘制地图上的点
+	function drawMapPoint(data){
+	   /* console.log(airPosLayer);*/
+	  /*  if(airPosLayer.graphics.length == 15 || airPosLayer.graphics.length == 0){*/
+            var len=data.length;
+            //没有进行纠偏的经纬度
+//                var XY=[parseFloat(data[0].JD),parseFloat(data[0].WD)]
+//		var jd=XY[0];
+//		var wd=XY[1];
+        airPosLayer.clear()
+            var pointArr=[];
+//		pointArr.push({jd:jd,wd:wd,details:666});
+
+            for(var i=0;i<len;i++){
+                //经纬度纠偏方法
+                var XY=bd09towgs84(parseFloat(data[i].jd),parseFloat(data[i].wd))
+                var jd=XY[0];
+                var wd=XY[1];
+                pointArr.push({jd:jd,wd:wd,details:data[i]});
+            }
+            kqzljcshowLayers(pointArr,airPosLayer);
+		/*}*/
+        /*console.log("*************************");*/
+		map.addLayer(airPosLayer);
+		/*var point=esri.geometry.Point(jd, wd);
+		map.centerAt(point);*/
+	}
+	//数据 图层 图片
+	function kqzljcshowLayers(data,layer) {
+		var pointSymobol = new Array(data.length);
+		var pointGraphic = new Array(data.length);
+		var greenImage = "images/greenImage.png";
+		var yellowImage="images/yellowImage.png";
+		var orangeImage = "images/orangeImage.png";
+		var redImage="images/redImage.png";
+		var bigredImage="images/bigredImage.png";
+		var darkredImage="images/darkredImage.png";
+		for (var j = 0; j < data.length; j++) {
+			var x = data[j].jd, y = data[j].wd;
+			var z = lonLat2Mercator(x,y);
+//			console.log(data[j])
+//			console.log(data[j].details.aqi)
+			//这边做判断 选择放在地图上的点是什么颜色的
+			//大于0小于51 显示绿色  大于51小于等于100 显示黄色，大于100显示红色，
+			//imageSoure 为默认传入的图片
+
+			if(data[j].details.aqi>=0&&data[j].details.aqi<=51){
+				pointSymobol[j] = new esri.symbol.PictureMarkerSymbol(greenImage, 34, 34);
+			}
+			if(data[j].details.aqi>=51&&data[j].details.aqi<=100){
+				pointSymobol[j] = new esri.symbol.PictureMarkerSymbol(yellowImage, 34, 34);
+			}
+			if(data[j].details.aqi>=100&&data[j].details.aqi<=150){
+				pointSymobol[j] = new esri.symbol.PictureMarkerSymbol(orangeImage, 34, 34);
+			}
+			if(data[j].details.aqi>=151&&data[j].details.aqi<=200){
+				pointSymobol[j] = new esri.symbol.PictureMarkerSymbol(redImage, 34, 34);
+			}
+			if(data[j].details.aqi>=201&&data[j].details.aqi<=250){
+				pointSymobol[j] = new esri.symbol.PictureMarkerSymbol(bigredImage, 34, 34);
+			}
+			if(data[j].details.aqi>=301){
+				pointSymobol[j] = new esri.symbol.PictureMarkerSymbol(darkredImage, 34, 34);
+			}
+			var planePoint = new esri.geometry.Point(z[0], z[1], map.spatialReference);
+			pointGraphic[j] = new esri.Graphic(planePoint, pointSymobol[j]);
+			pointGraphic[j].setAttributes =data[j];
+			layer.add(pointGraphic[j]);
+			layer.refresh();
+		}
+	}
+
+	$(".kqzljcProgressBox").delegate(".scBox","click",function(){
+//		console.log($(this))
+//		console.log($(this).attr("jd"))
+//		console.log($(this).attr("wd"))
+		var XY=bd09towgs84(parseFloat($(this).attr("jd")),parseFloat($(this).attr("wd")));
+		var point=esri.geometry.Point(XY[0],XY[1], map.spatialReference);
+		map.centerAt(point);
+	})
+
+	var heatLayer;
+	$(".kqzljcRltqh").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+
+		if($(this).find("span:last").text()=="热力图"){
+			map.removeLayer(airPosLayer);
+			/*console.log(arcgisServiceUrl);*/
+			/*var airPollutionLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://192.168.11.167:6080/arcgis/rest/services/jxfshotmap/MapServer",{opacity:1});
+			 map.addLayer(airPollutionLayer);*/
+			heatMapData();
+		}
+		if($(this).find("span:last").text()=="监测站点"){
+			/*eval(model+"Ajax('"+qhbh+"')");
+			 $("#"+model).modal("show");*/
+//			$('.waterChange:first').addClass("active");
+//			$('.waterChange:last').removeClass("active");
+			/*map.removeLayer(airPollutionLayer);*/
+			if(heatLayer != null){
+				map.removeLayer(heatLayer);
+			}
+			$(".areaChange span:first").click();
+		}
+	})
+
+
+	//获取热力图数据
+	function heatMapData(){
+		//空气监测热力图
+		if(heatLayer == null){
+			heatLayer = new  HeatmapLayer({//热力图
+				config: {
+					"useLocalMaximum": true,
+					"radius": 50,
+					"gradient": {
+						0.45: "rgb(000,000,255)",
+						0.55: "rgb(000,255,255)",
+						0.65: "rgb(000,255,000)",
+						0.95: "rgb(255,255,000)",
+						1.00: "rgb(255,000,000)"
+					}
+				},
+				"map": map,
+				"domNodeId": "heatLayer",
+				"opacity": 0.85
+			});
+			var points = [];
+			$.ajax({
+				type: 'post',
+				url: "jxenvir/queryEnvirMapAirJcdInfo.do",
+				dataType: 'JSON',
+				data:{qhbh:qhbh},
+				success: function (data) {
+					// console.log(data);
+					$.each(data, function(i){
+						var point ={
+							attributes:{count:data[i].aqi},
+							geometry:{
+								spatialReference: {wkid: map.spatialReference},
+								type: "point",
+								x: lonLat2Mercator(parseFloat(data[i].jd), parseFloat(data[i].wd))[0],
+								y: lonLat2Mercator(parseFloat(data[i].jd), parseFloat(data[i].wd))[1]
+							}
+						}
+						points.push(point);
+
+					})
+					heatLayer.setData(points);
+				}
+			})
+
+		}
+		map.addLayer(heatLayer);
+	}
+	$(".hjzb").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		kqzljcEchartsShow();
+
+	})
+	var kqzljcEchartsObj30Day={};
+	var kqzl30DayPre={};
+	var kqzljcEchartsObj24hour={
+
+	};
+	var kqzl24HourPre={};
+	function kqzljcEchartsData30DayDispose(data,datapre){
+		//数据处理，建立全局kqzljcEchartsObj30Day对象，用于保存aqi co no2 ...指数数据，用于 指数切换控制图标
+		kqzljcEchartsObj30Day["AQI指数"]=[];
+		kqzljcEchartsObj30Day['SO2']=[];
+		kqzljcEchartsObj30Day['NO2']=[];
+		kqzljcEchartsObj30Day['O3']=[];
+		kqzljcEchartsObj30Day["PM10"]=[];
+		kqzljcEchartsObj30Day["PM2.5"]=[];
+		kqzljcEchartsObj30Day["CO"]=[];
+		kqzljcEchartsObj30Day.jcsj=[];
+		var len=data.length;
+		for(var i=0;i<len;i++){
+			kqzljcEchartsObj30Day["AQI指数"].push(data[i].aqi);
+			kqzljcEchartsObj30Day['SO2'].push(data[i].so2);
+			kqzljcEchartsObj30Day['NO2'].push(data[i].no2);
+			kqzljcEchartsObj30Day['O3'].push(data[i].o3);
+			kqzljcEchartsObj30Day["PM10"].push(data[i].pm10);
+			kqzljcEchartsObj30Day["PM2.5"].push(data[i].pm25);
+			kqzljcEchartsObj30Day["CO"].push(data[i].co);
+			kqzljcEchartsObj30Day.jcsj.push(data[i].jcsj);//检测时间
+		}
+//		console.log("30天数据")
+//		console.log(kqzljcEchartsObj30Day);
+
+
+		var preLen=datapre.length;
+		for(var j=0;j<preLen;j++){
+			var indexName=datapre[j].mc;
+			kqzl30DayPre[indexName]=[];
+			kqzl30DayPre.jcsj=[];
+			var dataLen=datapre[j].prevalue.length;
+			for(var k=0;k<dataLen;k++){
+				kqzl30DayPre[indexName].push(datapre[j].prevalue[k][1]);
+				kqzl30DayPre.jcsj.push(datapre[j].prevalue[k][0]);
+			}
+
+		}
+		$(".kqzljcZBchange ul li:first").click();
+		//显示下方echarts图表
+		$("#kqzljcEcharts").modal("show");
+
+	}
+	function kqzljcEchartsData24HourDispose(data,datapre24hour){
+		//对24小时数据进行缓存，用作图表指标切换
+		kqzljcEchartsObj24hour["AQI指数"]=[];
+		kqzljcEchartsObj24hour['SO2']=[];
+		kqzljcEchartsObj24hour['NO2']=[];
+		kqzljcEchartsObj24hour['O3']=[];
+		kqzljcEchartsObj24hour["PM10"]=[];
+		kqzljcEchartsObj24hour["PM2.5"]=[];
+		kqzljcEchartsObj24hour["CO"]=[];
+		kqzljcEchartsObj24hour['jcsj']=[];
+		var len=data.length;
+		for(var i=0;i<len;i++){
+			kqzljcEchartsObj24hour["AQI指数"].push(data[i].aqi);
+			kqzljcEchartsObj24hour['SO2'].push(data[i].so2);
+			kqzljcEchartsObj24hour['NO2'].push(data[i].no2);
+			kqzljcEchartsObj24hour['O3'].push(data[i].o3);
+			kqzljcEchartsObj24hour["PM10"].push(data[i].pm10);
+			kqzljcEchartsObj24hour["PM2.5"].push(data[i].pm25);
+			kqzljcEchartsObj24hour["CO"].push(data[i].co);
+			kqzljcEchartsObj24hour['jcsj'].push(data[i].jcsj);//检测时间
+		}
+		console.log(kqzljcEchartsObj24hour)
+//		console.log("24小时数据")
+//		console.log(kqzljcEchartsObj24hour)
+		var preLen24Hour=datapre24hour.length;
+		for(var j=0;j<preLen24Hour;j++){
+			var indexName24Hour=datapre24hour[j].mc;
+			kqzl24HourPre[indexName24Hour]=[];
+			kqzl24HourPre.jcsj=[];
+			var dataLen24Hour=datapre24hour[j].prevalue.length;
+			for(var k=0;k<dataLen24Hour;k++){
+				kqzl24HourPre[indexName24Hour].push(datapre24hour[j].prevalue[k][1]);
+				kqzl24HourPre.jcsj.push(datapre24hour[j].prevalue[k][0]);
+			}
+		}
+		//图表初始化展示；
+		kqzljcEchartsShow();
+	}
+
+	function kqzljcEchartsShow(){
+		console.log("11")
+		var zb=$(".kqzljcZBchange ul li.active").html();
+		var kqzljcEchartsObjData="";
+		var kqzljcEchartPreData="";
+//		console.log(kqzljcEchartsObj24hour)
+//		console.log(kqzl24HourPre)
+		if($(".hjzb.active").html()=="每日"){
+			kqzljcEchartsObjData=kqzljcEchartsObj30Day;
+			kqzljcEchartPreData=kqzl30DayPre;
+		}
+		if($(".hjzb.active").html()=="每小时"){
+			kqzljcEchartsObjData=kqzljcEchartsObj24hour;
+			kqzljcEchartPreData=kqzl24HourPre;
+		};
+//		console.log($(".hjzb.active").html())
+
+		$("#kqzljcEcharts0001").width($("#kqzljcEcharts").width()-150);
+
+
+		var mycharts=echarts.init(document.getElementById('kqzljcEcharts0001'));
+		var option = {
+			tooltip: {
+				trigger: "axis",
+				formatter: "{b} <br/>{a0} : {c0}<br/>{a1} : {c1}"
+			},
+
+			grid: {
+				x: '7%',
+				y: '10%',
+				x2: '5%',
+				y2: '25%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			legend: {
+				textStyle:text_style,
+				data:['实际值','预测值']
+			},
+			xAxis: [
+				{
+					type: "category",
+//					name: $(".hjzb.active").html(),
+					splitLine: {show: false},
+					data: kqzljcEchartPreData.jcsj,
+					axisLabel:{
+						textStyle:{
+							color: '#fff',
+							fontSize: 12
+						},
+						interval: 0,
+						rotate: 30
+					}
+				}
+			],
+			yAxis: [
+				{
+					type: "log",
+					name: $(".kqzljcZBchange li.active").attr("dw"),
+					axisLabel:{
+						textStyle:{
+							color: '#fff'
+						}
+					},
+					nameTextStyle:{
+						color:'red',
+						fontSize : 20
+					}
+				}
+			],
+			calculable: false,
+			series: [
+				{
+					name: "实际值",
+					type: "line",
+					markLine:{
+						data:[{
+							yAxis:$(".kqzljcZBchange li.active").attr("zs"),
+							type:'max'
+						}]
+					},
+//					markLine: {
+//						silent: true,
+//						data: [{
+//							yAxis: 50
+//						}, {
+//							yAxis: 100
+//						}, {
+//							yAxis: 150
+//						}]
+//					},
+//					markLine:{
+//						data:[{name:'告警值',type:'average'}]
+//					},
+//					symbol:"none",
+					data: kqzljcEchartsObjData[zb]
+
+				},
+				{
+					name: "预测值",
+					type: "line",
+					data: kqzljcEchartPreData[zb]
+
+				}
+			]
+		};
+		mycharts.setOption(option);
+	}
+
+	//各项指标值切换
+	$(".kqzljcZBchange ul li").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		kqzljcEchartsShow()
+	})
+
+</script>
+</body>
+</html>

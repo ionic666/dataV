@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.JxLoginDao">
+        <select id="queryUserByName" parameterType="java.lang.String" resultType="com.cetc28.idata.model.User">
+            select userid,username,password,regtime,lastlogintime,status from JX_MANAGE_USER u WHERE  u.username=#{username} and u.status=1
+        </select>
+
+        <select id="getUserModule" parameterType="java.lang.Integer" resultType="com.cetc28.idata.model.Module">
+            select m.permission from jx_manage_user u left join jx_manage_user_role ur  on u.userid=ur.userid
+            left join jx_manage_role r on ur.roleid = r.roleid
+            left join jx_manage_role_module rm on rm.roleid=r.roleid
+            left join jx_manage_module m on rm.moduleid = m.moduleid where u.status=1 and r.status=1 AND m.status=1 and u.userid=#{userid}
+        </select>
+
+        <insert id="addUserLoginList" parameterType="com.cetc28.idata.model.UserLoginList">
+            INSERT  INTO  jx_manage_login_list (loginid,username,logintime,loginip)
+            VALUES (seq_login_list_id.nextval,#{username},#{logintime},#{loginip})
+        </insert>
+
+        <select id="queryLoginList" parameterType="Integer" resultType="com.cetc28.idata.model.UserLoginList">
+            select * from JX_MANAGE_LOGIN_LIST ORDER BY logintime DESC
+        </select>
+</mapper>

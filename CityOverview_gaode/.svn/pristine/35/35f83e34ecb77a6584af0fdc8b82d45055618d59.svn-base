@@ -1,0 +1,838 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: sunyuan
+  Date: 2017/11/23
+  Time: 10:49
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三率一感</title>
+    <link rel="stylesheet" href="../../myCss/headTitle.css"/>
+    <link rel="stylesheet" href="../../myCss/titleImg.css"/>
+    <style>
+        * {
+            box-sizing: border-box !important;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        html, body {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+            background: url(../../images/socialSecurity/sbbg.png);
+        }
+
+        .container {
+            width: 98%;
+            height: 100%;
+            margin: 0 1%;
+        }
+
+        .top {
+            height: 10%;
+            text-align: center;
+            position: relative;
+        }
+
+        .return-btn {
+            position: absolute;
+            top: 9%;
+            right: 1%;
+            cursor: pointer;
+        }
+
+        .title-btn {
+            font-size: 42px;
+            color: #0cdaf1;
+            font-family: 微软雅黑;
+            -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(255, 255, 255, 0.2)));
+            display: inline-block;
+            padding: 0;
+            margin: 0px 20px 0px 20px;
+        }
+
+        .middle {
+            height: 90%;
+            margin-top: 6%;
+        }
+
+        .middle-left {
+            width: 28%;
+            float: left;
+            height: 100%;
+        }
+
+        .middle-middle {
+            width: 70%;
+            float: left;
+            height: 100%;
+            margin: 0 1%;
+        }
+
+        .middle-left-1 {
+            width: 100%;
+            height: 45%;
+            margin-bottom: 10px;
+            border-top: 2px solid #0CDAF5;
+            background: rgba(18, 24, 24, 0.4);
+            position: relative;
+            padding-top: 10%;
+        }
+
+        .middle-left-1 > span:nth-child(1) {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .middle-left-1 > div {
+            width: 50%;
+            height: 50%;
+            float: left;
+            position: relative;
+            padding-top: 8%;
+
+        }
+
+        .middle-left-2 > span:nth-child(1) {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .middle-left-2 {
+            width: 100%;
+            height: calc(55% - 10px);
+            height: -moz-calc(55% - 10px);
+            border-top: 2px solid #0CDAF5;
+            background: rgba(18, 24, 24, 0.4);
+            position: relative;
+        }
+
+        /*右侧上部数据*/
+        .middle-middle-top {
+            width: 100%;
+            height: 10%;
+            padding: 1.5% 10px 10px 10px;
+        }
+
+        /*右侧下部数据*/
+        .middle-middle-bottom {
+            width: 100%;
+            height: 90%;
+            border-top: 2px solid #0CDAF5;
+            background: rgba(18, 24, 24, 0.4);
+        }
+
+        .middle-middle-bottom-1 {
+            width: 100%;
+            height: 50%;
+        }
+
+        .middle-middle-bottom-2 {
+            width: 100%;
+            height: 50%;
+        }
+
+        .middle-middle-top > span:not(.tsgz) {
+            padding: 6px 18px;
+            background: #006977;
+            display: inline-block;
+            border-radius: 6px;
+            text-align: center;
+            color: #00e0fe;
+            cursor: pointer;
+            margin: 0 20px;
+            font-size: 24px;
+        }
+
+        .middle-middle-top > span.tsgz {
+            padding: 10px 25px;
+            background: #217ED4;
+            display: inline-block;
+            border-radius: 6px;
+            text-align: center;
+            color: #fff;
+            cursor: pointer;
+            margin: 0 20px;
+            float: right;
+        }
+
+        .middle-middle-top > span.active {
+            background: #00B5CD;
+            color:#fff;
+        }
+
+        #echart-1, #echart-2 {
+            width: 100%;
+            height: 90%;
+        }
+
+        .bind-a{
+            width: 100%;
+            height: 10%;
+            text-align: center;
+        }
+
+        .bind-b{
+            width: 100%;
+            height: 10%;
+            text-align: center;
+        }
+
+        .top-select {
+            margin-top: 10px;
+            text-align: center;
+            color: #fff;
+            height: 30px;
+            padding-left: 30%;
+        }
+
+        .top-select > span {
+            margin: 0 30px;
+            font-size: 18px;
+        }
+
+        .top-select > select {
+            width: 150px;
+            height: 31px;
+            background: black;
+            color: #fff;
+            font-size: 18px;
+            line-height: 18px;
+        }
+
+        .bottom-gd {
+            width: 100%;
+            height: calc(100% - 90px) !important;
+            height: -moz-calc(100% - 90px) !important;
+            margin-top: 30px;
+        }
+
+        .bottom-gd > ul {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .bottom-gd > ul li {
+            color: #fff;
+            text-align: center;
+            height: 20% !important;
+            transition: all 0.5s;
+            line-height: 2.5;
+        }
+
+        .bottom-gd > ul li:nth-child(1) {
+            transform: scale(0.8);
+        }
+
+        .bottom-gd > ul li:nth-child(2) {
+            transform: scale(1);
+        }
+
+        .bottom-gd > ul li:nth-child(3) {
+            transform: scale(1.5);
+            color: #EFE960;
+        }
+
+        .bottom-gd > ul li:nth-child(4) {
+            transform: scale(1);
+        }
+
+        .bottom-gd > ul li:nth-child(5) {
+            transform: scale(0.8);
+        }
+
+        .bottom-gd > ul li:nth-child(6) {
+            transform: scale(0.6);
+        }
+        ._header h1{
+
+            font-size: 42px;
+            color:#0cdaf1;
+            font-family:微软雅黑;
+            -webkit-box-reflect: below 0px
+            -webkit-gradient(linear,left top,left bottom, from(rgba(0,0,0,0)),to(rgba(255,255,255,0.2)));
+            display: inline-block;
+            padding: 0;
+            margin:0px 20px 0px 20px;
+        }
+        ._header span{
+            font-size: 30px;
+            color:#b8d1d1;
+            font-family:微软雅黑;
+            background-color: #166D76;
+            margin:0px 20px;
+            padding:0px 10px;
+        }
+        ._header img{
+            position: relative;
+            top: -10%;
+        }
+        .outerWidth{
+            display:inline-block;
+        }
+        ._header{
+            position: absolute;
+            height: 10%;
+            z-index: 7777;
+            margin-left: 50%;
+            padding-top:0.5%;
+            top:0;
+        }
+    </style>
+</head>
+<body>
+<div id="pageNav">
+    <span>当前页面</span>
+    <select id="chooseNav">
+        <option value="001">最多跑一次</option>
+        <option value="002" selected="selected">三率一感</option>
+        <option value="003">特色工作</option>
+        <option value="004">全国首创</option>
+    </select>
+</div>
+<div class="container">
+    <%--<div class="top">--%>
+        <%--<img src="../../images/btz.png" alt="" style="position: relative;top: -10%;">--%>
+        <%--<h1 class="title-btn">三率一感</h1>--%>
+        <%--<img src="../../images/bty.png" alt="" style="position: relative;top: -10%;">--%>
+    <%--</div>--%>
+        <div class="_headerImg">
+            <img src="../../images/adminService/slyg.png" alt=""/>
+        </div>
+    <div class="middle">
+        <div class="middle-left">
+            <div class="middle-left-1">
+                <span>全市三季度"三率一感"情况概览</span>
+                <div style="padding-right:2%;">
+                    <div style="float:left;width:25%;height:100%;background: url(../../images/sl-myd.png) no-repeat center"></div>
+                    <div style="float:left;width:37%;height:100%;">
+                        <span style="position:relative;line-height:4;font-size:24px;display:inline-block;width:100%;height:50%;text-align: center;color:#1296DB;">
+                            <span style="font-weight:bolder;font-size:28px;display:inline-block;line-height:1;position: absolute;bottom:5px;left:0;text-align: center;width:100%;">92.9%</span>
+                        </span>
+                        <span style="font-size:20px;display:inline-block;width:100%;height:50%;text-align: center;color:#fff;">满意率</span>
+                    </div>
+                    <div style="float:left;width:37%;height:100%;">
+                        <span style="position:relative;line-height:4;font-size:24px;display:inline-block;width:100%;height:50%;text-align: center;color:#1296DB;">
+                            <span style="font-size:24px;display:inline-block;line-height:1;position: absolute;bottom:5px;left:0;text-align: center;width:100%;">5.5%</span>
+                        </span>
+                        <span style="font-size:20px;display:inline-block;width:100%;height:50%;text-align: center;color:#fff;">同比增长</span>
+                    </div>
+                </div>
+
+
+                <div style="padding-left:2%;">
+                    <div style="float:left;width:25%;height:100%;background: url(../../images/sl-sxl.png) no-repeat center"></div>
+                    <div style="float:left;width:37%;height:100%;">
+                        <span style="position:relative;line-height:4;font-size:24px;display:inline-block;width:100%;height:50%;text-align: center;color:#1296DB;">
+                            <span style="font-weight:bolder;font-size:28px;display:inline-block;line-height:1;position: absolute;bottom:5px;left:0;text-align: center;width:100%;">84.2%</span>
+                        </span>
+                        <span style="font-size:20px;display:inline-block;width:100%;height:50%;text-align: center;color:#fff;">实现率</span>
+                    </div>
+                    <div style="float:left;width:37%;height:100%;">
+                        <span style="position:relative;line-height:4;font-size:24px;display:inline-block;width:100%;height:50%;text-align: center;color:#1296DB;">
+                            <span style="font-size:24px;display:inline-block;line-height:1;position: absolute;bottom:5px;left:0;text-align: center;width:100%;">4.7%</span>
+                        </span>
+                        <span style="font-size:20px;display:inline-block;width:100%;height:50%;text-align: center;color:#fff;">同比增长</span>
+                    </div>
+                </div>
+
+                <div style="padding-right:2%;">
+                    <div style="float:left;width:25%;height:100%;background: url(../../images/sl-zxl.png) no-repeat center"></div>
+                    <div style="float:left;width:37%;height:100%;">
+                        <span style="position:relative;line-height:4;font-size:24px;display:inline-block;width:100%;height:50%;text-align: center;color:#1296DB;">
+                            <span style="font-weight:bolder;font-size:28px;display:inline-block;line-height:1;position: absolute;bottom:5px;left:0;text-align: center;width:100%;">81.0%</span>
+                        </span>
+                        <span style="font-size:20px;display:inline-block;width:100%;height:50%;text-align: center;color:#fff;">知晓率</span>
+                    </div>
+                    <div style="float:left;width:37%;height:100%;">
+                        <span style="position:relative;line-height:4;font-size:24px;display:inline-block;width:100%;height:50%;text-align: center;color:#1296DB;">
+                            <span style="font-size:24px;display:inline-block;line-height:1;position: absolute;bottom:5px;left:0;text-align: center;width:100%;">16.1%</span>
+                        </span>
+                        <span style="font-size:20px;display:inline-block;width:100%;height:50%;text-align: center;color:#fff;">同比增长</span>
+                    </div>
+                </div>
+
+                <div style="padding-left:2%;">
+                    <div style="float:left;width:25%;height:100%;background: url(../../images/sl-hdg.png) no-repeat center"></div>
+                    <div style="float:left;width:37%;height:100%;">
+                        <span style="position:relative;line-height:4;font-size:24px;display:inline-block;width:100%;height:50%;text-align: center;color:#1296DB;">
+                            <span style="font-weight:bolder;font-size:28px;display:inline-block;line-height:1;position: absolute;bottom:5px;left:0;text-align: center;width:100%;">94.9%</span>
+                        </span>
+                        <span style="font-size:20px;display:inline-block;width:100%;height:50%;text-align: center;color:#fff;">获得感</span>
+                    </div>
+                    <div style="float:left;width:37%;height:100%;">
+                        <span style="position:relative;line-height:4;font-size:24px;display:inline-block;width:100%;height:50%;text-align: center;color:#1296DB;">
+                            <span style="font-size:24px;display:inline-block;line-height:1;position: absolute;bottom:5px;left:0;text-align: center;width:100%;">3.5%</span>
+                        </span>
+                        <span style="font-size:20px;display:inline-block;width:100%;height:50%;text-align: center;color:#fff;">同比增长</span>
+                    </div>
+                </div>
+            </div>
+            <div class="middle-left-2">
+                <span>群众意见建议</span>
+                <div class="top-select">
+                    <span>区域选择</span>
+                    <select name="" id="quyxz">
+                        <option value="003001001">南湖区</option>
+                        <option value="003001002">秀洲区</option>
+                        <option value="003001003">海宁市</option>
+                        <option value="003001004">平湖市</option>
+                        <option value="003001005">桐乡市</option>
+                        <option value="003001006">嘉善县</option>
+                        <option value="003001007">海盐县</option>
+                    </select>
+                </div>
+                <div class="bottom-gd">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="middle-middle">
+            <div class="middle-middle-top">
+                <span pid="1">满意率</span>
+                <span pid="2">实现率</span>
+                <span pid="3">知晓率</span>
+                <span pid="4">获得感</span>
+            </div>
+            <div class="middle-middle-bottom">
+                <div class="middle-middle-bottom-1">
+                    <div id="echart-1"></div>
+                    <div class="bind-a">
+                        <img src="../../images/slyg-t1.png" alt="">
+                    </div>
+                </div>
+                <div class="middle-middle-bottom-2">
+                    <div id="echart-2"></div>
+                    <div class="bind-b">
+                        <img src="../../images/slyg-t2.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../../myjs/jquery-2.1.4.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/vTicker.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    var nanhuSpecial='<%=Web_srcUtil.getString("nanhuSpecial")%>';
+    //    导航切换
+    $('#chooseNav').change(function(){
+        var navText=$('#chooseNav').val();
+//    console.log(navText)
+        switch(navText){
+            case '001':zdpyc();break;
+            case '002':slyg();break;
+            case '003':tsgz();break;
+            case '004':nhsc();break;
+
+        }
+    });
+    function zdpyc(){
+        location.href="zdpyc.jsp";
+    }
+    function slyg(){
+        location.href="slyg.jsp";
+    }
+    function tsgz(){
+        location.href="tsgz.jsp";
+    }
+    function nhsc(){
+        location.href=nanhuSpecial;
+    }
+    var sumWidth=0;//计算头部div中所有元素的宽度
+    $('.outerWidth').each(function(){
+        var myWidth=$(this).outerWidth(true);//计算头部div中每个元素的宽度
+        sumWidth+=myWidth;
+    })
+    $("._header").css("left",-sumWidth/2+"px");//让头部标题居中
+    $('.middle-middle-top>span').click(function () {
+        if ($(this).attr('class') == 'tsgz') {
+            return
+        }
+        $('.middle-middle-top>span').removeClass('active');
+        $(this).addClass('active');
+        var text=$(this).html();//文字题目
+        var id = $(this).attr('pid');
+        var avg = 0;
+        var y_min = 0;
+        //设置图标
+        if(text=='满意率'){
+            avg = 92.9;
+            y_min = 85;
+            $('.bind-a>img').attr('src','../../images/slyg-t1.png')
+            $('.bind-b>img').attr('src','../../images/slyg-t2.png')
+        }else if(text=='实现率'){
+            avg = 84.2;
+            y_min=60;
+            $('.bind-a>img').attr('src','../../images/sx1.png')
+            $('.bind-b>img').attr('src','../../images/sx2.png')
+        }else if(text=='知晓率'){
+            avg = 81.0;
+            y_min = 60;
+            $('.bind-a>img').attr('src','../../images/zx1.png')
+            $('.bind-b>img').attr('src','../../images/zx2.png')
+        }else if(text=='获得感'){
+            avg = 94.9;
+            y_min = 85;
+            $('.bind-a>img').attr('src','../../images/hdg1.png')
+            $('.bind-b>img').attr('src','../../images/hdg2.png')
+        }
+        $.ajax({
+            url: '../../jxecokey/queryRateCaseBySort.do?sort=' + id,
+            dataType: 'json',
+            type: 'get',
+            success: function (data) {
+                //上部echarts图
+                var zls=['NANHU','XIUZHOU','JIASHAN','HAIYAN','HAINING','PINGHU','TONGXIANG']
+                var arr2=[];
+                $.each(zls, function(i, val) {
+                    arr2.push(parseFloat(data.town[0][val]))
+                });
+                echartUp(arr2,text,avg, y_min);
+
+                //下部echarts图
+                var zl=['BUDONGCHAN','CHELIANGGUANLI','CHURUJING','HUJI','SHEBAOYIBAO','SHUIWU','GONGSHANGDENGJI','QIYETONGZI','QITA']
+                var arr1=[]
+                $.each(zl, function(i, val) {
+                    arr1.push(parseFloat(data.item[0][val]))
+                });
+                echartDown(arr1,text,avg, y_min);
+            }
+        })
+    })
+
+    $('.middle-middle-top>span:nth-child(1)').trigger('click');
+
+    var once=1;
+    $('#quyxz').change(function () {
+        $.ajax({
+            url: '../../jxecokey/querySuggestByBhValue.do?bhValue=' + $(this).val(),
+            dataType: 'json',
+            type: 'get',
+            success: function (data) {
+                var str = '';
+                str += '<li>--群众服务类--</li>'
+                $.each(data.suggest.bianming, function (i, v) {
+                    str += '<li>' + v.SUGGEST + v.PERCENT + '%</li>'
+                })
+                str += '<li>--企业审批类--</li>'
+                $.each(data.suggest.qiye, function (i, v) {
+                    str += '<li>' + v.SUGGEST + v.PERCENT + '%</li>'
+                })
+                $('.bottom-gd>ul').html('');
+                $('.bottom-gd>ul').html(str);
+                if(once==1){
+                    $('.bottom-gd').vTicker({pause:2000});
+                    once--;
+                }
+
+            }
+        })
+
+    })
+    $('#quyxz').trigger('change');
+
+    function echartUp(arr,text, avg, y_min) {
+        var mycharts = echarts.init(document.getElementById('echart-1'));
+        var option = {
+            color: ['#1296DB'],
+            title: {
+                show: true,
+                x: 'center',
+                y: 'top',
+                text: '各县市区三季度'+text+'情况',
+                textStyle: {
+                    color: '#fff',
+                    fontSize: title_font_text_Style.fontSize,
+                    fontWeight: 'normal'
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (value) {
+                    return value[0]['name'] + value[0]['seriesName'] + value[0]['data'] + '%';
+                }
+            },
+            calculable: false,
+            grid: {
+                x: '10%',
+                y: '20%',
+                x2: '10%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['三季度'+text],
+                show: false
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    splitLine: false,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#bfbfbf'
+                        }
+                    },
+                    axisTick: {show: false},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        clickable: true
+                    },
+                    data: ['南湖区', '秀洲区', '嘉善县', '海盐县', '海宁市', '平湖市', '桐乡市']//data.years
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: "三季度"+text,
+                    splitNumber: 5,
+                    min: y_min,
+                    max: 100,
+                    nameTextStyle: text_style,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#bfbfbf'
+                        }
+                    },
+                    splitLine: {show: false},
+                    axisTick: {show: true, lineStyle: {color: '#bfbfbf'}},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: '{value}% '
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: "三季度"+text,
+                    type: 'bar',
+                    barWidth: 30,
+                    yAxisIndex: 0,
+                    markLine: {
+                        clickable: false,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    textStyle: text_style,
+                                    formatter: function (a) {
+                                        return a.value + '%'
+                                    }
+                                }
+                            },
+                            emphasis: {
+                            }
+                        },
+                        data: [
+                            [
+                                {name: '市平均'+text, value: avg, xAxis: -1, yAxis: avg},
+                                {name: '市平均'+text, xAxis: 9, yAxis: avg}
+                            ]
+                        ]
+                        /*data: [
+                            {
+                                type: 'average',
+                                name: '平均值',
+                                itemStyle: {
+                                    normal: {
+                                        color: '#0FCFE8'
+                                    }
+                                }
+                            }
+                        ]*/
+                    },
+                    itemStyle: {
+                        color: '#3696d9',
+                        normal: {
+                            label: {
+                                show: true,
+                                textStyle: text_style,
+                                formatter: function (a) {
+                                    return a.data + '%'
+                                }
+                            },
+                            lineStyle: {
+                                color: '#0FCFE8',
+                                width: 2,
+                                type: 'solid'
+                            }
+                        }
+                    },
+                    data: arr
+                }
+            ]
+
+        };
+        mycharts.setOption(option);
+    }
+
+    function echartDown(arr,text,avg, y_min) {
+        var mycharts = echarts.init(document.getElementById('echart-2'));
+        var option = {
+            color: ['#27AF9A'],
+            title: {
+                show: true,
+                x: 'center',
+                y: 'top',
+                text: '9类事项三季度'+text+'情况',
+                textStyle: {
+                    color: '#fff',
+                    fontSize: title_font_text_Style.fontSize,
+                    fontWeight: 'normal'
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (value) {
+                    return value[0]['name'] + value[0]['seriesName'] + value[0]['data'] + '%';
+                }
+            },
+            calculable: false,
+            grid: {
+                x: '10%',
+                y: '20%',
+                x2: '10%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['三季度'+text],
+                show: false
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    splitLine: false,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#bfbfbf'
+                        }
+                    },
+
+                    axisTick: {show: false},
+                    axisLabel: {
+                        interval: 0,
+                        show: true,
+                        textStyle: text_style,
+                        clickable: true
+                    },
+                    data: ['不动产', '车辆管理', '出入境', '户籍登记', '社保医保', '税务', '工商登记', '企业投资项目审批', '其他']//data.years
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: "三季度"+text,
+                    splitNumber: 5,
+                    min: y_min,
+                    max: 100,
+                    nameTextStyle: text_style,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#bfbfbf'
+                        }
+                    },
+                    splitLine: {show: false},
+                    axisTick: {show: true, lineStyle: {color: '#bfbfbf'}},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: '{value}% '
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: "三季度"+text,
+                    type: 'bar',
+                    barWidth: 30,
+                    yAxisIndex: 0,
+                    markLine: {
+                        clickable: false,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    textStyle: text_style,
+                                    formatter: function (a) {
+                                        return a.value + '%'
+                                    }
+                                },
+                            },
+                        emphasis: {
+                          }
+                        },
+                        data: [
+                            [
+                                {name: '市平均'+text, value: avg, xAxis: -1, yAxis: avg},
+                                {name: '市平均'+text, xAxis: 9, yAxis: avg}
+                            ]
+                           /* {
+
+                                type: 'average',
+                                name: '平均值',
+                                itemStyle: {
+                                    normal: {
+                                        color: '#0FCFE8'
+                                    }
+                                }
+                            },*/
+                        ]
+                    },
+                    itemStyle: {
+                        color: '#3696d9',
+                        normal: {
+                            label: {
+                                show: true,
+                                textStyle: text_style,
+                                formatter: function (a) {
+                                    return a.data + '%'
+                                }
+                            },
+                            lineStyle: {
+                                color: '#0FCFE8',
+                                width: 2,
+                                type: 'solid'
+                            }
+                        }
+                    },
+                    data: arr
+                }
+            ]
+
+        };
+        mycharts.setOption(option);
+    }
+
+
+</script>
+
+</body>
+</html>

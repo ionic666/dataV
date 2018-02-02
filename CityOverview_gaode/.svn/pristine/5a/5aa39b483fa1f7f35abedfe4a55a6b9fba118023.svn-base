@@ -1,0 +1,296 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tonghao
+  Date: 2017/11/18
+  Time: 14:56
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../../myCss/bootstrap.min.css">
+	<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+
+
+	<style>
+		*{
+			color:#fff;
+			font-size: 1em;
+			font-family: "Microsoft YaHei", "宋体", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
+			box-sizing: border-box;
+		}
+		ul,li,h1,h2,h3,h4,h5,h6,p,ol{
+			padding:0;
+			margin:0;
+		}
+		li{
+			list-style: none;
+		}
+		/*搜索框*/
+		#search{
+			position: absolute;
+			height: 4%;
+			width: 14%;
+			z-index: 1000;
+			left: 1%;
+			top: 4%;
+			padding-left: 1%;
+			font-size: 1.1em;
+			border: 1px solid #0AAABE;
+			color: #0AAABE;
+			outline: 0;
+			background-color: transparent;
+		}
+		#searchBtn{
+			position: absolute;
+			display: inline-block;
+			width: 15px;
+			height: 15px;
+			left: 13.2%;
+			top: 5.3%;
+			z-index: 1000;
+			cursor: pointer;
+			background: url('../../images/hlwqs/search.png') no-repeat;
+		}
+		.header {
+			width: 60%;
+			height: 7.8%;
+			margin: 0 auto;
+			background-size: 100% 100%;
+			background-repeat: no-repeat;
+			position: absolute;
+			z-index: 999;
+			top: 2%;
+			margin-left: 50%;
+		}
+		::-webkit-scrollbar{
+			background-color: #1B1B1D;
+		}
+		::-webkit-scrollbar-thumb {
+			background-color: #303030;
+		}
+		.modelBox{
+			height:90%;
+			width:25%;
+			position: absolute;
+			z-index:101;
+		}
+		.modelBox div.head{
+			padding:1% 0px 0px 5%;
+			width:100%;
+			height:8%;
+		}
+		.modelBox div.head select{
+			background-color: black;
+			width: 90%;
+			margin: 6% 0 2% 2%;
+			font-size: 1.2em;
+			padding: 1% 2%;
+			outline: 0;
+		}
+		.modelBox div.head select option{
+			outline: 0;
+		}
+		.modelBox div.body{
+			/*padding:1% 0px 0px 5%;*/
+			width:100%;
+			height:60%;
+		}
+		#industrialPlatform{
+			margin-top: 2%;
+			width: 100%;
+			height: 100%;
+			font-size: 1.1em;
+		}
+		#industrialPlatform tr:nth-of-type(odd){
+			background-color: #232323;
+		}
+		#industrialPlatform tr td:first-child{
+			width: 38%;
+			text-align: right;
+			color: #919191;
+		}#industrialPlatform tr td:nth-child(2){  
+			width: 62%;
+			padding-left: 5%;
+		 }
+		.modelBox div.foot{
+			padding:1% 0px 0px 5%;
+			width:100%;
+			height:30%;
+			margin-top: 8%;
+		}
+		#industrials{
+			width: 100%;
+			height: 92%;
+		}
+		#industrials tr{
+			height: 20%;
+		}
+		.modelBoxL{
+			top:10%;
+			left:0;
+			border-top:2px solid #0CFFFF;
+		}
+		/*.modelBoxC{*/
+			/*height:10%;*/
+			/*width: 50%;*/
+			/*bottom:2%;*/
+			/*right:25%;*/
+			/*!*background-color: #fff;*!*/
+		/*}*/
+		/*.modelBoxR{*/
+			/*top:10%;*/
+			/*right:0;*/
+			/*border-top:2px solid #0CFFFF;*/
+		/*}*/
+		.modelBoxL{
+			background: -moz-linear-gradient(left, #000000 70%, transparent 100%);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#000000), color-stop(100%,#ffffff));
+			background: -webkit-linear-gradient(left, #000000 70%,transparent 100%);
+			background: -o-linear-gradient(left, #000000 70%,transparent 100%);
+			background: -ms-linear-gradient(left, #000000 70%,transparent 100%);
+			background: linear-gradient(to right, #000000 70%,transparent 100%);
+		}
+		/*.modelBoxR{*/
+			/*background: -moz-linear-gradient(right, #000000 70%, transparent 100%);*/
+			/*background: -webkit-gradient(linear, right top, right bottom, color-stop(0%,#000000), color-stop(100%,#ffffff));*/
+			/*background: -webkit-linear-gradient(right, #000000 70%,transparent 100%);*/
+			/*background: -o-linear-gradient(right, #000000 70%,transparent 100%);*/
+			/*background: -ms-linear-gradient(right, #000000 70%,transparent 100%);*/
+			/*background: linear-gradient(to left, #000000 70%,transparent 100%);*/
+		/*}*/
+	</style>
+</head>
+<body>
+<div class="header" style="left: -582px; background-image: url(../../images/hlwjjqs.png);"></div>
+<input  id="search" type="text" placeholder="企业搜索"/>
+<span id="searchBtn"></span>
+<div id="map" style="width:100%; height:100%;"></div>
+<div class="modelBox modelBoxL">
+	<div class="head">
+		<select>
+			<option value="">互联网产业平台</option>
+			<option value="">互联网产业平台</option>
+			<option value="">互联网产业平台</option>
+			<option value="">互联网产业平台</option>
+		</select>
+	</div>
+	<div class="body">
+		<%--产业平台信息--%>
+		<table id="industrialPlatform">
+			<tbody>
+			    <tr>
+					<td>产业平台名称</td>
+					<td>乌镇核心区</td>
+				</tr>
+				<tr>
+					<td>产业平台地址</td>
+					<td>嘉兴桐乡市乌镇</td>
+				</tr>
+				<tr>
+					<td>产业平台简介</td>
+					<td>乌镇核心区，规划建设30平方公里的互联网产业园，发展互联网创新创业会客厅、众创空间等创业平台，打造展示互联网文化发展历程、世界最新网络科技成果发布、发展、交流与合作、制度创新的先行区。</td>
+				</tr>
+			    <tr>
+					<td>产业平台占地面积</td>
+					<td>30平方公里</td>
+				</tr>
+				<tr>
+					<td>企业规模（数量）</td>
+					<td>200家</td>
+				</tr>
+				<tr>
+					<td>企业性质top5</td>
+					<td>国企、私企、中外合资企业、外资企业、股份制</td>
+				</tr>
+				<tr>
+					<td>企业经营范围top5</td>
+					<td>光伏、通讯电子产品、软件、信息服务</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="foot">
+		<%--企业信息--%>
+		<table id="industrials">
+			<thead>
+			    <tr>
+					<td width="56%">企业名称</td>
+					<td width="22%">企业性质</td>
+					<td width="22%">企业年龄</td>
+				</tr>
+			</thead>
+			<tbody>
+			    <tr>
+					<td>浙江神州量子通讯有限公司</td>
+					<td>国企</td>
+					<td>10年</td>
+				</tr>
+				<tr>
+					<td>浙江昱能科技有限公司</td>
+					<td>私企</td>
+					<td>20年</td>
+				</tr>
+				<tr>
+					<td>嘉兴佳利电子股份有限公司</td>
+					<td>合资</td>
+					<td>15年</td>
+				</tr>
+				<tr>
+					<td>浙江昱能科技有限公司</td>
+					<td>私企</td>
+					<td>20年</td>
+				</tr>
+				<tr>
+					<td>嘉兴佳利电子股份有限公司</td>
+					<td>合资</td>
+					<td>15年</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<%--<div class="modelBox modelBoxC">--%>
+<%--</div>--%>
+<%--<div class="modelBox modelBoxR">--%>
+<%--</div>--%>
+
+
+
+<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+<%--<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.1&key=您申请的key值&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>--%>
+<%--<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>--%>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<script>
+    var headerWidth=$(".header").width();	//获取头部标题的宽度
+    $(".header").css("left",-headerWidth/2-6+"px");//让头部标题居中
+
+
+    window.onload=function(){
+        //加载地图的方法
+        map = new AMap.Map('map', {
+            mapStyle: 'amap://styles/e08db8ed18c196aa387f5352644fe504'//样式URL
+        });
+//        //输入提示
+//        var autoOptions = {
+//            input: "search"
+//        };
+//        var auto = new AMap.Autocomplete(autoOptions);
+//        var placeSearch = new AMap.PlaceSearch({
+//            map: map
+//        });  //构造地点查询类
+//        AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+//        function select(e) {
+//            placeSearch.setCity(e.poi.adcode);
+//            placeSearch.search(e.poi.name);  //关键字查询查询
+//        }
+//    AMap.event.addListener(map,'click',function(e){
+//      map.clearInfoWindow();
+//    });
+    }
+</script>
+</body>
+</html>

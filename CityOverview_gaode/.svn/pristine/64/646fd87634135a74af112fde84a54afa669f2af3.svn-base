@@ -1,0 +1,294 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/22
+  Time: 9:01
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    div.comprehensive{
+      width: 100%;
+      height: 100%;
+    }
+    ul#selectDate{
+      margin-top: 2%;
+      padding-left: 1%;
+      height: 12%;
+    }
+    #selectDate>li{
+      display: inline-block;
+    }
+    select{
+      padding: 2px 4px;
+      background-color: rgba(0,0,0,0.5);
+    }
+    div#comprehensive{
+      height: 70%;
+      width: 95%;
+      padding: 0 0 0 1%;
+    }
+    div#comprehensive ul{
+      width: 100%;
+      height: 100%;
+    }
+    div#comprehensive ul li{
+      width: 50%;
+      height: 25%;
+      float: left;
+    }
+    div#comprehensive ul li img{
+      width: 40px;
+      float: left;
+    }
+    div#comprehensive ul li div{
+      float: left;
+      text-align: center;
+      width: 70%;
+      height: 100%;
+    }
+    div#comprehensive ul li div p{
+      font-size: 1em;
+    }
+    div#comprehensive ul li div h2 span{
+      color:  #0CDAF5;
+    }
+    .double h2 {
+      color: #0066C5;
+    }
+  </style>
+</head>
+<body>
+<div class="comprehensive">
+  <p class="headerTitle">
+    综合实力
+    <%--<img src="../../images/manufacture/comprehensive.png" alt=""/>--%>
+  </p>
+  <ul id="selectDate">
+    <li>
+      <select id="selectY1" class="selectY">
+
+      </select>
+    </li>
+    <li>
+      <select id="selectM1">
+        <option value ="1" selected="selected">1月</option>
+      </select>
+    </li>
+    <li><span>--</span></li>
+    <li>
+      <select id="selectY2" class="selectY">
+
+      </select>
+    </li>
+    <li>
+      <select id="selectM2">
+      </select>
+    </li>
+  </ul>
+  <div id="comprehensive">
+    <ul>
+      <li>
+        <img src="../../images/manufacture/comprehensive/gyzcz.png" alt=""/>
+        <div>
+          <h2 id="countryzone"></h2>
+          <p>工业总产值（亿元）</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/manufacture/comprehensive/gyzczbl.png" alt=""/>
+        <div class="double">
+          <h2 id="countryzonearea"></h2>
+          <p>同比增长</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/manufacture/comprehensive/gyzjz.png" alt=""/>
+        <div>
+          <h2 id="foreigncapital"></h2>
+          <p>工业增加值（亿元）</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/manufacture/comprehensive/gyzczbl.png" alt=""/>
+        <div class="double">
+          <h2 id="foreigncapitalnum"></h2>
+          <p>同比增长</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/manufacture/comprehensive/lrze.png" alt=""/>
+        <div>
+          <h2 id="provincezone"></h2>
+          <p>利润总额（亿元）</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/manufacture/comprehensive/lrzebl.png" alt=""/>
+        <div class="double">
+          <h2 id="provincezonearea"></h2>
+          <p>同比增长</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/manufacture/comprehensive/gyqyjs.png" alt=""/>
+        <div>
+          <h2 id="townzone"></h2>
+          <p>工业企业家数</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/manufacture/comprehensive/ssqyjs.png" alt=""/>
+        <div class="double">
+          <h2 id="townzonearea"></h2>
+          <p>境内外上市企业家数</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script>
+  $(function(){
+    var selectY_value,selectM_value;//定义年份，月份
+//        默认发送ajax请求获取年、月
+    function ajaxEcommerce1(year,month){
+      $.ajax({
+        type: 'post',
+        url: "../../jxecomanufacture/queryJxEcoManS.do?year="+year+"&month="+month+"",
+        dataType: 'JSON',
+        success: function (data) {
+          var len = data.monthRange.length;
+          $("#selectM2").empty();
+          //清空原先的option
+          if(selectY_value == null){
+            $(".selectY").empty();
+            $.each(data.yearRange,function(i){
+                      var year =data.yearRange[i];
+                      $(".selectY").append("<option value ="+year+">"+year+"年</option>");
+                      if(i==0 && selectY_value==null){
+                        selectY_value = data.yearRange[i];//年份默认为最大值
+//                                    console.log(selectY_value);
+                        return selectY_value;
+                      }
+                    }
+            );
+          }
+          $.each(data.monthRange,function(i){
+                    var month = data.monthRange[i];
+                    $("#selectM2").append("<option value ="+month+">"+month+"月</option>");
+                    if(i==0){
+                      selectM_value = data.monthRange[i];//月份默认为最大值
+                      return selectM_value;
+                    }
+                  }
+          );
+          dataAssignment(data);//初次进入页面获取最新年月的数据
+
+          setValue(selectY_value);
+        }
+      });
+    }
+    //自定义选择年月后发送请求获取数据
+    function ajaxEcommerce2(year,month){
+      $.ajax({
+        type: 'post',
+        url: "../../jxecomanufacture/queryJxEcoManS.do?year="+year+"&month="+month+"",
+        dataType: 'JSON',
+        success: function (data) {
+          dataAssignment(data);
+        }
+      });
+    }
+    function setValue(year){
+      $.ajax({
+        type: 'post',
+        url: "${pageContext.request.contextPath}/jxecomanufacture/getConditionConpany.do",
+        data:{
+          year:year
+        },
+        dataType: 'JSON',
+        success: function (data) {
+          dataTownzone(data);
+        }
+      });
+    }
+
+    //页面赋值函数
+    function dataAssignment(data){
+      $("#countryzone").html("<span class='counter'>"+data.MTV+"</span>");
+      $("#countryzonearea").html("<span class='counter'>"+data.MTVPERCENT+"</span><span>%</span>");
+      $("#foreigncapital").html("<span class='counter'>"+data.MAV+"</span>");
+      $("#foreigncapitalnum").html("<span class='counter'>"+data.MAVPERCENT+"</span><span>%</span>");
+      $("#provincezone").html("<span class='counter'>"+data.PTY+"</span>");
+      $("#provincezonearea").html("<span class='counter'>"+data.PTYPERCENT+"</span><span>%</span>");
+      $('.counter').countUp({
+        delay: 2,
+        time: 200
+      });
+    }
+  function dataTownzone(data){
+    $("#townzone").html("<span class='counter'>"+data[1]+"</span>");
+    $("#townzonearea").html("<span class='counter'>"+data[0]+"</span>");
+    $('.counter').countUp({
+      delay: 2,
+      time: 200
+    });
+  }
+
+//        日期范围选择
+    function selectDate(){
+
+      selectY_value = $("#selectY2").children().eq(0).val();
+      $(".selectY").change(function(){
+        var selectY_index = $(this).children('option:selected').index();
+        selectY_value = $(this).children('option:selected').val();
+//                console.log(selectY_value);
+        var selectY_id = $(this).attr('id');
+        if(selectY_id == "selectY1"){
+          $("#selectY2").children().prop('selected',false);
+          $("#selectY2").children().eq(selectY_index).prop('selected',true);
+        }else{
+          $("#selectY1").children().prop('selected',false);
+          $("#selectY1").children().eq(selectY_index).prop('selected',true);
+        }
+      })
+      //监测月份发生改变后后立即发送ajax请求
+      $("#selectM2").on('change',function(){
+        selectM_value = $(this).children('option:selected').val();//获取选择的月份
+        ajaxEcommerce2(selectY_value,selectM_value);
+        setValue(selectY_value);
+      });
+
+      //监测年份发生改变后后立即发送ajax请求
+      $("#selectY2").on('change',function(){
+        selectY_value = $(this).children('option:selected').val();//获取选择的年份
+        ajaxEcommerce1(selectY_value,"");
+        setValue(selectY_value);
+      });
+      $("#selectY1").on('change',function(){
+        //变更月份的选择范围
+        selectY_value = $(this).children('option:selected').val();//获取选择的年份
+        ajaxEcommerce1(selectY_value,"");
+        setValue(selectY_value);
+      });
+    }
+    ajaxEcommerce1("","");//默认发送发一次请求
+
+
+    selectDate();
+  })
+</script>
+</body>
+</html>
+

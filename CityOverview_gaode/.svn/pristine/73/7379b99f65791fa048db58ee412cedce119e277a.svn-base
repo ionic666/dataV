@@ -1,0 +1,23 @@
+package com.cetc28.idata.model;
+
+public class JxUtilityManteDeviceStateKey {
+    private String deviceId;
+
+    private String mesId;
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId == null ? null : deviceId.trim();
+    }
+
+    public String getMesId() {
+        return mesId;
+    }
+
+    public void setMesId(String mesId) {
+        this.mesId = mesId == null ? null : mesId.trim();
+    }
+}

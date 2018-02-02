@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.IJxEcoDao">
+
+    <resultMap id="BaseResultMap" type="com.cetc28.PeopleBenefitService.model.JxNetEcoStatistics" >
+        <id column="ID" jdbcType="DECIMAL" property="id" />
+        <id column="TIME" jdbcType="VARCHAR" property="time" />
+        <result column="COREPRODUCTION" jdbcType="DECIMAL" property="coreproduction" />
+        <result column="CORE_RANK" jdbcType="DECIMAL" property="coreRank" />
+        <result column="STORE_NUM" jdbcType="DECIMAL" property="storeNum" />
+        <result column="SALE" jdbcType="DECIMAL" property="sale" />
+        <result column="employerNum" jdbcType="DECIMAL" property="employernum" />
+        <result column="CONSUMPTION" jdbcType="DECIMAL" property="consumption" />
+    </resultMap>
+
+    <select id="queryGyzz" resultType="com.cetc28.PeopleBenefitService.dto.HgJjDto">
+        <![CDATA[ select gyzz,sj from (SELECT hg.gyzz,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1}
+        order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0} order by TO_DATE(sj,'YYYY-MM')]]>
+    </select>
+
+    <select id="queryPreGyzz" resultType="com.cetc28.PeopleBenefitService.dto.HgJjDto">
+        <![CDATA[ select gyzz,sj from (SELECT hg.gyzz,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1} AND TO_DATE(hg.sj,'YYYY-MM') <= TO_DATE(#{2},'YYYY-MM')
+           order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0} order by TO_DATE(sj,'YYYY-MM')]]>
+    </select>
+
+    <select id="queryFwysczs" resultType="com.cetc28.PeopleBenefitService.dto.HgJjDto">
+           <![CDATA[ select fwysczs,sj from (SELECT hg.fwysczs,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1}
+           order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0}]]>
+    </select>
+
+    <select id="queryGdzctz"  resultType="com.cetc28.PeopleBenefitService.dto.HgJjDto">
+          <![CDATA[ select gdzctz,sj from (SELECT hg.gdzctz,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1}
+           order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0} order by TO_DATE(sj,'YYYY-MM')]]>
+    </select>
+
+    <select id="queryPreGdzctz" resultType="com.cetc28.PeopleBenefitService.dto.HgJjDto">
+        <![CDATA[ select gdzctz,sj from (SELECT hg.gdzctz,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1} AND TO_DATE(hg.sj,'YYYY-MM') <= TO_DATE(#{2},'YYYY-MM')
+           order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0} order by TO_DATE(sj,'YYYY-MM')]]>
+    </select>
+
+    <select id="queryFdckftz" parameterType="java.lang.String" resultType="com.cetc28.PeopleBenefitService.dto.Fdckftz">
+           SELECT sum(hg.fdckftz) as kftz,max(rownum) as monthSize, TO_CHAR(max(TO_DATE(sj,'YYYY-MM')), 'YYYY-MM') as maxSj FROM
+            JX_ECO_HGJJ hg WHERE SUBSTR(hg.sj,0,4)=#{year}
+    </select>
+
+    <select id="queryPreFdckftz" resultType="java.lang.Double">
+        <![CDATA[ select sum(fdckftz)from ( SELECT hg.fdckftz FROM
+        JX_ECO_HGJJ hg WHERE SUBSTR(hg.sj,0,4)=#{0} order by TO_DATE(hg.sj,'YYYY-MM')) where rownum <=#{1}]]>
+    </select>
+
+    <select id="queryShxfplsze"  resultType="com.cetc28.PeopleBenefitService.dto.HgJjDto">
+           <![CDATA[ select shxfplsze,sj from (SELECT hg.shxfplsze,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1}
+           order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0} order by TO_DATE(sj,'YYYY-MM')]]>
+    </select>
+
+    <select id="queryShxfplszePrevious"  resultType="com.cetc28.PeopleBenefitService.dto.HgJjDto">
+         <![CDATA[ select shxfplsze,sj from (SELECT hg.shxfplsze,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1} and
+         TO_DATE(hg.sj,'YYYY-MM') <= TO_DATE(#{2},'YYYY-MM') order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0} order by TO_DATE(sj,'YYYY-MM')]]>
+    </select>
+
+    <select id="queryJck" resultType="com.cetc28.PeopleBenefitService.dto.HgJjDto">
+        <![CDATA[ select jck,sj from (SELECT hg.jck,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1}
+           order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0} order by TO_DATE(sj,'YYYY-MM')]]>
+    </select>
+
+    <select id="queryPreJck" resultType="com.cetc28.PeopleBenefitService.dto.HgJjDto">
+        <![CDATA[ select jck,sj from (SELECT hg.jck,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1} AND TO_DATE(hg.sj,'YYYY-MM') <= TO_DATE(#{2},'YYYY-MM')
+           order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0} order by TO_DATE(sj,'YYYY-MM')]]>
+    </select>
+    
+    <select id="getEcoInternetIndex" resultType="java.util.HashMap">
+        SELECT * FROM JX_ECO_INTERNET WHERE TIME = (SELECT MAX(TIME ) FROM JX_ECO_INTERNET)
+    </select>
+
+    <select id="getMaxTime" resultType="java.lang.String">
+        SELECT MAX(TIME) FROM JX_ECO_NET_STATISTICS
+    </select>
+    
+    <select id="queryNetBusiness" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        SELECT * from JX_ECO_NET_BUSINESS where to_number(to_char(to_date(time,'yyyy-mm'),'yyyy')) = #{0} and  to_number(to_char(to_date(time,'yyyy-mm'),'mm')) = #{1}
+    </select>
+
+    <select id="queryYears" resultType="java.lang.Integer">
+        SELECT distinct to_char(to_date(time,'yyyy-mm'),'yyyy') as year　from JX_ECO_NET_BUSINESS order by year desc
+    </select>
+
+    <select id="queryMonths" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT to_number(to_char(to_date(time,'yyyy-mm'),'mm')) as month from  JX_ECO_NET_BUSINESS where to_number(to_char(to_date(time,'yyyy-mm'),'yyyy')) = #{0} order by to_date(time,'yyyy-mm') desc
+    </select>
+
+
+    <select id="queryNetEcoStatistics" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT * from JX_ECO_NET_STATISTICS where time = #{time}
+    </select>
+
+    <select id="listEcoIndex" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        <![CDATA[SELECT * from (select * from JX_ECO_INTERNET order by time desc) where rownum <= #{0} order by time]]>
+    </select>
+    
+    <select id="queryIndustrialSite" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+        SELECT * from JX_ECO_INTERNET_SITE
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="type != null">
+              and type = #{type}
+           </if>
+        </where>
+    </select>
+
+    <select id="queryCurrentYear" resultType="String">
+        SELECT max(sj) FROM JX_ECO_HGJJ
+    </select>
+ </mapper>

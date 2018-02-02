@@ -1,0 +1,13 @@
+package com.cetc28.idata.Constant;
+
+
+/**
+ * 系统全局常量配置类
+ * Created by FangYan on 2017/9/19.
+ */
+
+public class SysConstant {
+	public static String CURRENT_USER_INFO = "_CURRENT_USER";	     //当前用户session name
+    public static String USER_DISABLED = "该用户已被禁用,请联系管理员";
+    public static String USER_PASSWD_ERROR = "用户名密码错误";
+}

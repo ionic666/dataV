@@ -1,0 +1,617 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #warningWindow .modal-dialog{
+      margin-right: 10px;
+      width:660px;
+    }
+    #warningWindow .modal-content{
+      height: 430px;
+      /*background: url("map/images/economicModel/bgw(1).png") no-repeat;
+      background-position: -7px 0;
+      background-size: 102% 101%;*/
+    }
+    #warningWindow .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #warningWindow .modal-title{
+      margin-top: -5px;
+    }
+    #warningWindow .modal-body{
+      padding: 0px;
+    }
+    #warningWindow .modal-header .nav li{
+      width: 117px;
+      height: 32px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+    }
+
+    #economicWindow .modal-header div .nav{
+      height:32px;
+      margin-top: -5px;
+    }
+    #economicWindow .nav li a:hover{
+      color: #000;
+      text-decoration: none;
+    }
+    #warnListTable{
+      color: #000000;
+    }
+    .menu-text{
+      padding-left: 0px;
+    }
+    /*提示信息弹出框样式*/
+    #myModal22 .modal-dialog{
+      width:300px;
+      margin: 0 auto;
+    }
+    #myModal22 .modal-header{
+      background-color: #49A6E9;
+      padding-top:2px;
+      padding-bottom:2px;
+    }
+    #myModal22 .modal-body{
+      font-size: 20px;
+      text-align: center;
+      padding-top:30px;
+      padding-bottom:30px;
+    }
+    #myModal22 .modal-footer{
+      background-color: #E4EAF6;
+      border-top:none;
+      padding-top:5px;
+      padding-bottom:5px;
+    }
+    #paging{
+      padding-left:42%;
+    }
+    #paging ul{
+      margin:auto;
+      list-style: none;
+    }
+    #paging li{
+      float:left;
+      text-align: center;
+      margin-right:10px;
+    }
+    .pre,.next{
+      width:20px;
+      border:1px solid #808080;
+      border-radius:50%;
+      color:#808080;
+      margin-top:2px;
+    }
+    .pre:hover,.next:hover{
+      border:1px solid #699AB5;
+      color:#699AB5;
+    }
+  </style>
+  <jsp:include page="addOrUpdatewarning.jsp"></jsp:include>
+</head>
+<body>
+<!--保存成功模态框-->
+<div class="modal fade" style="z-index: 1200;top:200px " id="myModal22" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
+      </div>
+      <div class="modal-body">
+        是否确认删除
+      </div>
+      <div class="modal-footer">
+        <button id="deletesure_jieru" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">确定</button>
+        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" style="width: 700px;height: 450px;margin: 0 auto;top:100px" id="warningWindow" tabindex="-1" role="dialog" aria-hidden="true" style=""
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header" >
+        <button type="button" onclick="closeInfoWindow()" class="close" data-dismiss="modal" aria-label="close" >
+          <img src="map/images/economicModel/close.png">
+        </button>
+        <div class="nav" style="margin-top: -11px;">
+          <ul class="list-group ">
+            <li onclick="toUrl(this,'#proSizewarn')"  class="list-unstyled act_4" value="4" style="font-weight: 100;"><div class="stext">告警列表</div></li>
+            <li onclick="toUrl(this,'#proStructurewarn_warning')"  class="list-unstyled li_3" value="3"><div class="stext">告警接入</div></li>
+            <%--<li onclick="toUrl(this,'#comState')"  class="list-unstyled li_5" value="5"><div class="stext">预测</div></li>--%>
+          </ul>
+        </div>
+        <%--<h4 class="modal-title ecoWindowTitle" id="infoModalLabel">社会经济</h4>--%>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content ">
+          <div id="proSizewarn" class="tab-pane active"><!--第一页产品规模这个图表-->
+            <div id="proSizewarnlab" style="float: left;width:120px;height: 330px;overflow-y: auto;overflow-x: hidden">
+
+                <ul id="gjLI" class="nav nav-list" style="top: 0px;">
+
+                </ul><!-- /.nav-list -->
+                <!-- /section:basics/sidebar.layout.minimize -->
+                <script type="text/javascript">
+                  try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                </script>
+              </div>
+            <div style="float: left;height:330px;width:510px;overflow-y: auto;">
+              <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <th>告警名称</th>
+                <th>告警指标</th>
+                <th>告警等级</th>
+                <%--<th>value</th>--%>
+                </thead>
+                <tbody id="warnListTable">
+
+                </tbody>
+              </table>
+              <%--<div id="paging">--%>
+                <%--<ul>--%>
+                  <%--<li class="pre"><</li>--%>
+                  <%--<li class='currentPage'><input size='4px;' style='text-align: center' id='currentPage' value=''/></li>--%>
+                  <%--<li class="next">></li>--%>
+                  <%--<li>共<span id="totopages">0</span>页</li>--%>
+                <%--</ul>--%>
+              <%--</div>--%>
+            </div>
+          </div>
+          <div id="proStructurewarn_warning" class="tab-pane " ><!--z这是第二页的饼图-->
+            <div style="height:330px;width:640px;" id="">
+              <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <th>接入名称</th>
+                <th>告警类型</th>
+                <th>接入链接</th>
+                <%--<th>接入描述</th>--%>
+                <%--<th>value</th>--%>
+                <th><input style="height: 20px;padding: 0px" class="btn" type="button" value="新增" onclick="addOreditJieru(this,'')"></th>
+                </thead>
+                <tbody  id="warnjieruTable">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <%--<div id="comState" class="tab-pane "><!--z这是第三页的条形图-->--%>
+            <%--<div style="height:225px;width:660px;" id="economicChartLine"></div>--%>
+            <%--<div style="height: 105px;width: 658px;padding-left: 50px;background-color: #80a2f2">--%>
+              <%--<table style="font-size: 18px;">--%>
+                <%--<tr>--%>
+                  <%--<td>本月经济生产GDP</td>--%>
+                  <%--<td><span style="color: #00ffd8">524万</span></td>--%>
+                <%--</tr>--%>
+                <%--<tr>--%>
+                  <%--<td>次月经济生产预测GDP</td>--%>
+                  <%--<td><span style="color: #f5fe02">615万</span></td>--%>
+                <%--</tr>--%>
+                <%--<tr>--%>
+                  <%--<td>环比增长</td>--%>
+                  <%--<td><span style="color: #5aff00">17%</span></td>--%>
+                <%--</tr>--%>
+              <%--</table>--%>
+            <%--</div>--%>
+          <%--</div>--%>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  //面板切换事件
+    function toUrl(evt,id){
+      var currentIndex=$(evt).val();
+      var currentAct='act_'+currentIndex;
+      var currentLi='li_'+currentIndex;
+      var docs=$(evt).siblings();
+      if($(evt).hasClass(currentAct)){
+        $(evt).addClass(currentLi).removeClass(currentAct);
+      }else{
+        $(evt).addClass(currentAct).removeClass(currentLi);
+        for(var i=0;i<docs.length;i++){
+          var otherAct="act_"+docs[i].value;
+          var otherLi="li_"+docs[i].value;
+          $(docs[i]).addClass(otherLi).removeClass(otherAct);
+        }
+        $(id).addClass("active").siblings().removeClass("active");
+      }
+    }
+
+  //分页获取告警table数据
+  var gjlxi=0;
+  function getGjInfos(gjlx,currentPage,pageSize){
+    gjlxi=0;
+    $("#warnListTable").html("");
+    if(gjlx=="网络安全"){
+       getAptData();
+    }
+    if(gjlx=="网络安全"){
+      getDcData();
+    }
+    if(gjlx=="基础设施"){
+      getGkData();
+    }
+  }
+
+  //告警列表
+  function initGjLi(){
+      $.ajax({
+        type: 'post',
+        url: 'icom/Ycyj_listYcyjGjxxLx.action',
+        dataType: 'JSON',
+        success: function (data) {
+          if(data){
+            $("#gjLI").html("");
+            var str="";
+            for(var i=0;i<data.length;i++){
+               str+=' <li class=""> <a href="javascript:void(0)"> <i class="menu-icon fa fa-tachometer"></i> <span class="menu-text"> '+data[i].gjlx+'</span> <span class="badge badge-success"></span></a> <b class="arrow"></b></li>'
+            }
+            str+="</tbody>";
+            $("#gjLI").append(str);
+            $("#proSizewarnlab").find("li").click(function(){
+              if(!$(this).hasClass("active")){
+                $(this).toggleClass("active");
+                $(this).siblings().removeClass("active");
+                //交互数
+                var gjlx=$(this).find(".menu-text").text().trim();
+                getGjInfos(gjlx,1,5);
+              }
+              $(this).siblings().removeClass("active");
+            })
+            getGjInfos("first",1,5);
+          }
+
+        }
+      })
+  }
+
+    //获取告警接入信息
+    function getGjConnectInfos(){
+      $.ajax({
+        type: 'post',
+        url: 'icom/Ycyj_listYcyjGjxxJr.action',
+        dataType: 'JSON',
+        success: function (data) {
+          if(data){
+            $("#warnjieruTable").html("");
+            var str="";
+            for(var i=0;i<data.length;i++){
+              str+='<tr><td>'+data[i].jrmc+'</td><td>'+data[i].gjlx+'</td><td>'+data[i].jrdz+'</td> <td><button onclick="addOreditJieru(this,\''+data[i].id+'\')" class="btn btn-xs btn-info">编辑'+
+              '</button><button onclick="deleteJieru(this,\''+data[i].id+'\')" class="btn btn-xs btn-danger">删除</button></td></tr>';
+            }
+            str+="</tbody>";
+            $("#warnjieruTable").append(str);
+          }
+        }
+      })
+    }
+
+  //测试
+  function getGjConnectInfosDemo(){
+    $.ajax({
+      type: 'post',
+      url: 'icom/Ycyj_listYcyjGjxxJrD.action',
+      dataType: 'JSONP',
+      jsonp: "callback",
+      processData: false,
+      success: function (data) {
+        if(data){
+          console.log(data);
+//          alert(data[0].id);
+        }
+      }
+    })
+  }
+//  getGjConnectInfosDemo();
+
+    var deleteId=0;
+
+    //打开删除确认弹出框
+  function deleteJieru(evt,id){
+    $("#myModal22").modal("show");
+    deleteId=id
+  }
+
+    //删除确认操作
+  $("#deletesure_jieru").click(function(){
+    $.ajax({
+      type: 'post',
+      url: 'icom/Ycyj_deleteYcyjGjxxJr.action?id='+deleteId,
+      dataType: 'text',
+      success: function (data) {
+        if(data=="删除成功"){
+          getGjConnectInfos();
+        }
+      }
+    })
+  })
+
+    //打开告警接入修改和新增面板框
+  function addOreditJieru(evt,id){
+    if(id==""||id==null){
+      $("#jrid").val("");
+      $("#jrmc").val("");
+      $("#gjlx").val("");
+      $("#jrdz").val("");
+      $("#jrms").val("");
+    }else{
+      $.ajax({
+        type: 'post',
+        url: 'icom/Ycyj_getYcyjGjxxJrInfo.action?id='+id,
+        dataType: 'JSON',
+        success: function (data) {
+          $("#jrid").val(data[0].id);
+          $("#jrmc").val(data[0].jrmc);
+          $("#gjlx").val(data[0].gjlx);
+          $("#jrdz").val(data[0].jrdz);
+          $("#jrms").val(data[0].jrms);
+        }
+      })
+    }
+    $("#addOrUpdatewarning").modal("show").draggable({cursor:'auto'});
+//    $("#warningWindow").modal("hide");
+  }
+
+    //保存和修改告警介入
+    function saveYcyjGjxxJr(){
+      var gjjr={};
+      gjjr.id=$("#jrid").val();
+      gjjr.jrmc=$("#jrmc").val();
+      gjjr.gjlx=$("#gjlx").val();
+      gjjr.jrdz=$("#jrdz").val();
+      gjjr.jrms=$("#jrms").val();
+      $.ajax({
+        type: 'post',
+        url: 'icom/Ycyj_saveOrUpdateYcyjGjxxJr.action?gjjr='+JSON.stringify(gjjr),
+        dataType: 'text',
+        success: function (data) {
+          var datas=eval("(" + data + ")");
+          if(datas.success==true) {
+            getGjConnectInfos();
+//            $("#warningWindow").modal("show").draggable({cursor:'auto'});
+            $("#addOrUpdatewarning").modal("hide");
+          }
+        }
+      })
+    }
+
+    //前一页
+    $(".pre").click(function(){
+      var curr=($(".currentPage").find("input").val()-0)-1;
+      if(curr>=1){
+        var gjlx=$("#proSizewarnlab").find(".active").find(".menu-text").text();
+        getGjInfos(gjlx,curr,5);
+      }
+    });
+    //后一页
+    $(".next").click(function(){
+      var totalPages=$("#totopages").text()-0;
+      var curr=($(".currentPage").find("input").val()-0)+1;
+      if(curr<=totalPages){
+        var gjlx=$("#proSizewarnlab").find(".active").find(".menu-text").text();
+        getGjInfos(gjlx,curr,5);
+      }
+    });
+
+  //获取apt数据
+  function getAptData() {
+    var aptArr = new Array();
+    var aptObj = {};
+    aptObj.apikey = '2E2B1D28D7CB3EA69A0712BC3B0445ED';
+    aptObj.size = 10;
+    $.ajax({
+      type: 'get',
+      url: 'http://110.185.210.154:18092/v1/realtime/alarms/last',
+      data: $.param(aptObj),
+      dataType: "json",
+      async:false,
+      success: function(request,status) {
+          var arr = request;
+        for(var i=0;i<arr.length;i++) {
+          var obj = {};
+          obj.level = '严重';
+
+          var level = '严重';
+
+          var str = '';
+          var datetime = arr[i].alarm_datetime;
+          str+=datetime;
+          var category = arr[i].alarm_category_string;
+          if(category == '病毒感染' || category == '可疑文件'){
+            str+=' 【安全防护告警】';
+          }
+          else if(category == '命令控制' || category == '恶意攻击'){
+            str+=' 【安全攻击告警】';
+          }
+//          str+=' 告警等级：'+level+', '+arr[i].alarm_type_string+', '+arr[i].alarm_digest;
+//          obj.content = str;
+          str+='<tr><td>安全攻击告警</td><td>'+arr[i].alarm_category_string+'</td><td>'+level+'</td></tr>';
+//          aptArr.push(obj);
+        }
+        gjlxi+=arr.length;
+        $("#warnListTable").append(str);
+      },
+      error: function(data) {
+        console.log("=="+data);
+      }
+    });
+    return aptArr;
+  }
+
+  //获取电磁数据
+  function getDcData() {
+    var dcArr = new Array();
+    var dcObj = {};
+    dcObj.start = '2016/7/1 15:06:00';
+    dcObj.end = '2016/8/20 15:06:00';
+    dcObj.xmin = '110';
+    dcObj.ymin = '21';
+    dcObj.xmax = '115';
+    dcObj.ymax = '23';
+    dcObj.fmin = '1000000';
+    dcObj.fmax = '3000000';
+
+    var str="";
+    $.ajax({
+      type: 'get',
+      url: 'http://10.0.11.125:82/default.aspx',
+      data: $.param(dcObj),
+      dataType: "text",
+      async:false,
+      success: function(request,status) {
+        var result = JSON.parse(request);
+        for(var i=0;i<result.length;i++) {
+          var obj = {};
+
+
+          var data = result[i];
+
+          var score = parseFloat(Math.abs((data.value-data.thres)/data.thres));
+          var level = getDcLevel(score);
+          obj.level = level;
+
+
+//          var str = data.datatime;
+//          str+=' 【安全防护告警】 告警等级：'+level+', 站点['+data.lon+","+data.lat+']监测到频率'+data.freq/1000+'KHz信号强度为'+data.value
+//          +', 超过标准值'+data.thres;
+          str+='<tr><td>安全防护告警</td><td>'+data.value+'</td><td>'+level+'</td></tr>';
+//          obj.content = str;
+
+//          dcArr.push(obj);
+        }
+        gjlxi+=result.length;
+        $("#warnListTable").append(str);
+        $("#proSizewarnlab").find(".active").find(".badge-success").text(gjlxi);
+      },
+      error: function(data) {
+        console.log("=="+data);
+      }
+    });
+  }
+
+  //获取工控数据
+  function getGkData() {
+    var gkArr = new Array();
+
+    var gkObj = {};
+    gkObj.token = '95154958858039831702';
+    gkObj.invoker = 'External';
+    var str = "";
+    $.ajax({
+      type: 'get',
+      url: 'http://110.185.210.152:40303/web/zhcs/api/statistics.php',
+      data: $.param(gkObj),
+      dataType: 'text',
+      async:false,
+      success: function(request,status) {
+        var result = JSON.parse(request);
+
+        var message = result.message;
+        if(message == 'Success'){
+          var data = result.data;
+
+          var obj = {};
+
+          var score = parseFloat(data.vulnerability/data.total);
+          var level = getGkLevel(score);
+          obj.level = level;
+
+//          str+=' 【基础资产状态告警】 告警等级：'+level+', 威胁量化指标为'+data.security+', 存在安全隐患工控个数为：'+data.vulnerability;
+//          obj.content = str;
+          str+='<tr><td>基础资产状态告警</td><td>'+data.security+'</td><td>'+level+'</td></tr>';
+//          gkArr.push(obj);
+        }
+        $("#warnListTable").html(str);
+        $("#proSizewarnlab").find(".active").find(".badge-success").text(1);
+      },
+      error: function(data) {
+        console.log("=="+data);
+      }
+    });
+
+//    return gkArr;
+  }
+
+  function getCurDateTime() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth()+1;
+    var day = date.getDate();
+    if(month >= 1 && month <= 9)
+      month = "0" + month;
+    if(day >= 1 && day <= 9)
+      day = "0" + day;
+    curDate = year + "-" + month + "-" + day;
+
+    var hour = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+    if(hour >= 1 && hour <= 9)
+      hour = "0" + hour;
+    if(minutes >= 1 && minutes <= 9)
+      minutes = "0" + minutes;
+    if(seconds>=1 && seconds <= 9)
+      seconds = "0"+seconds;
+    curDate = curDate+" "+hour+":"+minutes+":"+seconds;
+    return curDate;
+  }
+
+  //电磁告警等级
+  function getDcLevel(score) {
+    var level = null;
+    if(score>0.8)
+      level = '致命';
+    else if(score>=0.5&&score<0.8)
+      level = '严重';
+    else if(score>=0.1&&score<0.5)
+      level = '重要'
+    else if(score>=0&&score<0.1)
+      level = '一般';
+    else
+      level = '正常';
+
+    return level;
+  }
+
+  //工控告警等级
+  function getGkLevel(score) {
+    var level = null;
+    if (score>=0.9)
+      level = '致命';
+    else if( score>=0.7&&score<0.9)
+      level = '严重';
+    else if (score >=0.4&&score<0.7)
+      level = '重要';
+    else if(score>=0.1&&score<0.4)
+      level = '一般';
+    else if (score<0.1)
+      level = '正常';
+    return level;
+  }
+//
+//  getGjInfos("网络安全",0,0);
+//  getGjInfos("基础设施",0,0);
+</script>
+</body>
+</html>

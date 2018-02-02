@@ -1,0 +1,217 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="../../map/js/jquery-1.11.3.js"></script>
+  <script src="../../myjs/echarts-all.js"></script>
+    <script src="../../map/js/jquery.waypoints.min.js"></script>
+    <script src="../../map/js/jquery.countup.js"></script>
+  <script src="../../myjs/myEcharts.js"></script>
+  <style>
+    body{
+      margin: 0;
+    }
+    .wlbzLine{
+      float: left;
+    }
+  </style>
+</head>
+
+<body>
+<div id="wlbzLine1" class="wlbzLine" style="height:50vh;width: 50%"></div>
+<div id="wlbzLine2" class="wlbzLine" style="height:50vh;width: 50%"></div>
+<div id="wlbzLine3" class="wlbzLine" style="height:50vh;width: 50%"></div>
+<div id="wlbzLine4" class="wlbzLine" style="height:50vh;width: 50%"></div>
+<script>
+  var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+ function wlbz(data1,data2,data3,data4){
+   var myChart1=echarts.init(document.getElementById("wlbzLine1")),
+           myChart2=echarts.init(document.getElementById("wlbzLine2")),
+           myChart3=echarts.init(document.getElementById("wlbzLine3")),
+           myChart4=echarts.init(document.getElementById("wlbzLine4"));
+   var option1 = {
+     title : {
+       text: '固定宽带普及率',
+       textStyle:text_style
+     },
+     tooltip : {
+       formatter: "{a} <br/>{b} : {c}%"
+     },
+     series : [
+       {
+         name:'固定宽带',
+         type:'gauge',
+         radius : '90%',
+         min:0,
+         max:100,
+         axisLine: {            // 坐标轴线
+           lineStyle: {       // 属性lineStyle控制线条样式
+             width: 4
+           }
+         },
+         axisTick: {            // 坐标轴小标记
+           length :12,        // 属性length控制线长
+           lineStyle: {       // 属性lineStyle控制线条样式
+             color: 'auto'
+           }
+         },
+         splitLine: {           // 分隔线
+           length :20,         // 属性length控制线长
+           lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+             color: 'auto'
+           }
+         },
+         detail : {formatter:'{value}%'},
+         data:data1
+
+       }
+     ]
+   };
+   option2 = {
+     title : {
+       text: '光纤到户渗透率',
+       textStyle:text_style
+     },
+     tooltip : {
+       formatter: "{a} <br/>{b} : {c}%"
+     },
+     series : [
+       {
+         name:'光纤到户',
+         type:'gauge',
+         radius : '90%',
+         min:0,
+         max:100,
+         axisLine: {            // 坐标轴线
+           lineStyle: {       // 属性lineStyle控制线条样式
+             width: 4
+           }
+         },
+         axisTick: {            // 坐标轴小标记
+           length :12,        // 属性length控制线长
+           lineStyle: {       // 属性lineStyle控制线条样式
+             color: 'auto'
+           }
+         },
+         splitLine: {           // 分隔线
+           length :20,         // 属性length控制线长
+           lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+             color: 'auto'
+           }
+         },
+         detail : {formatter:'{value}%'},
+         data:data2
+       }
+     ]
+   };
+   option3 = {
+     title : {
+       text: '移动宽带普及率',
+       textStyle:text_style
+     },
+     tooltip : {
+       formatter: "{a} <br/>{b} : {c}%"
+     },
+     series : [
+       {
+         name:'移动宽带',
+         type:'gauge',
+         radius : '90%',
+         min:0,
+         max:100,
+         axisLine: {            // 坐标轴线
+           lineStyle: {       // 属性lineStyle控制线条样式
+             width: 4
+           }
+         },
+         axisTick: {            // 坐标轴小标记
+           length :12,        // 属性length控制线长
+           lineStyle: {       // 属性lineStyle控制线条样式
+             color: 'auto'
+           }
+         },
+         splitLine: {           // 分隔线
+           length :20,         // 属性length控制线长
+           lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+             color: 'auto'
+           }
+         },
+         detail : {formatter:'{value}%'},
+         data:data3
+       }
+     ]
+   };
+   option4 = {
+     title : {
+       text: '公共场所WIFI覆盖率',
+       textStyle:text_style
+     },
+     tooltip : {
+       formatter: "{a} <br/>{b} : {c}%"
+     },
+     series : [
+       {
+         name:'公共场所WIFI',
+         type:'gauge',
+         radius : '90%',
+         min:0,
+         max:100,
+         axisLine: {            // 坐标轴线
+           lineStyle: {       // 属性lineStyle控制线条样式
+             width: 4
+           }
+         },
+         axisTick: {            // 坐标轴小标记
+           length :12,        // 属性length控制线长
+           lineStyle: {       // 属性lineStyle控制线条样式
+             color: 'auto'
+           }
+         },
+         splitLine: {           // 分隔线
+           length :20,         // 属性length控制线长
+           lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+             color: 'auto'
+           }
+         },
+         detail : {formatter:'{value}%'},
+         data:data4
+       }
+     ]
+   };
+
+
+   myChart1.setOption(option1);
+   myChart2.setOption(option2);
+   myChart3.setOption(option3);
+   myChart4.setOption(option4);
+ }
+  //  查询本年网络保障数据
+  $.ajax({
+    type:"POST",
+    url:'../../jxutility/internet/internetCoverRate.do?bH='+qhbh+'&yearSize=1',
+    dataType:'json',
+    success:function(data){
+      var data1=[],data2=[],data3=[],data4=[];
+      var dataValue1=data[0].fixedBbRate*100,
+          dataValue2=data[0].fiberToHomeRate*100,
+          dataValue3=data[0].mobileBbRate*100,
+          dataValue4=data[0].publicWifiRate*100;
+      data1.push({"value":dataValue1,"name":"普及率"});
+      data2.push({"value":dataValue2,"name":"普及率"});
+      data3.push({"value":dataValue3,"name":"普及率"});
+      data4.push({"value":dataValue4,"name":"普及率"});
+      wlbz(data1,data2,data3,data4);
+    }
+  });
+</script>
+</body>
+</html>

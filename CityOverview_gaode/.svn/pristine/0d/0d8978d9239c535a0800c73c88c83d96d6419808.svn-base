@@ -1,0 +1,20 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxSchoolStatisticInfo;
+import com.cetc28.idata.model.JxSchoolStatisticInfoExample;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+public interface JxSchoolStatisticInfoMapper {
+    int insert(JxSchoolStatisticInfo record);
+
+    int insertSelective(JxSchoolStatisticInfo record);
+
+    List<JxSchoolStatisticInfo> selectByExample(JxSchoolStatisticInfoExample example);
+
+    String queryMaxYear(String qhbh);
+
+    List<JxSchoolStatisticInfo> queryStatisticInfoByYear(@Param("qhbh")String qhbh, @Param("year") String year);
+}

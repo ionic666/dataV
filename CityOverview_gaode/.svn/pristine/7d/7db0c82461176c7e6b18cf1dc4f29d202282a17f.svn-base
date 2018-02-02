@@ -1,0 +1,90 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.JxServiceRateCaseDao;
+import com.cetc28.idata.service.IJxSerRateCaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/23.
+ */
+@Service
+public class JxSerRateCaseServiceImpl implements IJxSerRateCaseService {
+    @Autowired
+    private JxServiceRateCaseDao jxServiceRateCaseDao;
+    @Override
+    public Map queryDefaultData() {
+        Map result=new HashMap();
+        List<String> quanshiRate=jxServiceRateCaseDao.queryQuanshiRate();
+        result.put("quanshiRate",quanshiRate);
+        result.put("quanshitongbirate",jxServiceRateCaseDao.queryQuanshiTongbiRate());
+        List<String> bhRange=jxServiceRateCaseDao.queryBhRange();
+        List bhMcRangeList=new ArrayList();
+        for(String bh:bhRange){
+            Map<String,String> bhMc=new HashMap();
+            String mc=jxServiceRateCaseDao.queryMcByBh(bh);
+            bhMc.put("bhValue",bh);
+            bhMc.put("mc", mc);
+            bhMcRangeList.add(bhMc);
+        }
+        result.put("bhList",bhMcRangeList);
+        //组装建议
+        Map param=new HashMap();
+        param.put("bhValue",bhRange.get(0));
+        param.put("sort","1");
+        List bianming=jxServiceRateCaseDao.querySuggestandPercentbyBh(param);
+        param.put("sort","2");
+        List qiye=jxServiceRateCaseDao.querySuggestandPercentbyBh(param);
+        Map suggest=new HashMap();
+        suggest.put("bianming",bianming);
+        suggest.put("qiye",qiye);
+        result.put("suggest",suggest);
+
+        //组装三率
+        Map rateparam=new HashMap();
+        rateparam.put("sort","1");
+        rateparam.put("category","1");
+        List town=jxServiceRateCaseDao.queryRateCaseBh(rateparam);
+        List item=jxServiceRateCaseDao.queryRateCaseItem(rateparam);
+        result.put("town",town);
+        result.put("item",item);
+
+        return result;
+    }
+
+    @Override
+    public Map querySuggestByBhValue(String bhValue) {
+        Map result=new HashMap();
+        //组装建议
+        Map param=new HashMap();
+        param.put("bhValue",bhValue);
+        param.put("sort","1");
+        List bianming=jxServiceRateCaseDao.querySuggestandPercentbyBh(param);
+        param.put("sort","2");
+        List qiye=jxServiceRateCaseDao.querySuggestandPercentbyBh(param);
+        Map suggest=new HashMap();
+        suggest.put("bianming",bianming);
+        suggest.put("qiye",qiye);
+        result.put("suggest",suggest);
+        return result;
+    }
+
+    @Override
+    public Map queryRateCaseBySort(String sort) {
+        Map result=new HashMap();
+        //组装三率
+        Map rateparam=new HashMap();
+        rateparam.put("sort",sort);
+        rateparam.put("category","1");
+        List town=jxServiceRateCaseDao.queryRateCaseBh(rateparam);
+        List item=jxServiceRateCaseDao.queryRateCaseItem(rateparam);
+        result.put("town",town);
+        result.put("item",item);
+        return result;
+    }
+}

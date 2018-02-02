@@ -1,0 +1,43 @@
+package com.cetc28.idata.model;
+
+/**
+ * Created by linyu on 2017/9/1.
+ */
+public class JxIndicator {
+    private String name;   //指标名称
+    private String pxxh;   //排序序号
+    private String state;  //监测状态
+    private String bh;     //编号
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPxxh() {
+        return pxxh;
+    }
+
+    public void setPxxh(String pxxh) {
+        this.pxxh = pxxh;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+}

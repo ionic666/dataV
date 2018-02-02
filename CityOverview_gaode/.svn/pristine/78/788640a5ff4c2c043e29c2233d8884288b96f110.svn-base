@@ -1,0 +1,65 @@
+package com.cetc28.idata.model;
+
+import java.util.Date;
+
+public class JxSsMiHospitalVolume {
+    private Short id;
+
+    private Short hospitalCode;
+
+    private String volumeDate;
+
+    private Long volume;
+
+    private Long sumVolume;
+
+    private String hospitalName;//医院名称
+
+    public String getHospitalName() {
+        return hospitalName;
+    }
+
+    public void setHospitalName(String hospitalName) {
+        this.hospitalName = hospitalName;
+    }
+
+    public Short getId() {
+        return id;
+    }
+
+    public void setId(Short id) {
+        this.id = id;
+    }
+
+    public Short getHospitalCode() {
+        return hospitalCode;
+    }
+
+    public void setHospitalCode(Short hospitalCode) {
+        this.hospitalCode = hospitalCode;
+    }
+
+    public String getVolumeDate() {
+        return volumeDate;
+    }
+
+    public void setVolumeDate(String volumeDate) {
+        this.volumeDate = volumeDate;
+    }
+
+    public Long getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Long volume) {
+        this.volume = volume;
+    }
+
+    public Long getSumVolume() {
+        return sumVolume;
+    }
+
+    public void setSumVolume(Long sumVolume) {
+        this.sumVolume = sumVolume;
+    }
+}

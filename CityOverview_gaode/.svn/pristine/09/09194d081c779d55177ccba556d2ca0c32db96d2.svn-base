@@ -1,0 +1,161 @@
+package com.cetc28.EcoSuitableResidence.model;
+
+/**
+ * Created by LYLYC on 2017/9/12.
+ */
+public class JxEnvirWater {
+    private String qhbh;    //区划编号
+    private String mc;      //名称
+    private String jd;      //经度
+    private String wd;      //纬度
+    private String bh;      //编号
+    private String jcsj;    //监测时间
+    private double ph;      //ph值
+    private double rjy;     //溶解氧
+    private double zd;      //浊度
+    private double ddl;     //电导率
+    private double zl;      //总磷
+    private double zd1;     //总氮
+    private double ad;      //氨氮
+    private String zldj;    //质量等级
+    private String dz;       //地址
+    private double gmsy;   //高锰酸盐
+    private String sywrw;   //首要污染物
+
+
+    public String getQhbh() {
+        return qhbh;
+    }
+
+    public void setQhbh(String qhbh) {
+        this.qhbh = qhbh;
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+
+    public String getJd() {
+        return jd;
+    }
+
+    public void setJd(String jd) {
+        this.jd = jd;
+    }
+
+    public String getWd() {
+        return wd;
+    }
+
+    public void setWd(String wd) {
+        this.wd = wd;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getJcsj() {
+        return jcsj;
+    }
+
+    public void setJcsj(String jcsj) {
+        this.jcsj = jcsj;
+    }
+
+    public double getPh() {
+        return ph;
+    }
+
+    public void setPh(double ph) {
+        this.ph = ph;
+    }
+
+    public double getRjy() {
+        return rjy;
+    }
+
+    public void setRjy(double rjy) {
+        this.rjy = rjy;
+    }
+
+    public double getZd() {
+        return zd;
+    }
+
+    public void setZd(double zd) {
+        this.zd = zd;
+    }
+
+    public double getDdl() {
+        return ddl;
+    }
+
+    public void setDdl(double ddl) {
+        this.ddl = ddl;
+    }
+
+    public double getZl() {
+        return zl;
+    }
+
+    public void setZl(double zl) {
+        this.zl = zl;
+    }
+
+    public double getZd1() {
+        return zd1;
+    }
+
+    public void setZd1(double zd1) {
+        this.zd1 = zd1;
+    }
+
+    public double getAd() {
+        return ad;
+    }
+
+    public void setAd(double ad) {
+        this.ad = ad;
+    }
+
+    public String getZldj() {
+        return zldj;
+    }
+
+    public void setZldj(String zldj) {
+        this.zldj = zldj;
+    }
+
+    public String getDz() {
+        return dz;
+    }
+
+    public void setDz(String dz) {
+        this.dz = dz;
+    }
+
+    public double getGmsy() {
+        return gmsy;
+    }
+
+    public void setGmsy(double gmsy) {
+        this.gmsy = gmsy;
+    }
+
+    public String getSywrw() {
+        return sywrw;
+    }
+
+    public void setSywrw(String sywrw) {
+        this.sywrw = sywrw;
+    }
+}

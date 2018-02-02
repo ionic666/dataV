@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.JxSsMiVolumeStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.cetc28.PeopleBenefitService.model.JxSsMiVolumeStatistics" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="STATISTICS_DATE" property="statisticsDate" jdbcType="TIMESTAMP" />
+    <result column="TRANSACTION_NUM" property="transactionNum" jdbcType="DECIMAL" />
+    <result column="TRANSACTION_AMOUNT" property="transactionAmount" jdbcType="DECIMAL" />
+    <result column="NORMAL_IN_HOSPITAL_VOLUME" property="normalInHospitalVolume" jdbcType="DECIMAL" />
+    <result column="CONTINUNE_IN_HOSPITAL_VOLUME" property="continuneInHospitalVolume" jdbcType="DECIMAL" />
+    <result column="HOSPITAL_REGISTER_VOLUME" property="hospitalRegisterVolume" jdbcType="DECIMAL" />
+    <result column="OUTPATIENT_DISEASE_VOLUME" property="outpatientDiseaseVolume" jdbcType="DECIMAL" />
+    <result column="FAMILY_SICKBED_VOLUME" property="familySickbedVolume" jdbcType="DECIMAL" />
+    <result column="NORMAL_OUTPATIENT_VOLUME" property="normalOutpatientVolume" jdbcType="DECIMAL" />
+    <result column="DRUGSTORES_VOLUME" property="drugstoresVolume" jdbcType="DECIMAL" />
+    <result column="VOLUME_003001001" property="volume003001001" jdbcType="DECIMAL" />
+    <result column="VOLUME_003001005" property="volume003001005" jdbcType="DECIMAL" />
+    <result column="VOLUME_003001003" property="volume003001003" jdbcType="DECIMAL" />
+    <result column="VOLUME_003001002" property="volume003001002" jdbcType="DECIMAL" />
+    <result column="VOLUME_003001006" property="volume003001006" jdbcType="DECIMAL" />
+    <result column="VOLUME_003001007" property="volume003001007" jdbcType="DECIMAL" />
+    <result column="VOLUME_003001004" property="volume003001004" jdbcType="DECIMAL" />
+    <result column="TIME_0_VOLUME" property="time0Volume" jdbcType="DECIMAL" />
+    <result column="TIME_1_VOLUME" property="time1Volume" jdbcType="DECIMAL" />
+    <result column="TIME_2_VOLUME" property="time2Volume" jdbcType="DECIMAL" />
+    <result column="TIME_3_VOLUME" property="time3Volume" jdbcType="DECIMAL" />
+    <result column="TIME_4_VOLUME" property="time4Volume" jdbcType="DECIMAL" />
+    <result column="TIME_5_VOLUME" property="time5Volume" jdbcType="DECIMAL" />
+    <result column="TIME_6_VOLUME" property="time6Volume" jdbcType="DECIMAL" />
+    <result column="TIME_7_VOLUME" property="time7Volume" jdbcType="DECIMAL" />
+    <result column="TIME_8_VOLUME" property="time8Volume" jdbcType="DECIMAL" />
+    <result column="TIME_9_VOLUME" property="time9Volume" jdbcType="DECIMAL" />
+    <result column="TIME_10_VOLUME" property="time10Volume" jdbcType="DECIMAL" />
+    <result column="TIME_11_VOLUME" property="time11Volume" jdbcType="DECIMAL" />
+    <result column="TIME_12_VOLUME" property="time12Volume" jdbcType="DECIMAL" />
+    <result column="TIME_13_VOLUME" property="time13Volume" jdbcType="DECIMAL" />
+    <result column="TIME_14_VOLUME" property="time14Volume" jdbcType="DECIMAL" />
+    <result column="TIME_15_VOLUME" property="time15Volume" jdbcType="DECIMAL" />
+    <result column="TIME_16_VOLUME" property="time16Volume" jdbcType="DECIMAL" />
+    <result column="TIME_17_VOLUME" property="time17Volume" jdbcType="DECIMAL" />
+    <result column="TIME_18_VOLUME" property="time18Volume" jdbcType="DECIMAL" />
+    <result column="TIME_19_VOLUME" property="time19Volume" jdbcType="DECIMAL" />
+    <result column="TIME_20_VOLUME" property="time20Volume" jdbcType="DECIMAL" />
+    <result column="TIME_21_VOLUME" property="time21Volume" jdbcType="DECIMAL" />
+    <result column="TIME_22_VOLUME" property="time22Volume" jdbcType="DECIMAL" />
+    <result column="TIME_23_VOLUME" property="time23Volume" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, STATISTICS_DATE, TRANSACTION_NUM, TRANSACTION_AMOUNT, NORMAL_IN_HOSPITAL_VOLUME, 
+    CONTINUNE_IN_HOSPITAL_VOLUME, HOSPITAL_REGISTER_VOLUME, OUTPATIENT_DISEASE_VOLUME, 
+    FAMILY_SICKBED_VOLUME, NORMAL_OUTPATIENT_VOLUME, DRUGSTORES_VOLUME, VOLUME_003001001, 
+    VOLUME_003001005, VOLUME_003001003, VOLUME_003001002, VOLUME_003001006, VOLUME_003001007, 
+    VOLUME_003001004, TIME_0_VOLUME, TIME_1_VOLUME, TIME_2_VOLUME, TIME_3_VOLUME, TIME_4_VOLUME, 
+    TIME_5_VOLUME, TIME_6_VOLUME, TIME_7_VOLUME, TIME_8_VOLUME, TIME_9_VOLUME, TIME_10_VOLUME, 
+    TIME_11_VOLUME, TIME_12_VOLUME, TIME_13_VOLUME, TIME_14_VOLUME, TIME_15_VOLUME, TIME_16_VOLUME, 
+    TIME_17_VOLUME, TIME_18_VOLUME, TIME_19_VOLUME, TIME_20_VOLUME, TIME_21_VOLUME, TIME_22_VOLUME, 
+    TIME_23_VOLUME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from JX_SS_MI_VOLUME_STATISTICS
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from JX_SS_MI_VOLUME_STATISTICS
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cetc28.PeopleBenefitService.model.JxSsMiVolumeStatistics" >
+    insert into JX_SS_MI_VOLUME_STATISTICS (ID, STATISTICS_DATE, TRANSACTION_NUM, 
+      TRANSACTION_AMOUNT, NORMAL_IN_HOSPITAL_VOLUME, 
+      CONTINUNE_IN_HOSPITAL_VOLUME, HOSPITAL_REGISTER_VOLUME, 
+      OUTPATIENT_DISEASE_VOLUME, FAMILY_SICKBED_VOLUME, 
+      NORMAL_OUTPATIENT_VOLUME, DRUGSTORES_VOLUME, 
+      VOLUME_003001001, VOLUME_003001005, VOLUME_003001003, 
+      VOLUME_003001002, VOLUME_003001006, VOLUME_003001007, 
+      VOLUME_003001004, TIME_0_VOLUME, TIME_1_VOLUME, 
+      TIME_2_VOLUME, TIME_3_VOLUME, TIME_4_VOLUME, 
+      TIME_5_VOLUME, TIME_6_VOLUME, TIME_7_VOLUME, 
+      TIME_8_VOLUME, TIME_9_VOLUME, TIME_10_VOLUME, 
+      TIME_11_VOLUME, TIME_12_VOLUME, TIME_13_VOLUME, 
+      TIME_14_VOLUME, TIME_15_VOLUME, TIME_16_VOLUME, 
+      TIME_17_VOLUME, TIME_18_VOLUME, TIME_19_VOLUME, 
+      TIME_20_VOLUME, TIME_21_VOLUME, TIME_22_VOLUME, 
+      TIME_23_VOLUME)
+    values (#{id,jdbcType=DECIMAL}, #{statisticsDate,jdbcType=TIMESTAMP}, #{transactionNum,jdbcType=DECIMAL}, 
+      #{transactionAmount,jdbcType=DECIMAL}, #{normalInHospitalVolume,jdbcType=DECIMAL}, 
+      #{continuneInHospitalVolume,jdbcType=DECIMAL}, #{hospitalRegisterVolume,jdbcType=DECIMAL}, 
+      #{outpatientDiseaseVolume,jdbcType=DECIMAL}, #{familySickbedVolume,jdbcType=DECIMAL}, 
+      #{normalOutpatientVolume,jdbcType=DECIMAL}, #{drugstoresVolume,jdbcType=DECIMAL}, 
+      #{volume003001001,jdbcType=DECIMAL}, #{volume003001005,jdbcType=DECIMAL}, #{volume003001003,jdbcType=DECIMAL}, 
+      #{volume003001002,jdbcType=DECIMAL}, #{volume003001006,jdbcType=DECIMAL}, #{volume003001007,jdbcType=DECIMAL}, 
+      #{volume003001004,jdbcType=DECIMAL}, #{time0Volume,jdbcType=DECIMAL}, #{time1Volume,jdbcType=DECIMAL}, 
+      #{time2Volume,jdbcType=DECIMAL}, #{time3Volume,jdbcType=DECIMAL}, #{time4Volume,jdbcType=DECIMAL}, 
+      #{time5Volume,jdbcType=DECIMAL}, #{time6Volume,jdbcType=DECIMAL}, #{time7Volume,jdbcType=DECIMAL}, 
+      #{time8Volume,jdbcType=DECIMAL}, #{time9Volume,jdbcType=DECIMAL}, #{time10Volume,jdbcType=DECIMAL}, 
+      #{time11Volume,jdbcType=DECIMAL}, #{time12Volume,jdbcType=DECIMAL}, #{time13Volume,jdbcType=DECIMAL}, 
+      #{time14Volume,jdbcType=DECIMAL}, #{time15Volume,jdbcType=DECIMAL}, #{time16Volume,jdbcType=DECIMAL}, 
+      #{time17Volume,jdbcType=DECIMAL}, #{time18Volume,jdbcType=DECIMAL}, #{time19Volume,jdbcType=DECIMAL}, 
+      #{time20Volume,jdbcType=DECIMAL}, #{time21Volume,jdbcType=DECIMAL}, #{time22Volume,jdbcType=DECIMAL}, 
+      #{time23Volume,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsMiVolumeStatistics" >
+    insert into JX_SS_MI_VOLUME_STATISTICS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="statisticsDate != null" >
+        STATISTICS_DATE,
+      </if>
+      <if test="transactionNum != null" >
+        TRANSACTION_NUM,
+      </if>
+      <if test="transactionAmount != null" >
+        TRANSACTION_AMOUNT,
+      </if>
+      <if test="normalInHospitalVolume != null" >
+        NORMAL_IN_HOSPITAL_VOLUME,
+      </if>
+      <if test="continuneInHospitalVolume != null" >
+        CONTINUNE_IN_HOSPITAL_VOLUME,
+      </if>
+      <if test="hospitalRegisterVolume != null" >
+        HOSPITAL_REGISTER_VOLUME,
+      </if>
+      <if test="outpatientDiseaseVolume != null" >
+        OUTPATIENT_DISEASE_VOLUME,
+      </if>
+      <if test="familySickbedVolume != null" >
+        FAMILY_SICKBED_VOLUME,
+      </if>
+      <if test="normalOutpatientVolume != null" >
+        NORMAL_OUTPATIENT_VOLUME,
+      </if>
+      <if test="drugstoresVolume != null" >
+        DRUGSTORES_VOLUME,
+      </if>
+      <if test="volume003001001 != null" >
+        VOLUME_003001001,
+      </if>
+      <if test="volume003001005 != null" >
+        VOLUME_003001005,
+      </if>
+      <if test="volume003001003 != null" >
+        VOLUME_003001003,
+      </if>
+      <if test="volume003001002 != null" >
+        VOLUME_003001002,
+      </if>
+      <if test="volume003001006 != null" >
+        VOLUME_003001006,
+      </if>
+      <if test="volume003001007 != null" >
+        VOLUME_003001007,
+      </if>
+      <if test="volume003001004 != null" >
+        VOLUME_003001004,
+      </if>
+      <if test="time0Volume != null" >
+        TIME_0_VOLUME,
+      </if>
+      <if test="time1Volume != null" >
+        TIME_1_VOLUME,
+      </if>
+      <if test="time2Volume != null" >
+        TIME_2_VOLUME,
+      </if>
+      <if test="time3Volume != null" >
+        TIME_3_VOLUME,
+      </if>
+      <if test="time4Volume != null" >
+        TIME_4_VOLUME,
+      </if>
+      <if test="time5Volume != null" >
+        TIME_5_VOLUME,
+      </if>
+      <if test="time6Volume != null" >
+        TIME_6_VOLUME,
+      </if>
+      <if test="time7Volume != null" >
+        TIME_7_VOLUME,
+      </if>
+      <if test="time8Volume != null" >
+        TIME_8_VOLUME,
+      </if>
+      <if test="time9Volume != null" >
+        TIME_9_VOLUME,
+      </if>
+      <if test="time10Volume != null" >
+        TIME_10_VOLUME,
+      </if>
+      <if test="time11Volume != null" >
+        TIME_11_VOLUME,
+      </if>
+      <if test="time12Volume != null" >
+        TIME_12_VOLUME,
+      </if>
+      <if test="time13Volume != null" >
+        TIME_13_VOLUME,
+      </if>
+      <if test="time14Volume != null" >
+        TIME_14_VOLUME,
+      </if>
+      <if test="time15Volume != null" >
+        TIME_15_VOLUME,
+      </if>
+      <if test="time16Volume != null" >
+        TIME_16_VOLUME,
+      </if>
+      <if test="time17Volume != null" >
+        TIME_17_VOLUME,
+      </if>
+      <if test="time18Volume != null" >
+        TIME_18_VOLUME,
+      </if>
+      <if test="time19Volume != null" >
+        TIME_19_VOLUME,
+      </if>
+      <if test="time20Volume != null" >
+        TIME_20_VOLUME,
+      </if>
+      <if test="time21Volume != null" >
+        TIME_21_VOLUME,
+      </if>
+      <if test="time22Volume != null" >
+        TIME_22_VOLUME,
+      </if>
+      <if test="time23Volume != null" >
+        TIME_23_VOLUME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="statisticsDate != null" >
+        #{statisticsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transactionNum != null" >
+        #{transactionNum,jdbcType=DECIMAL},
+      </if>
+      <if test="transactionAmount != null" >
+        #{transactionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="normalInHospitalVolume != null" >
+        #{normalInHospitalVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="continuneInHospitalVolume != null" >
+        #{continuneInHospitalVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="hospitalRegisterVolume != null" >
+        #{hospitalRegisterVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="outpatientDiseaseVolume != null" >
+        #{outpatientDiseaseVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="familySickbedVolume != null" >
+        #{familySickbedVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="normalOutpatientVolume != null" >
+        #{normalOutpatientVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="drugstoresVolume != null" >
+        #{drugstoresVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001001 != null" >
+        #{volume003001001,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001005 != null" >
+        #{volume003001005,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001003 != null" >
+        #{volume003001003,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001002 != null" >
+        #{volume003001002,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001006 != null" >
+        #{volume003001006,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001007 != null" >
+        #{volume003001007,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001004 != null" >
+        #{volume003001004,jdbcType=DECIMAL},
+      </if>
+      <if test="time0Volume != null" >
+        #{time0Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time1Volume != null" >
+        #{time1Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time2Volume != null" >
+        #{time2Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time3Volume != null" >
+        #{time3Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time4Volume != null" >
+        #{time4Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time5Volume != null" >
+        #{time5Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time6Volume != null" >
+        #{time6Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time7Volume != null" >
+        #{time7Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time8Volume != null" >
+        #{time8Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time9Volume != null" >
+        #{time9Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time10Volume != null" >
+        #{time10Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time11Volume != null" >
+        #{time11Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time12Volume != null" >
+        #{time12Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time13Volume != null" >
+        #{time13Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time14Volume != null" >
+        #{time14Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time15Volume != null" >
+        #{time15Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time16Volume != null" >
+        #{time16Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time17Volume != null" >
+        #{time17Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time18Volume != null" >
+        #{time18Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time19Volume != null" >
+        #{time19Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time20Volume != null" >
+        #{time20Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time21Volume != null" >
+        #{time21Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time22Volume != null" >
+        #{time22Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time23Volume != null" >
+        #{time23Volume,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsMiVolumeStatistics" >
+    update JX_SS_MI_VOLUME_STATISTICS
+    <set >
+      <if test="statisticsDate != null" >
+        STATISTICS_DATE = #{statisticsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transactionNum != null" >
+        TRANSACTION_NUM = #{transactionNum,jdbcType=DECIMAL},
+      </if>
+      <if test="transactionAmount != null" >
+        TRANSACTION_AMOUNT = #{transactionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="normalInHospitalVolume != null" >
+        NORMAL_IN_HOSPITAL_VOLUME = #{normalInHospitalVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="continuneInHospitalVolume != null" >
+        CONTINUNE_IN_HOSPITAL_VOLUME = #{continuneInHospitalVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="hospitalRegisterVolume != null" >
+        HOSPITAL_REGISTER_VOLUME = #{hospitalRegisterVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="outpatientDiseaseVolume != null" >
+        OUTPATIENT_DISEASE_VOLUME = #{outpatientDiseaseVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="familySickbedVolume != null" >
+        FAMILY_SICKBED_VOLUME = #{familySickbedVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="normalOutpatientVolume != null" >
+        NORMAL_OUTPATIENT_VOLUME = #{normalOutpatientVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="drugstoresVolume != null" >
+        DRUGSTORES_VOLUME = #{drugstoresVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001001 != null" >
+        VOLUME_003001001 = #{volume003001001,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001005 != null" >
+        VOLUME_003001005 = #{volume003001005,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001003 != null" >
+        VOLUME_003001003 = #{volume003001003,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001002 != null" >
+        VOLUME_003001002 = #{volume003001002,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001006 != null" >
+        VOLUME_003001006 = #{volume003001006,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001007 != null" >
+        VOLUME_003001007 = #{volume003001007,jdbcType=DECIMAL},
+      </if>
+      <if test="volume003001004 != null" >
+        VOLUME_003001004 = #{volume003001004,jdbcType=DECIMAL},
+      </if>
+      <if test="time0Volume != null" >
+        TIME_0_VOLUME = #{time0Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time1Volume != null" >
+        TIME_1_VOLUME = #{time1Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time2Volume != null" >
+        TIME_2_VOLUME = #{time2Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time3Volume != null" >
+        TIME_3_VOLUME = #{time3Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time4Volume != null" >
+        TIME_4_VOLUME = #{time4Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time5Volume != null" >
+        TIME_5_VOLUME = #{time5Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time6Volume != null" >
+        TIME_6_VOLUME = #{time6Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time7Volume != null" >
+        TIME_7_VOLUME = #{time7Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time8Volume != null" >
+        TIME_8_VOLUME = #{time8Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time9Volume != null" >
+        TIME_9_VOLUME = #{time9Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time10Volume != null" >
+        TIME_10_VOLUME = #{time10Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time11Volume != null" >
+        TIME_11_VOLUME = #{time11Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time12Volume != null" >
+        TIME_12_VOLUME = #{time12Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time13Volume != null" >
+        TIME_13_VOLUME = #{time13Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time14Volume != null" >
+        TIME_14_VOLUME = #{time14Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time15Volume != null" >
+        TIME_15_VOLUME = #{time15Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time16Volume != null" >
+        TIME_16_VOLUME = #{time16Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time17Volume != null" >
+        TIME_17_VOLUME = #{time17Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time18Volume != null" >
+        TIME_18_VOLUME = #{time18Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time19Volume != null" >
+        TIME_19_VOLUME = #{time19Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time20Volume != null" >
+        TIME_20_VOLUME = #{time20Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time21Volume != null" >
+        TIME_21_VOLUME = #{time21Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time22Volume != null" >
+        TIME_22_VOLUME = #{time22Volume,jdbcType=DECIMAL},
+      </if>
+      <if test="time23Volume != null" >
+        TIME_23_VOLUME = #{time23Volume,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cetc28.PeopleBenefitService.model.JxSsMiVolumeStatistics" >
+    update JX_SS_MI_VOLUME_STATISTICS
+    set STATISTICS_DATE = #{statisticsDate,jdbcType=TIMESTAMP},
+      TRANSACTION_NUM = #{transactionNum,jdbcType=DECIMAL},
+      TRANSACTION_AMOUNT = #{transactionAmount,jdbcType=DECIMAL},
+      NORMAL_IN_HOSPITAL_VOLUME = #{normalInHospitalVolume,jdbcType=DECIMAL},
+      CONTINUNE_IN_HOSPITAL_VOLUME = #{continuneInHospitalVolume,jdbcType=DECIMAL},
+      HOSPITAL_REGISTER_VOLUME = #{hospitalRegisterVolume,jdbcType=DECIMAL},
+      OUTPATIENT_DISEASE_VOLUME = #{outpatientDiseaseVolume,jdbcType=DECIMAL},
+      FAMILY_SICKBED_VOLUME = #{familySickbedVolume,jdbcType=DECIMAL},
+      NORMAL_OUTPATIENT_VOLUME = #{normalOutpatientVolume,jdbcType=DECIMAL},
+      DRUGSTORES_VOLUME = #{drugstoresVolume,jdbcType=DECIMAL},
+      VOLUME_003001001 = #{volume003001001,jdbcType=DECIMAL},
+      VOLUME_003001005 = #{volume003001005,jdbcType=DECIMAL},
+      VOLUME_003001003 = #{volume003001003,jdbcType=DECIMAL},
+      VOLUME_003001002 = #{volume003001002,jdbcType=DECIMAL},
+      VOLUME_003001006 = #{volume003001006,jdbcType=DECIMAL},
+      VOLUME_003001007 = #{volume003001007,jdbcType=DECIMAL},
+      VOLUME_003001004 = #{volume003001004,jdbcType=DECIMAL},
+      TIME_0_VOLUME = #{time0Volume,jdbcType=DECIMAL},
+      TIME_1_VOLUME = #{time1Volume,jdbcType=DECIMAL},
+      TIME_2_VOLUME = #{time2Volume,jdbcType=DECIMAL},
+      TIME_3_VOLUME = #{time3Volume,jdbcType=DECIMAL},
+      TIME_4_VOLUME = #{time4Volume,jdbcType=DECIMAL},
+      TIME_5_VOLUME = #{time5Volume,jdbcType=DECIMAL},
+      TIME_6_VOLUME = #{time6Volume,jdbcType=DECIMAL},
+      TIME_7_VOLUME = #{time7Volume,jdbcType=DECIMAL},
+      TIME_8_VOLUME = #{time8Volume,jdbcType=DECIMAL},
+      TIME_9_VOLUME = #{time9Volume,jdbcType=DECIMAL},
+      TIME_10_VOLUME = #{time10Volume,jdbcType=DECIMAL},
+      TIME_11_VOLUME = #{time11Volume,jdbcType=DECIMAL},
+      TIME_12_VOLUME = #{time12Volume,jdbcType=DECIMAL},
+      TIME_13_VOLUME = #{time13Volume,jdbcType=DECIMAL},
+      TIME_14_VOLUME = #{time14Volume,jdbcType=DECIMAL},
+      TIME_15_VOLUME = #{time15Volume,jdbcType=DECIMAL},
+      TIME_16_VOLUME = #{time16Volume,jdbcType=DECIMAL},
+      TIME_17_VOLUME = #{time17Volume,jdbcType=DECIMAL},
+      TIME_18_VOLUME = #{time18Volume,jdbcType=DECIMAL},
+      TIME_19_VOLUME = #{time19Volume,jdbcType=DECIMAL},
+      TIME_20_VOLUME = #{time20Volume,jdbcType=DECIMAL},
+      TIME_21_VOLUME = #{time21Volume,jdbcType=DECIMAL},
+      TIME_22_VOLUME = #{time22Volume,jdbcType=DECIMAL},
+      TIME_23_VOLUME = #{time23Volume,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <select id="selectSsMiVolumeStatisticsLatestDay" resultMap="BaseResultMap">
+    select * from JX_SS_MI_VOLUME_STATISTICS t
+    where t.statistics_date=(select max(statistics_date) from JX_SS_MI_VOLUME_STATISTICS)
+  </select>
+</mapper>

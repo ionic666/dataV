@@ -1,0 +1,61 @@
+package com.cetc28.idata.dto;
+
+/**
+ * Created by FangYan on 2017/11/9.
+ */
+public class ReportDto {
+    private int rid;
+    private String rtitle;
+    private String rurl;
+    private String createtime;
+    private String rmodule;
+    private String updatetime;
+
+    public int getRid() {
+        return rid;
+    }
+
+    public void setRid(int rid) {
+        this.rid = rid;
+    }
+
+    public String getRtitle() {
+        return rtitle;
+    }
+
+    public void setRtitle(String rtitle) {
+        this.rtitle = rtitle;
+    }
+
+    public String getRurl() {
+        return rurl;
+    }
+
+    public void setRurl(String rurl) {
+        this.rurl = rurl;
+    }
+
+    public String getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(String createtime) {
+        this.createtime = createtime;
+    }
+
+    public String getRmodule() {
+        return rmodule;
+    }
+
+    public void setRmodule(String rmodule) {
+        this.rmodule = rmodule;
+    }
+
+    public String getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(String updatetime) {
+        this.updatetime = updatetime;
+    }
+}

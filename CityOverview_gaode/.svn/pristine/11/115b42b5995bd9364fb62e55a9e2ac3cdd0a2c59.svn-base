@@ -1,0 +1,23 @@
+package com.cetc28.idata.dao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/20.
+ */
+public interface JxEcoCoreComDao {
+
+    List<HashMap<String,String>> queryCoreCom(Map map);
+    List queryBhRange();
+    String queryMcByBh(String bhValue);
+    String queryCoreID(String name);
+    String queryCoredes(String id);
+    Integer queryType(Map map);
+    Integer queryAge(Map map);
+    Integer queryValue(Map map);
+
+    List<HashMap<String,String>> serchCorecom(String name);
+
+}

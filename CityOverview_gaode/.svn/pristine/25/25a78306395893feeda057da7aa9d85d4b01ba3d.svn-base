@@ -1,0 +1,95 @@
+package com.cetc28.EcoSuitableResidence.service;
+
+import com.cetc28.EcoSuitableResidence.dto.WaterMacro;
+import com.cetc28.EcoSuitableResidence.model.*;
+
+import java.util.Map;
+import java.util.List;
+
+/**
+ * Created by linyu on 2017/8/8.
+ */
+public interface IJxEnvirService {
+
+    public abstract List<JxEnvirAir> queryAllEnvirAir();
+
+    public abstract List<JxWaterInfo> selectEnvirInfo(String jcdbh);
+
+    public abstract List<JxKqzljcdInfo> selectKqzljc24Hour(String bh);
+
+    public abstract List<JxKqzljcdInfo> selectKqzljc30Day(String bh);
+
+    public abstract List queryPreData(String bh,Integer gap,Integer preNum);
+
+    public abstract List queryPre24HourData(String bh,Integer gap,Integer preNum);
+
+    public abstract Map selectZsJcdInfo(String jcdbh, String zstype, String time_start, String time_end);
+
+    public abstract List<JxEnvirAir> selectEnvirAirJcdInfo(String bh);//没用上
+
+    public abstract List<JxEnvirAir> selectEnvirAirJcd(String qhbh);// 作图用  监测点最近时间的监测数据
+
+    public abstract List<JxKqzljcdInfo> selectAirQXMonitor(String bh);//嘉兴左边栏区县最近时间监测数据
+
+    public  Integer AirCurrentYear();//获取当前年份//计算增长率
+
+    public Double queryEnvirTotal(Integer year,String flag);//计算总数的接口函数//计算增长率
+
+    public Double queryAirTotal(Integer year);//计算增长率
+    //************************************环境监测首页*************************************
+
+    public abstract List<JxEnvirMacroMonitor> selectAirQuality( );    //计算空气质量
+
+    public abstract List<JxEnvirMacroMonitor> selectWaterEnvirLv( );  //计算水环境
+
+    public abstract List<JxEnvirMacroMonitor> selectNoiseOverproof(); //计算噪声超标率
+
+    public abstract List<JxEnvirMacroMonitor> selectCompanyEnvir();   //计算企事业单位环境公开率
+
+    public abstract List<JxEnvirMacroMonitor> selectPolluteMonitor(); //计算污染源监测情况
+
+    public abstract List<JxEnvirMacroMonitor> selectCityProblem();    //城市问题处置率
+    //**************************************饮用水水质监测全景图********************************
+
+    public abstract List<JxEnvirWater> selectWaterMonitor30Day(String bh);//计算最近30天水质监测数据
+
+    public abstract List queryWaterPre30Day(String bh,Integer gap,Integer preNum);//获取饮用水的30天预测数据
+
+    public abstract List<JxEnvirWater> selectWaterMonitor24Hour(String bh);//计算最近24小时水质监测数据
+
+    public abstract List queryWaterPre24Hour(String bh,Integer gap,Integer preNum);//获取饮用水的24小时预测数据
+
+    public abstract List<JxEnvirWater> selectWaterMonitorQX(String bh); //计算区县最近时间水质数据
+
+    public abstract List<JxEnvirWater> selectWaterMonitorJcd(String qhbh);//作图用监测点最近时间水质数据
+    //*********************************************************************************************
+    public abstract List<JxEnvirWater> selectWaterDmsMonth(String bh);   //计算断面水月份统计数据
+
+    public abstract List queryDmsPre12Month(String bh,Integer gap,Integer preNum);//获取饮用水的12个月预测数据
+
+    public abstract List<JxEnvirWater> selectWaterDmsDay(String bh);     //计算断面水日统计数据
+
+    public abstract List queryDmsPre30Day(String bh,Integer gap,Integer preNum);//获取饮用水的30天预测数据
+
+    public abstract List<JxEnvirWater> selectWaterDmsJcd(String bh);     //计算断面水监测点实时数据
+
+    public List<WaterMacro> selectWaterMacro();
+
+    public  List<WaterMacro> selectWaterMacroByYear(Integer year);
+
+    public int selectMaxYear();
+
+    public List<JxNoise> selectNoiseMapJcd(String bh);
+
+    public List<JxPollution> selectMapPollution();
+
+    public List<JxPollution> selectMapPollutionJcd(String type);
+
+    public List<JxPollution> selectPollutionHG();
+
+    public JxWaterManage selectWaterManage();
+
+    public List<JxPollution> selectPolluteDisplay();
+
+    public List<JxPollution> displayQYInfo(String mc,int type);
+}

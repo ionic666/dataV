@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.JxSsCorpAnalysisMapper" >
+  <resultMap id="BaseResultMap" type="com.cetc28.PeopleBenefitService.model.JxSsCorpAnalysis" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="YEAR" property="year" jdbcType="DECIMAL" />
+    <result column="REGION_CODE" property="regionCode" jdbcType="VARCHAR" />
+    <result column="CORP_NAME" property="corpName" jdbcType="VARCHAR" />
+    <result column="EMPLOYEE_SUM" property="employeeSum" jdbcType="DECIMAL" />
+    <result column="INSURED_SUM" property="insuredSum" jdbcType="DECIMAL" />
+    <result column="AVERAGE_INSURED_AMOUNT" property="averageInsuredAmount" jdbcType="DECIMAL" />
+    <result column="AVERAGE_INSURED_AGE" property="averageInsuredAge" jdbcType="DECIMAL" />
+    <result column="INSURED_DOCTOR_SUM" property="insuredDoctorSum" jdbcType="DECIMAL" />
+    <result column="INSURED_MASTER_SUM" property="insuredMasterSum" jdbcType="DECIMAL" />
+    <result column="INSURED_BACHELOR_SUM" property="insuredBachelorSum" jdbcType="DECIMAL" />
+    <result column="INSURED_TECHNICAL_SUM" property="insuredTechnicalSum" jdbcType="DECIMAL" />
+    <result column="INSURED_SENIOR_SUM" property="insuredSeniorSum" jdbcType="DECIMAL" />
+    <result column="INSURED_JUNIOR_SUM" property="insuredJuniorSum" jdbcType="DECIMAL" />
+    <result column="INSURED_ELEMENTARY_SUM" property="insuredElementarySum" jdbcType="DECIMAL" />
+    <result column="INSURED_OTHER_SUM" property="insuredOtherSum" jdbcType="DECIMAL" />
+    <result column="LEGAL_PERSON_TYPE" property="legalPersonType" jdbcType="VARCHAR" />
+    <result column="BUSINESS_TYPE" property="businessType" jdbcType="VARCHAR" />
+    <result column="BUSINESS_RANGE" property="businessRange" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
+    <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, YEAR, REGION_CODE, CORP_NAME, EMPLOYEE_SUM, INSURED_SUM, AVERAGE_INSURED_AMOUNT, 
+    AVERAGE_INSURED_AGE, INSURED_DOCTOR_SUM, INSURED_MASTER_SUM, INSURED_BACHELOR_SUM, 
+    INSURED_TECHNICAL_SUM, INSURED_SENIOR_SUM, INSURED_JUNIOR_SUM, INSURED_ELEMENTARY_SUM, 
+    INSURED_OTHER_SUM, LEGAL_PERSON_TYPE, BUSINESS_TYPE, BUSINESS_RANGE, LONGITUDE, LATITUDE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from JX_SS_CORP_ANALYSIS
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from JX_SS_CORP_ANALYSIS
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCorpAnalysis" >
+    insert into JX_SS_CORP_ANALYSIS (ID, YEAR, REGION_CODE, 
+      CORP_NAME, EMPLOYEE_SUM, INSURED_SUM, 
+      AVERAGE_INSURED_AMOUNT, AVERAGE_INSURED_AGE, 
+      INSURED_DOCTOR_SUM, INSURED_MASTER_SUM, INSURED_BACHELOR_SUM, 
+      INSURED_TECHNICAL_SUM, INSURED_SENIOR_SUM, 
+      INSURED_JUNIOR_SUM, INSURED_ELEMENTARY_SUM, 
+      INSURED_OTHER_SUM, LEGAL_PERSON_TYPE, BUSINESS_TYPE, 
+      BUSINESS_RANGE, LONGITUDE, LATITUDE
+      )
+    values (#{id,jdbcType=DECIMAL}, #{year,jdbcType=DECIMAL}, #{regionCode,jdbcType=VARCHAR}, 
+      #{corpName,jdbcType=VARCHAR}, #{employeeSum,jdbcType=DECIMAL}, #{insuredSum,jdbcType=DECIMAL}, 
+      #{averageInsuredAmount,jdbcType=DECIMAL}, #{averageInsuredAge,jdbcType=DECIMAL}, 
+      #{insuredDoctorSum,jdbcType=DECIMAL}, #{insuredMasterSum,jdbcType=DECIMAL}, #{insuredBachelorSum,jdbcType=DECIMAL}, 
+      #{insuredTechnicalSum,jdbcType=DECIMAL}, #{insuredSeniorSum,jdbcType=DECIMAL}, 
+      #{insuredJuniorSum,jdbcType=DECIMAL}, #{insuredElementarySum,jdbcType=DECIMAL}, 
+      #{insuredOtherSum,jdbcType=DECIMAL}, #{legalPersonType,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, 
+      #{businessRange,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCorpAnalysis" >
+    insert into JX_SS_CORP_ANALYSIS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="year != null" >
+        YEAR,
+      </if>
+      <if test="regionCode != null" >
+        REGION_CODE,
+      </if>
+      <if test="corpName != null" >
+        CORP_NAME,
+      </if>
+      <if test="employeeSum != null" >
+        EMPLOYEE_SUM,
+      </if>
+      <if test="insuredSum != null" >
+        INSURED_SUM,
+      </if>
+      <if test="averageInsuredAmount != null" >
+        AVERAGE_INSURED_AMOUNT,
+      </if>
+      <if test="averageInsuredAge != null" >
+        AVERAGE_INSURED_AGE,
+      </if>
+      <if test="insuredDoctorSum != null" >
+        INSURED_DOCTOR_SUM,
+      </if>
+      <if test="insuredMasterSum != null" >
+        INSURED_MASTER_SUM,
+      </if>
+      <if test="insuredBachelorSum != null" >
+        INSURED_BACHELOR_SUM,
+      </if>
+      <if test="insuredTechnicalSum != null" >
+        INSURED_TECHNICAL_SUM,
+      </if>
+      <if test="insuredSeniorSum != null" >
+        INSURED_SENIOR_SUM,
+      </if>
+      <if test="insuredJuniorSum != null" >
+        INSURED_JUNIOR_SUM,
+      </if>
+      <if test="insuredElementarySum != null" >
+        INSURED_ELEMENTARY_SUM,
+      </if>
+      <if test="insuredOtherSum != null" >
+        INSURED_OTHER_SUM,
+      </if>
+      <if test="legalPersonType != null" >
+        LEGAL_PERSON_TYPE,
+      </if>
+      <if test="businessType != null" >
+        BUSINESS_TYPE,
+      </if>
+      <if test="businessRange != null" >
+        BUSINESS_RANGE,
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE,
+      </if>
+      <if test="latitude != null" >
+        LATITUDE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCode != null" >
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corpName != null" >
+        #{corpName,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeSum != null" >
+        #{employeeSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredSum != null" >
+        #{insuredSum,jdbcType=DECIMAL},
+      </if>
+      <if test="averageInsuredAmount != null" >
+        #{averageInsuredAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="averageInsuredAge != null" >
+        #{averageInsuredAge,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredDoctorSum != null" >
+        #{insuredDoctorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredMasterSum != null" >
+        #{insuredMasterSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredBachelorSum != null" >
+        #{insuredBachelorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredTechnicalSum != null" >
+        #{insuredTechnicalSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredSeniorSum != null" >
+        #{insuredSeniorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredJuniorSum != null" >
+        #{insuredJuniorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredElementarySum != null" >
+        #{insuredElementarySum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredOtherSum != null" >
+        #{insuredOtherSum,jdbcType=DECIMAL},
+      </if>
+      <if test="legalPersonType != null" >
+        #{legalPersonType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessRange != null" >
+        #{businessRange,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCorpAnalysis" >
+    update JX_SS_CORP_ANALYSIS
+    <set >
+      <if test="year != null" >
+        YEAR = #{year,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCode != null" >
+        REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corpName != null" >
+        CORP_NAME = #{corpName,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeSum != null" >
+        EMPLOYEE_SUM = #{employeeSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredSum != null" >
+        INSURED_SUM = #{insuredSum,jdbcType=DECIMAL},
+      </if>
+      <if test="averageInsuredAmount != null" >
+        AVERAGE_INSURED_AMOUNT = #{averageInsuredAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="averageInsuredAge != null" >
+        AVERAGE_INSURED_AGE = #{averageInsuredAge,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredDoctorSum != null" >
+        INSURED_DOCTOR_SUM = #{insuredDoctorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredMasterSum != null" >
+        INSURED_MASTER_SUM = #{insuredMasterSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredBachelorSum != null" >
+        INSURED_BACHELOR_SUM = #{insuredBachelorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredTechnicalSum != null" >
+        INSURED_TECHNICAL_SUM = #{insuredTechnicalSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredSeniorSum != null" >
+        INSURED_SENIOR_SUM = #{insuredSeniorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredJuniorSum != null" >
+        INSURED_JUNIOR_SUM = #{insuredJuniorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredElementarySum != null" >
+        INSURED_ELEMENTARY_SUM = #{insuredElementarySum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredOtherSum != null" >
+        INSURED_OTHER_SUM = #{insuredOtherSum,jdbcType=DECIMAL},
+      </if>
+      <if test="legalPersonType != null" >
+        LEGAL_PERSON_TYPE = #{legalPersonType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessRange != null" >
+        BUSINESS_RANGE = #{businessRange,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCorpAnalysis" >
+    update JX_SS_CORP_ANALYSIS
+    set YEAR = #{year,jdbcType=DECIMAL},
+      REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      CORP_NAME = #{corpName,jdbcType=VARCHAR},
+      EMPLOYEE_SUM = #{employeeSum,jdbcType=DECIMAL},
+      INSURED_SUM = #{insuredSum,jdbcType=DECIMAL},
+      AVERAGE_INSURED_AMOUNT = #{averageInsuredAmount,jdbcType=DECIMAL},
+      AVERAGE_INSURED_AGE = #{averageInsuredAge,jdbcType=DECIMAL},
+      INSURED_DOCTOR_SUM = #{insuredDoctorSum,jdbcType=DECIMAL},
+      INSURED_MASTER_SUM = #{insuredMasterSum,jdbcType=DECIMAL},
+      INSURED_BACHELOR_SUM = #{insuredBachelorSum,jdbcType=DECIMAL},
+      INSURED_TECHNICAL_SUM = #{insuredTechnicalSum,jdbcType=DECIMAL},
+      INSURED_SENIOR_SUM = #{insuredSeniorSum,jdbcType=DECIMAL},
+      INSURED_JUNIOR_SUM = #{insuredJuniorSum,jdbcType=DECIMAL},
+      INSURED_ELEMENTARY_SUM = #{insuredElementarySum,jdbcType=DECIMAL},
+      INSURED_OTHER_SUM = #{insuredOtherSum,jdbcType=DECIMAL},
+      LEGAL_PERSON_TYPE = #{legalPersonType,jdbcType=VARCHAR},
+      BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR},
+      BUSINESS_RANGE = #{businessRange,jdbcType=VARCHAR},
+      LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      LATITUDE = #{latitude,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <select id="selectSsCorpAnalysisLatestY" resultMap="BaseResultMap">
+    <![CDATA[select t.* from(select st.*,row_number() over (order by st.year desc)rn
+    from JX_SS_CORP_ANALYSIS st
+    where st.region_code=#{0} and st.corp_name=#{1})t where rn<=1]]>
+  </select>
+  <select id="selectSsCorpAnalysisInFiveY" resultMap="BaseResultMap">
+    <![CDATA[select t.* from(select st.*,row_number() over (order by st.year desc)rn
+    from JX_SS_CORP_ANALYSIS st
+    where st.region_code=#{0} and st.corp_name=#{1})t where rn<=#{2}  order by t.year]]>
+  </select>
+  <select id="selectCorpAnalysisTooltipLatestY" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select t.* from JX_SS_CORP_ANALYSIS t where
+    <choose>
+      <when test="regionCode != '003001'">
+         t.region_code=#{regionCode} and
+      </when>
+    </choose>
+     t.year=(select max(year) from JX_SS_CORP_ANALYSIS)
+  </select>
+
+    <select id="queryCorpInfo" parameterType="String" resultType="map">
+        <![CDATA[select AVERAGE_INSURED_AMOUNT,AVERAGE_INSURED_AGE
+         from JX_SS_CORP_ANALYSIS  where corp_name=#{companyName} and rownum<6 order by year desc]]>
+    </select>
+
+    <select id="queryCorpEmployeeInfo" resultType="map">
+        SELECT EIGHTEEN,THIRTY,FIFTY,SIXTY_FIVE from JX_SS_CORP_EMPLOYEE_INFO
+        where company_name=#{companyName}
+        <if test="sex=='female'">
+            AND female=1
+        </if>
+        <if test="sex=='male'">
+            AND male=1
+        </if>
+    </select>
+
+    <select id="queryCorpCompanyInfo" parameterType="String" resultType="map">
+        select * from JX_SS_CORP_COMPANY_INFO where company_name like '%'||#{name}||'%'
+    </select>
+</mapper>

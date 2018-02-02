@@ -1,0 +1,426 @@
+package com.cetc28.PeopleBenefitService.model;
+
+import java.util.Date;
+
+public class JxSsMiVolumeStatistics {
+    private Short id;
+
+    private String statisticsDate;
+
+    private Long transactionNum;
+
+    private Long transactionAmount;
+
+    private Short normalInHospitalVolume;
+
+    private Short continuneInHospitalVolume;
+
+    private Short hospitalRegisterVolume;
+
+    private Short outpatientDiseaseVolume;
+
+    private Short familySickbedVolume;
+
+    private Short normalOutpatientVolume;
+
+    private Short drugstoresVolume;
+
+    private Double volume003001001;
+
+    private Double volume003001005;
+
+    private Double volume003001003;
+
+    private Double volume003001002;
+
+    private Double volume003001006;
+
+    private Double volume003001007;
+
+    private Double volume003001004;
+
+    private Double time0Volume;
+
+    private Double time1Volume;
+
+    private Double time2Volume;
+
+    private Double time3Volume;
+
+    private Double time4Volume;
+
+    private Double time5Volume;
+
+    private Double time6Volume;
+
+    private Double time7Volume;
+
+    private Double time8Volume;
+
+    private Double time9Volume;
+
+    private Double time10Volume;
+
+    private Double time11Volume;
+
+    private Double time12Volume;
+
+    private Double time13Volume;
+
+    private Double time14Volume;
+
+    private Double time15Volume;
+
+    private Double time16Volume;
+
+    private Double time17Volume;
+
+    private Double time18Volume;
+
+    private Double time19Volume;
+
+    private Double time20Volume;
+
+    private Double time21Volume;
+
+    private Double time22Volume;
+
+    private Double time23Volume;
+
+    public Short getId() {
+        return id;
+    }
+
+    public void setId(Short id) {
+        this.id = id;
+    }
+
+    public String getStatisticsDate() {
+        return statisticsDate;
+    }
+
+    public void setStatisticsDate(String statisticsDate) {
+        this.statisticsDate = statisticsDate;
+    }
+
+    public Long getTransactionNum() {
+        return transactionNum;
+    }
+
+    public void setTransactionNum(Long transactionNum) {
+        this.transactionNum = transactionNum;
+    }
+
+    public Long getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    public void setTransactionAmount(Long transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
+
+    public Short getNormalInHospitalVolume() {
+        return normalInHospitalVolume;
+    }
+
+    public void setNormalInHospitalVolume(Short normalInHospitalVolume) {
+        this.normalInHospitalVolume = normalInHospitalVolume;
+    }
+
+    public Short getContinuneInHospitalVolume() {
+        return continuneInHospitalVolume;
+    }
+
+    public void setContinuneInHospitalVolume(Short continuneInHospitalVolume) {
+        this.continuneInHospitalVolume = continuneInHospitalVolume;
+    }
+
+    public Short getHospitalRegisterVolume() {
+        return hospitalRegisterVolume;
+    }
+
+    public void setHospitalRegisterVolume(Short hospitalRegisterVolume) {
+        this.hospitalRegisterVolume = hospitalRegisterVolume;
+    }
+
+    public Short getOutpatientDiseaseVolume() {
+        return outpatientDiseaseVolume;
+    }
+
+    public void setOutpatientDiseaseVolume(Short outpatientDiseaseVolume) {
+        this.outpatientDiseaseVolume = outpatientDiseaseVolume;
+    }
+
+    public Short getFamilySickbedVolume() {
+        return familySickbedVolume;
+    }
+
+    public void setFamilySickbedVolume(Short familySickbedVolume) {
+        this.familySickbedVolume = familySickbedVolume;
+    }
+
+    public Short getNormalOutpatientVolume() {
+        return normalOutpatientVolume;
+    }
+
+    public void setNormalOutpatientVolume(Short normalOutpatientVolume) {
+        this.normalOutpatientVolume = normalOutpatientVolume;
+    }
+
+    public Short getDrugstoresVolume() {
+        return drugstoresVolume;
+    }
+
+    public void setDrugstoresVolume(Short drugstoresVolume) {
+        this.drugstoresVolume = drugstoresVolume;
+    }
+
+    public Double getVolume003001001() {
+        return volume003001001;
+    }
+
+    public void setVolume003001001(Double volume003001001) {
+        this.volume003001001 = volume003001001;
+    }
+
+    public Double getVolume003001005() {
+        return volume003001005;
+    }
+
+    public void setVolume003001005(Double volume003001005) {
+        this.volume003001005 = volume003001005;
+    }
+
+    public Double getVolume003001003() {
+        return volume003001003;
+    }
+
+    public void setVolume003001003(Double volume003001003) {
+        this.volume003001003 = volume003001003;
+    }
+
+    public Double getVolume003001002() {
+        return volume003001002;
+    }
+
+    public void setVolume003001002(Double volume003001002) {
+        this.volume003001002 = volume003001002;
+    }
+
+    public Double getVolume003001006() {
+        return volume003001006;
+    }
+
+    public void setVolume003001006(Double volume003001006) {
+        this.volume003001006 = volume003001006;
+    }
+
+    public Double getVolume003001007() {
+        return volume003001007;
+    }
+
+    public void setVolume003001007(Double volume003001007) {
+        this.volume003001007 = volume003001007;
+    }
+
+    public Double getVolume003001004() {
+        return volume003001004;
+    }
+
+    public void setVolume003001004(Double volume003001004) {
+        this.volume003001004 = volume003001004;
+    }
+
+    public Double getTime0Volume() {
+        return time0Volume;
+    }
+
+    public void setTime0Volume(Double time0Volume) {
+        this.time0Volume = time0Volume;
+    }
+
+    public Double getTime1Volume() {
+        return time1Volume;
+    }
+
+    public void setTime1Volume(Double time1Volume) {
+        this.time1Volume = time1Volume;
+    }
+
+    public Double getTime2Volume() {
+        return time2Volume;
+    }
+
+    public void setTime2Volume(Double time2Volume) {
+        this.time2Volume = time2Volume;
+    }
+
+    public Double getTime3Volume() {
+        return time3Volume;
+    }
+
+    public void setTime3Volume(Double time3Volume) {
+        this.time3Volume = time3Volume;
+    }
+
+    public Double getTime4Volume() {
+        return time4Volume;
+    }
+
+    public void setTime4Volume(Double time4Volume) {
+        this.time4Volume = time4Volume;
+    }
+
+    public Double getTime5Volume() {
+        return time5Volume;
+    }
+
+    public void setTime5Volume(Double time5Volume) {
+        this.time5Volume = time5Volume;
+    }
+
+    public Double getTime6Volume() {
+        return time6Volume;
+    }
+
+    public void setTime6Volume(Double time6Volume) {
+        this.time6Volume = time6Volume;
+    }
+
+    public Double getTime7Volume() {
+        return time7Volume;
+    }
+
+    public void setTime7Volume(Double time7Volume) {
+        this.time7Volume = time7Volume;
+    }
+
+    public Double getTime8Volume() {
+        return time8Volume;
+    }
+
+    public void setTime8Volume(Double time8Volume) {
+        this.time8Volume = time8Volume;
+    }
+
+    public Double getTime9Volume() {
+        return time9Volume;
+    }
+
+    public void setTime9Volume(Double time9Volume) {
+        this.time9Volume = time9Volume;
+    }
+
+    public Double getTime10Volume() {
+        return time10Volume;
+    }
+
+    public void setTime10Volume(Double time10Volume) {
+        this.time10Volume = time10Volume;
+    }
+
+    public Double getTime11Volume() {
+        return time11Volume;
+    }
+
+    public void setTime11Volume(Double time11Volume) {
+        this.time11Volume = time11Volume;
+    }
+
+    public Double getTime12Volume() {
+        return time12Volume;
+    }
+
+    public void setTime12Volume(Double time12Volume) {
+        this.time12Volume = time12Volume;
+    }
+
+    public Double getTime13Volume() {
+        return time13Volume;
+    }
+
+    public void setTime13Volume(Double time13Volume) {
+        this.time13Volume = time13Volume;
+    }
+
+    public Double getTime14Volume() {
+        return time14Volume;
+    }
+
+    public void setTime14Volume(Double time14Volume) {
+        this.time14Volume = time14Volume;
+    }
+
+    public Double getTime15Volume() {
+        return time15Volume;
+    }
+
+    public void setTime15Volume(Double time15Volume) {
+        this.time15Volume = time15Volume;
+    }
+
+    public Double getTime16Volume() {
+        return time16Volume;
+    }
+
+    public void setTime16Volume(Double time16Volume) {
+        this.time16Volume = time16Volume;
+    }
+
+    public Double getTime17Volume() {
+        return time17Volume;
+    }
+
+    public void setTime17Volume(Double time17Volume) {
+        this.time17Volume = time17Volume;
+    }
+
+    public Double getTime18Volume() {
+        return time18Volume;
+    }
+
+    public void setTime18Volume(Double time18Volume) {
+        this.time18Volume = time18Volume;
+    }
+
+    public Double getTime19Volume() {
+        return time19Volume;
+    }
+
+    public void setTime19Volume(Double time19Volume) {
+        this.time19Volume = time19Volume;
+    }
+
+    public Double getTime20Volume() {
+        return time20Volume;
+    }
+
+    public void setTime20Volume(Double time20Volume) {
+        this.time20Volume = time20Volume;
+    }
+
+    public Double getTime21Volume() {
+        return time21Volume;
+    }
+
+    public void setTime21Volume(Double time21Volume) {
+        this.time21Volume = time21Volume;
+    }
+
+    public Double getTime22Volume() {
+        return time22Volume;
+    }
+
+    public void setTime22Volume(Double time22Volume) {
+        this.time22Volume = time22Volume;
+    }
+
+    public Double getTime23Volume() {
+        return time23Volume;
+    }
+
+    public void setTime23Volume(Double time23Volume) {
+        this.time23Volume = time23Volume;
+    }
+
+}

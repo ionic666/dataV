@@ -1,0 +1,42 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.IJxModuleDao;
+import com.cetc28.idata.model.Module;
+import com.cetc28.idata.model.PageResult;
+import com.cetc28.idata.service.IJxModuleManageService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/9/23.
+ */
+@Service
+public class IJxModuleManageServiceImpl implements IJxModuleManageService {
+    @Autowired
+    private IJxModuleDao iJxModuleDao;
+
+    @Override
+    public PageResult queryModuleInfo(Integer pageNumber, Integer pageSize) {
+        //设置分页信息
+        PageHelper.startPage(pageNumber,pageSize);
+        //执行查询
+        List<Module> list = iJxModuleDao.queryModuleInfo(pageNumber, pageSize);
+        //取查询结果
+        PageInfo<Module> pageInfo = new PageInfo<Module>(list);
+        PageResult result = new PageResult();
+        //设置表格每行内容
+        result.setRows(list);
+        result.setTotal(pageInfo.getTotal());
+        //返回结果
+        return result;
+    }
+
+    @Override
+    public List<String> queryModuleName() {
+        return iJxModuleDao.queryModuleName();
+    }
+}

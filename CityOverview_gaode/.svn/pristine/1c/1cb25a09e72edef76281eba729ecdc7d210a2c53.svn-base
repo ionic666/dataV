@@ -1,0 +1,29 @@
+package com.cetc28.ConfigurationManagement.dao;
+
+import com.cetc28.ConfigurationManagement.dto.ReportDto;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/11/9.
+ */
+public interface IJxReportDao {
+//    List<ReportDto> queryReportList(@Param("startTime") String startTime, @Param("endTime")String endTime);
+
+    List<ReportDto> queryReportList(@Param("startTime") String startTime, @Param("endTime")String endTime,@Param("rModule")String rModule);
+
+    ReportDto queryReportByid(Integer rid);
+
+    void updateReportTime(ReportDto reportDto);
+
+
+    int add();
+
+
+    Integer checkTitle(String rtitle);
+
+    void addReport(ReportDto reportDto);
+
+    List queryRmodule();
+}

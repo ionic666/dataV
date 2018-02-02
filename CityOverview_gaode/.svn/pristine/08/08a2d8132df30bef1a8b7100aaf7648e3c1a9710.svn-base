@@ -1,0 +1,165 @@
+/**
+ * 地图坐标转换代码
+ * Created by Linyu on 2017/8/18.
+ */
+var PI = Math.PI;
+var x_PI = PI * 3000.0 / 180.0;
+var a = 6378245.0;
+var ee = 0.00669342162296594323;
+
+//经纬度转墨卡托
+function lonLat2Mercator(x,y){
+	var cor = [x,y];
+/*	var cor = [];
+	var x_m = x*20037508.34/180;
+	var y_m = Math.log(Math.tan((90+y)*Math.PI/360))/(Math.PI/180);
+	y_m = y_m*20037508.34/180;
+	//debugger
+	cor.push(x_m);
+	cor.push(y_m);*/
+	return cor;
+}
+
+//墨卡托转经纬度
+function mercator2Lonlat(x,y){
+	var cor = [x,y];
+	/*var cor = [];
+	var x_l = x*180/20037508.34;
+	var y_l = y*180/20037508.34;
+	y_l = 180/Math.PI*(2*Math.atan(Math.exp(y_l*Math.PI/180))-Math.PI/2);
+	cor.push(x_l);
+	cor.push(y_l);*/
+	return cor;
+}
+
+/**
+ * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
+ * @param bd_lon
+ * @param bd_lat
+ * @returns {*[]}
+ */
+function bd09togcj02(bd_lon, bd_lat) {
+	var x = bd_lon - 0.0065;
+	var y = bd_lat - 0.006;
+	var z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_PI);
+	var theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_PI);
+	var gg_lon = z * Math.cos(theta);
+	var gg_lat = z * Math.sin(theta);
+	return [gg_lon, gg_lat]
+}
+
+/**
+ * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换
+ * @param lon
+ * @param lat
+ * @returns {*[]}
+ */
+function gcj02tobd09(lon, lat) {
+	var z = Math.sqrt(lon * lon + lat * lat) + 0.00002 * Math.sin(lat * x_PI);
+	var theta = Math.atan2(lat, lon) + 0.000003 * Math.cos(lon * x_PI);
+	var bd_lon = z * Math.cos(theta) + 0.0065;
+	var bd_lat = z * Math.sin(theta) + 0.006;
+	return [bd_lon, bd_lat]
+}
+
+/**
+ * WGS84转GCj02
+ * @param lon
+ * @param lat
+ * @returns {*[]}
+ */
+function wgs84togcj02(lon, lat) {
+	if (out_of_china(lon, lat)) {
+		return [lon, lat]
+	}
+	else {
+		var dlat = transformlat(lon - 105.0, lat - 35.0);
+		var dlon = transformlon(lon - 105.0, lat - 35.0);
+		var radlat = lat / 180.0 * PI;
+		var magic = Math.sin(radlat);
+		magic = 1 - ee * magic * magic;
+		var sqrtmagic = Math.sqrt(magic);
+		dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);
+		dlon = (dlon * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);
+		var mglat = lat + dlat;
+		var mglon = lon + dlon;
+		return [mglon, mglat]
+	}
+}
+
+/**
+ * GCJ02转换为WGS84
+ * @param lon
+ * @param lat
+ * @returns {*[]}
+ */
+function gcj02towgs84(lon, lat) {
+	if (out_of_china(lon, lat)) {
+		return [lon, lat]
+	}
+	else {
+		var dlat = transformlat(lon - 105.0, lat - 35.0);
+		var dlon = transformlon(lon - 105.0, lat - 35.0);
+		var radlat = lat / 180.0 * PI;
+		var magic = Math.sin(radlat);
+		magic = 1 - ee * magic * magic;
+		var sqrtmagic = Math.sqrt(magic);
+		dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);
+		dlon = (dlon * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);
+		var mglat = lat + dlat;
+		var mglon = lon + dlon;
+		return [lon * 2 - mglon, lat * 2 - mglat]
+	}
+}
+
+/**
+ * BD-09转WGS84
+ * @param lon
+ * @param lat
+ * @returns {*[]}
+ */
+function bd09towgs84(lon, lat){
+	return [lon,lat]
+	//var temp = bd09togcj02(lon, lat);
+	//return gcj02towgs84(temp[0], temp[1]);
+}
+
+/**
+ * WGS84 转 BD-09
+ * @param lon
+ * @param lat
+ * @returns {*[]}
+ */
+function wgs84tobd09(lon, lat){
+	var temp = wgs84togcj02(lon, lat);
+	return gcj02tobd09(temp[0], temp[1]);
+}
+
+function transformlat(lon, lat) {
+	var ret = -100.0 + 2.0 * lon + 3.0 * lat + 0.2 * lat * lat + 0.1 * lon * lat + 0.2 * Math.sqrt(Math.abs(lon));
+	ret += (20.0 * Math.sin(6.0 * lon * PI) + 20.0 * Math.sin(2.0 * lon * PI)) * 2.0 / 3.0;
+	ret += (20.0 * Math.sin(lat * PI) + 40.0 * Math.sin(lat / 3.0 * PI)) * 2.0 / 3.0;
+	ret += (160.0 * Math.sin(lat / 12.0 * PI) + 320 * Math.sin(lat * PI / 30.0)) * 2.0 / 3.0;
+	return ret
+}
+
+function transformlon(lon, lat) {
+	var ret = 300.0 + lon + 2.0 * lat + 0.1 * lon * lon + 0.1 * lon * lat + 0.1 * Math.sqrt(Math.abs(lon));
+	ret += (20.0 * Math.sin(6.0 * lon * PI) + 20.0 * Math.sin(2.0 * lon * PI)) * 2.0 / 3.0;
+	ret += (20.0 * Math.sin(lon * PI) + 40.0 * Math.sin(lon / 3.0 * PI)) * 2.0 / 3.0;
+	ret += (150.0 * Math.sin(lon / 12.0 * PI) + 300.0 * Math.sin(lon / 30.0 * PI)) * 2.0 / 3.0;
+	return ret
+}
+
+/**
+ * 判断是否在国内，不在国内则不做偏移
+ * @param lon
+ * @param lat
+ * @returns {boolean}
+ */
+function out_of_china(lon, lat) {
+	return (lon < 72.004 || lon > 137.8347) || ((lat < 0.8293 || lat > 55.8271) || false);
+}
+
+
+

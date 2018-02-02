@@ -1,0 +1,762 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+
+
+    #typeLook.modal {
+      display: none;
+    }
+
+    #typeLook .modal-dialog {
+      width: 100%;
+      height: 100%;
+    }
+    /*.modal-content{模态框背景颜色设置
+      background-color:#68adde;
+    }*/
+    #typeLook .nav-tabs>li {
+      float: left;
+      margin-bottom: -2px;
+    }
+
+    .message-item{
+      padding:5px 14px;
+    }
+    #typeLook .message-item .sender {
+      margin: 0 6px 0 6px;
+      width: auto;
+      color: #000;
+    }
+    #typeLook .message-item .summary {
+      vertical-align: middle;
+      margin-left: 0;
+      max-width: 250px;
+      min-width: 200px;
+      white-space: nowrap;
+    }
+    #typeLook .message-item .summary a{
+      color: black;
+    }
+    #typeLook .message-item .summary a:hover{
+      color: orange;
+    }
+    #typeLook .message-item .time {
+      width: auto;
+      color: #999999;
+    }
+    #div1{
+      padding:0;
+      height: 74%;
+    }
+    #div1 .hnlist ul {
+      list-style: none outside none;
+      padding-left: 15px;
+      margin-top: 10px;
+    }
+
+    #div1 .hnlist-content ul li a{
+      color: #000000;
+    }
+    #div1 .hnlist-content ul li a:hover{
+      color: orange;
+    }
+    #div1 .hnlist-content span{
+      float: right;
+      display: block;
+      margin: 0 8px;
+      color: #53637d;
+      cursor: pointer;
+    }
+    #div1 .hnlist-title {
+      height: 31px;
+      background: url(http://192.168.40.81/IIAS/lib/js/cnewslist/title_bg.jpg) repeat-x;
+    }
+    #div1 .hnlist-item {
+      list-style: none outside none;
+      padding-left: 10px;
+      line-height: 24px;
+      font-size: 12px;
+      font-family: "微软雅黑";
+      background: url(http://192.168.40.81/IIAS/lib/js/cnewslist/square.jpg) left center no-repeat;
+    }
+    #div1 .hnlist-title p {
+      color: #2283d7;
+      font-size: 16px;
+      font-family: "微软雅黑";
+      float: left;
+      height: 31px;
+      line-height: 31px;
+      text-indent: 45px;
+      background: url(http://192.168.40.81/IIAS/lib/js/cnewslist/four_bg.jpg) 0 0 no-repeat;
+      width: 157px;
+      padding: 0 0 0 10px;
+      margin: 0;
+      font-weight: bold;
+    }
+    #div1 .more_img {
+      background-image: url(http://192.168.40.81/IIAS/lib/js/cnewslist/more.jpg);
+      float: right;
+      border: 0;
+      width: 50px;
+      height: 20px;
+      margin: 8px 10px 0 0;
+    }
+    .style{
+      border-top: 1px  dashed #000000;padding: 10px 0; line-height: 23px
+    }
+    /*修改滚动条的样式*/
+    .modal-open .modal{
+      overflow-y: hidden;
+      overflow-x: hidden;
+    }
+    .tab-content{
+      padding: 16px 10px;
+      max-height: 478px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+
+    <%--舆情检索--%>
+    
+    .SocialMediaMonitor{
+      height: 74%;
+      padding:0px 60px;
+    }
+
+    .SocialMediaMonitor .SocialMediaMonitorRow{
+         margin-top:30px;
+    }
+
+    #SocialMonitorSearch{
+      border:2px solid #3A75AE;
+    }
+
+    .SocialMonitorheader h3{
+        font-size:25px;
+        font-weight:bold;
+        color:#fff;
+        background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(#3E6B93), to(#578EBE));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .SocialMonitorheader{
+      margin-top:20px;
+      margin-bottom:50px;
+    }
+
+    .SocialMediaMonitorSearch{
+      margin-top:50px;
+      /*margin-bottom:50px;*/
+    }
+
+      #btn-orange,#btn-blue{
+          padding:10px 20px;
+          background-color:#D84A38;
+          color:#fff;
+          font-weight:bold;
+          border:1px solid #D84A38;
+          border-radius:5%;
+        width: 100px;
+        text-align: center;
+      }
+
+    <%--舆情检索详情页--%>
+    .SocialMediaMonitorSPage{
+        height: 74%;
+    }
+    #MonitorSPageBtn{
+        padding:3px 10px;
+        font-weight:bold;
+        color:#fff;
+        height:26px;
+        margin-left:10px;
+        background-color:#D84A38;
+        border:1px solid #D84A38;
+        border-radius:5%;
+    }
+    .SocialMediaMonitorSPage input[type="search"]{
+        width:350px;
+    }
+
+    .SocialMediaMonitorSPageUl{
+        margin:0;
+        margin-top:20px;
+        padding:0;
+    }
+    .SocialMediaMonitorSPageUl li{
+        border-left:none;
+        border-right:none;
+    }
+
+    .SocialMediaMonitorSPageUl h4{
+        margin:0;
+        display:inline-block;
+        margin-left:20px;
+        vertical-align:middle;
+    }
+
+     .SocialMediaMonitorSPageUl>li>div{
+         margin-top:20px;
+     }
+
+      .SPageHeader>.SPageHeaderT,.SPageHeader>.SPageHeaderW,.SPageHeader>.SPageHeaderP{
+          margin-right:40px;
+      }
+
+    .SPageHeader>.glyphicon-comment,.SPageHeader>.glyphicon-user{
+        margin-right:10px;
+    }
+
+    .returnBtn{
+        padding:3px 10px;
+        font-weight:bold;
+        color:#fff;
+        height:26px;
+        margin-left:10px;
+        background-color:#3A87AD;
+        border:1px solid #3A87AD;
+        border-radius:5%;
+    }
+  .btnBox{
+    /*overflow: hidden;*/
+    width: 100%;
+    height: 100px;
+  }
+    .btnBox .topBtn{
+      float: left;
+      width: 165px;
+      height: 40px;
+      /*text-align: center;*/
+      border-radius: 3px;
+      margin-top: 10px;
+      margin-right: 20px
+    }
+    .btnBox .topBtn span{
+      float: right;
+      margin-right: 10px;
+      font-size: 20px;
+      color: #fff;
+      line-height: 40px;
+    }
+    .btnBox .topBtn i{
+      float: left;
+      margin-left: 10px;
+      font-style: normal;
+      font-size: 15px;
+      color: rgba(255,255,255,.6);
+      line-height: 40px;
+    }
+    .btnBox .topBtn:nth-child(1){
+      background-color: #257CB1;
+      margin-left: 20px;
+    }
+    .btnBox .topBtn:nth-child(2){
+      background-color: #DBB300;
+
+    }
+    .btnBox .topBtn:nth-child(3){
+      background-color: #EB6F01;
+    }
+    .btnBox .topBtn:nth-child(4){
+      background-color: #C1392B;
+    }
+    .headContent{
+      width: 100%;
+      height: 30px;
+
+    }
+    .form-sel,.form-inp,#search{
+      float: left;
+      margin-right: 10px;
+    }
+    .form-sel label,.form-inp label{
+      color: #3C3C3C;
+      font-weight: normal;
+    }
+    #search{
+      background-color: #428BCA;
+      border-radius: 3px;
+      width: 42px;
+      height: 28px;
+      line-height: 28px;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+    }
+    .mingan2{
+      width: 38px;
+      height: 22px;
+      background-color: #F2784B;
+      display: inline-block;
+      padding: .3em .6em .3em;
+      font-size: 75%;
+      font-weight: bold;
+      line-height: 1;
+      color: #ffffff;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: .25em;
+    }
+    <%--舆情检索--%>
+  </style>
+</head>
+<body>
+<div class="modal fade" style="width: 850px;height: 600px;top: 100px;margin: 0 auto;" id="typeLook" tabindex="-1" role="dialog" aria-hidden="true" style=""
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog">
+
+      <div class="modal-content" <%--style="padding: 15px;"--%>><%--删除了內padding--%>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="close">
+            <img src="map/images/economicModel/close.png" onclick="closeInfoWindow(this,1);">
+          </button>
+          <h4 class="modal-title">舆情信息</h4>
+        </div>
+        <div class="modal-body">
+          <div class="tabbable">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li id="xgbmtab1" class="active"><a href="#home" role="tab" data-toggle="tab">舆情概述</a></li>
+              <li id="xgbmtab3"><a href="#home1" role="tab" data-toggle="tab" onclick="   loadMonitorS(1)">分类浏览</a></li>
+              <li id="xgbmtab6"><a href="#profile3" role="tab" data-toggle="tab">舆情检索</a></li>
+              <li id="xgbmtab5"><a href="#profile2" role="tab" data-toggle="tab" onclick="initData()">实时预警</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane" id="profile2">
+                <div class="container">
+                  <div class="row">
+                    <%--<ul class="list-group SocialMediaMonitorSPageUl intime_data">--%>
+                      <%----%>
+                    <%--</ul>--%>
+                    <%--<ul class="pagination">--%>
+                      <%--<li><a href="javascript:;">&laquo;</a></li>--%>
+                      <%--<li class="active"><a href="javascript:;">1</a></li>--%>
+                      <%--<li><a href="javascript:;">2</a></li>--%>
+                      <%--<li><a href="javascript:;">3</a></li>--%>
+                      <%--<li><a href="javascript:;">4</a></li>--%>
+                      <%--<li><a href="javascript:;">5</a></li>--%>
+                      <%--<li><a href="javascript:;">&raquo;</a></li>--%>
+                    <%--</ul>--%>
+                    <table id="shishiyujing" class="table table-striped table-bordered table-hover softtable">
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane active " id="home">
+                <div class="btnBox" id="buttonBox">
+                </div>
+                <div style="height: 300px;width:750px;" id="data3"></div><%--修改了宽度为750--%>
+              </div>
+              <div class="tab-pane " id="home1">
+                <div class="container">
+                  <div class="row">
+                    <div class="headContent">
+                      <form action="" class="form-group" style="width: 100%">
+                        <div class="form-sel">
+                          <label for="sel1">时间：</label>
+                          <select name="" id="sel1">
+                            <option value="2">今天</option>
+                            <option value="1">昨天</option>
+                          </select>
+                        </div>
+                        <div class="form-sel" style="display: none">
+                          <label for="sel2">信息类别：</label>
+                          <select name="categoryCode" id="sel2">
+                            <option value="">全部</option>
+                            <option value="1">社会维稳</option>
+                            <option value="2">城市形象</option>
+                            <option value="3">生态环境</option>
+                            <option value="4">城市交通</option>
+                            <option value="5">文教</option>
+                            <option value="6">民生类</option>
+                            <option value="7">网络安全</option>
+                            <option value="8">社会治安</option>
+                            <option value="9">经济相关</option>
+                            <option value="10">干部舆情</option>
+                            <option value="11">突发事件</option>
+                            <option value="12">信访</option>
+                          </select>
+                        </div>
+                        <div class="form-sel" style="display: none">
+                          <label for="sel3">信息来源：</label>
+                          <select name="dataSource" id="sel3">
+                            <option value="">全部</option>
+                            <option value="1">论坛</option>
+                            <option value="2">微博</option>
+                            <option value="3">微信公众号</option>
+                            <option value="4">QQ群消息</option>
+                            <option value="5">新闻</option>
+                            <option value="6">博客</option>
+                            <option value="7">贴吧</option>
+                            <option value="8">twitter</option>
+                            <option value="9">facebook</option>
+                            <option value="0">其他</option>
+                          </select>
+                        </div>
+                        <div class="form-sel" style="display: none">
+                          <label for="sel4">情感：</label>
+                          <select name="sentimentType" id="sel4">
+                            <option value="">全部</option>
+                            <option value="1">反动</option>
+                            <option value="2">敏感</option>
+                            <option value="3">负面</option>
+                            <option value="4">中立</option>
+                            <option value="5">正面</option>
+                          </select>
+                        </div>
+                        <div class="form-inp" style="display: none">
+                          <label for="search">关键字：</label> <input id="searchBox" type="search" name="keyWords" style="width: 80px">
+                        </div>
+                        <a id="search" class="search2">查询</a>
+                      </form>
+
+                    </div>
+                    <div class="loadGif" style="width:100%;text-align: center;display: none">
+                      <img src="map/images/load.gif"/>
+                    </div>
+                    <ul id="searchResult" class="list-group SocialMediaMonitorSPageUl">
+
+                    </ul>
+                    <ul id="paging1" class="pagination">
+                      <li><a href="javascript:;">&laquo;</a></li>
+                      <li class="active"><a href="javascript:;">1</a></li>
+                      <li><a href="javascript:;">2</a></li>
+                      <li><a href="javascript:;">3</a></li>
+                      <li><a href="javascript:;">4</a></li>
+                      <li><a href="javascript:;">5</a></li>
+                      <li><a href="javascript:;">&raquo;</a></li>
+                    </ul>
+
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane " id="profile3">
+                <div class="container SocialMediaMonitorSPage">
+                      <div class="row">
+                        <div class="col-sm-12 text-center SocialMonitorheader"><h3>互联网舆情监控分析平台</h3></div>
+                        <div class="form-group SocialMediaMonitorSearch">
+                          <input type="text" class="form-control" id="SocialMonitorSearch">
+                        </div>
+                        <div style="width: 100%;text-align: center">
+                        <button type="button" onclick="SearchMassage(1,2,$('#SocialMonitorSearch').val())"  id="btn-orange" style="background-color:#D84A38">站内搜索</button>
+                        <button type="button" onclick="SearchMassage(1,1,$('#SocialMonitorSearch').val())"  id="btn-blue" style="background-color:#4F81BD; border:1px solid #4F81BD;">云搜索</button>
+                        </div>
+                        <div class="loadGif" style="width:100%;text-align: center;display: none">
+                          <img src="map/images/load.gif"/>
+                        </div>
+                        <ul id="SearchMassage" class="list-group SocialMediaMonitorSPageUl">
+
+                          </ul>
+                          <ul id="SearchMassagePageUtil" class="pagination" style="display: none">
+                              <li><a href="javascript:;">&laquo;</a></li>
+                              <li class="active"><a href="javascript:;">1</a></li>
+                              <li><a href="javascript:;">2</a></li>
+                              <li><a href="javascript:;">3</a></li>
+                              <li><a href="javascript:;">4</a></li>
+                              <li><a href="javascript:;">5</a></li>
+                              <li><a href="javascript:;">&raquo;</a></li>
+                          </ul>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+</div>
+  </div>
+  <!-- /.modal-content -->
+</div>
+<script>
+  <%--分类浏览--%>
+  $(function(){
+    $('.search2').on('click',function(){
+      loadMonitorS(1);
+    });
+  });
+  var totalPages;
+  function loadMonitorS(pageNo){
+    paging($('#paging1'),1);
+    var startTime,endTime,categoryCode,dataSource,sentimentType,keyWords,searchType;
+
+    var setime=yesterdayandtoday(new Date(),'#sel1');
+    startTime=setime.startTime;
+    endTime=setime.endTime;
+    categoryCode=$('#sel2').val();
+    dataSource=$('#sel3').val();
+    sentimentType=$('#sel4').val();
+    keyWords=$('#searchBox').val();
+    $.ajax({
+      type:'POST',
+      dataType:'JSON',
+      url:'icom/ChangeData_searchBdmgyqxx.action?startTime='+startTime+'&endTime='+endTime+'&categoryCode='+categoryCode+'&dataSource='
+      +dataSource+'&sentimentType='+sentimentType+'&keyWords='+keyWords+'&pageNo='+pageNo,
+      beforeSend:function(){
+        //这里是开始执行方法，显示效果，效果自己写
+        $(".loadGif").show();
+      },
+      complete:function(){
+        //方法执行完毕，效果自己可以关闭，或者隐藏效果
+        $(".loadGif").hide();
+      },
+      success:function(data){
+        console.log(data);
+        var str='';
+        $('#searchResult').empty();
+        $.each(data.response.result,function(k,v){
+//          console.log(v);
+          str+='<li class="list-group-item">'
+          +'<div class="SPageTitle">'
+          +'<span class="label label-info'+tipColor(v.sentimentTypeStr)+'">'+ v.sentimentTypeStr+'</span> <h4 class="text-info"><a onclick="showDetails(\''+v.pageUrl+'\')">'+ v.title+'</a></h4>'
+          +'</div>'
+          +'<div class="SPageHeader">发布时间：<span class="SPageHeaderT">'+timeChange(v.publishTime)+'</span><span class="glyphicon glyphicon-comment"></span>来源网站：<span class="SPageHeaderW">'+ v.siteName+'</span><span class="glyphicon glyphicon-user"></span>发布人：<span class="SPageHeaderP">'+ v.posterName+'</span></div>'
+          +'<div class="SPageBody" style="text-indent:2em;">'+ v.content+'</div>'
+          +'</li>'
+        });
+        totalPages=Math.ceil((data.response.total)/10);
+        $('#searchResult').html(str);
+      }
+    });
+  }
+  function paging(elem,type){
+    var pageNo=1;
+    refresh(elem,1);
+    elem.on('click','li',function(){
+      pageNo=$(this).text();
+      if(totalPages>=pageNo&&pageNo>0){
+        if(type==1) {
+          loadMonitorS(pageNo);
+        }else if(type==2){
+          loadMonitorS2(pageNo);
+        }
+        $(this).addClass('active').siblings().removeClass('active');
+      }else if(pageNo=='«'){
+        var firstNo=$(this).next().text();
+        firstNo--;
+        if(firstNo<1){
+          return;
+        }
+        if(type==1) {
+          loadMonitorS($(elem).find(".active").text());
+        }else if(type==2){
+          loadMonitorS2($(elem).find(".active").text());
+        }
+        refresh(elem,firstNo);
+      }else if(pageNo=='»'){
+        var firstNo=$($(this).siblings()[1]).text();
+        firstNo++;
+        if($($(this).siblings()[5]).text()>=totalPages){
+          return;
+        }
+        if(type==1) {
+          loadMonitorS($(elem).find(".active").text());
+        }else if(type==2){
+          loadMonitorS2($(elem).find(".active").text());
+        }
+        refresh(elem,firstNo);
+      }
+    });
+  }
+  function refresh(elem,firstNo){
+    var a=elem.find('li>a');
+    for(var i=1;i<a.length-1;i++){
+      $(a[i]).text(firstNo+i-1);
+    }
+  }
+  function yesterdayandtoday(date,elem){
+    var tyear=date.getFullYear();
+    var tmonth=date.getMonth()+1;
+    var tdate=date.getDate();
+    var t={startTime:0,endTime:0};
+    tmonth<10 && (tmonth='0'+tmonth);
+    var setime=$(elem).val();
+    if(setime==1){
+      if(tdate<10){
+        tdate='0'+(tdate-1);
+      }else{
+        tdate=tdate-1;
+      }
+      t.startTime=String(tyear)+String(tmonth)+String(tdate)+'000000';
+      t.endTime=String(tyear)+String(tmonth)+String(tdate)+'240000';
+    }else{
+      t.startTime=String(tyear)+String(tmonth)+String(tdate)+'000000';
+      t.endTime=String(tyear)+String(tmonth)+String(tdate)+'240000';
+    }
+    return t;
+  }
+  function timeChange(str){
+    str=String(str);
+    str=str.substr(0,10);
+    var y=str.slice(0,4);
+    var m=parseInt(str.slice(4,6));
+    var d=parseInt(str.slice(6,8));
+    var h=parseInt(str.slice(8,10));
+    return y+'年'+m+'月'+d+'日'+h+'时';
+  }
+</script>
+<script>
+    $('#xgbmtab1').click(function(){
+      setMyLineIndex();
+    });
+//  function drawOpinitionMap(num,data){
+//    require([
+//      "esri/map", "esri/layers/WMTSLayer", "esri/layers/WMTSLayerInfo", "esri/layers/ArcGISDynamicMapServiceLayer",
+//      "esri/layers/FeatureLayer", "esri/InfoTemplate", "esri/renderers/ClassBreaksRenderer", "esri/symbols/SimpleFillSymbol", "esri/dijit/Legend",
+//      "esri/Color", "esri/renderers/UniqueValueRenderer", "esri/symbols/SimpleLineSymbol",
+//      "esri/geometry/Extent", "esri/layers/TileInfo", "esri/SpatialReference",
+//      "dojo/parser", "dijit/layout/BorderContainer", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojox/layout/ExpandoPane", "dojo/domReady!"
+//    ], function (Map, WMTSLayer, WMTSLayerInfo, ArcGISDynamicMapServiceLayer,
+//                 FeatureLayer, InfoTemplate, ClassBreaksRenderer, SimpleFillSymbol, Legend,
+//                 Color, UniqueValueRenderer, SimpleLineSymbol,
+//                 Extent, TileInfo, SpatialReference,
+//                 parser) {
+//      defaultSymbol = new  SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
+//      defaultSymbol.outline.setStyle(SimpleLineSymbol.STYLE_NULL);
+//
+//      // 创建渲染器
+//      renderer = new UniqueValueRenderer(defaultSymbol, "CONTAIN");
+//
+//      renderer.addValue(data.qy,new SimpleFillSymbol().setColor(data.color));
+//      featureLayer = new FeatureLayer("http://192.168.190.21:6080/arcgis/rest/services/NJRegion/MapServer/0");
+//      featureLayer.opacity = 0.6;
+//      typeLookLayers.push(featureLayer);
+//      featureLayer.setRenderer(renderer);
+//      map.addLayer(featureLayer);
+//      featureLayer.on("mouse-over",function(evt){
+//        map.infoWindow.setTitle(data.qy+"&nbsp&nbsp舆情指数："+num);
+//        map.infoWindow.resize(200,200);
+//        map.infoWindow.setContent(
+//                '<div><ul><li>'+"嘴巴气泡吃什么好,加多宝"+'</li><li>'+"蒙牛，销售就是和自己较劲"+'</li><li>'+"胡歌逆天古装天赋"+'</li>' +
+//                '<li>'+"彩票好运占"+'</li><li>'+"我的鼻血已经止不住了，怎么办"+'</li><li>'+"帕金森用药最好细水长流"+'</li><li>'+"黄牛从一台苹果手机中赚多少钱"+'</li></ul></div>'
+//        );
+//        map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+//      })
+//    });
+//  }
+  //舆情检索分页
+    var totalPages;
+    var serachType;
+  function SearchMassage(pageNo,searchType,keyWords){
+    serachType=searchType;
+    $.ajax({
+      type: 'get',
+      url: 'icom/ChangeData_searchMassage.action?pageNo='+pageNo+'&keyWords='+keyWords+'&searchType='+searchType,
+      dataType: "JSON",
+      beforeSend:function(){
+        //这里是开始执行方法，显示效果，效果自己写
+        $(".loadGif").show();
+      },
+      complete:function(){
+        //方法执行完毕，效果自己可以关闭，或者隐藏效果
+        $(".loadGif").hide();
+      },
+      success: function (data) {
+        var result=data.response.result;
+        var str="";
+        $("#SearchMassage").empty();
+        for(var i=0;i<result.length;i++) {
+          var resultdata=result[i];
+          str += '<li onclick="showDetails(\''+resultdata.pageUrl+'\')" class="list-group-item">' +
+          '<div class="SPageTitle">' +
+          '<span class="label label-info'+tipColor(resultdata.sentimentTypeStr)+'">'+resultdata.sentimentTypeStr+'</span> <h4 class="text-info" lang=\"'+resultdata.pageUrl+'\">文章标题： '+resultdata.title+'</h4>' +
+          '</div><div class="SPageHeader">发布时间：<span class="SPageHeaderT">'+timeChange(resultdata.publishTime)+'</span><span class="glyphicon glyphicon-comment"></span>来源网站：<span class="SPageHeaderW">'+resultdata.siteUrl+'</span><span class="glyphicon glyphicon-user"></span>发布人：<span class="SPageHeaderP">'+resultdata.posterName+'</span></div>' +
+          '<div class="SPageBody" style="text-indent:2em;">'+resultdata.content+'</div></li>';
+        }
+        totalPages=Math.ceil((data.response.total)/10);
+        $("#SearchMassage").append(str);
+        $("#SearchMassagePageUtil").css("display","block");
+      }
+    })
+  }
+    $("#SearchMassagePageUtil>li").click(function(){
+      var lis=$("#SearchMassagePageUtil").find("li");
+      var pageNo=$(this).find("a").text();
+      if(pageNo=="»"){
+          for(var i=lis.length-2;i>=1;i--){
+            var text=$(lis[i]).find("a").text()-0+1;
+            if(text>totalPages){
+              return;
+            }
+            $(lis[i]).find("a").text(text);
+          }
+      }
+      else if(pageNo=="«"){
+        for(var i=1;i<lis.length-1;i++){
+          var text=$(lis[i]).find("a").text()-0-1;
+          if(text<1){
+            return;
+          }
+          $(lis[i]).find("a").text(text);
+        }
+      }
+      else if(pageNo<=totalPages) {
+        $(this).addClass("active").siblings().removeClass("active");
+      }
+
+      SearchMassage($("#SearchMassagePageUtil>.active>a").text(),serachType,$('#SocialMonitorSearch').val());
+    })
+//    function showSearchdetial(jspUrl){
+////      alert(jspUrl);
+//    }
+//实时预警
+  function initData(){
+    $.ajax({
+      type: 'GET',
+      url: 'icom/ChangeData_searchWarningInformation.action',
+      dataType: 'JSON',
+      success: function (data) {
+        //console.log(data);
+        console.log(data);
+        var timeData=data.response.result;
+        $("#shishiyujing").empty();
+        var str="<tr><td>主题名称</td><td>预警规则</td><td>时间</td></tr>";
+        for(var i=0;i<timeData.length;i++){
+          var date=new Date(timeData[i].warningTime)
+          var time=date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+          str+='<tr><td>'+getTypeName(timeData[i].type)+'</td><td>'+(timeData[i].summary).trim()+'</td><td>'+time+'</td></tr>';
+        }
+        $("#shishiyujing").append(str);
+      }
+    })
+  }
+
+    function getTypeName(val) {
+      switch (val) {
+        case 1:
+          return '交通事故';
+        case 2:
+          return '交通事故';
+        case 3:
+          return '交通事故';
+        case 4:
+          return '交通事故';
+        case 5:
+          return '交通事故';
+        default:
+          return;
+      }
+    }
+</script>
+</body>
+</html>

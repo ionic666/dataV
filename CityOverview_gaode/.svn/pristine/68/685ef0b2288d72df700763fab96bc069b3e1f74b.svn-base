@@ -1,0 +1,49 @@
+package com.cetc28.idata.dao;
+
+
+import com.cetc28.idata.dto.Jsqx;
+import com.cetc28.idata.model.Role;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by FangYan on 2017/9/21.
+ */
+public interface IJxRoleDao {
+    public List<Role> queryRoleInfo(Integer pageNumber, Integer pageSize);
+
+    public List<String> queryRoleName();
+
+    /**
+     * 查询除了超级管理员的所有角色
+     * @return
+     */
+    public List<String> queryRoleNameEx();
+
+    void addRole(Map map);
+
+    void delRole(Integer roleid);
+
+    /**
+     * 删除用户和角色中间表数据
+     * @param roleid
+     */
+    void delUserRole(Integer roleid);
+
+    void delRoleMoule(String roleid);
+
+    void updateRoleP(Map map);
+
+    void updateRoleStatus(Map map);
+
+    Integer queryModuleidByName(String modulename);
+
+    void addPermision(Map map);
+
+    void delPermision(String roleid);
+
+    List<Role> queryisExeitRole(String rolename);
+
+    List<String> queryModuleNamebyRoleid(Integer roleid);
+}

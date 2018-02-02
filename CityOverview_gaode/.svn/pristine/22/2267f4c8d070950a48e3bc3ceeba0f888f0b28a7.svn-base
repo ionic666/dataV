@@ -1,0 +1,70 @@
+package com.cetc28.idata.dto;
+
+/**
+ * Created by wangxw on 2017/8/18.
+ */
+public class JjHgjjTlDto {
+    private int id;
+    private String bh;
+    private int jb;
+    private String color;
+    private String ksz;
+    private String jsz;
+    private String dw;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public int getJb() {
+        return jb;
+    }
+
+    public void setJb(int jb) {
+        this.jb = jb;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getKsz() {
+        return ksz;
+    }
+
+    public void setKsz(String ksz) {
+        this.ksz = ksz;
+    }
+
+    public String getJsz() {
+        return jsz;
+    }
+
+    public void setJsz(String jsz) {
+        this.jsz = jsz;
+    }
+
+    public String getDw() {
+        return dw;
+    }
+
+    public void setDw(String dw) {
+        this.dw = dw;
+    }
+}

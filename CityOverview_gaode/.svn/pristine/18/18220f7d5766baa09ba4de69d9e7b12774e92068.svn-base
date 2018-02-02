@@ -1,0 +1,121 @@
+package com.cetc28.ConfigurationManagement.dao;
+
+
+import com.cetc28.ConfigurationManagement.model.Role;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by FangYan on 2017/9/21.
+ */
+public interface IJxRoleDao {
+    /**
+     * 查询角色信息
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    public List<Role> queryRoleInfo(Integer pageNumber, Integer pageSize);
+
+    /**
+     * 查询角色名称
+     * @return
+     */
+    public List<String> queryRoleName();
+
+    /**
+     * 查询除了超级管理员的所有角色
+     * @return
+     */
+    public List<String> queryRoleNameEx(Integer userid);
+
+    /**
+     * 新增角色
+     * @param map
+     */
+    void addRole(Map map);
+
+    /**
+     * 删除角色
+     * @param roleid
+     */
+    void delRole(Integer roleid);
+
+    /**
+     * 删除用户和角色中间表数据
+     * @param roleid
+     */
+    void delUserRole(Integer roleid);
+
+    /**
+     *
+     * @param roleid
+     */
+    void delRoleMoule(String roleid);
+
+    /**
+     * 更新角色
+     * @param map
+     */
+    void updateRoleP(Map map);
+
+    /**
+     * 更新角色状态
+     * @param map
+     */
+    void updateRoleStatus(Map map);
+
+    /**
+     *
+     * @param modulename
+     * @return
+     */
+    Integer queryModuleidByName(String modulename);
+
+    /**
+     * 新增权限
+     * @param map
+     */
+    void addPermision(Map map);
+
+    /**
+     * 删除权限
+     * @param roleid
+     */
+    void delPermision(String roleid);
+
+    /**
+     *
+     * @param rolename
+     * @return
+     */
+    List<Role> queryisExeitRole(String rolename);
+
+    /**
+     *
+     * @param roleid
+     * @return
+     */
+    List<String> queryModuleNamebyRoleid(Integer roleid);
+
+    /**
+     *
+     * @param rolename
+     * @return
+     */
+    public Integer queryRoleIdByName(String rolename);
+
+    /**
+     *
+     * @return
+     */
+    List<String> queryAllRoleName();
+
+    /**
+     * 判断是否存在该角色下的用户
+     * @param roleid
+     * @return
+     */
+    int checkRoleHasUse(Integer roleid);
+}

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.EcoSuitableResidence.dao.IJxEnvirDao">
+
+        <select id="queryAllEnvirAir"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirAir" parameterType="java.lang.String">
+                select * from JX_ENVIR_KQZL
+        </select>
+
+        <select id="selectEnvirInfo"  resultType="com.cetc28.EcoSuitableResidence.model.JxWaterInfo" parameterType="java.lang.String">
+                select * from JX_ENVIR_YYS where jcdbh = #{jcdbh}
+        </select>
+
+        <select id="selectKqzljc24Hour"  resultType="com.cetc28.EcoSuitableResidence.model.JxKqzljcdInfo" parameterType="java.lang.String">
+                <![CDATA[ select * from ( select * from JX_ENVIR_KQZL_JCD_HOUR t where bh=#{bh} order by jcsj desc ) where rownum<=24 order by jcsj]]>
+        </select>
+
+        <select id="selectKqzljc30Day"  resultType="com.cetc28.EcoSuitableResidence.model.JxKqzljcdInfo" parameterType="java.lang.String">
+                <![CDATA[ select * from ( select * from  JX_ENVIR_KQZL_JCD_DAY t where bh=#{bh} order by jcsj desc ) where rownum<=30 order by jcsj]]>
+        </select>
+
+        <select id="queryOriginDataBy24Hour"  resultType="java.util.HashMap" >
+                <![CDATA[ select jcsj,${indexName} from ( select * from  JX_ENVIR_KQZL_JCD_HOUR  where bh=#{bh} order by jcsj desc ) where rownum<=(24+#{gap}) order by jcsj]]>
+        </select>
+
+        <select id="queryOriginData"  resultType="java.util.HashMap" >
+                <![CDATA[ select jcsj,${indexName} from ( select * from  JX_ENVIR_KQZL_JCD_DAY  where bh=#{bh} order by jcsj desc ) where rownum<=(30+#{gap}) order by jcsj]]>
+        </select>
+
+        <select id="getNextDay"  resultType="java.lang.String" >
+                <![CDATA[ select to_char(to_date(jcsj,'yyyy-mm-dd')+#{prenum},'yyyy-mm-dd') from ( select jcsj from  JX_ENVIR_KQZL_JCD_DAY  where bh=#{bh} order by jcsj desc ) where rownum=1]]>
+        </select>
+
+        <select id="getNextHour"  resultType="java.lang.String" >
+                <![CDATA[ select to_char(to_date(jcsj,'yyyy-mm-dd hh24:mi:ss')+(#{prenum}/24),'yyyy-mm-dd hh24:mi') from ( select jcsj from  JX_ENVIR_KQZL_JCD_HOUR  where bh=#{bh} order by jcsj desc ) where rownum=1]]>
+        </select>
+
+        <select id="selectZsJcdInfo"  resultType="java.util.HashMap" parameterType="java.lang.String">
+                select avg(zsdb) noise_avg from JX_ENVIR_ZS_DAY
+                <trim prefix="where" prefixOverrides="and |or">
+                        <if test="jcdbh != null and jcdbh != ''">
+                                and jcdbh = #{jcdbh}
+                        </if>
+                        <if test="zstype != null and zstype != ''">
+                                and zstype = #{zstype}
+                        </if>
+                        <if test="time_start != null and time_start != ''">
+                                and jcsj &gt;= to_date(#{time_start},'yyyy-MM-dd')
+                        </if>
+                        <if test="time_end != null and time_end != ''">
+                                and jcsj &lt;= to_date(#{time_end},'yyyy-MM-dd')
+                        </if>
+                </trim>
+        </select>
+
+        <select id="getEnvirAirJcdInfo"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirAir" parameterType="java.lang.String">
+                select b.qhbh,b.bh,b.mc,b.zdlx,b.dz,b.jd,b.wd,a.aqi, a.pm25,a.pm10,a.co,a.no2,a.o3,a.so2,a.sywrw,a.jcsj from JX_ENVIR_KQZL_JCD_HOUR a LEFT JOIN JX_ENVIR_KQZL_JCD b ON a.bh=b.bh where b.bh = #{bh} and a.jcsj=#{jcsj}
+        </select>
+
+
+        <select id="selectEnvirAirJcd"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirAir" parameterType="java.lang.String">
+                select max(jcsj) as jcsj,bh from JX_ENVIR_KQZL_JCD_HOUR WHERE bh in (select bh from JX_ENVIR_KQZL_JCD where qhbh = #{qhbh})group by bh order by bh
+        </select>
+
+        <select id="selectAirQXMonitor"  resultType="com.cetc28.EcoSuitableResidence.model.JxKqzljcdInfo" parameterType="java.lang.String">
+                select aqi,zldj,mc,jcsj,jd,wd from ( select * from JX_ENVIR_KQZL_QX_DAY a left join xxzygl.XZQH b on a.bh=b.bh where substr(a.bh, 1,6)=#{bh} and a.jcsj=(select max(jcsj) as sj from JX_ENVIR_KQZL_QX_DAY ) )
+        </select>
+
+        <select id="queryAirTotal" parameterType="java.lang.Integer" resultType="java.lang.Double">
+                SELECT  avg(yll)as yll FROM  JX_ENVIR_AQI_DAY WHERE year=#{year}
+        </select>
+
+        <select id="AirCurrentYear" resultType="java.lang.Integer">
+                SELECT MAX(year) FROM JX_ENVIR_AQI_DAY
+        </select>
+
+        <select id="selectAirQuality"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirMacroMonitor" parameterType="java.lang.Integer">
+                <![CDATA[ select * from (select trunc(avg(airquality_lv),1) as airquality_lv, year from JX_ENVIR_MACRO_MONITOR t group by year order by year desc) where rownum < 8 order by year]]>
+        </select>
+
+        <select id="selectWaterEnvirLv"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirMacroMonitor" parameterType="java.lang.Integer">
+                <![CDATA[ select * from (select trunc(avg(waterenvir_lv),1) as waterenvir_lv,trunc(avg(waterenvir_lv_imp),1) as waterenvir_lv_imp,year from JX_ENVIR_MACRO_MONITOR t group by year order by year desc) where rownum < 6 order by year]]>
+        </select>
+
+        <select id="selectNoiseOverproof"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirMacroMonitor" parameterType="java.lang.Integer">
+                <![CDATA[ select * from (select trunc(avg(NOISE_OVERPROOF_LV),1) as NOISE_OVERPROOF_LV, year from JX_ENVIR_MACRO_MONITOR t group by year order by year desc) where rownum < 6 order by year]]>
+        </select>
+
+        <select id="selectCompanyEnvir"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirMacroMonitor" parameterType="java.lang.Integer">
+                <![CDATA[ select * from (select COMPANY_ENVIR_OPEN_Q_LV,COMPANY_ENVIR_OPEN_S_LV, COMPANY_ENVIR_OPEN_QS_LV, year from JX_ENVIR_MACRO_MONITOR_XZ t where rownum < 6 order by year desc) order by year]]>
+        </select>
+
+        <select id="selectPolluteMonitor"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirMacroMonitor" parameterType="java.lang.Integer">
+                <![CDATA[SELECT * from (select POLLUTE_MONITOR_GK_LV,POLLUTE_MONITOR_SK_LV, POLLUTE_MONITOR_CK_LV, year from JX_ENVIR_MACRO_MONITOR_XZ t where rownum < 6 order by year desc) order by year]]>
+        </select>
+
+        <select id="selectCityProblem"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirMacroMonitor" parameterType="java.lang.Integer">
+                <![CDATA[SELECT * from (select CITY_PROBLEM_JB_NM,CITY_PROBLEM_CZ_NM,year from JX_ENVIR_MACRO_MONITOR_XZ t where rownum < 6 order by year desc) order by year]]>
+        </select>
+
+        <select id="selectWaterMonitor24Hour"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirWater" parameterType="java.lang.String">
+                <![CDATA[ select * from ( select * from JX_ENVIR_WATER_MONITOR_HOUR t where bh=#{bh} order by jcsj desc ) where rownum<=24 order by jcsj]]>
+        </select>
+
+        <select id="selectWaterMonitor30Day"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirWater" parameterType="java.lang.String">
+                <![CDATA[ select * from ( select * from  JX_ENVIR_WATER_MONITOR_DAY t where bh=#{bh} order by jcsj desc ) where rownum<=30 order by jcsj]]>
+        </select>
+
+        <select id="queryWaterPre30Day"  resultType="java.util.HashMap" >
+                <![CDATA[ select jcsj,${indexName} from ( select * from  JX_ENVIR_WATER_MONITOR_DAY  where bh=#{bh} order by jcsj desc ) where rownum<=(30+#{gap}) order by jcsj]]>
+        </select>
+
+        <select id="getWaterNextDay"  resultType="java.lang.String" >
+                <![CDATA[ select to_char(to_date(jcsj,'yyyy-mm-dd')+#{prenum},'yyyy-mm-dd') from ( select jcsj from  JX_ENVIR_WATER_MONITOR_DAY  where bh=#{bh} order by jcsj desc ) where rownum=1]]>
+        </select>
+
+        <select id="queryWaterPre24Hour"  resultType="java.util.HashMap" >
+                <![CDATA[ select jcsj,${indexName} from ( select * from  JX_ENVIR_WATER_MONITOR_HOUR  where bh=#{bh} order by jcsj desc ) where rownum<=(24+#{gap}) order by jcsj]]>
+        </select>
+
+        <select id="getWaterNextHour"  resultType="java.lang.String" >
+                <![CDATA[ select to_char(to_date(jcsj,'yyyy-mm-dd hh24:mi:ss')+(#{prenum}/24),'yyyy-mm-dd hh24:mi') from ( select jcsj from  JX_ENVIR_WATER_MONITOR_HOUR  where bh=#{bh} order by jcsj desc ) where rownum=1]]>
+        </select>
+
+        <select id="getWaterMonitorJcd"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirWater" parameterType="java.lang.String">
+                select b.qhbh,b.bh,b.mc,b.dz,b.jd,b.wd,a.zldj,a.ph,a.rjy,a.zd,a.ddl,a.zl,a.zd1,a.ad,a.sywrw,a.jcsj from JX_ENVIR_WATER_MONITOR_HOUR a LEFT JOIN JX_ENVIR_WATER_JCD b ON a.bh=b.bh where b.bh = #{bh} and a.jcsj=#{jcsj}
+        </select>
+
+
+        <select id="selectWaterMonitorJcd"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirWater" parameterType="java.lang.String">
+                select max(jcsj) as jcsj,bh from JX_ENVIR_WATER_MONITOR_HOUR WHERE bh in (select bh from JX_ENVIR_WATER_JCD where qhbh = #{qhbh})group by bh order by bh
+        </select>
+
+        <select id="selectWaterMonitorQX"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirWater" parameterType="java.lang.String">
+                select zldj,mc,jcsj from ( select * from JX_ENVIR_WATER_MONITOR_QX a left join xxzygl.XZQH b on a.bh=b.bh where substr(a.bh, 1,6)=#{bh} and a.jcsj=(select max(jcsj) as sj from JX_ENVIR_WATER_MONITOR_QX ) )
+        </select>
+
+        <select id="selectWaterDmsMonth"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirWater" parameterType="java.lang.String">
+                <![CDATA[ select * from ( select * from JX_ENVIR_WATER_DMS_MONTH t where bh=#{bh} order by jcsj desc ) where rownum<=12 order by jcsj]]>
+        </select>
+
+        <select id="queryDmsPre12Month"  resultType="java.util.HashMap" >
+                <![CDATA[ select jcsj,${indexName} from ( select * from  JX_ENVIR_WATER_DMS_MONTH  where bh=#{bh} order by jcsj desc ) where rownum<=(12+#{gap}) order by jcsj]]>
+        </select>
+
+        <select id="getDmsNextMonth"  resultType="java.lang.String" >
+                <![CDATA[ select to_char(add_months(to_date(jcsj,'yyyy-mm'),${prenum}),'yyyy-mm') from ( select jcsj from  JX_ENVIR_WATER_DMS_MONTH  where bh=#{bh} order by jcsj desc ) where rownum=1]]>
+        </select>
+
+        <select id="selectWaterDmsDay"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirWater" parameterType="java.lang.String">
+                <![CDATA[ select * from ( select * from  JX_ENVIR_WATER_DMS_DAY t where bh=#{bh} order by jcsj desc ) where rownum<=30 order by jcsj]]>
+        </select>
+
+        <select id="queryDmsPre30Day"  resultType="java.util.HashMap" >
+                <![CDATA[ select jcsj,${indexName} from ( select * from  JX_ENVIR_WATER_DMS_DAY  where bh=#{bh} order by jcsj desc ) where rownum<=(30+#{gap}) order by jcsj]]>
+        </select>
+
+        <select id="getDmsNextDay"  resultType="java.lang.String" >
+                <![CDATA[ select to_char(to_date(jcsj,'yyyy-mm-dd')+#{prenum},'yyyy-mm-dd') from ( select jcsj from  JX_ENVIR_WATER_DMS_DAY  where bh=#{bh} order by jcsj desc ) where rownum=1]]>
+        </select>
+
+        <select id="getWaterDmsJcd"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirWater" parameterType="java.lang.String">
+                 select b.qhbh,b.bh,b.mc,b.dz,b.jd,b.wd,a.gmsy,a.ad,a.zl,a.sywrw,a.jcsj,a.zldj from JX_ENVIR_WATER_DMS_DAY a LEFT JOIN JX_ENVIR_WATER_DMS_JCD b ON a.bh=b.bh where b.bh = #{bh} and a.jcsj=#{jcsj}
+        </select>
+
+
+        <select id="selectWaterDmsJcd"  resultType="com.cetc28.EcoSuitableResidence.model.JxEnvirWater" parameterType="java.lang.String">
+                select max(jcsj) as jcsj,bh from JX_ENVIR_WATER_DMS_DAY WHERE bh in (select bh from JX_ENVIR_WATER_DMS_JCD where qhbh = #{qhbh})group by bh order by bh
+        </select>
+
+        <select id="selectWaterMacro"  resultType="com.cetc28.EcoSuitableResidence.dto.WaterMacro">
+                select date_year,quality,count(1) as num ,round(ratio_to_report(count(1)) over(partition by date_year)*100,2)as percent from JX_ENVIR_WATER_MACRO group by quality,date_year
+        </select>
+
+        <select id="selectWaterMacroByYear" parameterType="java.lang.Integer" resultType="com.cetc28.EcoSuitableResidence.dto.WaterMacro">
+                select count(quality) as num,w.date_year,w.quality  from JX_ENVIR_WATER_MACRO  w where w.date_year=#{year} group by quality, w.date_year order by w.quality
+        </select>
+
+        <select id="selectMaxYear" resultType="Integer">
+                select Max(date_year) from JX_ENVIR_WATER_MACRO
+        </select>
+
+        <select id="selectNoiseMapJcd"  resultType="com.cetc28.EcoSuitableResidence.model.JxNoise" parameterType="java.lang.String">
+                select db,mc,jd,wd from ( select * from JX_ENVIR_NOISE_MONITOR_QX a left join xxzygl.XZQH b on a.bh=b.bh where substr(a.bh, 1,6)=#{bh} and a.year=(select max(year) as sj from JX_ENVIR_NOISE_MONITOR_QX ) )
+        </select>
+
+        <select id="selectMapPollution"  resultType="com.cetc28.EcoSuitableResidence.model.JxPollution" parameterType="java.lang.String">
+                select type,zypfwrw,count(type)as counttype from JX_ENVIR_POLLUTION group by zypfwrw,type
+        </select>
+
+        <select id="selectMapPollutionJcd"  resultType="com.cetc28.EcoSuitableResidence.model.JxPollution" parameterType="java.lang.String">
+               select * from JX_ENVIR_POLLUTION x left join JX_ENVIR_POLLUTION_A a on x.xh=a.xh left join JX_ENVIR_POLLUTION_B b on x.xh=b.xh left join JX_ENVIR_POLLUTION_D d on x.xh=d.xh left join JX_ENVIR_POLLUTION_E e on x.xh=e.xh where x.type=#{type}
+        </select>
+
+        <select id="selectPollutionHG"  resultType="com.cetc28.EcoSuitableResidence.model.JxPollution" parameterType="java.lang.String">
+              select zypfwrw,type,sum (HG),count(type),round( sum (HG)/count(type)*100,2)as HGLV from JX_ENVIR_POLLUTION_REACH group by zypfwrw,type
+        </select>
+
+        <select id="selectWaterManage"  resultType="com.cetc28.EcoSuitableResidence.model.JxWaterManage">
+               select (sum(CITYHZ)+sum(COUNTYHZ)+sum(TOWNHZ)+sum(VILLAGEHZ))as TotalHZ,(sum(CITYHD)+sum(COUNTYHD)+sum(TOWNHD)+sum(VILLAGEHD))as TotalHD,sum(RIVERWAYPOLLUTE)as TotalHDpollute,sum(RIVERPWK)as TotalHDPWK from JX_ENVIR_HEDAO t
+        </select>
+
+        <select id="selectPolluteDisplay"  resultType="com.cetc28.EcoSuitableResidence.model.JxPollution">
+               select type,sum(QYNUMBER)as Totalnum from JX_ENVIR_POLLUTE_DISPLAY t group by type
+        </select>
+
+        <select id="displayQYInfo"  resultType="com.cetc28.EcoSuitableResidence.model.JxPollution">
+              select * from JX_ENVIR_POLLUTION t where MC LIKE '%'||#{mc}||'%' and type=#{type}
+        </select>
+
+
+
+
+
+</mapper>

@@ -1,0 +1,92 @@
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.Constant.SysConstant;
+import com.cetc28.idata.model.CityResult;
+import com.cetc28.idata.model.PageResult;
+import com.cetc28.idata.model.User;
+import com.cetc28.idata.model.UserLoginList;
+import com.cetc28.idata.service.IJxUserManageService;
+import com.cetc28.idata.service.JxLoginService;
+import com.cetc28.idata.shiro.AuthRealm;
+import com.cetc28.util.DateUtil;
+import com.cetc28.util.IpUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+
+/**
+ * Created by FangYan on 2017/9/19.
+ */
+@Controller
+@RequestMapping("/manage")
+public class JxLoginController {
+    @Autowired
+    private JxLoginService jxLoginService;
+    @Autowired
+    private IJxUserManageService iJxUserManageService;
+    @Autowired
+    private AuthRealm authRealm;
+
+    @RequestMapping("/login/login.do")
+    @ResponseBody
+    public CityResult Userlogin(String username, String password, HttpSession session, HttpServletRequest request){
+        try {
+            Subject subject = SecurityUtils.getSubject();
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            subject.login(token);
+            User user = (User) subject.getPrincipal();
+            if(user.getStatus()==0){
+                return CityResult.build(400,"对不起，该用户已被停用!");
+            }
+            session.setAttribute(SysConstant.CURRENT_USER_INFO,user);
+            UserLoginList userLoginList = new UserLoginList();
+            userLoginList.setUsername(user.getUsername());
+            userLoginList.setLoginip(IpUtil.toIpAddr(request));
+            userLoginList.setLogintime(DateUtil.timestampFormat(new java.util.Date()));
+            jxLoginService.addUserLoginList(userLoginList);
+            java.util.Date currentTime = new java.util.Date();
+            iJxUserManageService.updateLastLoginTime(username,new java.sql.Timestamp(currentTime.getTime()));
+        } catch( Exception e) {
+            e.printStackTrace();
+            if(e.getMessage().equals(SysConstant.USER_DISABLED)){
+                return CityResult.build(400,e.getMessage());
+            }
+                return CityResult.build(400,SysConstant.USER_PASSWD_ERROR);
+        }
+                return CityResult.build(200,"",username);
+    }
+
+    @RequestMapping("/login/checkSession.do")
+    @ResponseBody
+    public  CityResult CheckSession(HttpSession session){
+           if(session.getAttribute(SysConstant.CURRENT_USER_INFO)==null){
+            return CityResult.build(400,"用户未登录");
+           }else {
+               User user = (User) session.getAttribute(SysConstant.CURRENT_USER_INFO);
+               return  CityResult.build(200,"",user.getUsername());
+           }
+    }
+
+    @RequestMapping("/login/queryLoginList.do")
+    @ResponseBody
+    public PageResult queryLoginList(Integer pageNumber, Integer pageSize){
+        return  jxLoginService.queryLoginList(pageNumber,pageSize);
+    }
+
+    @RequestMapping("/login/loginOut.do")
+    @ResponseBody
+    public CityResult  loginOut(HttpSession session){
+        session.removeAttribute(SysConstant.CURRENT_USER_INFO);
+        authRealm.updateCachedAuthorization();
+        return CityResult.build(200,"退出成功");
+    }
+}

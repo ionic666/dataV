@@ -1,0 +1,38 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.dto.SchoolInfoDto;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/10/23.
+ */
+public interface ISerchNameDao {
+    /**
+     * 根据名称查询学校名称
+     * @param name
+     * @return
+     */
+    List<SchoolInfoDto> querySchoolName(String name);
+
+    /**
+     * 根据拼音查询学校名称
+     * @param pinyin
+     * @return
+     */
+    List<SchoolInfoDto> querySchoolNameByPinyin(String pinyin);
+
+    /**
+     * 查询所有学校
+     * @return
+     */
+    List<SchoolInfoDto> queryAll();
+
+    /**
+     * 更新所有学校名称的拼音
+     * @param map
+     */
+    void update(Map map);
+}

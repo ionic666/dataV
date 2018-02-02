@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cetc28.idata.dao.IjxUserDao">
+    <select id="queryUserInfo" parameterType="java.lang.Integer" resultType="com.cetc28.idata.model.User">
+          select u.userid,u.username,u.status,u.regtime,u.lastlogintime,r.rolename from JX_MANAGE_USER u
+          LEFT JOIN  JX_MANAGE_USER_ROLE ur ON u.userid = ur.userid
+          LEFT JOIN JX_MANAGE_ROLE r ON ur.roleid = r.roleid  where u.username!='admin' ORDER BY u.regtime desc
+    </select>
+
+    <select id="queryUserByuserid" parameterType="java.lang.Integer" resultType="com.cetc28.idata.model.User">
+        select * from JX_MANAGE_USER u where userid=#{userid}
+    </select>
+    <!--<select id="queryUserInfoEx" parameterType="java.lang.Integer" resultType="com.cetc28.idata.model.User">
+        select u.userid,u.username,u.status,u.regtime,u.lastlogintime,r.rolename from JX_MANAGE_USER u
+        LEFT JOIN  JX_MANAGE_USER_ROLE ur ON u.userid = ur.userid
+        LEFT JOIN JX_MANAGE_ROLE r ON ur.roleid = r.roleid  ORDER BY u.regtime desc
+    </select>-->
+
+    <delete id="delUser" parameterType="java.lang.Integer">
+        DELETE FROM JX_MANAGE_USER u WHERE  u.userid=#{userid}
+    </delete>
+
+    <delete id="delUserRole">
+        DELETE FROM JX_MANAGE_USER_ROLE ur WHERE ur.userid=#{userid}
+    </delete>
+
+    <insert id="addUser" parameterType="java.util.Map">
+        INSERT  INTO  JX_MANAGE_USER (userid,username,password,regtime,lastlogintime,status) VALUES
+        (seq_user_add.nextval,#{username},#{password},#{regtime},#{lastlogintime},#{status})
+    </insert>
+
+    <update id="updateLastLoginTime">
+        UPDATE JX_MANAGE_USER u SET u.lastlogintime=#{1} WHERE u.username=#{0}
+    </update>
+
+    <select id="queryRolePermission" parameterType="java.lang.String" resultType="java.lang.String">
+        select m.modulename from JX_MANAGE_ROLE r
+        LEFT JOIN JX_MANAGE_ROLE_MODULE rm ON r.roleid=rm.roleid
+        LEFT  JOIN  JX_MANAGE_MODULE m ON  rm.moduleid=m.moduleid
+        WHERE  r.rolename=#{rolename}
+    </select>
+
+    <insert id="updateRolePermission" parameterType="java.lang.Integer">
+        UPDATE JX_MANAGE_USER_ROLE SET  roleid=#{1} WHERE  userid=#{0}
+    </insert>
+
+    <insert id="insertRolePermission" parameterType="java.lang.Integer">
+        INSERT INTO JX_MANAGE_USER_ROLE (userid,roleid) VALUES (#{0},#{1})
+    </insert>
+
+    <select id="queryRoleIdByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT roleid from JX_MANAGE_ROLE r WHERE r.rolename=#{rolename}
+    </select>
+
+    <select id="queryUserIdByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT userid from JX_MANAGE_USER u WHERE username=#{username}
+    </select>
+
+    <select id="checkRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM  JX_MANAGE_USER_ROLE WHERE userid=#{userid}
+    </select>
+
+    <update id="updateUserStatus" parameterType="java.util.Map">
+        update JX_MANAGE_USER set status=#{status} where userid=#{userid}
+    </update>
+
+    <update id="updateUserPwd" parameterType="java.util.Map">
+        update JX_MANAGE_USER set password=#{password} where userid=#{userid}
+    </update>
+
+    <select id="checkUserPassword" parameterType="String" resultType="Integer">
+        select count(*) from JX_MANAGE_USER where password=#{pre_password}
+    </select>
+</mapper>

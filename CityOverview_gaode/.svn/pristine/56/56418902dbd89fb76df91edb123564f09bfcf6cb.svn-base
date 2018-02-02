@@ -1,0 +1,161 @@
+/**
+ * Created by think on 2017/11/8.
+ */
+var citysmx={
+    citysmxAjax:function(){
+        $(".envirAll").removeClass("active");
+        $.ajax({
+            type: 'post',
+            url: "jxutility/distinct/distinctOverview.do?bH="+qhbh,
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                var pointArr=[];
+                for(var i=0;i<len;i++){
+                    var details={key0:data[i].jxUtilityStatisByMonth,key1:data[i].xzqh}
+                    citysmx.addPoint(wgs84togcj02(parseFloat(data[i].xzqh.jd),parseFloat(data[i].xzqh.wd)),20,28,'images/smx.png',details,'smx');
+            }}
+        })
+        citysmx.gzd()
+        citysmx.bjd()
+    },
+    gzd:function(){
+        $.ajax({
+            type: 'post',
+            url: "jxutility/fault/faultPointAll.do",
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                var pointArr=[];
+                for(var i=0;i<len;i++){
+                    citysmx.addPoint(wgs84togcj02(parseFloat(data[i].lon),parseFloat(data[i].lat)),35,40,'images/utility/gzd.gif',data[i],'gzd');
+                }
+            }
+        })
+    },
+    bjd:function(){
+        $.ajax({
+            type: 'post',
+            url: "jxutility/alarm/alarmPointAll.do",
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                var pointArr=[];
+                for(var i=0;i<len;i++){
+                    citysmx.addPoint(wgs84togcj02(parseFloat(data[i].lon),parseFloat(data[i].lat)),35,35,'images/utility/bjd.gif',data[i],'bjd');
+                }
+            }
+        })
+    },
+    //故障点上点以及事件监听
+    addPoint:function addPoint(arr,h,w,img,details,type){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+        var _marker=new AMap.Marker({
+            map: map,
+            position: arr,        //经纬度
+            icon: new AMap.Icon({
+                size: new AMap.Size(h, w),  //图标大小
+                image: img       //自定义图片
+            })
+        });
+        _marker.setExtData(details);
+       if(type=='gzd'){
+           AMap.event.addListener(_marker,'click',function(e){
+               citysmx.infoWindow(details,'gzd')
+           });
+       }
+        if(type=='bjd'){
+            AMap.event.addListener(_marker,'click',function(e){
+                citysmx.infoWindow(details,'bjd')
+            });
+        }
+        if(type=='smx'){
+            AMap.event.addListener(_marker,'click',function(e){
+                citysmx.infoWindow(details,'smx')
+            });
+        }
+        //AMap.event.addListener(_marker,'mouseout',function(e){
+        //    //map.clearInfoWindow();
+        //});
+    },
+    infoWindow:function(details,type){
+        var content = [];
+        var title='';
+        var XY;//经纬度数组，已纠偏变量
+        if(type=="gzd"){
+            title = '<span style="font-size:14px;color:#0CDAF5;">故障详情</span>';
+            content.push('<p>故障编号：' +details.id+'</p>');
+            content.push('<p>故障描述：' +details.des+'</p>');
+            content.push('<p>管网类型：' +details.utilityType+'</p>');
+            content.push('<p>地点：' + details.loca+'</p>');
+            content.push('<p>上报时间：' +details.dateYmd+'</p>');
+            content.push('<p>抢修状态：' +details.state+'</p>');
+            content.push('<p>责任单位：' +details.admi+'</p>');
+            XY=wgs84togcj02(parseFloat(details.lon),parseFloat(details.lat))
+        }
+        if(type=="bjd"){
+            title = '<span style="font-size:14px;color:#0CDAF5;">报警详情</span>';
+            content.push('<p>报警编号：' +details.id+'</p>' );
+            content.push('<p>报警信息：' +details.alarmDes+'</p>' );
+            content.push('<p>报警时间：' +details.dateYmdhm+'</p>' );
+            content.push('<p>处理状态：' +details.state+'</p>' );
+            content.push('<p>检测设备：' +details.deviceTypeDes+'</p>' );
+            content.push('<p>地点：' +details.deviceLoca+'</p>' );
+            content.push('<p>责任单位：' + details.admi+'</p>' );
+            XY=wgs84togcj02(parseFloat(details.lon),parseFloat(details.lat))
+        }
+        if(type=="smx"){
+            title = '<span style="font-size:14px;color:#0CDAF5;">'+details.key1.mc+'</span>';
+            content.push('<p>供水量：' + details.key0.waterSupplyAll + '万立方米</p>' );
+            content.push('<p>供电量：' + details.key0.elecSupplyAll  + '万千瓦时</p>' );
+            content.push('<p>供气量：' + details.key0.ngSupply  + '万立方米</p>' );
+            content.push('<p>供热量：' + details.key0.heatingSupplyAll  + '万吨</p>' );
+            content.push('<p>排污量：' + details.key0.wasteResiAll  + '万立方米</p>' );
+            content.push('<p>管网故障次数：' + details.key0.noFault  + '次</p>');
+            XY=wgs84togcj02(parseFloat(details.key1.jd),parseFloat(details.key1.wd))
+        }
+        var infoWindow = new AMap.InfoWindow({
+            isCustom: true,  //使用自定义窗体
+            content: citysmx.createInfoWindow(title,content.join("")),
+            offset: new AMap.Pixel(15, -35)
+        });
+        map.panTo(XY);//将infowindow移到屏幕中间
+        infoWindow.open(map,XY);
+    },
+    createInfoWindow: function (title, content) {
+        var info = document.createElement("div");
+        info.className = "info";
+        //可以通过下面的方式修改自定义窗体的宽高
+        info.style.width = "200px";
+        // 定义顶部标题
+        var top = document.createElement("div");
+        var titleD = document.createElement("div");
+        var closeX = document.createElement("img");
+        top.className = "info-top";
+        titleD.innerHTML = title;
+        closeX.src = "images/gaode-close.png";
+        closeX.onclick = shbz.closeInfoWindow;
+
+        top.appendChild(titleD);
+        top.appendChild(closeX);
+        info.appendChild(top);
+
+        // 定义中部内容
+        var middle = document.createElement("div");
+        middle.className = "info-middle";
+        middle.style.backgroundColor = 'white';
+        middle.innerHTML = content;
+        info.appendChild(middle);
+
+        // 定义底部内容   //下方的小箭头
+        var bottom = document.createElement("div");
+        bottom.className = "info-bottom";
+        bottom.style.position = 'relative';
+        bottom.style.top = '0px';
+        bottom.style.margin = '0 auto';
+        var sharp = document.createElement("img");
+        sharp.src = "images/gaode-sharp.png";
+        bottom.appendChild(sharp);
+        info.appendChild(bottom);
+        return info;
+    }
+}

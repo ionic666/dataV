@@ -1,0 +1,106 @@
+package com.cetc28.PeopleBenefitService.dto;
+
+import java.util.List;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：wangxw
+ * 创建日期：2017/9/20 9:22
+ * 描述信息：
+ * ***************************************************************
+ */
+
+public class CorpAnalysisTooltipDto {
+    private String corpName;
+    private String longitude;
+    private String latitude;
+    private Short year;
+    private Short employeeSum;
+    private Short insuredSum;
+    List<Short> educationData;
+    private String legalPersonType;
+    private String businessType;
+    private String businessRange;
+
+    public String getLegalPersonType() {
+        return legalPersonType;
+    }
+
+    public void setLegalPersonType(String legalPersonType) {
+        this.legalPersonType = legalPersonType;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    public String getBusinessRange() {
+        return businessRange;
+    }
+
+    public void setBusinessRange(String businessRange) {
+        this.businessRange = businessRange;
+    }
+
+    public String getCorpName() {
+        return corpName;
+    }
+
+    public void setCorpName(String corpName) {
+        this.corpName = corpName;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public Short getYear() {
+        return year;
+    }
+
+    public void setYear(Short year) {
+        this.year = year;
+    }
+
+    public Short getEmployeeSum() {
+        return employeeSum;
+    }
+
+    public void setEmployeeSum(Short employeeSum) {
+        this.employeeSum = employeeSum;
+    }
+
+    public Short getInsuredSum() {
+        return insuredSum;
+    }
+
+    public void setInsuredSum(Short insuredSum) {
+        this.insuredSum = insuredSum;
+    }
+
+    public List<Short> getEducationData() {
+        return educationData;
+    }
+
+    public void setEducationData(List<Short> educationData) {
+        this.educationData = educationData;
+    }
+}

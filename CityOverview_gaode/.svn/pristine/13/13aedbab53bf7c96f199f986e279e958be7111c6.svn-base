@@ -1,0 +1,1103 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title>交通</title>
+  <style type="text/css">
+      #traffic .modal-dialog{
+          width: 320px;
+          margin-right: 10px;
+      }
+      #traffic .modal-content{
+          height: 600px;
+      }
+
+      #traffic .modal-body{
+          padding: 0px;
+      }
+      #traffic .subtitle{
+          font-size: 16px;
+          float: left;
+          width: 33%;
+          text-align: center;
+      }
+      .subtitleChange1{
+          color: #1468a5;
+      }
+      .subtitleChange2{
+          color: #ff7800;
+      }
+      #traffic .contentTitle {
+          width: 96%;
+          height: 60px;
+          border-bottom: #Ebeaea solid 3px;
+      }
+      #traffic .contentBody{
+          /*height: 120px;*/
+          font-size: 16px;
+          padding-left: 18px;
+      }
+      #traffic .tablebody{
+          color: #474747 ;
+          height: 100px;
+          width: 70%;
+      }
+      #traffic .tablebody tr{
+          height: 33px;
+          line-height: 33px;
+      }
+      #traffic .tablebody tr td{
+          text-align: left;
+      }
+      #traffic .tablesub{
+          color: #ababab;
+      }
+
+      .showOn{
+          display: block;
+      }
+      .showOff{
+          display: none;
+      }
+  </style>
+    <script type="text/javascript" src="map/modalPages/traffic/myjs/busdata.js"></script>
+    <script type="text/javascript" src="map/modalPages/traffic/myjs/showbuspath.js"></script>
+    <script type="text/javascript" src="map/modalPages/traffic/myjs/planedata.js"></script>
+    <script type="text/javascript" src="map/modalPages/traffic/myjs/showPlane.js"></script>
+    <script type="text/javascript" src="map/modalPages/traffic/myjs/shipdata.js"></script>
+    <script type="text/javascript" src="map/modalPages/traffic/myjs/showShip.js"></script>
+</head>
+<body>
+<div class="modal fade" style="width: 325px;height: 620px;top: 60px;left:auto;right: 0px;" id="traffic" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close" style="">
+          <img src="map/images/economicModel/close.png" onclick="$('#transportationDetails').modal('hide');">
+        </button>
+        <h4 class="modal-title">城市交通</h4>
+      </div>
+      <%--<div class="modal-body">--%>
+        <%--<div style="height: 10px"></div>--%>
+        <%--<div class="contentTitle">--%>
+          <%--<div class="subtitle subtitleChange2" onclick="tochangetraffic(this)"><img src="map/images/traffic/1checked.png"><br/><label>公路交通</label></div>--%>
+          <%--<div class="subtitle subtitleChange1" onclick="tochangetraffic(this)"><img src="map/images/traffic/2.png"><br/><label>铁路交通</label></div>--%>
+          <%--<div class="subtitle subtitleChange1" onclick="tochangetraffic(this)"><img src="map/images/traffic/3.png"><br/><label>航空交通</label></div>--%>
+          <%--<div class="subtitle subtitleChange1" onclick="tochangetraffic(this)"><img src="map/images/traffic/4.png"><br/><label>水路交通</label></div>--%>
+        <%--</div>--%>
+        <%--<div id="trafficconten1" class="showOn">--%>
+          <%--<div class="contentBody">--%>
+            <%--<div style="height: 20px"></div>--%>
+          <%--</div>--%>
+            <%--<div style="height: 460px;overflow: auto;text-align: left;padding-left: 55px;margin-top: -10px" >--%>
+                <%--<ul id="trafficdataTree1" class="easyui-tree" style="height: 90%;width: 90%">--%>
+                    <%--&lt;%&ndash; <li>--%>
+                       <%--<span>Folder</span>--%>
+                       <%--<ul>--%>
+                         <%--<li>--%>
+                           <%--<span>Sub Folder 1</span>--%>
+                         <%--</li>--%>
+                       <%--</ul>--%>
+                     <%--</li>--%>
+                     <%--<li>--%>
+                       <%--<span>File21</span>--%>
+                       <%--<ul><li> <span>Sub Folder 1</span></li></ul>--%>
+                       <%--<ul><li> <span>Sub Folder 1</span></li></ul>--%>
+                     <%--</li>&ndash;%&gt;--%>
+                <%--</ul>--%>
+            <%--</div>--%>
+      <%--</div>--%>
+        <%--<div id="trafficconten2" class="showOff">--%>
+          <%--<div class="contentBody">--%>
+            <%--<div style="height: 20px"></div>--%>
+          <%--</div>--%>
+            <%--<div style="height: 460px;overflow: auto;text-align: left;padding-left: 55px;margin-top: -10px" >--%>
+                <%--<ul id="trafficdataTree2" class="easyui-tree" style="height: 90%;width: 90%">--%>
+                    <%--&lt;%&ndash; <li>--%>
+                       <%--<span>Folder</span>--%>
+                       <%--<ul>--%>
+                         <%--<li>--%>
+                           <%--<span>Sub Folder 1</span>--%>
+                         <%--</li>--%>
+                       <%--</ul>--%>
+                     <%--</li>--%>
+                     <%--<li>--%>
+                       <%--<span>File21</span>--%>
+                       <%--<ul><li> <span>Sub Folder 1</span></li></ul>--%>
+                       <%--<ul><li> <span>Sub Folder 1</span></li></ul>--%>
+                     <%--</li>&ndash;%&gt;--%>
+                <%--</ul>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <%--<div id="trafficconten3" class="showOff">--%>
+          <%--<div class="contentBody">--%>
+            <%--<div style="height: 20px"></div>--%>
+          <%--</div>--%>
+            <%--<div style="height: 460px;overflow: auto;text-align: left;padding-left: 55px;margin-top: -10px" >--%>
+                <%--<ul id="trafficdataTree3" class="easyui-tree" style="height: 90%;width: 90%">--%>
+                    <%--&lt;%&ndash; <li>--%>
+                       <%--<span>Folder</span>--%>
+                       <%--<ul>--%>
+                         <%--<li>--%>
+                           <%--<span>Sub Folder 1</span>--%>
+                         <%--</li>--%>
+                       <%--</ul>--%>
+                     <%--</li>--%>
+                     <%--<li>--%>
+                       <%--<span>File21</span>--%>
+                       <%--<ul><li> <span>Sub Folder 1</span></li></ul>--%>
+                       <%--<ul><li> <span>Sub Folder 1</span></li></ul>--%>
+                     <%--</li>&ndash;%&gt;--%>
+                <%--</ul>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <%--<div id="trafficconten4" class="showOff">--%>
+          <%--<div class="contentBody">--%>
+            <%--<div style="height: 20px"></div>--%>
+          <%--</div>--%>
+            <%--<div style="height: 460px;overflow: auto;text-align: left;padding-left: 55px;margin-top: -10px" >--%>
+                <%--<ul id="trafficdataTree4" class="easyui-tree" style="height: 90%;width: 90%">--%>
+                    <%--&lt;%&ndash; <li>--%>
+                       <%--<span>Folder</span>--%>
+                       <%--<ul>--%>
+                         <%--<li>--%>
+                           <%--<span>Sub Folder 1</span>--%>
+                         <%--</li>--%>
+                       <%--</ul>--%>
+                     <%--</li>--%>
+                     <%--<li>--%>
+                       <%--<span>File21</span>--%>
+                       <%--<ul><li> <span>Sub Folder 1</span></li></ul>--%>
+                       <%--<ul><li> <span>Sub Folder 1</span></li></ul>--%>
+                     <%--</li>&ndash;%&gt;--%>
+                <%--</ul>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+        <div class="modal-body">
+            <div style="height: 10px"></div>
+            <div class="contentTitle">
+                <div class="subtitle subtitleChange2" onclick="tochangetraffic(this)"><img src="map/images/traffic/1checked.png"><br/><label>交通概况</label></div>
+                <div class="subtitle subtitleChange1" onclick="tochangetraffic(this)"><img src="map/images/envir/2.png"><br/><label>交通分类</label></div>
+                <div class="subtitle subtitleChange1" onclick="tochangetraffic(this)"><img src="map/images/envir/3.png"><br/><label>重点关注</label></div>
+                <%--<div class="subtitle subtitleChange1" onclick="tochangesafety(this)"><img src="map/images/safty/4.png"><br/><label>公共卫生</label></div>--%>
+            </div>
+            <div id="trafficconten1" class="showOn">
+                <div class="contentBody">
+                    <div style="height: 20px"></div>
+                </div>
+                <div style="max-height: 430px;overflow: auto;text-align: left;padding-left: 20px;margin-top: -10px" >
+                    <table id="trafficdata1" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <th>货运量(万吨)</th>
+                        <th>2014</th>
+                        <th>2015</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>公路</td>
+                            <td>14006</td>
+                            <td>13995</td>
+                        </tr>
+                        <tr>
+                            <td>铁路</td>
+                            <td>1522.56</td>
+                            <td>1603.67</td>
+                        </tr>
+                        <tr>
+                            <td>水路</td>
+                            <td>14565</td>
+                            <td>13455</td>
+                        </tr>
+                        <tr>
+                            <td>航空</td>
+                            <td>12.67</td>
+                            <td>14.45</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table id="trafficdata1" class="table table-striped table-bordered table-hover" style="margin-top: -20px">
+                        <thead>
+                            <th>客运量(万人)</th>
+                            <th>2014</th>
+                            <th>2015</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>公路</td>
+                                <td>21367</td>
+                                <td>20293</td>
+                            </tr>
+                            <tr>
+                                <td>铁路</td>
+                                <td>8572</td>
+                                <td>8697</td>
+                            </tr>
+                            <tr>
+                                <td>水路</td>
+                                <td>22.57</td>
+                                <td>21.48</td>
+                            </tr>
+                            <tr>
+                                <td>航空</td>
+                                <td>1893</td>
+                                <td>1915</td>
+                            </tr>
+                            <tr>
+                                <td>公交</td>
+                                <td>132569</td>
+                                <td>103846</td>
+                            </tr>
+                            <tr>
+                                <td>出租</td>
+                                <td>31997</td>
+                                <td>33665</td>
+                            </tr>
+                            <tr>
+                                <td>轨道</td>
+                                <td>51621</td>
+                                <td>65462</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <%--<ul id="safetydataTree1" class="easyui-tree" style="height: 90%;width: 90%">--%>
+                    <%--</ul>--%>
+                </div>
+                <div style="margin-top: 10px;padding-left:210px"><input class="btn" type="button" value="查看详细" onclick="$('#transportationDetails').modal('show').draggable({cursor:'auto'})"/></div>
+            </div>
+            <div id="trafficconten2" class="showOff">
+                <div class="contentBody">
+                    <div style="height: 20px"></div>
+                </div>
+                <div style="height: 460px;overflow: auto;text-align: left;padding-left: 55px;margin-top: -10px" >
+                    <ul id="trafficdataTree2" class="easyui-tree" style="height: 90%;width: 90%">
+
+                    </ul>
+                </div>
+            </div>
+            <div id="trafficconten3" class="showOff">
+                <div class="contentBody">
+                    <div style="height: 20px"></div>
+                </div>
+                <div style="height: 460px;overflow: auto;text-align: left;padding-left: 55px;margin-top: -10px" >
+                    <ul id="trafficdataTree1" class="easyui-tree" style="height: 90%;width: 90%">
+                        <%-- <li>
+                           <span>Folder</span>
+                           <ul>
+                             <li>
+                               <span>Sub Folder 1</span>
+                             </li>
+                           </ul>
+                         </li>
+                         <li>
+                           <span>File21</span>
+                           <ul><li> <span>Sub Folder 1</span></li></ul>
+                           <ul><li> <span>Sub Folder 1</span></li></ul>
+                         </li>--%>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+<script>
+    var graphicBusLayer,graphicPlaneLayer,graphicShipLayer;
+    var graphicSpjcLayer,graphicWbjcLayer,graphicDcjcLayer,graphicXhdLayer,graphicSpjkLayer,graphicJtydpLayer,graphicDzjcLayer;
+    var graphicSslkLayer,graphicFujinSpjkLayer,graphicTlHczLayer;
+  function initTraffic(url){
+      var datas;
+      var Treeid;
+      if(url==1) {
+          Treeid="#trafficdataTree1";
+          datas = [{
+              "id": 1,
+              "text": "交通维护",
+              "state": "open",
+              "children": [{
+                  "id": 11,
+                  "text": "铁路维护"
+              },{
+                  "id": 12,
+                  "text": "公路维护"
+              },{
+                  "id": 11,
+                  "text": "航线维护"
+              },{
+                  "id": 11,
+                  "text": "航道维护"
+              }]
+          }]
+      }
+      if(url==2) {
+          Treeid="#trafficdataTree2";
+          datas = [{
+              "id": 4,
+              "text": "公路交通",
+              "state": "open",
+              "children":[{
+                  "id":41,
+                  "text":"交通状况",
+                  "state":"open",
+                  "children": [{
+                      "id": 411,
+                      "text": "实时路况"
+                  },{
+                      "id": 412,
+                      "text": "实时公交"
+                  },{
+                      "id": 413,
+                      "text": "卡口"
+                  },{
+                      "id": 414,
+                      "text": "公交站点"
+                  },{
+                      "id": 415,
+                      "text": "停车场"
+                  }]
+              },{
+                  "id": 5,
+                  "text": "监控设备",
+                  "state": "closed",
+                  "children": [{
+                      "id": 511,
+                      "text": "视频检测"
+                  },{
+                      "id": 512,
+                      "text": "微波检测"
+                  },{
+                      "id": 513,
+                      "text": "地磁检测"
+                  },{
+                      "id": 514,
+                      "text": "信号灯"
+                  },{
+                      "id": 515,
+                      "text": "视频监控"
+                  },{
+                      "id": 516,
+                      "text": "交通诱导屏"
+                  },{
+                      "id": 517,
+                      "text": "电子警察"
+                  }]
+              },{
+                  "id": 6,
+                  "text": "交通部门",
+                  "state": "closed",
+                  "children": [{
+                      "id": 611,
+                      "text": "交通局"
+                  },{
+                      "id": 612,
+                      "text": "交通中队"
+                  },{
+                      "id": 613,
+                      "text": "治安检查站"
+                  }]
+              },{
+                  "id": 7,
+                  "text": "重点区域",
+                  "state": "closed",
+                  "children": [{
+                      "id": 711,
+                      "text": "商业区"
+                  },{
+                      "id": 712,
+                      "text": "旅游景区"
+                  }]
+              }]
+          },{
+              "id": 1,
+              "text": "铁路交通",
+              "state": "closed",
+              "children": [{
+                  "id": 11,
+                  "text": "火车站"
+              }]
+          },{
+              "id": 2,
+              "text": "航空交通",
+              "state": "closed",
+              "children": [{
+                  "id": 21,
+                  "text": "机场"
+              },{
+                  "id": 22,
+                  "text": "航班"
+              }]
+          },{
+              "id": 3,
+              "text": "水路交通",
+              "state": "closed",
+              "children": [{
+                  "id": 31,
+                  "text": "码头"
+              },{
+                  "id": 32,
+                  "text": "水上船舶"
+              }]
+          }]
+      }
+      $(Treeid).tree({
+          checkbox:true,
+          onlyLeafCheck:true,
+          data:datas,
+          onCheck:function(node){
+              if(node.checked==false) {
+                  if(wmtsLayer.visible)
+                  {
+                      var extent = new esri.geometry.Extent({
+                          "xmin": 118.492965, "ymin": 31.831050, "xmax": 119.004035, "ymax": 32.111560,
+                          "spatialReference": {"wkid": 4326}
+                      });
+
+                      map.setExtent(extent);
+                  }
+                  if(node.text=="实时路况"){
+                      $("#trafficWindow").modal("show");
+                      $("#lukuangTool").css("display","block");
+                      if(graphicSslkLayer == null)
+                      {
+                          graphicSslkLayer = new esri.layers.GraphicsLayer();
+                          graphicSslkLayer.id = "trafficLayer";
+                          map.addLayer(graphicSslkLayer);
+                          featureLayers.push(graphicSslkLayer);
+                          graphicSslkLayer.on("click",function(evt){
+                              map.infoWindow.setTitle("道路情况");
+                              map.infoWindow.setContent(
+                                      '<div>'+"道路名称："+ evt.graphic.attributes.mc + '<br/>'+"方向：西→东"+
+                                              '<br/>'+"交通指数：7.0"+ '<br/>'+"拥挤等级：拥挤"+ '<br/>'+"平均车速：9.5公里/小时"+
+                                              '<br/><br/>'+'<button onclick="fujinTrafficVideo(this)">'+"道路监控"+'</button></div>'
+                              );
+                              map.infoWindow.resize(300,400);
+                              map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                          });
+                      }
+                      if(graphicSslkLayer.graphics.length>0){
+                          graphicSslkLayer.show();
+                      }
+                      else{
+                          $.ajax({
+                              type:'post',
+                              url:"icom/JjHgjjFl_listJtRoad.action",
+                              dataType:'JSON',
+                              success:function(data){
+                                  if(data){
+                                      var pointSymobol=new Array();
+                                      var pointGraphic=new Array();
+                                      var redColor = new esri.Color([255,10,11]);
+                                      var yellowColor = new esri.Color([255,207,0]);
+                                      var greenColor = new esri.Color([22,173,90]);
+                                      $(data).each(function(index, item){
+                                          var zbs = item.dlzb.split(";");
+                                          var zbArray = [];
+                                          var len = zbs.length;
+                                          for(var j=0; j<len; j++)
+                                          {
+                                              var temp = zbs[j].substring(1, zbs[j].length-1);
+                                              var ptarray = temp.split(",");
+                                              zbArray.push(ptarray);
+                                          }
+                                          var planePoint =new esri.geometry.Polyline(zbArray);
+                                          //var planePoint =new esri.geometry.Polyline(zbs1,map.spatialReference);
+                                          /*pointSymobol[index] = new esri.symbol.CartographicLineSymbol(
+                                                esri.symbol.CartographicLineSymbol.STYLE_SOLID,
+                                                new esri.Color([255,0,0]), 6,
+                                                esri.symbol.CartographicLineSymbol.CAP_ROUND,
+                                                esri.symbol.CartographicLineSymbol.JOIN_MITER, 5
+                                            );*/
+                                          var color;
+                                          switch(item.dldj)
+                                          {
+                                              case "0":
+                                              {
+                                                  color = greenColor;
+                                                  break;
+                                              }
+                                              case "1":
+                                              {
+                                                  color = yellowColor;
+                                                  break;
+                                              }
+                                              case "2":
+                                              {
+                                                  color = redColor;
+                                                  break;
+                                              }
+                                              default:
+                                              {
+                                                  color = greenColor;
+                                                  break;
+                                              }
+                                          }
+                                          pointSymobol[index] = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                                                  color, 3);
+
+                                          pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                                          pointGraphic[index].attributes=item;
+                                          graphicSslkLayer.add(pointGraphic[index]) ;
+                                          graphicSslkLayer.refresh();
+                                      })
+                                  }
+                              }
+                          });
+                      }
+                  }
+                  else if(node.text=="视频检测"){
+                      graphicSpjcLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicSpjcLayer);
+                      featureLayers.push(graphicSpjcLayer);
+                      graphicSpjcLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("视频检测设备");
+                          map.infoWindow.setContent(
+                                  '<div>'+"设备名称："+ evt.graphic.attributes.mc + '<br/>'+"类型："+evt.graphic.attributes.lxmc+
+                                          '<br/>'+"地址："+evt.graphic.attributes.dz+ '<br/>'+"安装日期："+evt.graphic.attributes.azrq+ '<br/>'+"联系电话："+evt.graphic.attributes.lxdh+ '</div>'
+                          );
+                          map.infoWindow.resize(300,400);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicSpjcLayer.graphics.length>0){
+                          graphicSpjcLayer.show();
+                      }
+                      else{
+                          $.ajax({
+                              type:'post',
+                              url:"icom/JjHgjjFl_listJtShebeiByType.action?type=32",
+                              dataType:'JSON',
+                              success:function(data){
+                                  if(data){
+                                      var pointSymobol=new Array();
+                                      var pointGraphic=new Array();
+                                      var imageSoure ="map/images/spjc.gif";
+                                      $(data).each(function(index, item){
+                                          pointSymobol[index]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+                                          var planePoint =new esri.geometry.Point(item.jd,item.wd,map.spatialReference);
+                                          pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                                          pointGraphic[index].attributes=item;
+                                          graphicSpjcLayer.add(pointGraphic[index]) ;
+                                          graphicSpjcLayer.refresh();
+                                      })
+                                  }
+                              }
+                          });
+
+                      }
+                  }
+                  else if(node.text=="微波检测"){
+                      graphicWbjcLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicWbjcLayer);
+                      featureLayers.push(graphicWbjcLayer);
+                      graphicWbjcLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("微波检测设备");
+                          map.infoWindow.setContent(
+                                  '<div>'+"设备名称："+ evt.graphic.attributes.mc + '<br/>'+"类型："+evt.graphic.attributes.lxmc+
+                                          '<br/>'+"地址："+evt.graphic.attributes.dz+ '<br/>'+"安装日期："+evt.graphic.attributes.azrq+ '<br/>'+"联系电话："+evt.graphic.attributes.lxdh+ '</div>'
+                          );
+                          map.infoWindow.resize(300,400);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicWbjcLayer.graphics.length>0){
+                          graphicWbjcLayer.show();
+                      }
+                      else{
+                          $.ajax({
+                              type:'post',
+                              url:"icom/JjHgjjFl_listJtShebeiByType.action?type=24",
+                              dataType:'JSON',
+                              success:function(data){
+                                  if(data){
+                                      var pointSymobol=new Array();
+                                      var pointGraphic=new Array();
+                                      var imageSoure ="map/images/wbjc.gif";
+                                      $(data).each(function(index, item){
+                                          pointSymobol[index]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+                                          var planePoint =new esri.geometry.Point(item.jd,item.wd,map.spatialReference);
+                                          pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                                          pointGraphic[index].attributes=item;
+                                          graphicWbjcLayer.add(pointGraphic[index]) ;
+                                          graphicWbjcLayer.refresh();
+                                      })
+                                  }
+                              }
+                          });
+
+                      }
+                  }
+                  else if(node.text=="地磁检测"){
+                      graphicDcjcLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicDcjcLayer);
+                      featureLayers.push(graphicDcjcLayer);
+                      graphicDcjcLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("地磁检测设备");
+                          map.infoWindow.setContent(
+                                  '<div>'+"设备名称："+ evt.graphic.attributes.mc + '<br/>'+"类型："+evt.graphic.attributes.lxmc+
+                                          '<br/>'+"地址："+evt.graphic.attributes.dz+ '<br/>'+"安装日期："+evt.graphic.attributes.azrq+ '<br/>'+"联系电话："+evt.graphic.attributes.lxdh+ '</div>'
+                          );
+                          map.infoWindow.resize(300,400);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicDcjcLayer.graphics.length>0){
+                          graphicDcjcLayer.show();
+                      }
+                      else{
+                          $.ajax({
+                              type:'post',
+                              url:"icom/JjHgjjFl_listJtShebeiByType.action?type=25",
+                              dataType:'JSON',
+                              success:function(data){
+                                  if(data){
+                                      var pointSymobol=new Array();
+                                      var pointGraphic=new Array();
+                                      var imageSoure ="map/images/dcjc.gif";
+                                      $(data).each(function(index, item){
+                                          pointSymobol[index]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+                                          var planePoint =new esri.geometry.Point(item.jd,item.wd,map.spatialReference);
+                                          pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                                          pointGraphic[index].attributes=item;
+                                          graphicDcjcLayer.add(pointGraphic[index]) ;
+                                          graphicDcjcLayer.refresh();
+                                      })
+                                  }
+                              }
+                          });
+
+                      }
+                  }
+                  else if(node.text=="信号灯"){
+                      graphicXhdLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicXhdLayer);
+                      featureLayers.push(graphicXhdLayer);
+                      graphicXhdLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("信号灯");
+                          map.infoWindow.setContent(
+                                  '<div>'+"设备名称："+ evt.graphic.attributes.mc + '<br/>'+"类型："+evt.graphic.attributes.lxmc+
+                                          '<br/>'+"地址："+evt.graphic.attributes.dz+ '<br/>'+"安装日期："+evt.graphic.attributes.azrq+ '<br/>'+"联系电话："+evt.graphic.attributes.lxdh+ '</div>'
+                          );
+                          map.infoWindow.resize(300,400);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicXhdLayer.graphics.length>0){
+                          graphicXhdLayer.show();
+                      }
+                      else{
+                          $.ajax({
+                              type:'post',
+                              url:"icom/JjHgjjFl_listJtShebeiByType.action?type=26",
+                              dataType:'JSON',
+                              success:function(data){
+                                  if(data){
+                                      var pointSymobol=new Array();
+                                      var pointGraphic=new Array();
+                                      var imageSoure ="map/images/xhd.gif";
+                                      $(data).each(function(index, item){
+                                          pointSymobol[index]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+                                          var planePoint =new esri.geometry.Point(item.jd,item.wd,map.spatialReference);
+                                          pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                                          pointGraphic[index].attributes=item;
+                                          graphicXhdLayer.add(pointGraphic[index]) ;
+                                          graphicXhdLayer.refresh();
+                                      })
+                                  }
+                              }
+                          });
+
+                      }
+                  }
+                  else if(node.text=="视频监控"){
+                      graphicSpjkLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicSpjkLayer);
+                      featureLayers.push(graphicSpjkLayer);
+                      graphicSpjkLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("视频监控设备");
+                          map.infoWindow.setContent(
+                                  '<div>'+"设备名称："+ evt.graphic.attributes.mc + '<br/>'+"类型："+evt.graphic.attributes.lxmc+
+                                          '<br/>'+"地址："+evt.graphic.attributes.dz+ '<br/>'+"安装日期："+evt.graphic.attributes.azrq+ '<br/>'+"联系电话："+evt.graphic.attributes.lxdh+
+                                          '<br/><br/>'+'<button onclick="playTrafficVideo(this)">'+"实时监控"+'</button></div>'
+                          );
+                          map.infoWindow.resize(300,400);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicSpjkLayer.graphics.length>0){
+                          graphicSpjkLayer.show();
+                      }
+                      else{
+                          $.ajax({
+                              type:'post',
+                              url:"icom/JjHgjjFl_listJtShebeiByType.action?type=31",
+                              dataType:'JSON',
+                              success:function(data){
+                                  if(data){
+                                      var pointSymobol=new Array();
+                                      var pointGraphic=new Array();
+                                      var imageSoure ="map/images/spjk.gif";
+                                      $(data).each(function(index, item){
+                                          pointSymobol[index]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+                                          var planePoint =new esri.geometry.Point(item.jd,item.wd,map.spatialReference);
+                                          pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                                          pointGraphic[index].attributes=item;
+                                          graphicSpjkLayer.add(pointGraphic[index]) ;
+                                          graphicSpjkLayer.refresh();
+                                      })
+                                  }
+                              }
+                          });
+                      }
+                  }
+                  else if(node.text=="交通诱导屏"){
+                      graphicJtydpLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicJtydpLayer);
+                      featureLayers.push(graphicJtydpLayer);
+                      graphicJtydpLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("交通诱导屏");
+                          map.infoWindow.setContent(
+                                  '<div>'+"设备名称："+ evt.graphic.attributes.mc + '<br/>'+"类型："+evt.graphic.attributes.lxmc+
+                                          '<br/>'+"地址："+evt.graphic.attributes.dz+ '<br/>'+"安装日期："+evt.graphic.attributes.azrq+ '<br/>'+"联系电话："+evt.graphic.attributes.lxdh+ '</div>'
+                          );
+                          map.infoWindow.resize(300,400);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicJtydpLayer.graphics.length>0){
+                          graphicJtydpLayer.show();
+                      }
+                      else{
+                          $.ajax({
+                              type:'post',
+                              url:"icom/JjHgjjFl_listJtShebeiByType.action?type=22",
+                              dataType:'JSON',
+                              success:function(data){
+                                  if(data){
+                                      var pointSymobol=new Array();
+                                      var pointGraphic=new Array();
+                                      var imageSoure ="map/images/jtydp.gif";
+                                      $(data).each(function(index, item){
+                                          pointSymobol[index]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+                                          var planePoint =new esri.geometry.Point(item.jd,item.wd,map.spatialReference);
+                                          pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                                          pointGraphic[index].attributes=item;
+                                          graphicJtydpLayer.add(pointGraphic[index]) ;
+                                          graphicJtydpLayer.refresh();
+                                      })
+                                  }
+                              }
+                          });
+
+                      }
+                  }
+                  else if(node.text=="电子警察"){
+                      graphicDzjcLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicDzjcLayer);
+                      featureLayers.push(graphicDzjcLayer);
+                      graphicDzjcLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("电子警察");
+                          map.infoWindow.setContent(
+                                  '<div>'+"设备名称："+ evt.graphic.attributes.mc + '<br/>'+"类型："+evt.graphic.attributes.lxmc+
+                                          '<br/>'+"地址："+evt.graphic.attributes.dz+ '<br/>'+"安装日期："+evt.graphic.attributes.azrq+ '<br/>'+"联系电话："+evt.graphic.attributes.lxdh+
+                                          '<br/><br/>'+'<button onclick="playTrafficVideo(this)">'+"实时视频"+'</button></div>'
+                          );
+                          map.infoWindow.resize(300,400);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicDzjcLayer.graphics.length>0){
+                          graphicDzjcLayer.show();
+                      }
+                      else{
+                          $.ajax({
+                              type:'post',
+                              url:"icom/JjHgjjFl_listJtShebeiByType.action?type=29",
+                              dataType:'JSON',
+                              success:function(data){
+                                  if(data){
+                                      var pointSymobol=new Array();
+                                      var pointGraphic=new Array();
+                                      var imageSoure ="map/images/dzjc.gif";
+                                      $(data).each(function(index, item){
+                                          pointSymobol[index]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+                                          var planePoint =new esri.geometry.Point(item.jd,item.wd,map.spatialReference);
+                                          pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                                          pointGraphic[index].attributes=item;
+                                          graphicDzjcLayer.add(pointGraphic[index]) ;
+                                          graphicDzjcLayer.refresh();
+                                      })
+                                  }
+                              }
+                          });
+
+                      }
+                  }
+                  else if(node.text=="实时公交"){  //对应实时路况
+                      //yqg添加，初始化动态图层
+                      graphicBusLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicBusLayer);
+                      featureLayers.push(graphicBusLayer);
+                      graphicBusLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("公交信息");
+                          map.infoWindow.setContent(
+                                  '<div>'+"公交名称："+ evt.graphic.attributes.xlmc + '<br/>'+"公交公司：南京公交总公司"+
+                                          '<br/>'+"定位时间："+evt.graphic.attributes.ccsj+ '<br/>'+"下一站：中山门"+ '<br/>'+"车速：13.6千米/小时"+
+                                          '<br/><br/>'+'<button onclick="playTrafficVideo(this)">'+"公交视频"+'</button><button onclick="playTrafficVideo(this)" style="margin-left: 30px;">'+"周边视频"+'</button></div>'
+                          );
+                          map.infoWindow.resize(300,300);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicBusLayer.graphics.length>0){
+                          graphicBusLayer.show();
+                      }
+                      else{
+                          showpath();
+                      }
+                  }
+                  else if(node.text=="火车站"){
+                      graphicTlHczLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicTlHczLayer);
+                      featureLayers.push(graphicTlHczLayer);
+                      graphicTlHczLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("火车站");
+                          map.infoWindow.setContent(
+                                  '<div>'+"名称："+ evt.graphic.attributes.mc + '<br/>'+"行政区划："+evt.graphic.attributes.xzqh+
+                                          '<br/>'+"地址："+evt.graphic.attributes.dz+ '<br/>'+"电话："+evt.graphic.attributes.dh+ '</div>'
+                          );
+                          map.infoWindow.resize(300,400);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicTlHczLayer.graphics.length>0){
+                          graphicTlHczLayer.show();
+                      }
+                      else{
+                          $.ajax({
+                              type:'post',
+                              url:"icom/JjHgjjFl_listJtTlHcz.action",
+                              dataType:'JSON',
+                              success:function(data){
+                                  if(data){
+                                      var pointSymobol=new Array();
+                                      var pointGraphic=new Array();
+                                      var imageSoure ="map/images/railway.png";
+                                      $(data).each(function(index, item){
+                                          pointSymobol[index]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+                                          var planePoint =new esri.geometry.Point(item.jd,item.wd,map.spatialReference);
+                                          pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                                          pointGraphic[index].attributes=item;
+                                          graphicTlHczLayer.add(pointGraphic[index]) ;
+                                          graphicTlHczLayer.refresh();
+                                      })
+                                  }
+                              }
+                          });
+                      }
+                  }
+                  else if(node.text=="航班"){
+                      graphicPlaneLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicPlaneLayer);
+                      featureLayers.push(graphicPlaneLayer);
+                      graphicPlaneLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("航班信息");
+                          map.infoWindow.setContent(
+                                  '<div>'+"航班号："+ evt.graphic.attributes.xlmc + '<br/>'+"航空公司："+evt.graphic.attributes.hkgs +'<br/>'+"定位时间："+evt.graphic.attributes.ccsj+
+                                    '<br/>'+"起飞机场："+evt.graphic.attributes.start+ '<br/>'+"降落机场："+evt.graphic.attributes.end+ '<br/>'+"机型："+evt.graphic.attributes.type+'</div>'
+                          );
+                          map.infoWindow.resize(300,300);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicPlaneLayer.graphics.length>0){
+                          graphicPlaneLayer.show();
+                      }
+                      else{
+                          showPlane();
+                      }
+                  }
+                  else if(node.text=="水上船舶"){  //对应实时路况
+                      //yqg添加，初始化动态图层
+                      graphicShipLayer=new esri.layers.GraphicsLayer();
+                      map.addLayer(graphicShipLayer);
+                      featureLayers.push(graphicShipLayer);
+                      graphicShipLayer.on("click",function(evt){
+                          map.infoWindow.setTitle("船舶信息");
+                          map.infoWindow.setContent(
+                                  '<div>'+"船舶名称："+ evt.graphic.attributes.xlmc + '<br/>'+"定位时间："+evt.graphic.attributes.ccsj+
+                                          '<br/>'+"船舶识别号："+evt.graphic.attributes.sbh+ '<br/>'+"航速："+evt.graphic.attributes.speed+ '<br/>'+"航向："+evt.graphic.attributes.course+'<br/>'+"船舶呼号："+evt.graphic.attributes.callsign+'</div>'
+                          );
+                          map.infoWindow.resize(300,300);
+                          map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                      });
+                      if(graphicShipLayer.graphics.length>0){
+                          graphicShipLayer.show();
+                      }
+                      else{
+                          showShip();
+                      }
+                  }
+              }else{
+                  map.infoWindow.hide();
+                  if(node.text=="实时路况"){
+                      $("#trafficWindow").modal("hide");
+                      $("#lukuangTool").css("display","none");
+                      graphicSslkLayer.hide();
+                      graphicFujinSpjkLayer.hide();
+                  }
+                  else if(node.text=="视频检测"){
+                      graphicSpjcLayer.hide();
+                  }
+                  else if(node.text=="微波检测"){
+                      graphicWbjcLayer.hide();
+                  }
+                  else if(node.text=="地磁检测"){
+                      graphicDcjcLayer.hide();
+                  }
+                  else if(node.text=="信号灯"){
+                      graphicXhdLayer.hide();
+                  }
+                  else if(node.text=="视频监控"){
+                      graphicSpjkLayer.hide();
+                  }
+                  else if(node.text=="交通诱导屏"){
+                      graphicJtydpLayer.hide();
+                  }
+                  else if(node.text=="电子警察"){
+                      graphicDzjcLayer.hide();
+                  }
+                  else if(node.text=="实时公交"){
+                      graphicBusLayer.hide();
+                  }
+                  else if(node.text=="航班"){
+                      graphicPlaneLayer.hide();
+                  }
+                  else if(node.text=="水上船舶"){
+                      graphicShipLayer.hide();
+                  }
+                  else if(node.text=="火车站"){
+                      graphicTlHczLayer.hide();
+                  }
+
+              }
+          }
+      });
+
+  }
+  function tochangetraffic(evt){
+    var ele=$(evt);
+    var flag=ele.hasClass('subtitleChange1');
+    var src="";
+    src=ele.children("img").attr("src");
+    src=src.substring(0,src.indexOf("."));
+    var index=src.substring(src.lastIndexOf("/")+1);
+    if(flag){
+      ele.removeClass('subtitleChange1').addClass('subtitleChange2');
+      ele.children("img").attr("src",src+"checked.png");
+      for(var i=1;i<=4;i++){
+        if(i==index){
+          if($("#trafficconten"+i).hasClass("showOff")) {
+            $("#trafficconten" + i).addClass("showOn").removeClass("showOff");
+          }
+        }else{
+          $("#trafficconten"+i).removeClass("showOn").addClass("showOff");
+        }
+      }
+      var eles = ele.siblings();
+      eles.addClass('subtitleChange1').removeClass('subtitleChange2');
+      for(var j=0;j<eles.length;j++){
+        var childsrc  = $(eles[j]).children("img").attr("src");
+        childsrc=childsrc.substring(0,childsrc.lastIndexOf("/")+2)+".png";
+        $(eles[j]).children("img").attr("src",childsrc);
+      }
+    }else{
+      ele.removeClass('subtitleChange2').addClass('subtitleChange1');
+      src=src.replace("checked",".png");
+      ele.children("img").attr("src",src);
+    }
+  }
+    function playTrafficVideo(evt){
+//        var inner = "<div><object type='application/x-vlc-plugin' pluginspage='http://www.videolan.org/' id='vlc' events='false' width='540' height='410'>";
+//        inner = inner + "<param name='mrl' value='";
+//        inner = inner + "rtsp://192.168.190.56/cam31";
+//        inner = inner + "' />";
+//        inner = inner + "<param name='volume' value='50' /><param name='autoplay' value='true' /><param name='loop' value='false' />";
+//        inner = inner + "<param name='fullscreen' value='false' /><param name='controls' value='false' /></object></div>";
+//        Ext.create('Ext.window.Window',{
+//            title: "实时视频",
+//            width: 550,
+//            layout:'fit',
+//            html:inner
+//        }).show();
+
+        var urlVideo={};
+        urlVideo.ip='10.0.2.213';
+        urlVideo.port="8000";
+        urlVideo.user='admin';
+        urlVideo.pwd='12345';
+        urlVideo.productId="19";
+        urlVideo.tbCameraNo="2";
+        $('#videoWindow').modal('show');
+        document.getElementById("videoWindowIframe").contentWindow.Login(urlVideo);
+    }
+
+    function fujinTrafficVideo(evt){
+        graphicFujinSpjkLayer=new esri.layers.GraphicsLayer();
+        map.addLayer(graphicFujinSpjkLayer);
+        graphicFujinSpjkLayer.on("click",function(evt){
+//            var inner = "<div><object type='application/x-vlc-plugin' pluginspage='http://www.videolan.org/' id='vlc' events='false' width='540' height='410'>";
+//            inner = inner + "<param name='mrl' value='";
+//            inner = inner + "rtsp://192.168.190.56/cam33";
+//            inner = inner + "' />";
+//            inner = inner + "<param name='volume' value='50' /><param name='autoplay' value='true' /><param name='loop' value='false' />";
+//            inner = inner + "<param name='fullscreen' value='false' /><param name='controls' value='false' /></object></div>";
+//            Ext.create('Ext.window.Window',{
+//                title: "实时视频",
+//                width: 550,
+//                layout:'fit',
+//                html:inner
+//            }).show();
+            var urlVideo={};
+            urlVideo.ip='10.0.2.213';
+            urlVideo.port="8000";
+            urlVideo.user='admin';
+            urlVideo.pwd='12345';
+            urlVideo.productId="19";
+            urlVideo.tbCameraNo="2";
+            $('#videoWindow').modal('show');
+            document.getElementById("videoWindowIframe").contentWindow.Login(urlVideo);
+        });
+        if(graphicFujinSpjkLayer.graphics.length>0){
+            graphicFujinSpjkLayer.show();
+        }
+        else{
+            $.ajax({
+                type:'post',
+                url:"icom/JjHgjjFl_listJtFujinShebei.action?type=1",
+                dataType:'JSON',
+                success:function(data){
+                    if(data){
+                        var pointSymobol=new Array();
+                        var pointGraphic=new Array();
+                        var imageSoure ="map/images/spjk.gif";
+                        $(data).each(function(index, item){
+                            pointSymobol[index]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+                            var planePoint =new esri.geometry.Point(item.jd,item.wd,map.spatialReference);
+                            pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+                            pointGraphic[index].attributes=item;
+                            graphicFujinSpjkLayer.add(pointGraphic[index]) ;
+                            graphicFujinSpjkLayer.refresh();
+                        })
+                    }
+                }
+            });
+        }
+    }
+
+
+</script>
+</body>
+<jsp:include page="../toolPages/video/videoWindow.jsp"></jsp:include>
+</html>

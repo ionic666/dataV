@@ -1,0 +1,261 @@
+
+//    公路运输
+    var myChart = echarts.init(document.getElementById('transDetailTab1_1'));
+    option = {
+        title: {
+            text: '公路客/货运输量',
+            x:'center',
+    y:'top'
+    },
+    grid: {
+        borderWidth: 0,
+        x: 80,
+        y: 70,
+        x2: 30,
+        y2: 70
+        },
+    tooltip: {
+        trigger: 'axis'
+        },
+    legend: {
+        data:['货运量(万吨)','客运量(万人)'],
+        x:'center',
+        y:'bottom'
+        },
+    xAxis:  {
+        type: 'category',
+        boundaryGap: false,
+        splitLine: {show:false},
+    data: ['11月','12月','1月','2月','3月','4月']
+        },
+        yAxis: {
+            type: 'value'
+
+        },
+        series: [
+            {
+                name:'货运量(万吨)',
+    type:'line',
+    data:[1190, 1230, 1100, 500, 1100, 1140]
+    },
+            {
+                name:'客运量(万人)',
+                type:'line',
+                data:[1000, 900, 900, 930, 950, 1000]
+
+                }
+    ]
+    };
+    myChart.setOption(option);
+
+    var myChart = echarts.init(document.getElementById('transDetailTab1_2'));
+    option = {
+        title : {
+            text: '公路客/货周转量',
+            x:'center',
+    y:'top'
+    },
+    grid: {
+        borderWidth: 0,
+        x: 80,
+        y: 70,
+        x2: 30,
+        y2: 70
+        },
+    tooltip : {
+        trigger: 'axis'
+        },
+    legend: {
+        data:['货物周转量(万吨公里)','旅客周转量(万人公里)'],
+        x:'center',
+        y:'bottom'
+        },
+
+    calculable : false,
+    xAxis : [
+            {
+                type : 'category',
+                data : ['11月','12月','1月','2月','3月','4月'],
+                splitLine: {show:false}
+    }
+    ],
+    yAxis : [
+            {
+                type : 'value'
+                }
+    ],
+    series : [
+            {
+                name:'货物周转量(万吨公里)',
+                type:'bar',
+                data:[ 180000, 190000, 180000, 70000, 156000, 180000]
+
+                },
+            {
+                name:'旅客周转量(万人公里)',
+                type:'bar',
+                data:[ 110000, 90000, 100000, 130000, 111000, 113000]
+
+                }
+    ]
+    };
+    myChart.setOption(option);
+
+
+//        公路运输
+
+//            全社会港口生成
+            var myChart = echarts.init(document.getElementById('transDetailTab3_1'));
+            option = {
+        title: {
+            text: '公路客/货运输量',
+            x:'center',
+            y:'top'
+            },
+            grid: {
+                borderWidth: 0,
+                x: 80,
+                y: 70,
+                x2: 30,
+                y2: 70
+                },
+            tooltip: {
+                trigger: 'axis'
+                },
+
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                splitLine: {show:false},
+            data: ['10月','11月','12月','1月','2月','3月','4月']
+        },
+        yAxis: {
+            type: 'value'
+
+        },
+        series: [
+            {
+                name:'货物吞吐量(万吨)',
+            type:'line',
+            data:[ 1800, 1830, 1880, 1870, 1560, 1780,1900]
+            }
+
+            ]
+            };
+            myChart.setOption(option);
+
+            var myChart = echarts.init(document.getElementById('transDetailTab3_2'));
+            option = {
+        title : {
+            text: '集装箱吞吐量(万TEU)',
+            x:'center',
+            y:'top'
+            },
+            grid: {
+                borderWidth: 0,
+                x: 80,
+                y: 70,
+                x2: 30,
+                y2: 70
+                },
+            tooltip : {
+                trigger: 'axis'
+                },
+
+            calculable : false,
+            xAxis : [
+            {
+                type : 'category',
+                data : ['10月','11月','12月','1月','2月','3月','4月'],
+                splitLine: {show:false}
+            }
+            ],
+            yAxis : [
+            {
+                type : 'value'
+                }
+            ],
+            series : [
+            {
+                name:'集装箱吞吐量(万TEU)',
+                type:'bar',
+                barWidth:'20',
+                data:[23.6, 24.1, 18.9, 25.9, 26.1, 27,24.7]
+
+                }
+
+            ]
+            };
+            myChart.setOption(option);
+
+
+//               全社会港口生成
+
+
+//                    城市交通客运量
+
+                    var myChart = echarts.init(document.getElementById('transDetailTab4_1'));
+                    option = {
+
+                    grid: {
+                        borderWidth: 0,
+                        x: 80,
+                        y: 70,
+                        x2: 30,
+                        y2: 70
+                        },
+                    tooltip : {
+                        trigger: 'axis'
+                        },
+                    legend: {
+                        data:['公交(万人)','轨道(万人)','出租(万人)'],
+                        x:'center',
+                        y:'bottom'
+                        },
+
+                    calculable : false,
+                    xAxis : [
+            {
+                type : 'category',
+                data : ['10月','11月','12月','1月','2月','3月'],
+                splitLine: {show:false}
+                    }
+                    ],
+                    yAxis : [
+            {
+                type : 'value'
+                }
+                    ],
+                    series : [
+
+            {
+                name:'公交(万人)',
+                type:'bar',
+                barWidth:10,
+
+                data:[ 8100, 8020, 8400, 6800, 8600, 8020]
+
+                },
+            {
+                name:'轨道(万人)',
+                type:'bar',
+                barWidth:10,
+
+                data:[ 4500, 4400, 6800, 5000, 7500, 7000]
+
+                },
+            {
+                name:'出租(万人)',
+                type:'bar',
+                barWidth:10,
+
+                data:[ 2800, 2620, 2100, 1900, 2200, 2520]
+
+                }
+                    ]
+                    };
+                    myChart.setOption(option);
+
+//                        城市交通客运量
+
+

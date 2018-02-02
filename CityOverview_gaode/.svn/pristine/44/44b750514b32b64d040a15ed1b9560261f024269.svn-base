@@ -1,0 +1,28 @@
+package com.cetc28.importExcel.dao;
+
+import com.cetc28.importExcel.model.JxSchoolInfo;
+import com.cetc28.importExcel.model.JxSchoolInfoExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+
+public interface JxSchoolInfoDao {
+    int deleteByExample(JxSchoolInfoExample example);
+
+    int deleteByPrimaryKey(String schoolCode);
+
+    int insert(JxSchoolInfo record);
+
+    int insertSelective(JxSchoolInfo record);
+
+    List<JxSchoolInfo> selectByExample(JxSchoolInfoExample example);
+
+    JxSchoolInfo selectByPrimaryKey(String schoolCode);
+
+    int updateByExampleSelective(@Param("record") JxSchoolInfo record, @Param("example") JxSchoolInfoExample example);
+
+    int updateByExample(@Param("record") JxSchoolInfo record, @Param("example") JxSchoolInfoExample example);
+
+    int updateByPrimaryKeySelective(JxSchoolInfo record);
+
+    int updateByPrimaryKey(JxSchoolInfo record);
+}

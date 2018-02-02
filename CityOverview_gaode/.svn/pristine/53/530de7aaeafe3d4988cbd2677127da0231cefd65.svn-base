@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.JxSsServiceStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.cetc28.idata.model.JxSsServiceStatistics" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="YEAR" property="year" jdbcType="DECIMAL" />
+    <result column="ONLINE_SERVICE" property="onlineService" jdbcType="DECIMAL" />
+    <result column="SELF_SERVICE_AIO_MACHINE" property="selfServiceAioMachine" jdbcType="DECIMAL" />
+    <result column="MOBILE_APP_SERVICE" property="mobileAppService" jdbcType="DECIMAL" />
+    <result column="PHONE_MESSAGE_SERVICE" property="phoneMessageService" jdbcType="DECIMAL" />
+    <result column="SELF_SERVICE_TAKE_RATE" property="selfServiceTakeRate" jdbcType="DECIMAL" />
+    <result column="REMOTE_SS_RELATION_TARNSFER" property="remoteSsRelationTarnsfer" jdbcType="DECIMAL" />
+    <result column="REMOTE_SS_BENEFITS_QA" property="remoteSsBenefitsQa" jdbcType="DECIMAL" />
+    <result column="REMOTE_MEDICAL_SETTLEMENT" property="remoteMedicalSettlement" jdbcType="DECIMAL" />
+    <result column="PI_BENEFITS_COMPARISON" property="piBenefitsComparison" jdbcType="DECIMAL" />
+    <result column="SS_SERVICE_INDEX" property="ssServiceIndex" jdbcType="DECIMAL" />
+    <result column="SS_ONLINE_SERVICE_INDEX" property="ssOnlineServiceIndex" jdbcType="DECIMAL" />
+    <result column="SS_SELF_SERVICE_INDEX" property="ssSelfServiceIndex" jdbcType="DECIMAL" />
+    <result column="SS_REMOTE_SERVICE_INDEX" property="ssRemoteServiceIndex" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, YEAR, ONLINE_SERVICE, SELF_SERVICE_AIO_MACHINE, MOBILE_APP_SERVICE, PHONE_MESSAGE_SERVICE, 
+    SELF_SERVICE_TAKE_RATE, REMOTE_SS_RELATION_TARNSFER, REMOTE_SS_BENEFITS_QA, REMOTE_MEDICAL_SETTLEMENT, 
+    PI_BENEFITS_COMPARISON, SS_SERVICE_INDEX, SS_ONLINE_SERVICE_INDEX, SS_SELF_SERVICE_INDEX, 
+    SS_REMOTE_SERVICE_INDEX
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select
+    <include refid="Base_Column_List" />
+    from JX_SS_SERVICE_STATISTICS
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from JX_SS_SERVICE_STATISTICS
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cetc28.idata.model.JxSsServiceStatistics" >
+    insert into JX_SS_SERVICE_STATISTICS (ID, YEAR, ONLINE_SERVICE, 
+      SELF_SERVICE_AIO_MACHINE, MOBILE_APP_SERVICE, 
+      PHONE_MESSAGE_SERVICE, SELF_SERVICE_TAKE_RATE, 
+      REMOTE_SS_RELATION_TARNSFER, REMOTE_SS_BENEFITS_QA, 
+      REMOTE_MEDICAL_SETTLEMENT, PI_BENEFITS_COMPARISON, 
+      SS_SERVICE_INDEX, SS_ONLINE_SERVICE_INDEX, SS_SELF_SERVICE_INDEX, 
+      SS_REMOTE_SERVICE_INDEX)
+    values (#{id,jdbcType=DECIMAL}, #{year,jdbcType=DECIMAL}, #{onlineService,jdbcType=DECIMAL}, 
+      #{selfServiceAioMachine,jdbcType=DECIMAL}, #{mobileAppService,jdbcType=DECIMAL}, 
+      #{phoneMessageService,jdbcType=DECIMAL}, #{selfServiceTakeRate,jdbcType=DECIMAL}, 
+      #{remoteSsRelationTarnsfer,jdbcType=DECIMAL}, #{remoteSsBenefitsQa,jdbcType=DECIMAL}, 
+      #{remoteMedicalSettlement,jdbcType=DECIMAL}, #{piBenefitsComparison,jdbcType=DECIMAL}, 
+      #{ssServiceIndex,jdbcType=DECIMAL}, #{ssOnlineServiceIndex,jdbcType=DECIMAL}, #{ssSelfServiceIndex,jdbcType=DECIMAL}, 
+      #{ssRemoteServiceIndex,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.idata.model.JxSsServiceStatistics" >
+    insert into JX_SS_SERVICE_STATISTICS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="year != null" >
+        YEAR,
+      </if>
+      <if test="onlineService != null" >
+        ONLINE_SERVICE,
+      </if>
+      <if test="selfServiceAioMachine != null" >
+        SELF_SERVICE_AIO_MACHINE,
+      </if>
+      <if test="mobileAppService != null" >
+        MOBILE_APP_SERVICE,
+      </if>
+      <if test="phoneMessageService != null" >
+        PHONE_MESSAGE_SERVICE,
+      </if>
+      <if test="selfServiceTakeRate != null" >
+        SELF_SERVICE_TAKE_RATE,
+      </if>
+      <if test="remoteSsRelationTarnsfer != null" >
+        REMOTE_SS_RELATION_TARNSFER,
+      </if>
+      <if test="remoteSsBenefitsQa != null" >
+        REMOTE_SS_BENEFITS_QA,
+      </if>
+      <if test="remoteMedicalSettlement != null" >
+        REMOTE_MEDICAL_SETTLEMENT,
+      </if>
+      <if test="piBenefitsComparison != null" >
+        PI_BENEFITS_COMPARISON,
+      </if>
+      <if test="ssServiceIndex != null" >
+        SS_SERVICE_INDEX,
+      </if>
+      <if test="ssOnlineServiceIndex != null" >
+        SS_ONLINE_SERVICE_INDEX,
+      </if>
+      <if test="ssSelfServiceIndex != null" >
+        SS_SELF_SERVICE_INDEX,
+      </if>
+      <if test="ssRemoteServiceIndex != null" >
+        SS_REMOTE_SERVICE_INDEX,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=DECIMAL},
+      </if>
+      <if test="onlineService != null" >
+        #{onlineService,jdbcType=DECIMAL},
+      </if>
+      <if test="selfServiceAioMachine != null" >
+        #{selfServiceAioMachine,jdbcType=DECIMAL},
+      </if>
+      <if test="mobileAppService != null" >
+        #{mobileAppService,jdbcType=DECIMAL},
+      </if>
+      <if test="phoneMessageService != null" >
+        #{phoneMessageService,jdbcType=DECIMAL},
+      </if>
+      <if test="selfServiceTakeRate != null" >
+        #{selfServiceTakeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="remoteSsRelationTarnsfer != null" >
+        #{remoteSsRelationTarnsfer,jdbcType=DECIMAL},
+      </if>
+      <if test="remoteSsBenefitsQa != null" >
+        #{remoteSsBenefitsQa,jdbcType=DECIMAL},
+      </if>
+      <if test="remoteMedicalSettlement != null" >
+        #{remoteMedicalSettlement,jdbcType=DECIMAL},
+      </if>
+      <if test="piBenefitsComparison != null" >
+        #{piBenefitsComparison,jdbcType=DECIMAL},
+      </if>
+      <if test="ssServiceIndex != null" >
+        #{ssServiceIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="ssOnlineServiceIndex != null" >
+        #{ssOnlineServiceIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="ssSelfServiceIndex != null" >
+        #{ssSelfServiceIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="ssRemoteServiceIndex != null" >
+        #{ssRemoteServiceIndex,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cetc28.idata.model.JxSsServiceStatistics" >
+    update JX_SS_SERVICE_STATISTICS
+    <set >
+      <if test="year != null" >
+        YEAR = #{year,jdbcType=DECIMAL},
+      </if>
+      <if test="onlineService != null" >
+        ONLINE_SERVICE = #{onlineService,jdbcType=DECIMAL},
+      </if>
+      <if test="selfServiceAioMachine != null" >
+        SELF_SERVICE_AIO_MACHINE = #{selfServiceAioMachine,jdbcType=DECIMAL},
+      </if>
+      <if test="mobileAppService != null" >
+        MOBILE_APP_SERVICE = #{mobileAppService,jdbcType=DECIMAL},
+      </if>
+      <if test="phoneMessageService != null" >
+        PHONE_MESSAGE_SERVICE = #{phoneMessageService,jdbcType=DECIMAL},
+      </if>
+      <if test="selfServiceTakeRate != null" >
+        SELF_SERVICE_TAKE_RATE = #{selfServiceTakeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="remoteSsRelationTarnsfer != null" >
+        REMOTE_SS_RELATION_TARNSFER = #{remoteSsRelationTarnsfer,jdbcType=DECIMAL},
+      </if>
+      <if test="remoteSsBenefitsQa != null" >
+        REMOTE_SS_BENEFITS_QA = #{remoteSsBenefitsQa,jdbcType=DECIMAL},
+      </if>
+      <if test="remoteMedicalSettlement != null" >
+        REMOTE_MEDICAL_SETTLEMENT = #{remoteMedicalSettlement,jdbcType=DECIMAL},
+      </if>
+      <if test="piBenefitsComparison != null" >
+        PI_BENEFITS_COMPARISON = #{piBenefitsComparison,jdbcType=DECIMAL},
+      </if>
+      <if test="ssServiceIndex != null" >
+        SS_SERVICE_INDEX = #{ssServiceIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="ssOnlineServiceIndex != null" >
+        SS_ONLINE_SERVICE_INDEX = #{ssOnlineServiceIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="ssSelfServiceIndex != null" >
+        SS_SELF_SERVICE_INDEX = #{ssSelfServiceIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="ssRemoteServiceIndex != null" >
+        SS_REMOTE_SERVICE_INDEX = #{ssRemoteServiceIndex,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cetc28.idata.model.JxSsServiceStatistics" >
+    update JX_SS_SERVICE_STATISTICS
+    set YEAR = #{year,jdbcType=DECIMAL},
+      ONLINE_SERVICE = #{onlineService,jdbcType=DECIMAL},
+      SELF_SERVICE_AIO_MACHINE = #{selfServiceAioMachine,jdbcType=DECIMAL},
+      MOBILE_APP_SERVICE = #{mobileAppService,jdbcType=DECIMAL},
+      PHONE_MESSAGE_SERVICE = #{phoneMessageService,jdbcType=DECIMAL},
+      SELF_SERVICE_TAKE_RATE = #{selfServiceTakeRate,jdbcType=DECIMAL},
+      REMOTE_SS_RELATION_TARNSFER = #{remoteSsRelationTarnsfer,jdbcType=DECIMAL},
+      REMOTE_SS_BENEFITS_QA = #{remoteSsBenefitsQa,jdbcType=DECIMAL},
+      REMOTE_MEDICAL_SETTLEMENT = #{remoteMedicalSettlement,jdbcType=DECIMAL},
+      PI_BENEFITS_COMPARISON = #{piBenefitsComparison,jdbcType=DECIMAL},
+      SS_SERVICE_INDEX = #{ssServiceIndex,jdbcType=DECIMAL},
+      SS_ONLINE_SERVICE_INDEX = #{ssOnlineServiceIndex,jdbcType=DECIMAL},
+      SS_SELF_SERVICE_INDEX = #{ssSelfServiceIndex,jdbcType=DECIMAL},
+      SS_REMOTE_SERVICE_INDEX = #{ssRemoteServiceIndex,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <select id="selectSsOnlineServiceInFiveY" resultMap="BaseResultMap">
+    <![CDATA[select t.* from(select st.*,row_number() over (order by st.year desc)rn
+    from JX_SS_SERVICE_STATISTICS st)t where rn<=5 order by t.year]]>
+  </select>
+
+  <select id="serchSbdw" resultType="java.util.HashMap" parameterType="java.lang.String">
+    select * from (select distinct corp_name as name,longitude as jd,latitude as wd,
+    a.company_location,a.business_type,a.business_scope,a.president,a.ensured_num,a.company_type
+    from JX_SS_CORP_ANALYSIS t
+    left join JX_SS_CORP_COMPANY_INFO a on a.company_name=t.corp_name
+    where corp_name like '%'||#{name}||'%')
+    WHERE <![CDATA[rownum <=10]]>
+  </select>
+
+  <select id="serchAmountAndAge" resultType="java.util.HashMap" parameterType="java.lang.String">
+    select year, AVERAGE_INSURED_AMOUNT,AVERAGE_INSURED_AGE from JX_SS_CORP_ANALYSIS t where corp_name=#{name} order by year
+  </select>
+</mapper>

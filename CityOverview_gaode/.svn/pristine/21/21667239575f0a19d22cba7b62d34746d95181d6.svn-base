@@ -1,0 +1,61 @@
+package com.cetc28.idata.model;
+
+/**
+ * Created by linyu on 2017/8/17.
+ */
+public class Xzqh {
+    private String bh;//区划编号
+    private String mc;//区划名称
+    private String sjbh;//上级编号
+    private String jd; //经度
+    private String wd; //纬度
+    private Double rk; //人口数量
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+
+    public String getSjbh() {
+        return sjbh;
+    }
+
+    public void setSjbh(String sjbh) {
+        this.sjbh = sjbh;
+    }
+
+    public Double getRk() {
+        return rk;
+    }
+
+    public void setRk(Double rk) {
+        this.rk = rk;
+    }
+
+    public String getJd() {
+        return jd;
+    }
+
+    public void setJd(String jd) {
+        this.jd = jd;
+    }
+
+    public String getWd() {
+        return wd;
+    }
+
+    public void setWd(String wd) {
+        this.wd = wd;
+    }
+}

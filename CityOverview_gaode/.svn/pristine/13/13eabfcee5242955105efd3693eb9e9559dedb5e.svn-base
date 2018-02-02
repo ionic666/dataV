@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cetc28.ConfigurationManagement.dao.SpiderDao">
+    <select id="getURL" resultType="java.lang.String">
+        SELECT  t.url from  JX_ADDMINSERV_TEMP t WHERE t.url IS NOT NULL and t.name IS NULL
+        /*<![CDATA[SELECT  t.url from  JX_ADDMINSERV_TEMP t WHERE t.url IS NOT NULL and LENGTH(url)<40 ]]>*/
+       <!-- <![CDATA[SELECT  t.url from  JX_ADDMINSERV_TEMP t WHERE t.url IS NOT NULL and LENGTH(url)>40 ]]>-->
+    </select>
+
+    <update id="insertBaseInfo" parameterType="java.lang.String">
+        UPDATE JX_ADDMINSERV_TEMP t SET t.name =#{0},t.lxdh=#{1},t.dz=#{2},t.szs=#{4},t.szqx=#{5},t.szz=#{6},t.qylx=#{7} where url=#{3}
+    </update>
+
+    <insert id="insertURL" parameterType="java.lang.String">
+        INSERT INTO JX_ADDMINSERV_TEMP (szs,szqx,szz,qylx,url) VALUES (#{0},#{1},#{2},#{3},#{4})
+    </insert>
+
+    <update id="insertShequBaseInfo" parameterType="java.lang.String">
+        UPDATE JX_ADDMINSERV_TEMP t SET t.name =#{0},t.lxdh=#{1},t.dz=#{2} where t.url=#{3}
+    </update>
+
+    <update id="checkbug" parameterType="java.lang.String">
+        UPDATE JX_ADDMINSERV_TEMP t SET t.name =#{0} where t.url=#{1}
+    </update>
+</mapper>

@@ -1,0 +1,26 @@
+package com.cetc28.PeopleBenefitService.service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/18.
+ */
+public interface IJxEcoIndPlatService {
+    Map queryIndustrialPlatform();
+    Map queryEcoPlatbyid(String id);
+
+    /**
+     * 根据平台名称查询平台信息以及所属公司
+     * @param name
+     * @return
+     */
+    Map queryEcoPlatbyName(String name);
+
+    /**
+     * 根据名称搜索公司
+     * @param name
+     * @return
+     */
+    List queryEcoPlatSecByname(String name);
+}

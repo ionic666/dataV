@@ -1,0 +1,158 @@
+/**
+ * Created by tonghao on 2017/11/6.
+ */
+var shbz={
+    timer:[],
+    shbzAjax:function(){
+        $.ajax({
+            type: 'post',
+            url: "jxSocialSecurity/getCorpAnalysisTooltipData.do?regionCode=003001" ,
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data)
+                var len=data.corpAnalysisTooltipDtoList.length;
+                for(var i=0;i<len;i++){
+                    shbz.addPoint(wgs84togcj02(parseFloat(data.corpAnalysisTooltipDtoList[i].longitude),parseFloat(data.corpAnalysisTooltipDtoList[i].latitude)),23,32,'images/enterprise.png',data.corpAnalysisTooltipDtoList[i]);
+                    (function(i){
+                        shbz.timer[i]=setTimeout(function(){
+                            //console.log(data.corpAnalysisTooltipDtoList)
+                            shbz.infoWindow(data.corpAnalysisTooltipDtoList[i])
+                        },i*4000)
+                    })(i)
+                }
+            }
+        })
+    },
+    //echarts图表
+    shbzMap_EchartsShow:function(dataArr,xl){
+        var mycharts=echarts.init(document.getElementById('shbzMapEchart'));
+        option = {
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} 人({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                y:'5%',
+                data:['博士研究生','硕士研究生','本科','专科','高中','初中','小学','其他'],
+                itemWidth: 10,
+                itemHeight:10,
+                textStyle:{
+                    color:'#fff',
+                    fontSize:14,
+                    fontFamily:'微软雅黑',
+                    fontWeight:'normal'
+                }
+            },
+            calculable : false,
+            series : [
+                {
+                    name:'学历结构',
+                    type:'pie',
+                    radius : ['15%', '60%'],
+                    center : ['65%', '50%'],
+                    //roseType : 'area',
+                    x: '50%',               // for funnel
+                    //max: 40,                // for funnel
+                    sort : 'ascending',     // for funnel
+                    data: dataArr,
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : false
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    },
+    //实例化信息窗体
+    //构建自定义信息窗体
+    createInfoWindow: function (title, content) {
+    var info = document.createElement("div");
+    info.className = "info";
+
+    //可以通过下面的方式修改自定义窗体的宽高
+    info.style.width = "280px";
+    // 定义顶部标题
+    var top = document.createElement("div");
+    var titleD = document.createElement("div");
+    var closeX = document.createElement("img");
+    top.className = "info-top";
+    titleD.innerHTML = title;
+    closeX.src = "images/gaode-close.png";
+    closeX.onclick = shbz.closeInfoWindow;
+
+    top.appendChild(titleD);
+    top.appendChild(closeX);
+    info.appendChild(top);
+
+    // 定义中部内容
+    var middle = document.createElement("div");
+    middle.className = "info-middle";
+    middle.style.backgroundColor = 'white';
+    middle.innerHTML = content;
+    info.appendChild(middle);
+
+    // 定义底部内容   //下方的小箭头
+    var bottom = document.createElement("div");
+    bottom.className = "info-bottom";
+    bottom.style.position = 'relative';
+    bottom.style.top = '0px';
+    bottom.style.margin = '0 auto';
+    var sharp = document.createElement("img");
+    sharp.src = "images/gaode-sharp.png";
+    bottom.appendChild(sharp);
+    info.appendChild(bottom);
+    return info;
+},
+    infoWindow:function(details){
+        var title = '<span style="font-size:14px;color:#0CDAF5;">'+details.corpName+'</span>';
+        var content = [];
+        content.push("<p style='color:#fff;'>从业人员数量："+details.employeeSum+"人</p>");
+        content.push("<p style='color:#fff;'>参保人员数量："+details.insuredSum+"人</p>");
+        content.push("<div id='shbzMapEchart' style='height:170px;width:100%;'></div>");
+        var infoWindow = new AMap.InfoWindow({
+            isCustom: true,  //使用自定义窗体
+            content: shbz.createInfoWindow(title, content.join("")),
+            offset: new AMap.Pixel(15, -35)
+        });
+        infoWindow.open(map, wgs84togcj02(parseFloat(details.longitude),parseFloat(details.latitude)));
+        var xl=['博士研究生','硕士研究生','本科','专科','高中','初中','小学','其他'];
+        var sum=0;
+        for(var n=0;n<details.educationData.length;n++){
+            sum+=details.educationData[n]
+        }
+        var dataArr=[];
+        for(var i=0;i<details.educationData.length;i++){
+            var obj={};
+            //obj.value=(details.educationData[i]/sum).toFixed(2);
+            obj.value=details.educationData[i];
+            obj.name=xl[i];
+            dataArr.push(obj)
+        }
+        setTimeout(function(){
+            shbz.shbzMap_EchartsShow(dataArr,xl);
+            map.setCenter(wgs84togcj02(parseFloat(details.longitude),parseFloat(details.latitude)));
+        },500)
+    },
+    addPoint:function addPoint(arr,h,w,img,details){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+        var _marker=new AMap.Marker({
+            map: map,
+            position: arr,        //经纬度
+            icon: new AMap.Icon({
+                size: new AMap.Size(h, w),  //图标大小
+                image: img       //自定义图片
+            })
+        });
+        AMap.event.addListener(_marker,'click',function(e){
+            shbz.infoWindow(details)
+        });
+    }
+}

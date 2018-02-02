@@ -1,0 +1,46 @@
+package com.cetc28.util;
+
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Created by jianglulu on 2017/10/23.
+ */
+public class HanyuPinyinUtil {
+
+    public static String toPinyin(String chineseCharacter){
+        String pinyin="";
+        for(Character chara:chineseCharacter.toCharArray()){
+            Pattern pt=Pattern.compile("[\\u4e00-\\u9fa5]+");
+            Matcher mt=pt.matcher(chara.toString());
+            if(mt.matches()){
+                HanyuPinyinOutputFormat format=new HanyuPinyinOutputFormat();
+                format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+                String[] hyarr=null;
+                try {
+                    hyarr= PinyinHelper.toHanyuPinyinStringArray(chara,format);
+                } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+                    badHanyuPinyinOutputFormatCombination.printStackTrace();
+                }
+                pinyin=pinyin.concat(hyarr[0]);
+            }else{
+                Pattern blankpt=Pattern.compile("\\s+");
+                Matcher blankmt=pt.matcher(chara.toString());
+                if(!blankmt.matches()){
+                    pinyin=pinyin.concat(chara.toString().toLowerCase());
+                }
+            }
+        }
+
+        return pinyin;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(toPinyin("zh(中国  大噶sdlfa"));
+    }
+}

@@ -1,0 +1,23 @@
+/**
+ * Created by LiBin on 2017/10/24.
+ */
+var font_color = '#fff', font_family = '微软雅黑', font_size = 16;
+var font_color_y = '#BFBFBF';
+var text_style={
+    color:font_color,
+    fontSize:font_size,
+    fontFamily:font_family
+};
+var title_font_text_Style={
+    fontSize: 24,
+    //color: '#b8d1d1',
+    color: '#fff',
+    fontWeight:'normal'
+};
+var title_x='center';
+var subtextStyle={
+    fontSize: 16,
+    //color: '#b8d1d1',
+    color: '#fff',
+    fontWeight:'normal'
+}

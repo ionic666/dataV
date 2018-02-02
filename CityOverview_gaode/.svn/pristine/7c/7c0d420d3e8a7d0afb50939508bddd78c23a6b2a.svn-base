@@ -1,0 +1,341 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #manage li{
+      font-size:12px;
+      list-style: none;
+      margin-top:8px;
+    }
+    #manage .modal-dialog{
+      width: 260px;
+      margin-right: 10px;
+    }
+    #manage .modal-content{
+      height: 400px;
+    }
+
+    #manage .modal-body{
+      padding: 0px;
+    }
+    #manage .subtitle{
+      font-size: 16px;
+      float: left;
+      width: 33%;
+      text-align: center;
+    }
+    .subtitleChange1{
+      color: #1468a5;
+    }
+    .subtitleChange2{
+      color: #ff7800;
+    }
+    #manage .contentTitle {
+      width: 96%;
+      height: 60px;
+      border-bottom: #Ebeaea solid 3px;
+    }
+    #manage .contentBody{
+      /*height: 120px;*/
+      font-size: 16px;
+      padding-left: 18px;
+    }
+    .showOn{
+      display: block;
+    }
+    .showOff{
+      display: none;
+    }
+    #manage .contentBody{
+      height: 280px;
+      overflow: auto;
+    }
+    .dyj+ul{
+      list-style: none;
+      margin-left: 22px;
+    }
+    .dyj,.erj{
+      height: 30px;
+      line-height: 30px;
+    }
+    .dyj+ul{
+      display: none;
+    }
+    .sele.dyj+ul{
+      display: block;
+      margin-left: 28px;;
+    }
+    .dyj>div{
+      float: left;
+      margin-top: 5px;
+      margin-right: 3px
+    }
+    .erj>div{
+      float: left;
+      margin-top: 5px;
+      margin-right: 3px
+    }
+    .dyj>div>img{
+      margin-bottom: 10px;
+      margin-right: 5px;
+    }
+    #manage ul img{
+      width:10px;
+      height:10px;
+    }
+  </style>
+</head>
+<body>
+<div class="modal fade" style="width: 280px;height: 420px;top: 50px;left:auto;right: 110px;" id="manage" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close" style="margin-top: -2px">
+          <img src="map/images/economicModel/close.png" onclick="closeInfoWindow(this,1);">
+        </button>
+        <h4 class="modal-title" style="font-size:14px;">图层管理</h4>
+      </div>
+      <div class="modal-body">
+        <div style="height: 10px"></div>
+        <div class="contentTitle">
+          <div class="subtitle subtitleChange2" onclick="tochangemanage(this)"><img src="map/images/envir/1checked.png"><br/><label style="font-size:12px;">业务图层</label></div>
+          <div class="subtitle subtitleChange1" onclick="tochangemanage(this)"><img src="map/images/envir/2.png"><br/><label style="font-size:12px;">基础图层</label></div>
+          <div class="subtitle subtitleChange1" onclick="tochangemanage(this)"><img src="map/images/envir/3.png"><br/><label style="font-size:12px;">专题图层</label></div>
+        </div>
+        <div id="manageconten1" class="showOn">
+          <div class="contentBody">
+            <ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>视频专网</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>350模拟集群</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网1</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群1</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群1</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯1</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力1</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>350M数字集群</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网2</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群2</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群2</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯2</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力2</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>北斗卫星通讯</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网3</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群3</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群3</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯3</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力3</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网4</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群4</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群4</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯4</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力4</li>
+              </ul>
+            </ul>
+
+          </div>
+        </div>
+        <div id="manageconten2" class="showOff">
+          <div class="contentBody">
+            <ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>视频专网</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>350模拟集群</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网1</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群1</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群1</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯1</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力1</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>350M数字集群</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网2</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群2</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群2</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯2</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力2</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>北斗卫星通讯</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网3</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群3</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群3</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯3</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力3</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网4</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群4</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群4</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯4</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力4</li>
+              </ul>
+            </ul>
+          </div>
+
+        </div>
+        <div id="manageconten3" class="showOff">
+          <div class="contentBody">
+            <ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>视频专网</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>350模拟集群</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网1</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群1</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群1</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯1</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力1</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>350M数字集群</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网2</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群2</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群2</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯2</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力2</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>北斗卫星通讯</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网3</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群3</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群3</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯3</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力3</li>
+              </ul>
+              <li class="dyj"><div><img src="map/images/left/right.png" /><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+              <ul>
+                <li class="erj"><div><input type="checkbox"/></div>视频专网4</li>
+                <li class="erj"><div><input type="checkbox"/></div>350模拟集群4</li>
+                <li class="erj"><div><input type="checkbox"/></div>350M数字集群4</li>
+                <li class="erj"><div><input type="checkbox"/></div>北斗卫星通讯4</li>
+                <li class="erj"><div><input type="checkbox"/></div>公共移动GSM/3G网络</li>
+                <li class="erj"><div><input type="checkbox"/></div>警力4</li>
+              </ul>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(".dyj").click(function(){
+    $(this).toggleClass("sele");
+    if($(this).hasClass("sele")){
+      $(this).find("img").attr("src","map/images/left/down.png");
+    }else{
+      $(this).find("img").attr("src","map/images/left/right.png");
+    }
+  });
+
+  function tochangemanage(evt){
+    var ele=$(evt);
+    var flag=ele.hasClass('subtitleChange1');
+    var src="";
+    src=ele.children("img").attr("src");
+    src=src.substring(0,src.indexOf("."));
+    var index=src.substring(src.lastIndexOf("/")+1);
+    if(flag){
+      ele.removeClass('subtitleChange1').addClass('subtitleChange2');
+      ele.children("img").attr("src",src+"checked.png");
+      for(var i=1;i<=3;i++){
+        var en="#manageconten"+i;
+        if(i==index){
+          if($(en).hasClass("showOff")) {
+            $(en).addClass("showOn").removeClass("showOff");
+          }
+        }else{
+          $(en).removeClass("showOn").addClass("showOff");
+        }
+      }
+      var eles = ele.siblings();
+      eles.addClass('subtitleChange1').removeClass('subtitleChange2');
+      for(var j=0;j<eles.length;j++){
+        var childsrc  = $(eles[j]).children("img").attr("src");
+        childsrc=childsrc.substring(0,childsrc.lastIndexOf("/")+2)+".png";
+        $(eles[j]).children("img").attr("src",childsrc);
+      }
+    }else{
+      ele.removeClass('subtitleChange2').addClass('subtitleChange1');
+      src=src.replace("checked",".png");
+      ele.children("img").attr("src",src);
+    }
+  }
+
+  //工具点击事件操作图层
+  $(".erj input").click(function(){
+    var flag=$(this).is(":checked");
+    var text=$(this).parent().parent().text();
+    //判断是否选中
+    if(flag){
+      //根据选项进行图层操作
+      if(""==text){
+
+      }
+    }else{
+      //根据选项进行图层操作
+      if(""==text){
+
+      }
+    }
+  })
+</script>
+</body>
+</html>

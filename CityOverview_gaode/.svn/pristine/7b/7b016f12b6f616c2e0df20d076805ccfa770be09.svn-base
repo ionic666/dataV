@@ -1,0 +1,75 @@
+package com.cetc28.idata.model;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
+
+/**
+ * 操作日志实体类
+ * Created by FangYan on 2017/9/21.
+ */
+public class Log implements Serializable{
+    private int logid;              //日志编号
+    private String username;      //用户姓名
+    private String modulename;    //操作模块名称
+    private String action;       //执行的操作
+    private String userip;       //用户ip地址
+    private String actiontime;    //操作消耗时间
+    private String opertime;  //操作时间
+
+    public int getLogid() {
+        return logid;
+    }
+
+    public void setLogid(int logid) {
+        this.logid = logid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getModulename() {
+        return modulename;
+    }
+
+    public void setModulename(String modulename) {
+        this.modulename = modulename;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getActiontime() {
+        return actiontime;
+    }
+
+    public void setActiontime(String actiontime) {
+        this.actiontime = actiontime;
+    }
+
+    public String getUserip() {
+        return userip;
+    }
+
+    public void setUserip(String userip) {
+        this.userip = userip;
+    }
+
+    public String getOpertime() {
+        return opertime;
+    }
+
+    public void setOpertime(String opertime) {
+        this.opertime = opertime;
+    }
+}

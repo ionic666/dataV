@@ -1,0 +1,458 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: TongHao
+  Date: 2017/8/21
+  Time: 13:43
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="myCss/environment.css"/>
+</head>
+<body>
+<div class="modal fade"
+     style="width: 440px;height:880px;top: 60px;left:auto;right: 95px;display:none;position: absolute;z-index: 9999"
+     id="environment" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p>生态环境</p>
+                <img style="float:right;display:inline-block" class="close" data-dismiss="modal" aria-label="close" style="" src="images/close.png" >
+            </div>
+            <div class="modal-body" style="height: 830px">
+                <div class="mainLeft">
+                    <p class="headerTitle">
+                        <span></span>城市空气质量
+                    </p>
+                    <div class="header">
+                        <div class="headerInfo">
+                            <ul>
+                                <li>
+                                    <img src="images/environment/weather.jpg" alt=""/>
+                                    <div class="air">
+                                        <h3 class="airNumber">198</h3>
+                                        <p class="airRanking">2017年蓝天数</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img src="images/environment/province.jpg" alt=""/>
+                                    <div class="air">
+                                        <h3 class="airNumber">9</h3>
+                                        <p class="airRanking">浙江省排名</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img src="images/environment/country.jpg" alt=""/>
+                                    <div class="air">
+                                        <h3 class="airNumber">89</h3>
+                                        <p class="airRanking">全国排名</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <%--AQI指数统计预测--%>
+                        <div id="zstjyc">
+                            <p class="echartsTitle">
+                                AQI指数统计预测
+                            </p>
+                            <div id="zstjycContent"></div>
+                        </div>
+                    </div>
+                    <p class="headerTitle">
+                        <span></span>水质监测
+                    </p>
+                    <div id="szjc">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>站点</th>
+                                    <th>本月水质类别</th>
+                                    <th>下月水质预测</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>王江泾</td>
+                                    <td class="addRed">劣Ⅴ</td>
+                                    <td class="addGreen">Ⅳ</td>
+                                </tr>
+                                <tr>
+                                    <td>新塍港</td>
+                                    <td class="addYellow">Ⅲ</td>
+                                    <td class="addGreen">Ⅳ</td>
+                                </tr>
+                                <tr>
+                                    <td>斜路港</td>
+                                    <td class="addGreen">Ⅳ</td>
+                                    <td class="addYellow">Ⅲ</td>
+                                </tr>
+                                <tr>
+                                    <td>晚村</td>
+                                    <td class="addGreen">Ⅳ</td>
+                                    <td class="addGreen">Ⅳ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="headerTitle">
+                        <span></span>城市噪声监测
+                    </p>
+                    <div id="cszsjc">
+                    </div>
+                    <div id="noiseBar">asdas</div>
+                    <p class="headerTitle">
+                        <span></span>重点污染源监测
+                    </p>
+                    <div id="zdwryjc">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>时间</th>
+                                    <th>监测点</th>
+                                    <th>指标项</th>
+                                    <th>污染程度</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2017-7-28 15:29:32</td>
+                                    <td>嘉兴金乐染织有限公司</td>
+                                    <td>SO2超标</td>
+                                    <td><span class="high"></span>高</td>
+                                </tr>
+                                <tr>
+                                    <td>2017-7-28 14:39:22</td>
+                                    <td>嘉兴新桥丝绸染整有限公司</td>
+                                    <td>SO2超标</td>
+                                    <td><span class="middle"></span>中</td>
+                                </tr>
+                                <tr>
+                                    <td>2017-7-28 10:19:12</td>
+                                    <td>台北高新染整（嘉兴）有限公司</td>
+                                    <td>重金属超标</td>
+                                    <td><span class="low"></span>低</td>
+                                </tr>
+                                <tr>
+                                    <td>2017-7-28 16:49:22</td>
+                                    <td>浙江华昌纺织有限公司</td>
+                                    <td>SO2超标</td>
+                                    <td><span class="low"></span>低</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        var font_color = '#BFBFBF', font_family = '微软雅黑', font_size = 10;
+        var font_color_y = '#BFBFBF';
+        var text_style={
+            color:font_color,
+            fontSize:font_size,
+            fontFamily:font_family
+        };
+        <%--AQI指数统计预测--%>
+        function zstjyc(data1,data2,data3){
+            data1= data1 ||[114,110,118,139];
+            data2= data2 ||[300,200,280,380];
+            data3= data3 ||[400,400,500,500];
+            var mycharts=echarts.init(document.getElementById('zstjycContent'));
+//            console.log(data1);
+//            console.log(data2);
+//            console.log(data3);
+            var option = {
+                color:['#5B9BD5','#ED7D31','#A5A5A5'],
+                tooltip: {
+                    trigger: 'axis'
+                },
+                grid: {
+                    x:'10%',
+                    y: '10%',
+                    x2: '5%',
+                    y2: '40%',
+                    containLabel: true,
+                    borderWidth: 0
+                },
+                legend: {
+                    data: ['嘉兴学院', '嘉兴监测站','清河小学'],
+                    y: 'bottom',
+                    textStyle: text_style
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: ['20%', '20%'],
+                    axisTick:{show: false},
+                    axisLine:{show:false},
+                    splitLine:{show: false},
+                    axisLabel:{show: true,textStyle: text_style},
+                    data: ['26日','27日','28日','29日']
+                },
+                yAxis: {
+                    type: 'value',
+                    min: 0,max: 600,splitNumber: 3,
+                    axisLine:{show:false},
+                    axisLabel:{show: true,textStyle: text_style},
+                    axisTick:{show: false},
+                    splitLine:{
+                        show: true,
+                        lineStyle:{color:'#BFBFBF'}
+                    }
+                },
+                series: [
+                    {
+                        name:'嘉兴学院',
+                        type:'line',
+                        symbol: 'none',
+                        data:data1
+                    },
+                    {
+                        name:'嘉兴监测站',
+                        type:'line',
+                        symbol: 'none',
+                        data: data2
+                    },
+                    {
+                        name:'清河小学',
+                        type:'line',
+                        symbol: 'none',
+                        data: data3
+                    }
+                ]
+            };
+            mycharts.setOption(option);
+        };
+        function cszsjc(){
+            var mycharts=echarts.init(document.getElementById('cszsjc'));
+            var option = {
+                tooltip : {
+                    formatter: "{a} <br/>{c} {b}"
+                },
+                series : [
+                    {
+                        name:'交通噪声均值',
+                        type:'gauge',
+                        min:0,
+                        max:100,
+                        center : ['35%', '55%'],    // 默认全局居中
+                        radius : 63,
+                        splitNumber:20,
+                        axisLine: {            // 坐标轴线
+                            lineStyle: {       // 属性lineStyle控制线条样式
+                                color:  [[0.68, 'red'],[1, '#5B5B5B']],
+                                width: 5,
+                                shadowColor : '#fff', //默认透明
+                                shadowBlur: 10
+                            }
+                        },
+                        axisLabel: {            // 坐标轴小标记
+                            show:false
+                        },
+                        axisTick: {            // 坐标轴小标记
+                            show:false
+                        },
+                        splitLine: {           // 分隔线
+                            show:false
+                        },
+                        pointer: {           // 指针
+                            show:false
+                        },
+                        title : {
+                            show : true,
+                            offsetCenter: [0,'-30%'],       // x, y，单位px
+                            textStyle: {       // 其余属性默认使用全局文本样式，
+                                color: '#fff',
+                                fontSize : 10
+                            }
+                        },
+                        detail : {
+                            formatter:'{value} dB',
+                            offsetCenter: [0, '15%'],       // x, y，单位px
+                            textStyle: {       // 其余属性默认使用全局文本样式，
+                                fontWeight: 'bolder',
+                                fontSize: 22,
+                                color: '#fff'
+                            }
+                        },
+                        data:[{value: 68.3, name: '交通噪声均速'}]
+                    },
+                    {
+                        name:'环境噪声均值',
+                        type:'gauge',
+                        min:0,
+                        max:100,
+                        center : ['75%', '55%'],    // 默认全局居中
+                        radius : 63,
+                        splitNumber:20,
+                        axisLine: {            // 坐标轴线
+                            lineStyle: {       // 属性lineStyle控制线条样式
+                                color:  [[0.59, 'green'],[1, '#5B5B5B']],
+                                width: 5,
+                                shadowColor : '#fff', //默认透明
+                                shadowBlur: 10
+                            }
+                        },
+                        axisLabel: {            // 坐标轴小标记
+                            show:false
+                        },
+                        axisTick: {            // 坐标轴小标记
+                            show:false
+                        },
+                        splitLine: {           // 分隔线
+                            show:false
+                        },
+                        pointer: {           // 分隔线
+                            show:false
+                        },
+                        title : {
+                            show : true,
+                            offsetCenter: [0,'-30%'],       // x, y，单位px
+                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                color: '#fff',
+                                fontSize : 10
+                            }
+                        },
+                        detail : {
+                            formatter:'{value} dB',
+                            offsetCenter: [0, '15%'],       // x, y，单位px
+                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                fontWeight: 'bolder',
+                                fontSize: 22,
+                                color: '#fff'
+                            }
+                        },
+                        data:[{value: 59.3, name: '环境噪声均值'}]
+                    },
+                ]
+            };
+            mycharts.setOption(option);
+        }
+        <%--城市噪声检测柱状图--%>
+        function noiseTest(){
+            var mycharts=echarts.init(document.getElementById('noiseBar'));
+            var labelData={
+                "top1":{"本月最吵杂区域":"交通大学","下月最吵杂区域预测":"交通大学"},
+                "top2":{"本月最吵杂区域":"八佰伴 ","下月最吵杂区域预测":"永丰路"},
+                "top3":{"本月最吵杂区域":"会展中心","下月最吵杂区域预测":"文昌路"}
+            };
+            var option = {
+                color:['#5B9BD5','#ED7D31','#A5A5A5'],
+                tooltip : {
+                    trigger: 'axis'
+                },
+                grid: {
+                    x:'30%',
+                    y: '10%',
+                    x2: '22%',
+                    y2: '25%',
+                    containLabel: true,
+                    borderWidth: 0
+                },
+                legend: {
+                    x:'right',
+                    y:'center',
+                    orient:'vertical',
+                    itemWidth:8,
+                    itemHeight:8,
+                    textStyle: text_style,
+                    data:['top1','top2','top3']
+
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'value',
+                        min:0,
+                        max:5,
+                        splitNumber: 5,
+                        axisLabel:{show: true,textStyle: text_style},
+                        axisLine:{show:true,lineStyle:{color:"#BFBFBF",width: 1}},
+                        axisTick:{show: true,lineStyle:{color:"#BFBFBF",width:1}}
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'category',
+                        axisLabel:{show: true,textStyle: text_style},
+                        axisLine:{show:true,lineStyle:{color:"#BFBFBF",width:1}},
+                        axisTick:{show: true,lineStyle:{color:"#BFBFBF",width:1}},
+                        splitLine:{
+                            show: false
+                        },
+                        data : ['本月最吵杂区域','下月最吵杂区域预测']
+                    }
+                ],
+                series : [
+                    {
+                        name:'top1',
+                        type:'bar',
+                        barWidth: 10,
+                        barGap: '10%',
+                        data:[4.2,4.5],
+                        itemStyle:{
+                            normal:{
+                                label:{
+                                    show:true,
+                                    position:'right',
+                                    textStyle: text_style,
+                                    formatter:function(params){
+                                        return labelData[params.seriesName][params.name]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        name:'top2',
+                        type:'bar',
+                        data:[2.5,3.5],
+                        barWidth: 10,
+                        barGap: '10%',
+                        itemStyle:{
+                            normal:{
+                                label:{
+                                    show:true,
+                                    position:'right',
+                                    textStyle: text_style,
+                                    formatter:function(params){
+                                        return labelData[params.seriesName][params.name]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        name:'top3',
+                        type:'bar',
+                        barWidth: 10,
+                        barGap: '10%',
+                        data:[2,2],
+                        itemStyle:{
+                            normal:{
+                                label:{
+                                    show:true,
+                                    position:'right',
+                                    textStyle: text_style,
+                                    formatter:function(params){
+                                        return labelData[params.seriesName][params.name]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            };
+            mycharts.setOption(option);
+        }
+        zstjyc();
+        cszsjc();
+        noiseTest();
+    </script>
+</body>
+</html>

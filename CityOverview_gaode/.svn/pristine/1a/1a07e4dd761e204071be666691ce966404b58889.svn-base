@@ -1,0 +1,409 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tonghao
+  Date: 2017/11/23
+  Time: 13:25
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>特色工作</title>
+  <link rel="stylesheet" href="../../myCss/headTitle.css"/>
+  <style>
+    body{
+      color: #fff;
+      width: 100%;
+      height: 100%;
+      background:url(" ../../images/ygyb-bg.png")no-repeat;
+      background-size:100% 100%;
+      position: relative;
+    }
+    *{
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+    li{
+      list-style: none;
+    }
+    div.main{
+      width: 100%;
+      height: 80%;
+      position: absolute;
+      margin-top: 5%;
+    }
+    div.main>div{
+      width: 32%;
+      height: 48%;
+      float: left;
+      margin:2% 0 0 1%;
+      background: rgba(22,24,25,0.5);
+      border-top: 2px solid #0CDAF4;
+    }
+    div.main>div>p{
+      max-height: 15%;
+      color: #fff;
+      font-size: 24px;
+      padding: 0.2em 0 2em 1em;
+    }
+    div.main>div>div{
+      width: 100%;
+      height: 85%;
+    }
+    div#hsdb>p{
+      padding: 1.5em 0 0 7em;
+    }
+    div#hsdb>p>span{
+      color: #1295D9;
+      font-size: 1.1em;
+      padding: 0 0.4em;
+      font-weight: bold;
+    }
+    .titletd td{padding:0.2em 0.5em;text-align:center;}
+    .datatd td{height:18px;padding:0.2em 0.5em;text-align:center;}
+    .td1{width:40%;}
+    .td2{width:20%;}
+  </style>
+</head>
+<body>
+<a href="#" onclick="returnMainPage()" style="max-width:3%;position: fixed;left:97%;top: 2%;z-index: 999;"><img src="../../images/returnUp.png" alt=""></a>
+
+<div class="_header">
+  <img src="../../images/btz.png" alt=""/>
+  <h1>特色工作</h1>  <%-- 主标题--%>
+  <%--<span>智慧结算</span>--%>  <%--副标题--%>
+  <img src="../../images/bty.png" alt=""/>
+</div>
+<div class="main">
+  <div class="main-1">
+    <p>“一政化”改革</p>
+    <div id="yzh"></div>
+  </div>
+  <div class="main-2">
+    <p>红色代办</p>
+    <div id="hsdb">
+      <p>已组建市、县、镇三级代办员队伍<span id="hsdb1">254</span>人</p>
+      <p>基层代办服务人员<span id="hsdb2">6432</span>人</p>
+      <p>全市实行代办服务的投资项目达<span id="hsdb3">80%</span>以上</p>
+      <p>投资项目均项目审批平均提速近<span id="hsdb4">40%</span></p>
+    </div>
+  </div>
+  <div class="main-3">
+    <p>不动产登记</p>
+    <div id="bdcdj"></div>
+  </div>
+  <div class="main-4">
+    <p>热点事项</p>
+    <div id="rdsx"></div>
+  </div>
+  <div class="main-5">
+    <p>企业投资项目</p>
+    <div id="qytzxm"></div>
+  </div>
+  <div class="main-6">
+    <p>不动产登记办件实况</p>
+    <div id="bdcsk">
+      <table border="0" width="100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="100%">
+            <table width="100%" border="0" cellpadding="0" cellspacing="1">
+              <tr class="titletd">
+                <td nowrap class="td1">受理号</td>
+                <td nowrap class="td2">受理时间</td>
+                <td nowrap class="td2">状态</td>
+                <td nowrap class="td2">办结时长</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td width="100%">
+            <div id="B1">
+              <div id="B2">
+                <table width="100%" border="0" cellpadding="0" cellspacing="1" style="margin-top:-1px;">
+                  <tbody class="datatd">
+                  <tr>
+                    <td nowrap class="td1">JK201711110506</td><td nowrap class="td2">05:06</td>
+                    <td nowrap class="td2">已办</td><td nowrap class="td2">23分</td>
+                  </tr>
+                  <tr>
+                    <td nowrap class="td1">JK201711110506</td><td nowrap class="td2">05:06</td>
+                    <td nowrap class="td2">已办</td><td nowrap class="td2">23分</td>
+                  </tr>
+                  <tr>
+                    <td nowrap class="td1">JK201711110506</td><td nowrap class="td2">05:06</td>
+                    <td nowrap class="td2">已办</td><td nowrap class="td2">23分</td>
+                  </tr>
+                  <tr>
+                    <td nowrap class="td1">JK201711110506</td><td nowrap class="td2">05:06</td>
+                    <td nowrap class="td2">已办</td><td nowrap class="td2">23分</td>
+                  </tr>
+                  <tr>
+                    <td nowrap class="td1">JK201711110506</td><td nowrap class="td2">05:06</td>
+                    <td nowrap class="td2">已办</td><td nowrap class="td2">23分</td>
+                  </tr>
+                  <tr>
+                    <td nowrap class="td1">JK201711110506</td><td nowrap class="td2">05:06</td>
+                    <td nowrap class="td2">已办</td><td nowrap class="td2">23分</td>
+                  </tr>
+                  <tr>
+                    <td nowrap class="td1">JK201711110506</td><td nowrap class="td2">05:06</td>
+                    <td nowrap class="td2">已办</td><td nowrap class="td2">23分</td>
+                  </tr><tr>
+                    <td nowrap class="td1">JK201711110506</td><td nowrap class="td2">05:06</td>
+                    <td nowrap class="td2">已办</td><td nowrap class="td2">23分</td>
+                  </tr>
+
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../../map/js/echarts-all.js"></script>
+<script type="text/javascript" src="../../myjs/index.js"></script>
+<script type="text/javascript" src="../../myjs/jquery.dataStatistics.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+  var headerWidth=$("._header").width();	//获取头部标题的宽度
+  $("._header").css("left",-headerWidth/2+"px");//让头部标题居中
+  function returnMainPage(){//页面返回
+    top.location.href="";
+  }
+  //表格轮播滚动
+  function _InitScroll(_S1,_S2,_W,_H,_T){
+    return "var marqueesHeight"+_S1+"="+_H+";var stopscroll"+_S1+"=false;var scrollElem"+_S1+"=document.getElementById('"+_S1+"');with(scrollElem"+_S1+"){style.width="+_W+";style.height=marqueesHeight"+_S1+";style.overflow='hidden';noWrap=true;}scrollElem"+_S1+".onmouseover=new Function('stopscroll"+_S1+"=true');scrollElem"+_S1+".onmouseout=new Function('stopscroll"+_S1+"=false');var preTop"+_S1+"=0; var currentTop"+_S1+"=0; var stoptime"+_S1+"=0;var leftElem"+_S2+"=document.getElementById('"+_S2+"');scrollElem"+_S1+".appendChild(leftElem"+_S2+".cloneNode(true));setTimeout('init_srolltext"+_S1+"()',"+_T+");function init_srolltext"+_S1+"(){scrollElem"+_S1+".scrollTop=0;setInterval('scrollUp"+_S1+"()',50);}function scrollUp"+_S1+"(){if(stopscroll"+_S1+"){return;}currentTop"+_S1+"+=1;if(currentTop"+_S1+"==(marqueesHeight"+_S1+"+1)) {stoptime"+_S1+"+=1;currentTop"+_S1+"-=1;if(stoptime"+_S1+"=="+_T/50+") {currentTop"+_S1+"=0;stoptime"+_S1+"=0;}}else{preTop"+_S1+"=scrollElem"+_S1+".scrollTop;scrollElem"+_S1+".scrollTop +=1;if(preTop"+_S1+"==scrollElem"+_S1+".scrollTop){scrollElem"+_S1+".scrollTop=0;scrollElem"+_S1+".scrollTop +=1;}}}";
+  }
+  var tableWidth=$("#bdcsk").outerWidth(true);
+  eval(_InitScroll("B1","B2",tableWidth,19*15,2000));
+  //echarts---开始
+  //不动产登记
+  echarts1Show()
+  function echarts1Show() {
+    var myChart = echarts.init(document.getElementById("bdcdj"));
+    var option = {
+      color: ['#5B9BD5'],
+      calculable: false,
+      tooltip: {
+        trigger: 'axis',
+        formatter: "{a}<br/>{b}:{c}件"
+      },
+      title : {
+        text: '2017年不动产登记办结量趋势图',
+        textStyle:text_style,
+        x:'center'
+      },
+      grid: {
+        x: '15%',
+        y: '7%',
+        x2: '15%',
+        y2: '20%',
+        containLabel: true,
+        borderWidth: 0
+      },
+      xAxis: [
+        {
+          type: 'category',
+          splitLine: {show: false},
+          axisLine: {show: true, lineStyle: {color: '#4B4C4C'}},
+          axisTick: {show: true},
+          axisLabel: {show: true, textStyle: text_style},
+          data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月']
+//          data: xAxisData
+        }
+      ],
+      yAxis: [
+        {
+          axisLine: { lineStyle: {
+            color: '#8D8C8C'
+          }},
+          type: 'value',
+          min:0,
+          max:500,
+          splitNumber:10,
+          splitLine: {
+            show: false,
+            lineStyle:{
+              color: ['#4B4C4C'],
+              width: 1,
+              type: 'dashed'
+            }
+          },
+          axisLine: { lineStyle: {
+            color: '#4B4C4C'
+          }},
+          axisTick: {show: false},
+          axisLabel: {
+            show: true,
+            textStyle: text_style,
+            formatter: '{value}'}
+        }
+      ],
+      series: [
+        {
+          name: '不动产办结量',
+          type: 'line',
+          smooth: true,
+          itemStyle:{
+            normal:{
+              label:{
+                show:false,
+                formatter: '{c}',
+                textStyle:text_style
+              }
+            }
+          },
+          data: [260,270,255,298,322,204,300,211,266,302]
+//          data: seriesData
+        }
+      ]
+    };
+    myChart.setOption(option);
+  }
+  echarts3Show();
+  function echarts3Show() {
+    var myChart = echarts.init(document.getElementById("qytzxm"));
+    var option = {
+      color: ['#1296DB', '#E3CD55'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      legend: {
+        data: ['已办结', '未办结'],
+        x: 'center',
+        y: 'top',
+        textStyle: text_style
+      },
+      grid: {
+        x: '10%',
+        y: '12%',
+        x2: '5%',
+        y2: '15%',
+        containLabel: true,
+        borderWidth: 0
+      },
+      xAxis: {
+        type: 'category',
+        axisLine: {lineStyle: {color: '#BFBFBF'}},
+        axisTick: {show: false},
+        axisLabel: {show: true, textStyle: text_style, interval: 0},
+        splitLine: {show: false},
+        data : ['发改','经信','国土','规划','环保','建设','人防']
+      },
+      yAxis: {
+        type: 'value',
+        axisLine: {lineStyle: {color: '#BFBFBF'}},
+        axisTick: {show: false},
+        axisLabel: {show: true, textStyle: text_style, interval: 0},
+        splitLine: {show: false},
+      },
+      series: [
+        {
+          name: '已办结',
+          type: 'bar',
+          stack: '总量',
+          barWidth: 25,
+          barGap: '0',
+//                    stack: '总数',
+          barCategoryGap: '37%',
+          itemStyle: {
+            normal: {
+              label: {
+                show: false,
+                formatter: '{c}',
+                position: 'top',
+                textStyle: text_style
+              }
+            }
+          },
+          data:[120, 200, 451, 134, 190, 230, 110]
+        },
+        {
+          name: '未办结',
+          type: 'bar',
+          stack: '总量',
+          barWidth: 25,
+          barCategoryGap: '36%',
+//                    stack: '总数',
+          barGap: '0',
+          itemStyle: {
+            normal: {
+              label: {
+                show: false,
+                formatter: '{c}',
+                position: 'top',
+                textStyle: text_style
+              }
+            }
+          },
+          data:[320, 332, 100, 334,200,330, 320]
+        }
+      ]
+    };
+    myChart.setOption(option);
+  }
+
+  //热点事项
+  function echarts2Show(ageList){
+    var myChart=echarts.init(document.getElementById("rdsx"));
+    option={
+      color: ['#00B9B9'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      grid: {
+        x: '20%',
+        y: '1%',
+        x2: '15%',
+        y2: '20%',
+        containLabel: true,
+        borderWidth: 0
+      },
+      xAxis: {
+        type: 'value',
+        splitLine: {show: false},
+        axisLine: {lineStyle: {color: '#676767'}},
+        axisTick: {show: true},
+        axisLabel: {show: true, textStyle: text_style, interval: 0}
+      },
+      yAxis: {
+        type: 'category',
+        axisLine: {lineStyle: {color: '#676767'}},
+        axisTick: {show: true},
+        axisLabel: {show: true, textStyle: text_style, interval: 0},
+        splitLine: {show: false},
+        nameLocation: 'end',
+//        data: ['25年以上','20-25年','15-20年','10-15年','5-10年','5年以内']
+        data: ['抵押登记','公积金审批','养老保险审定','社会保险参保','驾驶证申领','出口货物申报','税费申报','机动车登记']
+      },
+      series: [
+        {
+          type: 'bar',
+          itemStyle: {normal: {borderWidth: 0,label:{show:true,textStyle: text_style}}},
+          barWidth: 13,
+          barGap: '2%',
+          data: [20,30,25,24,28,12,20,40]
+        }
+      ]
+    };
+    myChart.setOption(option);
+  }
+echarts2Show()
+  //
+  //echarts---结束
+</script>
+</body>
+</html>

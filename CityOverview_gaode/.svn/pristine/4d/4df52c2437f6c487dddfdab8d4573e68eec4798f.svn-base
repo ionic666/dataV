@@ -1,0 +1,65 @@
+package com.cetc28.idata.dto;
+
+import java.math.BigDecimal;
+
+public class JxUtilityManteDeviceStateDto {
+    private String deviceId;
+
+    private String mesId;
+
+    private BigDecimal mesValue;
+
+    private BigDecimal batt;
+
+    private String deviceState;
+
+    private String mesTime;
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId == null ? null : deviceId.trim();
+    }
+
+    public String getMesId() {
+        return mesId;
+    }
+
+    public void setMesId(String mesId) {
+        this.mesId = mesId;
+    }
+
+    public BigDecimal getMesValue() {
+        return mesValue;
+    }
+
+    public void setMesValue(BigDecimal mesValue) {
+        this.mesValue = mesValue;
+    }
+
+    public BigDecimal getBatt() {
+        return batt;
+    }
+
+    public void setBatt(BigDecimal batt) {
+        this.batt = batt;
+    }
+
+    public String getDeviceState() {
+        return deviceState;
+    }
+
+    public void setDeviceState(String deviceState) {
+        this.deviceState = deviceState == null ? null : deviceState.trim();
+    }
+
+    public String getMesTime() {
+        return mesTime;
+    }
+
+    public void setMesTime(String mesTime) {
+        this.mesTime = mesTime == null ? null : mesTime.trim();
+    }
+}

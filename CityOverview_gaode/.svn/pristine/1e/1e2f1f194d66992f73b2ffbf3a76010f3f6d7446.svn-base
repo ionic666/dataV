@@ -1,0 +1,358 @@
+package com.cetc28.idata.model;
+
+/**
+ * Created by LYLYC on 2017/9/23.
+ */
+public class JxPollution {
+    private String xh;       //序号
+    private String dz;       //地址
+    private String mc;       //名称
+    private String zypfwrw;  //主要排放污染物
+    private String jd;       //经度
+    private String wd;       //纬度
+    private String orgnum;   //组织机构代码
+    private int type;        //污染源类别
+    private int counttype;   //计算类别数值
+    private String ad;       //氨氮
+    private String ad1;       //氨氮
+    private String ph;       //PH值
+    private String biooag;   //生化需氧
+    private String xfw;      //悬浮物
+    private String zl;       //总磷
+    private String SO2;      //S02
+    private String ADHW;     //氨氮化物
+    private String GONG;     //汞及化合物
+    private String KLW;      //颗粒物
+    private String lsy;      //磷酸盐
+    private String chsoag;   //化学需氧
+    private String sd;       //色度
+    private String ylzb;     //阴离子表
+    private String fdcj;     //粪大肠菌
+    private String biooag1;   //生化需氧
+    private String biooag2;   //生化需氧
+    private String ph1;       //PH值
+    private String xfw1;      //悬浮物
+    private String lsy1;      //磷酸盐
+    private String chsoag1;   //化学需氧
+    private String xfw2;      //悬浮物
+    private int HG;           //合格与否
+    private String HGLV;      //合格率
+    private int SUMHG;        //合格率类别求和
+    private int SUMTYPE;      //类型总数求和
+    private String location;
+    private int qynumber;
+    private String name;
+    private int Totalnum;
+    //加入了部分类型定义
+    public String getXh() {
+        return xh;
+    }
+
+    public void setXh(String xh) {
+        this.xh = xh;
+    }
+
+    public String getDz() {
+        return dz;
+    }
+
+    public void setDz(String dz) {
+        this.dz = dz;
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+
+    public String getZypfwrw() {
+        return zypfwrw;
+    }
+
+    public void setZypfwrw(String zypfwrw) {
+        this.zypfwrw = zypfwrw;
+    }
+
+    public String getJd() {
+        return jd;
+    }
+
+    public void setJd(String jd) {
+        this.jd = jd;
+    }
+
+    public String getWd() {
+        return wd;
+    }
+
+    public void setWd(String wd) {
+        this.wd = wd;
+    }
+
+    public String getOrgnum() {
+        return orgnum;
+    }
+
+    public void setOrgnum(String orgnum) {
+        this.orgnum = orgnum;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getCounttype() {
+        return counttype;
+    }
+
+    public void setCounttype(int counttype) {
+        this.counttype = counttype;
+    }
+
+    public String getAd() {
+        return ad;
+    }
+
+    public void setAd(String ad) {
+        this.ad = ad;
+    }
+
+    public String getPh() {
+        return ph;
+    }
+
+    public void setPh(String ph) {
+        this.ph = ph;
+    }
+
+    public String getBiooag() {
+        return biooag;
+    }
+
+    public void setBiooag(String biooag) {
+        this.biooag = biooag;
+    }
+
+    public String getXfw() {
+        return xfw;
+    }
+
+    public void setXfw(String xfw) {
+        this.xfw = xfw;
+    }
+
+    public String getZl() {
+        return zl;
+    }
+
+    public void setZl(String zl) {
+        this.zl = zl;
+    }
+
+    public String getSO2() {
+        return SO2;
+    }
+
+    public void setSO2(String SO2) {
+        this.SO2 = SO2;
+    }
+
+    public String getADHW() {
+        return ADHW;
+    }
+
+    public void setADHW(String ADHW) {
+        this.ADHW = ADHW;
+    }
+
+    public String getGONG() {
+        return GONG;
+    }
+
+    public void setGONG(String GONG) {
+        this.GONG = GONG;
+    }
+
+    public String getKLW() {
+        return KLW;
+    }
+
+    public void setKLW(String KLW) {
+        this.KLW = KLW;
+    }
+
+    public String getLsy() {
+        return lsy;
+    }
+
+    public void setLsy(String lsy) {
+        this.lsy = lsy;
+    }
+
+    public String getChsoag() {
+        return chsoag;
+    }
+
+    public void setChsoag(String chsoag) {
+        this.chsoag = chsoag;
+    }
+
+    public String getSd() {
+        return sd;
+    }
+
+    public void setSd(String sd) {
+        this.sd = sd;
+    }
+
+    public String getYlzb() {
+        return ylzb;
+    }
+
+    public void setYlzb(String ylzb) {
+        this.ylzb = ylzb;
+    }
+
+    public String getFdcj() {
+        return fdcj;
+    }
+
+    public void setFdcj(String fdcj) {
+        this.fdcj = fdcj;
+    }
+
+    public String getAd1() {
+        return ad1;
+    }
+
+    public void setAd1(String ad1) {
+        this.ad1 = ad1;
+    }
+
+    public String getBiooag1() {
+        return biooag1;
+    }
+
+    public void setBiooag1(String biooag1) {
+        this.biooag1 = biooag1;
+    }
+
+    public String getBiooag2() {
+        return biooag2;
+    }
+
+    public void setBiooag2(String biooag2) {
+        this.biooag2 = biooag2;
+    }
+
+    public String getPh1() {
+        return ph1;
+    }
+
+    public void setPh1(String ph1) {
+        this.ph1 = ph1;
+    }
+
+    public String getXfw1() {
+        return xfw1;
+    }
+
+    public void setXfw1(String xfw1) {
+        this.xfw1 = xfw1;
+    }
+
+    public String getLsy1() {
+        return lsy1;
+    }
+
+    public void setLsy1(String lsy1) {
+        this.lsy1 = lsy1;
+    }
+
+    public String getChsoag1() {
+        return chsoag1;
+    }
+
+    public void setChsoag1(String chsoag1) {
+        this.chsoag1 = chsoag1;
+    }
+
+    public String getXfw2() {
+        return xfw2;
+    }
+
+    public void setXfw2(String xfw2) {
+        this.xfw2 = xfw2;
+    }
+
+    public int getHG() {
+        return HG;
+    }
+
+    public void setHG(int HG) {
+        this.HG = HG;
+    }
+
+    public String getHGLV() {
+        return HGLV;
+    }
+
+    public void setHGLV(String HGLV) {
+        this.HGLV = HGLV;
+    }
+
+    public int getSUMHG() {
+        return SUMHG;
+    }
+
+    public void setSUMHG(int SUMHG) {
+        this.SUMHG = SUMHG;
+    }
+
+    public int getSUMTYPE() {
+        return SUMTYPE;
+    }
+
+    public void setSUMTYPE(int SUMTYPE) {
+        this.SUMTYPE = SUMTYPE;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public int getQynumber() {
+        return qynumber;
+    }
+
+    public void setQynumber(int qynumber) {
+        this.qynumber = qynumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getTotalnum() {
+        return Totalnum;
+    }
+
+    public void setTotalnum(int totalnum) {
+        Totalnum = totalnum;
+    }
+}

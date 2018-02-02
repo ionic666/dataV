@@ -1,0 +1,119 @@
+<%--
+  Create By FangYan On 2017/09/13
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>服务业生产指数</title>
+    <link rel="stylesheet" href="../../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.fwysczs{
+            width: 100%;
+            height: 100%;
+        }
+        div#fwysczs{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="fwysczs">
+    <p class="headerTitle">
+        服务业生产指数
+    </p>
+    <div id="fwysczs">
+    </div>
+</div>
+<script src="../../../map/js/jquery-1.11.3.js"></script>
+<script src="../../../myjs/echarts-all.js"></script>
+<script src="../../../myjs/myEcharts.js"></script>
+<script>
+    function fwysczs(xAxisData,data1){
+        var mycharts = echarts.init(document.getElementById('fwysczs'));
+        var option = {
+            color:['#3B64AC','#8FA2D4'],
+            tooltip: {
+                trigger: 'axis',
+                formatter:'{a}<br/>{b}:{c}%'
+            },
+            grid: {
+                x: '5%',
+                y: '10%',
+                x2: '10%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['同比上涨'],   //实际增长率
+                show: false
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap:false,
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: true},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                axisLabel: {show: false}
+            },
+            series: [
+                {
+                    name: '同比上涨',   //实际增长率
+                    type: 'line',
+                    symbol: 'rectangle',
+                    itemStyle: {
+                        normal:{
+                        areaStyle: {
+                            type:'default',
+                            color: '#4472C4'
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            textStyle: text_style,
+                            formatter:'{c}%'
+                               }
+                        }
+                    },
+                    data: data1
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //服务业生产指数
+    $.ajax({
+        type:"POST",
+        url:'../../../jxeco/hgjj/fwysczs.do',
+        dataType:'json',
+        data:{"monthSize":5},
+        success:function(data){
+            var xAxisData=[];
+            var data1=[];
+            for(var i=0;i<data.length;i++) {
+                var sj = String(data[i].sj);
+                xAxisData.push(sj.substring(5)+"月");
+                data1.push(parseFloat(data[i].fwysczs));
+            }
+            xAxisData.reverse();
+            data1.reverse();
+            fwysczs(xAxisData,data1);
+        }
+    });
+</script>
+</body>
+</html>
+
+

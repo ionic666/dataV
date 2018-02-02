@@ -1,0 +1,313 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tonghao
+  Date: 2017/11/23
+  Time: 14:01
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../myCss/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="../../myCss/headTitle.css"/>
+    <style>
+        *{
+            color:#fff;
+            font-size: 18px;
+            font-family: "Microsoft YaHei", "宋体", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
+            box-sizing: border-box;
+        }
+        ul,li,h1,h2,h3,h4,h5,h6,p,ol{
+            padding:0;
+            margin:0;
+        }
+        li{
+            list-style: none;
+        }
+        .header {
+            width: 60%;
+            height: 7.8%;
+            margin: 0 auto;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: absolute;
+            z-index: 999;
+            top: 2%;
+            margin-left: 50%;
+        }
+        ::-webkit-scrollbar{
+            background-color: #1B1B1D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+        .marker-xxqy-name{
+            min-width: 120px;
+        }
+        .map_deatils{
+            display: none;
+            position: absolute;
+            top: 24%;
+            left: 10%;
+            width: 350px;
+            height: 200px;
+            border: solid 1px #889DA2;
+            border-radius: 2px;
+            box-shadow: 0px 0px 8px #60d8ef;
+            background-color: rgba(0,29,36,0.8);
+        }
+        .map_deatils .table_box{
+            padding:0 10px;
+        }
+        .map_deatils .table_box table{
+            height:80%;
+        }
+        .map_deatils_t{
+            padding:10px;
+        }
+        #marquee {
+            position: absolute;
+            top: 12%;
+            left: 30%;
+            text-align: center;
+            line-height: 28px;
+            /*display: none;*/
+            width: 747px;
+            height: 30px;
+            overflow: hidden;
+        }
+        #marquee>div{
+            height:100%;
+            position: absolute;
+            top:0;
+        }
+        #marquee>div>span{
+            color:#fff;
+            font-size:28px;
+            line-height: 28px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map" style="width:100%; height:100%;"></div>
+<div class="_header" id="outerWidth">
+    <img src="../../images/btz.png" alt="" class="outerWidth"/>
+    <h1 class="outerWidth">嘉兴城市综合运营管理中心</h1>
+    <span class="outerWidth">最多跑一次</span>
+    <img src="../../images/bty.png" alt="" class="outerWidth"/>
+</div>
+<div id="marquee">
+    <div>
+        <span>嘉兴市本级已公布“最多跑一次”事项1029项，县（市、区）平均818项，全市91.6%的审批服务事项实现了“最多跑一次”，2017年已实现“最多跑一次”累计办件46037790件。</span>
+        <span>嘉兴市本级已公布“最多跑一次”事项1029项，县（市、区）平均818项，全市91.6%的审批服务事项实现了“最多跑一次”，2017年已实现“最多跑一次”累计办件46037790件。</span>
+    </div>
+</div>
+<div class="map_deatils">
+    <div class="map_deatils_t" >秀洲区</div>
+    <div class="table_box">
+        <table>
+            <tr>
+                <td>行政审批中心数量：</td>
+                <td class="det1">146个</td>
+            </tr>
+            <tr>
+                <td>以实现'最多跑一次'事项数：</td>
+                <td class="det2">780项</td>
+            </tr>
+            <tr>
+                <td>2017年累计办件：</td>
+                <td class="det3">679165件</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<script type="text/javascript" src="../../map/js/echarts-all.js"></script>
+<script type="text/javascript" src="../../myjs/index.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+
+<script>
+    var sumWidth=0;//计算头部div中所有元素的宽度
+    $('.outerWidth').each(function(){
+        var myWidth=$(this).outerWidth(true);//计算头部div中每个元素的宽度
+        sumWidth+=myWidth;
+    })
+    $("._header").css("left",-sumWidth/2+"px");//让头部标题居中
+
+    //跑马灯效果
+    var pmd_width = parseFloat($('#marquee>div>span:nth-child(1)').css('width'));
+    function pmd() {
+        var left = parseFloat($('#marquee>div').css('left')) - 1;
+        $('#marquee>div').css('left', left + 'px');
+        if (Math.abs(left) >= pmd_width + 10) {
+            $('#marquee>div').css({'left': 0});
+        }
+    }
+   setInterval(pmd, 24)
+
+    function main(){
+        $.ajax({
+            type:'post',
+            url:'../../jxecokey/serchAllInfo.do',
+            dataType:'JSON',
+            success:function(data){
+                console.log(data)
+            }
+        })
+    }
+    main()
+
+    var map,districtExplorer;
+    window.onload=function(){
+        //加载地图的方法
+        map = new AMap.Map('map', {
+            mapStyle: 'amap://styles/16e4e3ccd1f66f229a6276fe149db8df'//样式URL
+        });
+//        AMap.event.addListener(map,'click',function(e){
+//            map.clearInfoWindow();
+//        });
+
+        map.panTo([120.841, 30.722]);//默认第一个参数的坐标点居中
+        map.setZoom(10);
+        var colors = [
+                'transparent'
+        ];
+        var point = [
+            {name: '平湖市', po: '121.114666, 30.698921'},
+            {name: '海盐县', po: '120.942017, 30.522223'},
+            {name: '南湖区', po: '120.829953, 30.734652'},
+            {name: '嘉善县', po: '120.921871, 30.891352'},
+            {name: '秀洲区', po: '120.680431, 30.763323'},
+            {name: '海宁市', po: '120.688821, 30.475544'},
+            {name: '桐乡市', po: '120.521085, 30.629065'}
+        ];
+        var features = [];
+        var adcodes = [330400];
+        AMapUI.loadUI(['geo/DistrictExplorer'], function (DistrictExplorer) {
+            //创建一个实例
+            districtExplorer = new DistrictExplorer({
+                eventSupport: true, //打开事件支持
+                map: map
+            });
+
+            function renderAreaNode(areaNode) {
+                features = [];
+                //绘制子区域
+                districtExplorer.renderSubFeatures(areaNode, function (feature, i) {
+                    var fillColor = colors[i % colors.length];
+                    var strokeColor = colors[colors.length - 1 - i % colors.length];
+                    features.push(feature);
+                    return {
+                        cursor: 'default',
+                        bubble: true,
+                        strokeColor: strokeColor, //线颜色
+                        strokeOpacity: 1, //线透明度
+                        strokeWeight: 1, //线宽
+                        fillColor: fillColor, //填充色
+                        fillOpacity: 1 //填充透明度
+                    };
+                });
+
+                //绘制父区域
+                districtExplorer.renderParentFeature(areaNode, {
+                    cursor: 'default',
+                    bubble: true,
+                    strokeColor: 'black', //线颜色
+                    strokeOpacity: 1, //线透明度
+                    strokeWeight: 1, //线宽
+                    fillColor: null, //填充色
+                    fillOpacity: 1//填充透明度
+                });
+            }
+
+            function renderClickFeatures(feature) {
+                //绘制点击区域
+                districtExplorer.renderFeature(feature, {
+                    cursor: 'default',
+                    bubble: true,
+                    strokeColor: '#000', //线颜色
+                    strokeOpacity: 1, //线透明度
+                    strokeWeight: 1, //线宽
+                    fillColor: '#16a1bb', //填充色
+                    fillOpacity: 1 //填充透明度
+                });
+            }
+
+            function loadMap(adcodes, clickFeature) {
+                districtExplorer.loadMultiAreaNodes(adcodes, function (error, areaNodes) {
+                    //清除已有的绘制内容
+                    districtExplorer.clearFeaturePolygons();
+                    for (var i = 0, len = areaNodes.length; i < len; i++) {
+                        renderAreaNode(areaNodes[i]);
+                    }
+                    //更新地图视野
+                    //map.setFitView(districtExplorer.getAllFeaturePolygons());
+                    if (clickFeature) {
+                        renderClickFeatures(clickFeature)
+                    }
+                });
+            }
+            loadMap(adcodes);
+            //feature被点击
+            districtExplorer.on('featureClick', function (e, feature) {
+//
+            });
+            //监听feature的hover事件
+            districtExplorer.on('featureMouseout featureMouseover', function(e, feature) {
+                var isHover = e.type === 'featureMouseover';
+                if (isHover) {
+//                    console.log(feature.properties.name)
+                    if(feature.properties.name=="南湖区"){
+                        loadMap(adcodes, feature);
+                        var marker = new AMap.Marker({ //添加自定义点标记
+                            map: map,
+                            position: [120.829953, 30.734652], //基点位置
+                            offset: new AMap.Pixel(-36, -15), //相对于基点的偏移位置
+                            draggable: false,  //是否可拖动
+                            content: '<div class="marker-xxqy-name">南湖区</div>'   //自定义点标记覆盖物内容
+                        });
+                        $(".map_deatils").css("display","block");
+                        $(".map_deatils_t").html("南湖区");
+                        $(".det1").html('246个');
+                        $(".det2").html('1980项');
+                        $(".det3").html('548764554');
+                    }
+                    if(feature.properties.name=="秀洲区"){
+                        loadMap(adcodes, feature);
+                        var marker = new AMap.Marker({ //添加自定义点标记
+                            map: map,
+                            position: [120.680431, 30.763323], //基点位置
+                            offset: new AMap.Pixel(-36, -15), //相对于基点的偏移位置
+                            draggable: false,  //是否可拖动
+                            content: '<div class="marker-xxqy-name">秀洲区</div>'   //自定义点标记覆盖物内容
+                        });
+                        $(".map_deatils").css("display","block");
+                        $(".map_deatils_t").html("秀洲区");
+                        $(".det1").html('146个');
+                        $(".det2").html('780项');
+                        $(".det3").html('679165件');
+                    }
+                }else{
+                    $(".map_deatils").css("display","none");
+                    map.clearMap();
+                }
+            });
+        });
+
+
+    }
+</script>
+</body>
+</html>

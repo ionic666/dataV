@@ -1,0 +1,23 @@
+package com.cetc28.ConfigurationManagement.dao;
+
+import com.cetc28.ConfigurationManagement.model.Module;
+import com.cetc28.ConfigurationManagement.model.User;
+import com.cetc28.ConfigurationManagement.model.UserLoginList;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/9/19.
+ */
+public interface JxLoginDao {
+
+    public void addUserLoginList(UserLoginList userLoginList);
+
+    public List<User> queryUserByName(String username);
+
+    public List<Module> getUserModule(int userid);
+
+    public List<UserLoginList> queryLoginList(Integer pageNumber, Integer pageSize);
+
+    Integer queryUserStatus(String username);
+}

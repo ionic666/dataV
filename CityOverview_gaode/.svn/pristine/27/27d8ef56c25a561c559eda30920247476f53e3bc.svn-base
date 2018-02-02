@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.JxSsCardStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.cetc28.PeopleBenefitService.model.JxSsCardStatistics" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="YEAR" property="year" jdbcType="DECIMAL" />
+    <result column="CARD_HOLDER_SUM" property="cardHolderSum" jdbcType="DECIMAL" />
+    <result column="INSURED_SUM" property="insuredSum" jdbcType="DECIMAL" />
+    <result column="NATIVE_INSURED_SUM" property="nativeInsuredSum" jdbcType="DECIMAL" />
+    <result column="RURAL_INSURED_SUM" property="ruralInsuredSum" jdbcType="DECIMAL" />
+    <result column="CH_MALE_SUM" property="chMaleSum" jdbcType="DECIMAL" />
+    <result column="CH_FEMALE_SUM" property="chFemaleSum" jdbcType="DECIMAL" />
+    <result column="CH_AGE_0_18_SUM_M" property="chAge018SumM" jdbcType="DECIMAL" />
+    <result column="CH_AGE_18_30_SUM_M" property="chAge1830SumM" jdbcType="DECIMAL" />
+    <result column="CH_AGE_30_50_SUM_M" property="chAge3050SumM" jdbcType="DECIMAL" />
+    <result column="CH_AGE_50_65_SUM_M" property="chAge5065SumM" jdbcType="DECIMAL" />
+    <result column="CH_AGE_65_UP_SUM_M" property="chAge65UpSumM" jdbcType="DECIMAL" />
+    <result column="CH_DOCTOR_SUM" property="chDoctorSum" jdbcType="DECIMAL" />
+    <result column="CH_MASTER_SUM" property="chMasterSum" jdbcType="DECIMAL" />
+    <result column="CH_BACHELOR_SUM" property="chBachelorSum" jdbcType="DECIMAL" />
+    <result column="CH_TECHNICAL_SUM" property="chTechnicalSum" jdbcType="DECIMAL" />
+    <result column="CH_SENIOR_SUM" property="chSeniorSum" jdbcType="DECIMAL" />
+    <result column="CH_JUNIOR_SUM" property="chJuniorSum" jdbcType="DECIMAL" />
+    <result column="CH_ELEMENTARY_SUM" property="chElementarySum" jdbcType="DECIMAL" />
+    <result column="CH_OTHER_SUM" property="chOtherSum" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK1" property="chNationalityRank1" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK2" property="chNationalityRank2" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK3" property="chNationalityRank3" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK4" property="chNationalityRank4" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK5" property="chNationalityRank5" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK6" property="chNationalityRank6" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK7" property="chNationalityRank7" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK8" property="chNationalityRank8" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK9" property="chNationalityRank9" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK10" property="chNationalityRank10" jdbcType="DECIMAL" />
+    <result column="CH_NATIONALITY_RANK1_NAME" property="chNationalityRank1Name" jdbcType="VARCHAR" />
+    <result column="CH_NATIONALITY_RANK2_NAME" property="chNationalityRank2Name" jdbcType="VARCHAR" />
+    <result column="CH_NATIONALITY_RANK3_NAME" property="chNationalityRank3Name" jdbcType="VARCHAR" />
+    <result column="CH_NATIONALITY_RANK4_NAME" property="chNationalityRank4Name" jdbcType="VARCHAR" />
+    <result column="CH_NATIONALITY_RANK5_NAME" property="chNationalityRank5Name" jdbcType="VARCHAR" />
+    <result column="CH_NATIONALITY_RANK6_NAME" property="chNationalityRank6Name" jdbcType="VARCHAR" />
+    <result column="CH_NATIONALITY_RANK7_NAME" property="chNationalityRank7Name" jdbcType="VARCHAR" />
+    <result column="CH_NATIONALITY_RANK8_NAME" property="chNationalityRank8Name" jdbcType="VARCHAR" />
+    <result column="CH_NATIONALITY_RANK9_NAME" property="chNationalityRank9Name" jdbcType="VARCHAR" />
+    <result column="CH_NATIONALITY_RANK10_NAME" property="chNationalityRank10Name" jdbcType="VARCHAR" />
+    <result column="REGION_CODE" property="regionCode" jdbcType="VARCHAR" />
+    <result column="CH_AGE_0_18_SUM_F" property="chAge018SumF" jdbcType="DECIMAL" />
+    <result column="CH_AGE_18_30_SUM_F" property="chAge1830SumF" jdbcType="DECIMAL" />
+    <result column="CH_AGE_30_50_SUM_F" property="chAge3050SumF" jdbcType="DECIMAL" />
+    <result column="CH_AGE_50_65_SUM_F" property="chAge5065SumF" jdbcType="DECIMAL" />
+    <result column="CH_AGE_65_UP_SUM_F" property="chAge65UpSumF" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, YEAR, CARD_HOLDER_SUM, INSURED_SUM, NATIVE_INSURED_SUM, RURAL_INSURED_SUM, CH_MALE_SUM, 
+    CH_FEMALE_SUM, CH_AGE_0_18_SUM_M, CH_AGE_18_30_SUM_M, CH_AGE_30_50_SUM_M, CH_AGE_50_65_SUM_M, 
+    CH_AGE_65_UP_SUM_M, CH_DOCTOR_SUM, CH_MASTER_SUM, CH_BACHELOR_SUM, CH_TECHNICAL_SUM, 
+    CH_SENIOR_SUM, CH_JUNIOR_SUM, CH_ELEMENTARY_SUM, CH_OTHER_SUM, CH_NATIONALITY_RANK1, 
+    CH_NATIONALITY_RANK2, CH_NATIONALITY_RANK3, CH_NATIONALITY_RANK4, CH_NATIONALITY_RANK5, 
+    CH_NATIONALITY_RANK6, CH_NATIONALITY_RANK7, CH_NATIONALITY_RANK8, CH_NATIONALITY_RANK9, 
+    CH_NATIONALITY_RANK10, CH_NATIONALITY_RANK1_NAME, CH_NATIONALITY_RANK2_NAME, CH_NATIONALITY_RANK3_NAME, 
+    CH_NATIONALITY_RANK4_NAME, CH_NATIONALITY_RANK5_NAME, CH_NATIONALITY_RANK6_NAME, 
+    CH_NATIONALITY_RANK7_NAME, CH_NATIONALITY_RANK8_NAME, CH_NATIONALITY_RANK9_NAME, 
+    CH_NATIONALITY_RANK10_NAME, REGION_CODE, CH_AGE_0_18_SUM_F, CH_AGE_18_30_SUM_F, CH_AGE_30_50_SUM_F, 
+    CH_AGE_50_65_SUM_F, CH_AGE_65_UP_SUM_F
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from JX_SS_CARD_STATISTICS
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from JX_SS_CARD_STATISTICS
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCardStatistics" >
+    insert into JX_SS_CARD_STATISTICS (ID, YEAR, CARD_HOLDER_SUM, 
+      INSURED_SUM, NATIVE_INSURED_SUM, RURAL_INSURED_SUM, 
+      CH_MALE_SUM, CH_FEMALE_SUM, CH_AGE_0_18_SUM_M, 
+      CH_AGE_18_30_SUM_M, CH_AGE_30_50_SUM_M, CH_AGE_50_65_SUM_M, 
+      CH_AGE_65_UP_SUM_M, CH_DOCTOR_SUM, CH_MASTER_SUM, 
+      CH_BACHELOR_SUM, CH_TECHNICAL_SUM, CH_SENIOR_SUM, 
+      CH_JUNIOR_SUM, CH_ELEMENTARY_SUM, CH_OTHER_SUM, 
+      CH_NATIONALITY_RANK1, CH_NATIONALITY_RANK2, 
+      CH_NATIONALITY_RANK3, CH_NATIONALITY_RANK4, 
+      CH_NATIONALITY_RANK5, CH_NATIONALITY_RANK6, 
+      CH_NATIONALITY_RANK7, CH_NATIONALITY_RANK8, 
+      CH_NATIONALITY_RANK9, CH_NATIONALITY_RANK10, 
+      CH_NATIONALITY_RANK1_NAME, CH_NATIONALITY_RANK2_NAME, 
+      CH_NATIONALITY_RANK3_NAME, CH_NATIONALITY_RANK4_NAME, 
+      CH_NATIONALITY_RANK5_NAME, CH_NATIONALITY_RANK6_NAME, 
+      CH_NATIONALITY_RANK7_NAME, CH_NATIONALITY_RANK8_NAME, 
+      CH_NATIONALITY_RANK9_NAME, CH_NATIONALITY_RANK10_NAME, 
+      REGION_CODE, CH_AGE_0_18_SUM_F, CH_AGE_18_30_SUM_F, 
+      CH_AGE_30_50_SUM_F, CH_AGE_50_65_SUM_F, CH_AGE_65_UP_SUM_F
+      )
+    values (#{id,jdbcType=DECIMAL}, #{year,jdbcType=DECIMAL}, #{cardHolderSum,jdbcType=DECIMAL}, 
+      #{insuredSum,jdbcType=DECIMAL}, #{nativeInsuredSum,jdbcType=DECIMAL}, #{ruralInsuredSum,jdbcType=DECIMAL}, 
+      #{chMaleSum,jdbcType=DECIMAL}, #{chFemaleSum,jdbcType=DECIMAL}, #{chAge018SumM,jdbcType=DECIMAL}, 
+      #{chAge1830SumM,jdbcType=DECIMAL}, #{chAge3050SumM,jdbcType=DECIMAL}, #{chAge5065SumM,jdbcType=DECIMAL}, 
+      #{chAge65UpSumM,jdbcType=DECIMAL}, #{chDoctorSum,jdbcType=DECIMAL}, #{chMasterSum,jdbcType=DECIMAL}, 
+      #{chBachelorSum,jdbcType=DECIMAL}, #{chTechnicalSum,jdbcType=DECIMAL}, #{chSeniorSum,jdbcType=DECIMAL}, 
+      #{chJuniorSum,jdbcType=DECIMAL}, #{chElementarySum,jdbcType=DECIMAL}, #{chOtherSum,jdbcType=DECIMAL}, 
+      #{chNationalityRank1,jdbcType=DECIMAL}, #{chNationalityRank2,jdbcType=DECIMAL}, 
+      #{chNationalityRank3,jdbcType=DECIMAL}, #{chNationalityRank4,jdbcType=DECIMAL}, 
+      #{chNationalityRank5,jdbcType=DECIMAL}, #{chNationalityRank6,jdbcType=DECIMAL}, 
+      #{chNationalityRank7,jdbcType=DECIMAL}, #{chNationalityRank8,jdbcType=DECIMAL}, 
+      #{chNationalityRank9,jdbcType=DECIMAL}, #{chNationalityRank10,jdbcType=DECIMAL}, 
+      #{chNationalityRank1Name,jdbcType=VARCHAR}, #{chNationalityRank2Name,jdbcType=VARCHAR}, 
+      #{chNationalityRank3Name,jdbcType=VARCHAR}, #{chNationalityRank4Name,jdbcType=VARCHAR}, 
+      #{chNationalityRank5Name,jdbcType=VARCHAR}, #{chNationalityRank6Name,jdbcType=VARCHAR}, 
+      #{chNationalityRank7Name,jdbcType=VARCHAR}, #{chNationalityRank8Name,jdbcType=VARCHAR}, 
+      #{chNationalityRank9Name,jdbcType=VARCHAR}, #{chNationalityRank10Name,jdbcType=VARCHAR}, 
+      #{regionCode,jdbcType=VARCHAR}, #{chAge018SumF,jdbcType=DECIMAL}, #{chAge1830SumF,jdbcType=DECIMAL}, 
+      #{chAge3050SumF,jdbcType=DECIMAL}, #{chAge5065SumF,jdbcType=DECIMAL}, #{chAge65UpSumF,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCardStatistics" >
+    insert into JX_SS_CARD_STATISTICS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="year != null" >
+        YEAR,
+      </if>
+      <if test="cardHolderSum != null" >
+        CARD_HOLDER_SUM,
+      </if>
+      <if test="insuredSum != null" >
+        INSURED_SUM,
+      </if>
+      <if test="nativeInsuredSum != null" >
+        NATIVE_INSURED_SUM,
+      </if>
+      <if test="ruralInsuredSum != null" >
+        RURAL_INSURED_SUM,
+      </if>
+      <if test="chMaleSum != null" >
+        CH_MALE_SUM,
+      </if>
+      <if test="chFemaleSum != null" >
+        CH_FEMALE_SUM,
+      </if>
+      <if test="chAge018SumM != null" >
+        CH_AGE_0_18_SUM_M,
+      </if>
+      <if test="chAge1830SumM != null" >
+        CH_AGE_18_30_SUM_M,
+      </if>
+      <if test="chAge3050SumM != null" >
+        CH_AGE_30_50_SUM_M,
+      </if>
+      <if test="chAge5065SumM != null" >
+        CH_AGE_50_65_SUM_M,
+      </if>
+      <if test="chAge65UpSumM != null" >
+        CH_AGE_65_UP_SUM_M,
+      </if>
+      <if test="chDoctorSum != null" >
+        CH_DOCTOR_SUM,
+      </if>
+      <if test="chMasterSum != null" >
+        CH_MASTER_SUM,
+      </if>
+      <if test="chBachelorSum != null" >
+        CH_BACHELOR_SUM,
+      </if>
+      <if test="chTechnicalSum != null" >
+        CH_TECHNICAL_SUM,
+      </if>
+      <if test="chSeniorSum != null" >
+        CH_SENIOR_SUM,
+      </if>
+      <if test="chJuniorSum != null" >
+        CH_JUNIOR_SUM,
+      </if>
+      <if test="chElementarySum != null" >
+        CH_ELEMENTARY_SUM,
+      </if>
+      <if test="chOtherSum != null" >
+        CH_OTHER_SUM,
+      </if>
+      <if test="chNationalityRank1 != null" >
+        CH_NATIONALITY_RANK1,
+      </if>
+      <if test="chNationalityRank2 != null" >
+        CH_NATIONALITY_RANK2,
+      </if>
+      <if test="chNationalityRank3 != null" >
+        CH_NATIONALITY_RANK3,
+      </if>
+      <if test="chNationalityRank4 != null" >
+        CH_NATIONALITY_RANK4,
+      </if>
+      <if test="chNationalityRank5 != null" >
+        CH_NATIONALITY_RANK5,
+      </if>
+      <if test="chNationalityRank6 != null" >
+        CH_NATIONALITY_RANK6,
+      </if>
+      <if test="chNationalityRank7 != null" >
+        CH_NATIONALITY_RANK7,
+      </if>
+      <if test="chNationalityRank8 != null" >
+        CH_NATIONALITY_RANK8,
+      </if>
+      <if test="chNationalityRank9 != null" >
+        CH_NATIONALITY_RANK9,
+      </if>
+      <if test="chNationalityRank10 != null" >
+        CH_NATIONALITY_RANK10,
+      </if>
+      <if test="chNationalityRank1Name != null" >
+        CH_NATIONALITY_RANK1_NAME,
+      </if>
+      <if test="chNationalityRank2Name != null" >
+        CH_NATIONALITY_RANK2_NAME,
+      </if>
+      <if test="chNationalityRank3Name != null" >
+        CH_NATIONALITY_RANK3_NAME,
+      </if>
+      <if test="chNationalityRank4Name != null" >
+        CH_NATIONALITY_RANK4_NAME,
+      </if>
+      <if test="chNationalityRank5Name != null" >
+        CH_NATIONALITY_RANK5_NAME,
+      </if>
+      <if test="chNationalityRank6Name != null" >
+        CH_NATIONALITY_RANK6_NAME,
+      </if>
+      <if test="chNationalityRank7Name != null" >
+        CH_NATIONALITY_RANK7_NAME,
+      </if>
+      <if test="chNationalityRank8Name != null" >
+        CH_NATIONALITY_RANK8_NAME,
+      </if>
+      <if test="chNationalityRank9Name != null" >
+        CH_NATIONALITY_RANK9_NAME,
+      </if>
+      <if test="chNationalityRank10Name != null" >
+        CH_NATIONALITY_RANK10_NAME,
+      </if>
+      <if test="regionCode != null" >
+        REGION_CODE,
+      </if>
+      <if test="chAge018SumF != null" >
+        CH_AGE_0_18_SUM_F,
+      </if>
+      <if test="chAge1830SumF != null" >
+        CH_AGE_18_30_SUM_F,
+      </if>
+      <if test="chAge3050SumF != null" >
+        CH_AGE_30_50_SUM_F,
+      </if>
+      <if test="chAge5065SumF != null" >
+        CH_AGE_50_65_SUM_F,
+      </if>
+      <if test="chAge65UpSumF != null" >
+        CH_AGE_65_UP_SUM_F,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=DECIMAL},
+      </if>
+      <if test="cardHolderSum != null" >
+        #{cardHolderSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredSum != null" >
+        #{insuredSum,jdbcType=DECIMAL},
+      </if>
+      <if test="nativeInsuredSum != null" >
+        #{nativeInsuredSum,jdbcType=DECIMAL},
+      </if>
+      <if test="ruralInsuredSum != null" >
+        #{ruralInsuredSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chMaleSum != null" >
+        #{chMaleSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chFemaleSum != null" >
+        #{chFemaleSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge018SumM != null" >
+        #{chAge018SumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge1830SumM != null" >
+        #{chAge1830SumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge3050SumM != null" >
+        #{chAge3050SumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge5065SumM != null" >
+        #{chAge5065SumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge65UpSumM != null" >
+        #{chAge65UpSumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chDoctorSum != null" >
+        #{chDoctorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chMasterSum != null" >
+        #{chMasterSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chBachelorSum != null" >
+        #{chBachelorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chTechnicalSum != null" >
+        #{chTechnicalSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chSeniorSum != null" >
+        #{chSeniorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chJuniorSum != null" >
+        #{chJuniorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chElementarySum != null" >
+        #{chElementarySum,jdbcType=DECIMAL},
+      </if>
+      <if test="chOtherSum != null" >
+        #{chOtherSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank1 != null" >
+        #{chNationalityRank1,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank2 != null" >
+        #{chNationalityRank2,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank3 != null" >
+        #{chNationalityRank3,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank4 != null" >
+        #{chNationalityRank4,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank5 != null" >
+        #{chNationalityRank5,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank6 != null" >
+        #{chNationalityRank6,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank7 != null" >
+        #{chNationalityRank7,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank8 != null" >
+        #{chNationalityRank8,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank9 != null" >
+        #{chNationalityRank9,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank10 != null" >
+        #{chNationalityRank10,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank1Name != null" >
+        #{chNationalityRank1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank2Name != null" >
+        #{chNationalityRank2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank3Name != null" >
+        #{chNationalityRank3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank4Name != null" >
+        #{chNationalityRank4Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank5Name != null" >
+        #{chNationalityRank5Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank6Name != null" >
+        #{chNationalityRank6Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank7Name != null" >
+        #{chNationalityRank7Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank8Name != null" >
+        #{chNationalityRank8Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank9Name != null" >
+        #{chNationalityRank9Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank10Name != null" >
+        #{chNationalityRank10Name,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null" >
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chAge018SumF != null" >
+        #{chAge018SumF,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge1830SumF != null" >
+        #{chAge1830SumF,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge3050SumF != null" >
+        #{chAge3050SumF,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge5065SumF != null" >
+        #{chAge5065SumF,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge65UpSumF != null" >
+        #{chAge65UpSumF,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCardStatistics" >
+    update JX_SS_CARD_STATISTICS
+    <set >
+      <if test="year != null" >
+        YEAR = #{year,jdbcType=DECIMAL},
+      </if>
+      <if test="cardHolderSum != null" >
+        CARD_HOLDER_SUM = #{cardHolderSum,jdbcType=DECIMAL},
+      </if>
+      <if test="insuredSum != null" >
+        INSURED_SUM = #{insuredSum,jdbcType=DECIMAL},
+      </if>
+      <if test="nativeInsuredSum != null" >
+        NATIVE_INSURED_SUM = #{nativeInsuredSum,jdbcType=DECIMAL},
+      </if>
+      <if test="ruralInsuredSum != null" >
+        RURAL_INSURED_SUM = #{ruralInsuredSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chMaleSum != null" >
+        CH_MALE_SUM = #{chMaleSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chFemaleSum != null" >
+        CH_FEMALE_SUM = #{chFemaleSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge018SumM != null" >
+        CH_AGE_0_18_SUM_M = #{chAge018SumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge1830SumM != null" >
+        CH_AGE_18_30_SUM_M = #{chAge1830SumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge3050SumM != null" >
+        CH_AGE_30_50_SUM_M = #{chAge3050SumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge5065SumM != null" >
+        CH_AGE_50_65_SUM_M = #{chAge5065SumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge65UpSumM != null" >
+        CH_AGE_65_UP_SUM_M = #{chAge65UpSumM,jdbcType=DECIMAL},
+      </if>
+      <if test="chDoctorSum != null" >
+        CH_DOCTOR_SUM = #{chDoctorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chMasterSum != null" >
+        CH_MASTER_SUM = #{chMasterSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chBachelorSum != null" >
+        CH_BACHELOR_SUM = #{chBachelorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chTechnicalSum != null" >
+        CH_TECHNICAL_SUM = #{chTechnicalSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chSeniorSum != null" >
+        CH_SENIOR_SUM = #{chSeniorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chJuniorSum != null" >
+        CH_JUNIOR_SUM = #{chJuniorSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chElementarySum != null" >
+        CH_ELEMENTARY_SUM = #{chElementarySum,jdbcType=DECIMAL},
+      </if>
+      <if test="chOtherSum != null" >
+        CH_OTHER_SUM = #{chOtherSum,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank1 != null" >
+        CH_NATIONALITY_RANK1 = #{chNationalityRank1,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank2 != null" >
+        CH_NATIONALITY_RANK2 = #{chNationalityRank2,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank3 != null" >
+        CH_NATIONALITY_RANK3 = #{chNationalityRank3,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank4 != null" >
+        CH_NATIONALITY_RANK4 = #{chNationalityRank4,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank5 != null" >
+        CH_NATIONALITY_RANK5 = #{chNationalityRank5,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank6 != null" >
+        CH_NATIONALITY_RANK6 = #{chNationalityRank6,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank7 != null" >
+        CH_NATIONALITY_RANK7 = #{chNationalityRank7,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank8 != null" >
+        CH_NATIONALITY_RANK8 = #{chNationalityRank8,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank9 != null" >
+        CH_NATIONALITY_RANK9 = #{chNationalityRank9,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank10 != null" >
+        CH_NATIONALITY_RANK10 = #{chNationalityRank10,jdbcType=DECIMAL},
+      </if>
+      <if test="chNationalityRank1Name != null" >
+        CH_NATIONALITY_RANK1_NAME = #{chNationalityRank1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank2Name != null" >
+        CH_NATIONALITY_RANK2_NAME = #{chNationalityRank2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank3Name != null" >
+        CH_NATIONALITY_RANK3_NAME = #{chNationalityRank3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank4Name != null" >
+        CH_NATIONALITY_RANK4_NAME = #{chNationalityRank4Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank5Name != null" >
+        CH_NATIONALITY_RANK5_NAME = #{chNationalityRank5Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank6Name != null" >
+        CH_NATIONALITY_RANK6_NAME = #{chNationalityRank6Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank7Name != null" >
+        CH_NATIONALITY_RANK7_NAME = #{chNationalityRank7Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank8Name != null" >
+        CH_NATIONALITY_RANK8_NAME = #{chNationalityRank8Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank9Name != null" >
+        CH_NATIONALITY_RANK9_NAME = #{chNationalityRank9Name,jdbcType=VARCHAR},
+      </if>
+      <if test="chNationalityRank10Name != null" >
+        CH_NATIONALITY_RANK10_NAME = #{chNationalityRank10Name,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null" >
+        REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chAge018SumF != null" >
+        CH_AGE_0_18_SUM_F = #{chAge018SumF,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge1830SumF != null" >
+        CH_AGE_18_30_SUM_F = #{chAge1830SumF,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge3050SumF != null" >
+        CH_AGE_30_50_SUM_F = #{chAge3050SumF,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge5065SumF != null" >
+        CH_AGE_50_65_SUM_F = #{chAge5065SumF,jdbcType=DECIMAL},
+      </if>
+      <if test="chAge65UpSumF != null" >
+        CH_AGE_65_UP_SUM_F = #{chAge65UpSumF,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCardStatistics" >
+    update JX_SS_CARD_STATISTICS
+    set YEAR = #{year,jdbcType=DECIMAL},
+      CARD_HOLDER_SUM = #{cardHolderSum,jdbcType=DECIMAL},
+      INSURED_SUM = #{insuredSum,jdbcType=DECIMAL},
+      NATIVE_INSURED_SUM = #{nativeInsuredSum,jdbcType=DECIMAL},
+      RURAL_INSURED_SUM = #{ruralInsuredSum,jdbcType=DECIMAL},
+      CH_MALE_SUM = #{chMaleSum,jdbcType=DECIMAL},
+      CH_FEMALE_SUM = #{chFemaleSum,jdbcType=DECIMAL},
+      CH_AGE_0_18_SUM_M = #{chAge018SumM,jdbcType=DECIMAL},
+      CH_AGE_18_30_SUM_M = #{chAge1830SumM,jdbcType=DECIMAL},
+      CH_AGE_30_50_SUM_M = #{chAge3050SumM,jdbcType=DECIMAL},
+      CH_AGE_50_65_SUM_M = #{chAge5065SumM,jdbcType=DECIMAL},
+      CH_AGE_65_UP_SUM_M = #{chAge65UpSumM,jdbcType=DECIMAL},
+      CH_DOCTOR_SUM = #{chDoctorSum,jdbcType=DECIMAL},
+      CH_MASTER_SUM = #{chMasterSum,jdbcType=DECIMAL},
+      CH_BACHELOR_SUM = #{chBachelorSum,jdbcType=DECIMAL},
+      CH_TECHNICAL_SUM = #{chTechnicalSum,jdbcType=DECIMAL},
+      CH_SENIOR_SUM = #{chSeniorSum,jdbcType=DECIMAL},
+      CH_JUNIOR_SUM = #{chJuniorSum,jdbcType=DECIMAL},
+      CH_ELEMENTARY_SUM = #{chElementarySum,jdbcType=DECIMAL},
+      CH_OTHER_SUM = #{chOtherSum,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK1 = #{chNationalityRank1,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK2 = #{chNationalityRank2,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK3 = #{chNationalityRank3,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK4 = #{chNationalityRank4,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK5 = #{chNationalityRank5,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK6 = #{chNationalityRank6,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK7 = #{chNationalityRank7,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK8 = #{chNationalityRank8,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK9 = #{chNationalityRank9,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK10 = #{chNationalityRank10,jdbcType=DECIMAL},
+      CH_NATIONALITY_RANK1_NAME = #{chNationalityRank1Name,jdbcType=VARCHAR},
+      CH_NATIONALITY_RANK2_NAME = #{chNationalityRank2Name,jdbcType=VARCHAR},
+      CH_NATIONALITY_RANK3_NAME = #{chNationalityRank3Name,jdbcType=VARCHAR},
+      CH_NATIONALITY_RANK4_NAME = #{chNationalityRank4Name,jdbcType=VARCHAR},
+      CH_NATIONALITY_RANK5_NAME = #{chNationalityRank5Name,jdbcType=VARCHAR},
+      CH_NATIONALITY_RANK6_NAME = #{chNationalityRank6Name,jdbcType=VARCHAR},
+      CH_NATIONALITY_RANK7_NAME = #{chNationalityRank7Name,jdbcType=VARCHAR},
+      CH_NATIONALITY_RANK8_NAME = #{chNationalityRank8Name,jdbcType=VARCHAR},
+      CH_NATIONALITY_RANK9_NAME = #{chNationalityRank9Name,jdbcType=VARCHAR},
+      CH_NATIONALITY_RANK10_NAME = #{chNationalityRank10Name,jdbcType=VARCHAR},
+      REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      CH_AGE_0_18_SUM_F = #{chAge018SumF,jdbcType=DECIMAL},
+      CH_AGE_18_30_SUM_F = #{chAge1830SumF,jdbcType=DECIMAL},
+      CH_AGE_30_50_SUM_F = #{chAge3050SumF,jdbcType=DECIMAL},
+      CH_AGE_50_65_SUM_F = #{chAge5065SumF,jdbcType=DECIMAL},
+      CH_AGE_65_UP_SUM_F = #{chAge65UpSumF,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <select id="selectSsCardHolderLatestY" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <![CDATA[select t.* from(select st.*,row_number() over (order by st.year desc)rn
+    from JX_SS_CARD_STATISTICS st where st.region_code='003001')t where rn=#{rowNo}]]>
+  </select>
+
+  <select id="selectSsCardStatisticsInFiveY" resultMap="BaseResultMap">
+    <![CDATA[select t.* from(select st.*,row_number() over (order by st.year desc)rn
+    from JX_SS_CARD_STATISTICS st where st.region_code='003001')t where rn<=5 order by t.year]]>
+  </select>
+
+  <select id="selectCardStatisticsTooltipLatestY" parameterType="java.lang.String" resultType="com.cetc28.PeopleBenefitService.dto.CardStatisticsTooltipDto">
+    select t.year,t.region_code as regionCode,t.card_holder_sum as cardHolderSum,t.insured_sum as insuredSum,
+    xt.mc as regionName,xt.jd as longitude,xt.wd as latitude from JX_SS_CARD_STATISTICS t inner join xxzygl.xzqh xt on
+    t.region_code!=#{regionCode} and t.year=(select max(year) from JX_SS_CARD_STATISTICS) and t.region_code=xt.bh
+  </select>
+</mapper>

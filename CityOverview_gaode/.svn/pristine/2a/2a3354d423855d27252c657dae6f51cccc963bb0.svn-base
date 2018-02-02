@@ -1,0 +1,47 @@
+<%--
+  Create By FangYan On 2017/09/26
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>通知页面</title>
+    <link rel="stylesheet" type="text/css" href="../myCss/toastr.css">
+    <script type="text/javascript" src="../myjs/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="../myjs/toastr.min.js"></script>
+</head>
+<body>
+        <script>
+            /**
+             * toastr
+             *
+             */
+            $(function () {
+                /**
+                 * toastr配置项
+                 *
+                 */
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-center",
+                    "preventDuplicates": true,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "3000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    /**
+                     * 显示隐藏方法
+                     *
+                     */
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+            })
+        </script>
+</body>
+</html>

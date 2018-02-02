@@ -1,0 +1,139 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="../../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    a{
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .main{
+      width: 97%;
+      height: 75%;
+      margin-top: 5%;
+    }
+
+    .main>.main-content{
+      width: 49%;
+      height: 20%;
+      margin: 5% auto;
+      float: left;
+    }
+    .main .main-top{
+      width: 45%;
+    }
+    .main .main-middle{
+      width: 54%;
+    }
+    .infoLogo1{
+      width: 35%;
+      height: 90%;
+      margin-left: 1%;
+      float: left;
+    }
+    .infoLogo1>img,.infoLogo2>img{
+      width: 3em;
+      height: 3em;
+      float: right;
+    }
+    .infoTitle{
+      vertical-align: middle;
+      width: 63%;
+      height: 90%;
+      margin-left: 1%;
+      float: left;
+      text-align: center;
+    }
+    .infoTitle>h1{
+      color: #00FF00;
+      text-align: center;
+    }
+    .infoTitle>p{
+      font-size: 1em;
+      line-height: 24px;
+      font-weight: normal;
+      text-align: center;
+    }
+    /*.infoTitle-span1{*/
+      /*font-size: 1.7em;*/
+
+    /*}*/
+    .infoTitle-span1{
+      color: #0CDAF5;
+      font-size: 1.7em;
+    }
+    .infoTitle-span2{
+      color: #0CDAF5;
+      font-size: 1.7em;
+    }
+    .infoTitle-span3{
+      color: #0CDAF5;
+      font-size: 1.7em;
+    }
+    .infoTitle-span4{
+      color: #0CDAF5;
+      font-size: 1.7em;
+    }
+    p.headerTitle{
+      width: 45%;
+    }
+  </style>
+</head>
+<body>
+<div class="gsbz">
+  <p class="headerTitle">
+    互联网经济产业平台
+  </p>
+  <div class="main">
+    <div class="main-content main-top">
+      <div class="infoLogo1"><img src="../../../images/information/info5_1.png" alt=""/></div>
+      <div class="infoTitle"><p class="area"><a onclick="wuzhen()">乌镇核心区域</a></p><span class="infoTitle-span1 counter">30</span>平方公里</div>
+    </div>
+    <div class="main-content main-middle">
+      <div class="infoLogo1"><img src="../../../images/information/info5_1.png" alt=""/></div>
+      <div class="infoTitle"><p class="area"><a onclick="jxkj()">嘉兴科技城</a></p><span class="infoTitle-span2 counter">29.5</span>平方公里</div>
+    </div>
+    <div class="main-content main-top">
+      <div class="infoLogo1"><img src="../../../images/information/info5_1.png" alt=""/></div>
+      <div class="infoTitle"><p class="area"><a onclick="xzgx()">秀洲高新区</a></p><span class="infoTitle-span3 counter">5.72</span>平方公里</div>
+    </div>
+    <div class="main-content main-middle">
+      <div class="infoLogo1"><img src="../../../images/information/info5_1.png" alt=""/></div>
+      <div class="infoTitle"><p class="area"><a onclick="jxjj()">嘉兴经济技术开发区</a></p><span class="infoTitle-span4 counter">40</span>平方公里</div>
+    </div>
+  </div>
+</div>
+<script src="../../../map/js/jquery-1.11.3.js"></script>
+<script src="../../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../../map/js/jquery.countup.js"></script>
+<script>
+  $('.counter').countUp({
+    delay: 2,
+    time: 200
+  });
+  function wuzhen(){
+      parent.location.href="../../../iframeSecond/secondBox/hlwqsDetails.jsp?type=乌镇核心区";
+  }
+  function jxkj(){
+      parent.location.href="../../../iframeSecond/secondBox/hlwqsDetails.jsp?type=嘉兴科技城";
+  }
+  function xzgx(){
+      parent.location.href="../../../iframeSecond/secondBox/hlwqsDetails.jsp?type=秀洲高新区";
+  }
+  function jxjj(){
+      parent.location.href="../../../iframeSecond/secondBox/hlwqsDetails.jsp?type=嘉兴经济技术开发区";
+  }
+</script>
+</body>
+</html>

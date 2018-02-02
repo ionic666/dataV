@@ -1,0 +1,36 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxSsServiceStatistics;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
+public interface JxSsServiceStatisticsMapper {
+    int deleteByPrimaryKey(Short id);
+
+    int insert(JxSsServiceStatistics record);
+
+    int insertSelective(JxSsServiceStatistics record);
+
+    JxSsServiceStatistics selectByPrimaryKey(Short id);
+
+    int updateByPrimaryKeySelective(JxSsServiceStatistics record);
+
+    int updateByPrimaryKey(JxSsServiceStatistics record);
+
+    List<JxSsServiceStatistics> selectSsOnlineServiceInFiveY();
+
+    /**
+     * 查询参保企业
+     * @param name
+     * @return
+     */
+    List<HashMap<String,String>> serchSbdw(String name);
+
+    /**
+     * 查询企业平均参保金额和平均参保年龄
+     * @param name
+     * @return
+     */
+    List<HashMap<String,String>> serchAmountAndAge(String name);
+}

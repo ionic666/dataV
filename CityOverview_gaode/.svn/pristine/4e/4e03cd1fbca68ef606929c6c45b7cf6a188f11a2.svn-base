@@ -1,0 +1,756 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    <title>嘉兴城市运行全景特征图分系统</title>
+    <!--<link rel="stylesheet" type="text/css" href="myCss/indexAndMain.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/main_modal.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/toastr.css">-->
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="myCss/headTitle.css"/>
+    <script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+    <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <!--<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>-->
+    <!--<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>-->
+    <script type="text/javascript" src="myjs/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="map/js/echarts-all.js"></script>
+
+    <style>
+        body{
+            box-sizing: border-box;
+            overflow: hidden !important;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            color: #fff;
+            font-family: "Microsoft YaHei";
+            font-size: 18px;
+            background-image: url('images/socialSecurity/sbbg.png');
+            background-size: 100% 100%;
+            position: relative;
+        }
+        a{text-decoration:none}
+        ::-webkit-scrollbar{
+            background-color: #1B1B1D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+        .modelBox{
+            height:90%;
+            width:25%;
+            position: absolute;
+            z-index:101;
+        }
+        .modelBoxL{
+            top:10%;
+            left:0
+        }
+        .modelBoxC{
+            height:10%;
+            width: 50%;
+            bottom:2%;
+            right:25%;
+        }
+        .modelBoxC>div{
+            height:100%;
+            width: 35%;
+        }
+        .modelBoxC-a{
+            float: left;
+        }
+        .modelBoxC-b{
+            float: right;
+        }
+        .modelBoxR{
+            border-top: 2px #0cdaf5 solid;
+            background: rgba(0,0,0,0.5); 
+            height: 95%;
+            width: 73%;
+            top: 10%;
+            right: 1%
+        }
+        .modelBox .model{
+            height:32.8%;
+            width:100%;
+            margin-bottom:1%;
+            border-top: 2px #0cdaf5 solid;
+            position: relative;
+        }
+        .modelBox .model{ /*iframe*/
+            /*width:100%;*/
+            /*height:100%;*/
+            background: rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        .more{
+            position: absolute;
+            top:2%;
+            right:2%;
+            color: #0DD4EE;
+            cursor: pointer;
+        }
+        #changeImg img{
+            width:120px;
+            height:87px;
+        }
+        #login>button{
+            width: auto;
+            height: auto;
+            font-size: 1.5em;
+            color: #12C6D8;
+            background-color: #1E2222;
+            border: 0;
+            padding:0 0.2em;
+            float: right;
+            margin-right: 0.1em;
+        }
+        #login>button:hover{
+            color: #fff;
+        }
+        #login>h4{
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0.2em 0;
+            text-align: center;
+            color: #0CD9F4;
+
+        }
+        #login>form{
+            width: 100%;
+            height: 80%;
+
+        }
+        #login>form>input{
+            border-size: 0;
+            background-color: #00191C !important;
+        }
+        #login>form>input,#login>form>button{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+            line-height: 10%;
+        }
+        #login>form>button{
+            border-color: #e9ca3d;
+            border-color: #e9ca3d;
+            border-color: #0096AA;
+            background-color: #0096AA;
+        }
+        #login>form>label{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+        }
+
+        #legend div{
+            display: none;
+        }
+        #legend div p{
+            float: left;
+            display:block;
+            padding:10px;
+        }
+        #legend div p span{
+            margin:0px 3px;
+        }
+        #settingModal td{
+            border:0;
+            font-size: 1.3em;
+            color: #0a36e9;
+        }
+        a:hover{
+            /*color: #c74072;*/
+            text-decoration:none;
+        }
+        body{
+            width: 100%;
+        }
+    ul,li{
+        margin: 0;
+        list-style-type:none;
+    }
+    p{
+        margin: 0;
+    }
+        /*头部logo*/
+        .header {
+            width: 60%;
+            height: 7.8%;
+            margin: 0 auto;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: absolute;
+            z-index: 999;
+            top: 2%;
+            margin-left:50%;
+        }
+        .header>div{
+            display: inline-block;
+        }
+
+        #modell{
+            height: 100%;
+            width: 50%;
+            float: left;
+        }
+        #modelr{
+            height: 100%;
+            width: 50%;
+            float: left;
+        }
+        /*高德地图info窗口样式开始*/
+        .amap-toolbar{
+            display:none;
+        }
+        .info {
+            border: solid 1px #7A9095 !important;
+            border-radius: 5px;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 14px;
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        .info span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        /*高德地图info窗口样式开结束*/
+
+        .modelBox>.model>div:first-child{
+            padding-top:10px;
+            height:15%;
+            width:100%;
+        }
+        .modelBox>.model>div:last-child{
+            height:85%;
+            width:100%;
+        }
+        p.headerTitle{
+            padding-left: 3%;
+            font-size: 20px;
+            /*font-weight: bold;*/
+            color:#F2F2F2;
+            width: 40%;
+            font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+            margin:0;
+            float: left;
+            height: 100%;
+            position: relative;
+        }
+        .details{
+            /*margin-left:40%;*/
+        }
+        .details p{
+            font-size: 10px;
+            color:#fff;
+            margin:0px;
+        }
+        .details img{
+            width: 34px;
+        }
+        .details img,.details div,.detail span{
+            float: left;
+            margin-left: 15px;
+            text-align: center;
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 18px;
+            margin:0px;
+        }
+        #wrType{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            margin-left: 15px;
+        }
+
+        /*非公共样式 -* "河长制"--治水*/
+        div.model6{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 240px;
+        }
+        div#model6{
+            height: 85%;
+            width: 95%;
+        }
+        div#model6 ul{
+            width: 100%;
+            height: 20%;
+            color: #fff;
+        }
+        div#model6 ul li{
+            float: left;
+            width: 49%;
+            height: 100%;
+            /*padding-top: 10px;*/
+            /*padding-left:50px;*/
+        }
+        div#model6 ul li img{
+            float: left;
+        }
+        div#model6 ul .right{
+            float: left;
+            margin-left: 5%;
+        }
+        span.right{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+        }
+        div#ybjjsyl{
+            width: 100%;
+            height: 75%;
+        }
+        div.cardHolder{
+            width: 100%;
+            height: 100%;
+        }
+        div.cardHolderText{
+            height: 23%;
+            font-size: 16px;
+        }
+        div.cardHolderText span{
+            font-size: 1.2em;
+        }
+        div.growPercentText{
+            height: 23%;
+            font-size: 1em;
+        }
+        div.insuredPercentText{
+            height: 23%;
+            font-size: 16px;
+            padding-top: 1%;
+        }
+        div.cardHolder ul{
+            padding-top: 20px;
+            padding-left: 10px;
+            height: 100%;
+        }
+        div.cardHolder ul li{
+            width: 100%;
+            float: left;
+        }
+        /*div#cardHolderBar{*/
+        /*height: 15%;*/
+        /*width: 100%;*/
+        /*}*/
+        #townspeople{
+            width: 400px;
+            height: 15px;
+            margin-left: 5%;
+            margin-top: 2%;
+            background-color: #314B5D;
+            /*border: 1px solid #41719C;*/
+        }
+        .bar_pro{
+            width: 0;
+            height: 100%;
+            background-color: #53A6E2;
+            /*box-shadow: -2px 0 6px 9px #204079;*/
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        #cardHolderSum{
+            padding-left: 15%;
+            font-size: 1.5em;
+        }
+        #growPercent{
+            padding-left: 32%;
+        }
+        #insuredPercent{
+            padding-left: 28%;
+        }
+        #model4{
+            color: #fff;
+        }
+        div.netPointCount{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 240px;
+            cursor: pointer;
+        }
+        div#netPointCount{
+            height: 85%;
+            width: 100%;
+        }
+        div#netPointCount span{
+            font-size: 1em;
+        }
+        div#netPointCount>ul#acount{
+            height: 50%;
+            width: 100%;
+        }
+        div#netPointCount span.addBigBlue{
+            font-size: 26px;
+            font-weight: bold;
+            color: #119EE8;
+        }
+        div#netPointCount span.addBigRed{
+            font-size: 26px;
+            font-weight: bold;
+            color: #1297e4;
+        }
+        div#netPointCount>ul#acount li{
+            float: left;
+            width: 50%;
+            height: 100%;
+            /*padding-top: 5%;*/
+            /*padding-left: 5%;*/
+        }
+        div#netPointCount ul#acount li img{
+            float: left;
+            padding-top: 5%;
+        }
+        div#netPointCount ul#acount .right{
+            float: left;
+            margin-left: 5%;
+        }
+        ul#top3{
+            float: right;
+            width: 65%;
+            height: 50%;
+            padding: 1px 0 0 1%;
+        }
+        ul#top3 li{
+            width: 33.3%;
+            height: 100%;
+            float: left;
+        }
+        #top3 .blueP{
+            color: #E3CD55;
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 10px 0 0 10px;
+        }
+        .blueP b{
+            color: #E3CD55;
+        }
+        #netPointCount .blueP span{
+            color: #FFC000;
+            vertical-align: top;
+            font-size: 14px;
+        }
+        .centerP span{
+            width:97px;
+            text-align: center;
+            display:block;
+        }
+        .model2{
+            color: #fff;
+        }
+        .socialSecurityLeft-ssjy>div{
+            margin-top: 2%;
+            margin-left: 8%;
+            height: 50%;
+        }
+        .socialSecurityLeft-ssjy>div>ul>li{
+            display: inline-block;
+            margin: auto;
+            vertical-align: middle;
+        }
+        .socialSecurityLeft-ssjy-a>ul span{
+            vertical-align: middle;
+        }
+        #transactionNum,#transactionAmount{
+            font-size: 2em;
+            font-weight: bold;
+            padding: 0.3em;
+        }
+        #transactionNum{
+            color: #1AFF2B;
+        }
+        #transactionAmount{
+            color: #D4237A;
+        }
+        .dataStatistics,.dataStatistics1{
+            float: left;
+        }
+        .dw{
+            float: left;
+            margin-top: 60px;
+        }
+        .datatd td{background-color:#333;height:37px;padding-left:2px;border:1px solid #fff}
+        /*非公共样式--重点污染源在线监测--结束*/
+    </style>
+</head>
+<body class="tundra">
+
+<div class="_header">
+    <img src="images/btz.png" alt=""/>
+    <h1>嘉兴城市综合运营管理中心</h1>
+    <span>智慧社保</span>
+    <img src="images/bty.png" alt=""/>
+</div>
+
+<div class="modelBox modelBoxL">
+    <div class="model model1" >
+        <!--<span class="more">更多▶</span>-->
+        <!--<iframe id="iframe1" src="" frameborder="0"></iframe>-->
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">全市参保人员数量：621万</p>
+        </div>
+        <div id="model">
+            <div id="modell"></div>
+            <div id="modelr"></div>
+        </div>
+    </div>
+
+    <div class="model model3">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">医保卡交易量</p>
+        </div>
+        <div id="model3" class="socialSecurityLeft-ssjy">
+                <div class="socialSecurityLeft-ssjy-a">
+                    <p>当日交易笔数</p>
+                    <div>
+                        <div class="dataStatistics" id="jybs">
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set set_last"></div>
+                        </div>
+                        <span class="dw">笔</span>
+                    </div>
+                </div>
+
+                <div class="socialSecurityLeft-ssjy-b">
+                    <p>当日交易金额</p>
+                    <div>
+                        <div class="dataStatistics1" id="jyje">
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set set_last"></div>
+                        </div>
+                        <span class="dw">元</span>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="model model2">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">社保经办网点服务量</p>
+        </div>
+        <div id="netPointCount">
+            <ul id="acount">
+                <li>
+                    <img src="images/socialSecurity/todayCount.png" alt=""/>
+                    <div class="right">
+                        <p class="centerP"><span class="addBigBlue counter">6,580</span></p>
+                        <p class="centerP"><span>当日社保业务</span></p>
+                        <p class="centerP"><span>服务量</span></p>
+                    </div>
+                </li>
+                <li>
+                    <img src="images/socialSecurity/averageCount.png" alt=""/>
+                    <div class="right">
+                        <p class="centerP"><span class="addBigRed counter">363</span></p>
+                        <p class="centerP"><span>社保经办网点</span></p>
+                        <p class="centerP"><span>平均服务量</span></p>
+                    </div>
+                </li>
+            </ul>
+            <div style="float: left;padding-left: 5%">
+                <div class="centerP">
+                    <span>
+                     <img src="images/socialSecurity/buest.png" alt=""/>
+                    </span>
+                </div>
+                <p class="centerP"><span>最忙经办点</span></p>
+            </div>
+            <ul id="top3">
+                <li>
+                    <p class="centerP"><span>1.新嘉街道</span></p>
+                    <p class="centerP"><span>社会事业所</span></p>
+                    <p class="blueP"><b class="counter">1,040</b><span>+10</span></p>
+                </li>
+                <li>
+                    <p class="centerP"><span>2.解放街道</span></p>
+                    <p class="centerP"><span>社会事业所</span></p>
+                    <p class="blueP"><b class="counter">832</b><span>+6</span></p>
+                </li>
+                <li>
+                    <p class="centerP"><span>3.建设街道</span></p>
+                    <p class="centerP"><span>社会事业所</span></p>
+                    <p class="blueP"><b class="counter">671</b><span>+3</span></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modelBox modelBoxR">
+    
+</div>
+</body>
+<script src="myjs/myEcharts.js"></script>
+<script src="myjs/map/shbz.js"></script>
+<script src="myjs/index.js"></script>
+<script src="map/js/jquery.waypoints.min.js"></script>
+<script src="map/js/jquery.countup.js"></script>
+<script type="text/javascript" src="myjs/jquery.dataStatistics.js"></script>
+
+
+<script>
+    var headerWidth=$("._header").width();	//获取头部标题的宽度
+    console.log(headerWidth)
+    $("._header").css("left",-headerWidth/2+"px");//让头部标题居中
+    //参保人数量
+    function cbrs(){
+        var myChart1 = echarts.init(document.getElementById("modell"));
+        myChart2 = echarts.init(document.getElementById("modelr"));
+        var option1 = {
+            title: {
+                subtext: '75%',
+                text: '户籍人口',
+                x: 'center',
+                y: 'center',
+                itemGap: 5,
+                textStyle : text_style,
+                subtextStyle:text_style
+            },
+            calculable : false,
+            color:['#13BFBF','#2286CC'],
+            series : [
+                {
+                    name:'户籍人口',
+                    type:'pie',
+                    radius : ['40%', '60%'],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : false
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        },
+                        emphasis : {
+                            label : {
+                                show : true,
+                                position : 'center',
+                                textStyle : text_style
+                            }
+                        }
+                    },
+                    data:[
+                        {value:75},
+                        {value:25}
+                    ]
+                }
+            ]
+        };
+        option2= {
+            title: {
+                text: '新居民',
+                subtext: '65%',
+                x: 'center',
+                y: 'center',
+                itemGap: 5,
+                textStyle : text_style,
+                subtextStyle:text_style
+            },
+            color:['#66BF39','#2286CC'],
+            calculable : false,
+            series : [
+                {
+                    name:'新居民',
+                    type:'pie',
+                    radius : ['40%', '60%'],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : false
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        },
+                        emphasis : {
+                            label : {
+                                show : true,
+                                position : 'center',
+                                textStyle : text_style
+                            }
+                        }
+                    },
+                    data:[
+                        {value:65},
+                        {value:35}
+                    ]
+                }
+            ]
+        };
+        myChart1.setOption(option1);
+        myChart2.setOption(option2);
+    }
+    cbrs();
+    //交易量
+    $(document).ready(function(){
+        $('#jybs').dataStatistics({min:70000,max:79833,time:1,len:7});
+        $('#jyje').dataStatistics({min:600000,max:789000,time:1,len:7});
+    });
+      
+</script>
+</html>

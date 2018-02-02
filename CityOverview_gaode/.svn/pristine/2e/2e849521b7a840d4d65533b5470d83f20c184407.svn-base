@@ -1,0 +1,112 @@
+import com.cetc28.ConfigurationManagement.service.*;
+import com.cetc28.PeopleBenefitService.service.IJxEcoService;
+/*import com.cetc28.idata.dto.SeckillStatEnum;*/
+import com.cetc28.PeopleBenefitService.service.IJxEduService;
+import com.cetc28.PeopleBenefitService.dto.HgJjDto;
+import com.cetc28.PeopleBenefitService.model.JxNetEcoStatistics;
+import com.cetc28.ConfigurationManagement.model.User;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by FangYan on 2017/9/23.
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext-icity.xml")
+public class Test {
+    @Autowired private IJxEcoService iJxEcoService;
+    @Autowired private IJxUserManageService iJxUserManageService;
+    @Autowired private JxLoginService jxLoginService;
+    @Autowired private IjxRoleManageService ijxRoleManageService;
+    @Autowired private IJxEduService iJxEduService;
+    @Autowired private IJxMapService iJxMapService;
+    @Autowired private IJxCompanyInfoService iJxCompanyInfoService;
+
+    @org.junit.Test
+    public void  IJxMapService(){
+        List list = iJxMapService.queryMapServiceByIndicator(0);
+        for(Object o : list) {
+            System.out.println(o.toString());
+        }
+    }
+
+    @org.junit.Test
+    public void  IJxEduService(){
+        Map map = iJxEduService.listOverloadSchoolInfo("003001002");
+        for(Object o : map.entrySet()) {
+            System.out.println(o.toString());
+        }
+    }
+
+    @org.junit.Test
+    public void  IJxEcoService(){
+        Map map = iJxEcoService.queryNetBusiness(2017, 5);
+        for (Object o : map.entrySet()) {
+            System.out.println(o.toString());
+        }
+    }
+
+    @org.junit.Test
+    public void queryNetStatistics(){
+        JxNetEcoStatistics jxNetEcoStatistics = iJxEcoService.queryNetStatistics();
+        System.out.println(jxNetEcoStatistics.toString());
+    }
+
+    @org.junit.Test
+    public void queryShxfplsze(){
+        List<HgJjDto> hgJjDtos = iJxEcoService.queryShxfplsze(5, "2017");
+        for (HgJjDto hgJjDto : hgJjDtos) {
+            System.out.println(hgJjDto.toString());
+        }
+    }
+
+    @org.junit.Test
+    public void queryGdzctz(){
+        List<HgJjDto> hgJjDtos = iJxEcoService.queryGdzctz(5, "2017");
+        for (HgJjDto hgJjDto : hgJjDtos) {
+            System.out.println(hgJjDto.toString());
+        }
+    }
+
+    @org.junit.Test
+    public void queryFwysczs(){
+        List<HgJjDto> hgJjDtos = iJxEcoService.queryFwysczs(5, "2017");
+        for (HgJjDto hgJjDto : hgJjDtos) {
+            System.out.println(hgJjDto.toString());
+        }
+    }
+
+
+    @org.junit.Test
+    public void queryGyzz(){
+        List<HgJjDto> hgJjDtos = iJxEcoService.queryGyzz(5, "2017");
+        for (HgJjDto hgJjDto : hgJjDtos) {
+            System.out.println(hgJjDto.getGyzz());
+        }
+    }
+
+    @org.junit.Test
+    public void queryUserByName(){
+        List<User> admin = jxLoginService.queryUserByName("admin");
+        System.out.println(admin.toString());
+    }
+
+    @org.junit.Test
+    public void getPermision(){
+        Map permision = ijxRoleManageService.getPermision(1);
+        for (Object o : permision.entrySet()) {
+            System.out.println(o.toString());
+        }
+    }
+
+    @org.junit.Test
+    public void renewCompanyData(){
+        iJxCompanyInfoService.companyInfoRenewed();
+    }
+
+}

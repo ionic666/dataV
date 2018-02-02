@@ -1,0 +1,182 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tonghao
+  Date: 2017/11/18
+  Time: 14:56
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="../../myCss/bootstrap.min.css">
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+
+
+  <style>
+    *{
+      color:#fff;
+      font-size: 1em;
+      font-family: "Microsoft YaHei", "宋体", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
+      box-sizing: border-box;
+    }
+    ul,li,h1,h2,h3,h4,h5,h6,p,ol{
+      padding:0;
+      margin:0;
+    }
+    li{
+      list-style: none;
+    }
+    .header {
+      width: 60%;
+      height: 7.8%;
+      margin: 0 auto;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      position: absolute;
+      z-index: 999;
+      top: 2%;
+      margin-left: 50%;
+    }
+    ::-webkit-scrollbar{
+      background-color: #1B1B1D;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #303030;
+    }
+    .modelBox{
+      height:90%;
+      width:25%;
+      position: absolute;
+      z-index:101;
+    }
+    .modelBox div.head{
+      padding:1% 0px 0px 5%;
+      width:100%;
+      height:10%;
+    }
+    .modelBox div.head select{
+      background-color: black;
+      width: 40%;
+      float: left;
+      margin: 5%;
+    }
+    .modelBox div.body{
+      padding:1% 0px 0px 5%;
+      width:100%;
+      height:60%;
+    }
+    .modelBox div.foot{
+      padding:1% 0px 0px 5%;
+      width:100%;
+      height:30%;
+    }
+    .modelBoxL{
+      top:10%;
+      left:0;
+      border-top:2px solid #0CFFFF;
+    }
+    .modelBoxC{
+      height:10%;
+      width: 50%;
+      bottom:2%;
+      right:25%;
+      /*background-color: #fff;*/
+    }
+    .modelBoxR{
+      top:10%;
+      right:0;
+      border-top:2px solid #0CFFFF;
+    }
+    .modelBoxL{
+      background: -moz-linear-gradient(left, #000000 70%, transparent 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#000000), color-stop(100%,#ffffff));
+      background: -webkit-linear-gradient(left, #000000 70%,transparent 100%);
+      background: -o-linear-gradient(left, #000000 70%,transparent 100%);
+      background: -ms-linear-gradient(left, #000000 70%,transparent 100%);
+      background: linear-gradient(to right, #000000 70%,transparent 100%);
+    }
+    .modelBoxR{
+      background: -moz-linear-gradient(right, #000000 70%, transparent 100%);
+      background: -webkit-gradient(linear, right top, right bottom, color-stop(0%,#000000), color-stop(100%,#ffffff));
+      background: -webkit-linear-gradient(right, #000000 70%,transparent 100%);
+      background: -o-linear-gradient(right, #000000 70%,transparent 100%);
+      background: -ms-linear-gradient(right, #000000 70%,transparent 100%);
+      background: linear-gradient(to left, #000000 70%,transparent 100%);
+    }
+  </style>
+</head>
+<body>
+<div class="header" style="left: -582px; background-image: url(../../images/hlwjjqs.png);"></div>
+<div id="map" style="width:100%; height:100%;"></div>
+<div class="modelBox modelBoxL">
+  <div class="head">
+    <select>
+      <option value="">核心企业</option>
+      <option value="">核心企业</option>
+      <option value="">核心企业</option>
+      <option value="">核心企业</option>
+    </select>
+    <select>
+      <option value="">南湖区</option>
+      <option value="">南湖区</option>
+      <option value="">南湖区</option>
+      <option value="">南湖区</option>
+      <option value="">南湖区</option>
+    </select>
+  </div>
+  <div class="body">
+    <div class="listTitle">
+      <h3>信息制造产业</h3>
+      <ul>
+        <li>智能终端产业</li>
+        <li>装备电子产业</li>
+        <li>光伏产业</li>
+        <li>LED照明产业</li>
+        <li>新型电子元器件和电子材料产业</li>
+        <li>集成电路产业</li>
+      </ul>
+    </div>
+    <div class="listTitle">
+      <h3>服务业</h3>
+      <ul>
+        <li>软件产业和信息技术服务业</li>
+        <li>大数据</li>
+        <li>数字娱乐</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">
+    <div id="echarts">
+
+    </div>
+  </div>
+</div>
+<%--<div class="modelBox modelBoxC">--%>
+<%--</div>--%>
+<div class="modelBox modelBoxR">
+</div>
+
+
+
+<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<script>
+  var headerWidth=$(".header").width();	//获取头部标题的宽度
+  $(".header").css("left",-headerWidth/2-6+"px");//让头部标题居中
+
+
+  window.onload=function(){
+    //加载地图的方法
+    map = new AMap.Map('map', {
+      mapStyle: 'amap://styles/e08db8ed18c196aa387f5352644fe504'//样式URL
+    });
+//    AMap.event.addListener(map,'click',function(e){
+//      map.clearInfoWindow();
+//    });
+  }
+</script>
+</body>
+</html>

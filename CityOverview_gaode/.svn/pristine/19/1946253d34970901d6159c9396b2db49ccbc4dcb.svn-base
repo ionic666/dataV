@@ -1,0 +1,121 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LinYu
+  Comments: 教育资源分布情况监测子页面
+  Date: 2017/9/13
+  Time: 14:39
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>教育资源分布情况监测</title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.resourceMonitor{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 230px;
+        }
+        div#resourceMonitor{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="resourceMonitor">
+    <p class="headerTitle">
+        教育资源分布情况
+    </p>
+    <%--教育资源分布折线图--%>
+    <div id="resourceMonitor">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function resourceMonitor(xAxisData,data){
+        var mycharts = echarts.init(document.getElementById('resourceMonitor'));
+        var option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '5%',
+                y: '10%',
+                x2: '5%',
+                y2: '40%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['学校数'],
+                x: 'center',
+                y: 'bottom',
+                orient: 'vertical',
+                textStyle: text_style
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: ['20%', '20%'],
+                axisTick: {show: false, lineStyle: {color: font_color}},
+                axisLine: {show: false},
+                axisLabel: {show: true, textStyle: text_style, interval: 0, rotate: 40},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: {
+                type: 'value',
+//                    min: 0, max: 0.006, splitNumber: 3,
+                axisLine: {show: false,lineStyle: {color: font_color}},
+                axisLabel: {show: false, textStyle: text_style},
+                axisTick: {show: false, lineStyle: {color: font_color}},
+                splitLine: {
+                    show: false,
+                    lineStyle: {color: font_color}
+                }
+            },
+            series: [
+                {
+                    name: '学校数',
+                    type: 'line',
+                    symbol: 'rectangle',
+                    symbolSize: 3,
+                    data: data,
+                    itemStyle : {
+                        normal: {
+                            label : {show: true, position: 'inside', color:'#fff',textStyle:{fontSize:15} },
+                            lineStyle:{ color:'#FFE699',shadowColor:'#FFE699', shadowBlur:40}
+                        }
+                    }
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //出生性别比
+    $.ajax({
+        type:"POST",
+        url:'../../jxedu/querySchoolStatisticInfo.do',
+        dataType:'json',
+        data:{"qhbh":'003001', "num":1},
+        success:function(data){
+            var statisticInfo = data[0].statisticInfo;
+            var xAxisData=[];
+            var data=[];
+            for(var key in statisticInfo) {
+                xAxisData.push(statisticInfo[key].type);
+                data.push(statisticInfo[key].schoolNum);
+            }
+            resourceMonitor(xAxisData,data);
+        }
+    });
+</script>
+</body>
+</html>

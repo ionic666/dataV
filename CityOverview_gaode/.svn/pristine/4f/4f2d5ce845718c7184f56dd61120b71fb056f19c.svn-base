@@ -1,0 +1,124 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.IJxSysDao;
+import com.cetc28.idata.dao.IJxUtilityDao;
+import com.cetc28.idata.dto.JxUtilityStatisByMonth;
+import com.cetc28.idata.dto.JxUtilityStatisByYear;
+import com.cetc28.idata.model.Xzqh;
+import com.cetc28.idata.service.IJxUtilityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/14 10:12
+ * 描述信息：
+ *****************************************************************/
+@Service
+public class JxUtilityServiceImpl implements IJxUtilityService {
+    @Autowired
+    private IJxUtilityDao iJxUtilityDao;
+    @Autowired
+    private IJxSysDao iJxSysDao;
+
+    @Override
+    public JxUtilityStatisByMonth findLatestWaterSupplyByBh(String bH) {
+        return iJxUtilityDao.findLatestWaterSupplyByBh(bH);
+    }
+
+    @Override
+    public JxUtilityStatisByMonth findLatestWaterSupplyBySjbh(String sJBH){
+        return iJxUtilityDao.findLatestWaterSupplyBySjbh(sJBH);
+    }
+
+    @Override
+    public List<JxUtilityStatisByMonth> findWaterStsRateByBh(Integer monthSize, String bH) {
+        return iJxUtilityDao.findWaterStsRateByBh(monthSize,bH);
+    }
+
+    @Override
+    public List<JxUtilityStatisByMonth> findWaterStsRateBySjbh(Integer monthSize, String sJBH) {
+        return iJxUtilityDao.findWaterStsRateBySjbh(monthSize,sJBH);
+    }
+
+    @Override
+    public JxUtilityStatisByMonth findLatestDrainageByBh(String bH) {
+        return iJxUtilityDao.findLatestDrainageByBh(bH);
+    }
+
+    @Override
+    public JxUtilityStatisByMonth findLatestDrainageBySjbh(String sJBH) {
+        return iJxUtilityDao.findLatestDrainageBySjbh(sJBH);
+    }
+
+    @Override
+    public JxUtilityStatisByMonth findLatestElecSupByBh(String bH) {
+        return iJxUtilityDao.findLatestElecSupByBh(bH);
+    }
+
+    @Override
+    public List<JxUtilityStatisByMonth> findPowerLoadingRate(Integer monthSize, String bH) {
+        return iJxUtilityDao.findPowerLoadingRate(monthSize,bH);
+    }
+
+    @Override
+    public JxUtilityStatisByMonth findLatestGasSupByBh(String bH) {
+        return iJxUtilityDao.findLatestGasSupByBh(bH);
+    }
+
+    @Override
+    public List<JxUtilityStatisByMonth> findGasStsRateByBh(Integer monthSize, String bH){
+        return iJxUtilityDao.findGasStsRateByBh(monthSize,bH);
+    }
+
+    @Override
+    public JxUtilityStatisByMonth findLatestHeatSupByBh(String bH) {
+        return iJxUtilityDao.findLatestHeatSupByBh(bH);
+    }
+
+    @Override
+    public JxUtilityStatisByMonth findManteInfoByBh(String bH) {
+        JxUtilityStatisByMonth mainteInfo = iJxUtilityDao.findLatestAlarmNumAll();
+        mainteInfo.setNoFault(iJxUtilityDao.findLatestFaultNumAll().getNoFault());
+        return mainteInfo;
+    }
+
+    @Override
+    public List<JxUtilityStatisByYear> findUtilityNetInfoByBh(Integer yearSize, String bH) {
+        return iJxUtilityDao.findUtilityNetInfoByBh(yearSize,bH);
+    }
+
+    @Override
+    public List<JxUtilityStatisByYear> findUtilityPipeSurveilInfoByBh(Integer yearSize,String bH) {
+        return iJxUtilityDao.findUtilityPipeSurveilInfoByBh(yearSize,bH);
+    }
+
+    @Override
+    public  List<JxUtilityStatisByYear> findUtilityInternetByBh(Integer yearSize, String bH) {
+        return iJxUtilityDao.findUtilityInternetByBh(yearSize,bH);
+    }
+
+    @Override
+    public List<Map> findLatestUtilitySupplyByBh(String bH) {
+        List l = new ArrayList();
+        List<Xzqh> list = iJxSysDao.listJxXzqh(bH);
+        Iterator it = list.iterator();
+        //去除经开区数据
+        while (it.hasNext()) {
+            Xzqh xzqh = (Xzqh) it.next();
+            if(!xzqh.getBh().equals("003001008")){
+                JxUtilityStatisByMonth jUSBM = iJxUtilityDao.findLatestUtilitySupplyByBh(xzqh.getBh());
+                Map<String, Object> map1 = new HashMap<String, Object>();
+                map1.put("xzqh", xzqh);
+                map1.put("jxUtilityStatisByMonth", jUSBM);
+                l.add(map1);
+            }
+        }
+        return l;
+    }
+
+}

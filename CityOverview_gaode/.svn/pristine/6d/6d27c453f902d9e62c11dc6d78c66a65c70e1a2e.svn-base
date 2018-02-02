@@ -1,0 +1,21 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxSsServiceStatistics;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+public interface JxSsServiceStatisticsMapper {
+    int deleteByPrimaryKey(Short id);
+
+    int insert(JxSsServiceStatistics record);
+
+    int insertSelective(JxSsServiceStatistics record);
+
+    JxSsServiceStatistics selectByPrimaryKey(Short id);
+
+    int updateByPrimaryKeySelective(JxSsServiceStatistics record);
+
+    int updateByPrimaryKey(JxSsServiceStatistics record);
+
+    List<JxSsServiceStatistics> selectSsOnlineServiceInFiveY();
+}

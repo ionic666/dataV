@@ -1,0 +1,653 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../../map/js/jquery-1.11.3.js"></script>
+    <script src="../../myjs/echarts-all.js"></script>
+    <script src="../../myjs/myEcharts.js"></script>
+    <style>
+        html{
+            padding:0;
+            margin:0;
+            width:100%;
+            height:100%;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background: rgba(42,42,42,0.8);
+            position: relative;
+        }
+        .z-index{
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+        div,h2,h6,p{
+            margin: 0;
+        }
+        li{
+            list-style: none;
+        }
+        .floatLeft{
+            /*display: inline-block;*/
+            float: left;
+        }
+        p.headerTitle {
+            padding:0 3%;
+            font-size: 20px;
+            font-weight: bold;
+            color: #F2F2F2;
+            height: 12%;
+            width: auto;
+            display:inline-block;
+            line-height: 35px;
+            margin: 4px 4px;
+            background-color: #656565;
+        }
+        p.headerTitle2{
+            height: 6%;
+        }
+        div.hjxxgkl {
+            height: 85%;
+            width: 95%;
+        }
+        .header{
+            width: 100%;
+            height: 7%;
+            position: relative;
+            /*border: 1px solid red;*/
+        }
+        .main{
+            width: 100%;
+            height: 90%;
+            margin-top: 1%;
+            /*border: 1px solid blue;*/
+        }
+        .header>.log{
+            width: 33%;
+            height: 100%;
+        }
+        .header>.log>.logoLeft{
+            width: 30%;
+            height: 90%;
+            margin-right: 1%;
+        }
+        .header>.log>.logoRight{
+            width: 40%;
+            height: 100%;
+        }
+        .header>.log>.logoRight>img{
+            width: 100%;
+            height: 33%;
+            margin-top: 10px;
+        }
+        .header>.log>.logoRight>.time{
+            width: 100%;
+            height: 43%;
+            line-height: 30px;
+            text-align: center;
+            background: #0CDAF5;
+        }
+        #title{
+            width: 20%;
+            height: 130%;
+            position: absolute;
+            left: 40%;
+            top: 10%;
+            z-index: 200;
+            background-image: url(../../images/publicServe/zdpyc.png);background-size: 100%,100%;background-repeat: no-repeat;
+        }
+        #title>h1{
+            color: #00B050;
+            font-weight: bold;
+            text-align: center;
+            line-height: 100%;
+            margin-top: 10%;
+        }
+
+        /*主体内容*/
+        .main>.mainLeft,.main>.mainRight{
+            width: 25%;
+            height: 100%;
+        }
+        .main>.mainLeft>div,.main>.mainRight>.mainRight-top{
+            width: 100%;
+            height: 32%;
+            margin-top: 2%;
+            background: #303030;
+        }
+        .main>.mainRight>.mainRight-bottom{
+            width: 100%;
+            height: 66%;
+            margin-top: 1%;
+            background: #303030;
+        }
+        .main>.mainMiddle{
+            width: 50%;
+            height: 100%;
+        }
+        .main>.mainMiddle>.mainMiddle-top{
+            width: 100%;
+            height: 64%;
+            margin-top: 1%;
+        }
+
+
+    /*//动画*/
+        #donate_carousel{
+            height: 75%;
+            width: 95%;
+            overflow: hidden;
+        }
+        .donate_bar{
+            width: 98%;
+            margin-left: 2%;
+            padding: 0;
+            line-height: 25px;
+        }
+        .donate_bar tr{
+            width: 98%;
+            height: 25px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: table-row;
+            vertical-align: inherit;
+            /*border: 1px solid #ddd;*/
+        }
+        .donate_bar td{
+            width: 45%;
+            border-top: 1px solid #ddd;
+
+            /*padding: 8px;*/
+            line-height: 1.42857143;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .donate_bar p，.donate_bar h6{
+            /*text-decoration: none;*/
+            font-size: 14px;
+            /*color: #666;*/
+            margin: 0;
+            padding: 0;
+        }
+        .noticeInfo1{
+            border-left: 1px solid #ddd;
+        }
+        .noticeInfo2{
+            border-right: 1px solid #ddd;
+        }
+        .noticeInfo1>h6{
+            color: #892E64;
+            font-size: 1.1em;
+        }
+        .noticeInfo2>h6{
+            color: #fff;
+            font-size: 1.1em;
+        }
+        .noticeInfo1>p,.noticeInfo2>p{
+            color:#fff;
+            font-size: 0.8em;
+        }
+        .hospital{
+            color:#fff;
+            font-size: 0.9em;
+        }
+        #hospitalIndex{
+            width: 80%;
+            height: 75%;
+            margin-left: 5%;
+        }
+        #hospitalIndex tr{
+            height: 100%;
+        }
+        #hospitalIndex td{
+            height: 100%;
+            padding: 2%;
+        }
+        #hospitalIndex img,#hospitalIndex span{
+            height:90% ;
+            float: left;
+        }
+        #hospitalIndex span{
+            padding: 2%;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="z-index">
+    <!-- 头部logo主题 -->
+    <div class="header">
+        <div class="log floatLeft">
+            <img src="../../images/publicServe/logo.png"  class="logoLeft floatLeft" alt="">
+            <div class="logoRight floatLeft">
+                <img src="../../images/publicServe/logo2.png" class="floatLeft" alt="">
+                <div class="time floatLeft"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- 页面主体部分 -->
+    <div class="main">
+
+
+
+        <!-- 左侧三个模块 -->
+        <div class="mainLeft floatLeft">
+
+            <!-- 实时交易 -->
+            <div class="mainLeft-top">
+                <p class="headerTitle">实时交易</p>
+                <div class="ssjy">
+
+                </div>
+            </div>
+
+            <!-- 当日交易情况 -->
+            <div class="mainLeft-middle">
+                <p class="headerTitle">当日交易情况</p>
+                <div class="jyqk" id="jyqk" style="width: 95%;height: 75%;">
+
+                </div>
+            </div>
+
+            <!-- 通告信息 -->
+            <div class="mainLeft-bottom">
+                <p class="headerTitle">通告信息</p>
+                <div class="ptjs tgxx" id="donate_carousel">
+                    <table class="donate_bar table-bordered" cellpadding="0"cellspacing="0">
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 中间模块 -->
+        <div class="mainMiddle floatLeft">
+
+        </div>
+
+
+
+        <!-- 右侧三个模块 -->
+        <div class="mainRight floatLeft">
+            <!-- 交易类型 -->
+            <div class="mainRight-top">
+                <p class="headerTitle">交易类型</p>
+                <div id="jylx" style="width: 95%;height: 75%;"></div>
+            </div>
+
+            <!-- 医院排行 -->
+            <div class="mainRight-top">
+                <p class="headerTitle">医院排行</p>
+                <div id="yyph" style="width: 95%;height: 75%;">
+                    <table id="hospitalIndex">
+                        <tr><td><img src="../../images/sunHealthInsurance/transaction_6.png" alt=""/><span class="hospital"></span></td><td><img src="../../images/sunHealthInsurance/transaction_1.png" alt=""/></td></tr>
+                        <tr><td><img src="../../images/sunHealthInsurance/transaction_7.png" alt=""/><span class="hospital"></span></td><td><img src="../../images/sunHealthInsurance/transaction_2.png" alt=""/></td></tr>
+                        <tr><td><img src="../../images/sunHealthInsurance/transaction_8.png" alt=""/><span class="hospital"></span></td><td><img src="../../images/sunHealthInsurance/transaction_3.png" alt=""/></td></tr>
+                        <tr><td><img src="../../images/sunHealthInsurance/transaction_9.png" alt=""/><span class="hospital"></span></td><td><img src="../../images/sunHealthInsurance/transaction_4.png" alt=""/></td></tr>
+                        <tr><td><img src="../../images/sunHealthInsurance/transaction_10.png" alt=""/><span class="hospital"></span></td><td><img src="../../images/sunHealthInsurance/transaction_5.png" alt=""/></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <%--区域排行--%>
+            <div class="mainRight-top">
+                <p class="headerTitle">区域排行</p>
+                <div id="qyph" style="width: 95%;height: 75%;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+//    交易类型
+
+    function jylx(dayTransactionTypeData){
+        var myChart1=echarts.init(document.getElementById("jylx"));
+        var option1= {
+            color:['#70AD47','#245E92','#5B9BD5','#ED7D31','#A5A5A5','#FFC000','#4472C4'],
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            calculable : true,
+            series : [
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:true,
+                                textStyle:text_style,
+                                formatter:'{b}({d}%)'
+                            }
+                        }
+                    },
+                    data:dayTransactionTypeData
+                }
+            ]
+        };
+        myChart1.setOption(option1);
+    }
+
+
+//区域排行
+    function qyph(xArea,yRate){
+        var myChart2 = echarts.init(document.getElementById("qyph"));
+        var option2 = {
+            color: ['#125471'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            calculable: true,
+            grid: {
+                x: '10%',
+                y: '20%',
+                x2: '5%',
+                y2: '20%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    splitLine: {show: false},
+                    axisLine: {
+                        show: true,
+                        lineStyle:{
+                            color:'#6F6F63'
+                        }
+                    },
+                    axisTick: {show: false},
+                    axisLabel: {show: true,interval:0,rotate:0, textStyle: text_style},
+                    data: xArea
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    splitLine: {show: false},
+                    axisLine: {show: true,
+                        lineStyle:{
+                            color:'#6F6F63'
+                        }},
+                    axisTick: {show: false},
+                    axisLabel: {show: true,interval:0,rotate:0, textStyle: text_style}
+                }
+            ],
+            series: [
+                {
+                    name: '交易量（万元）',
+                    type: 'bar',
+                    barWidth: 15,
+                    barGap: '0',
+                    barCategoryGap:'37%',
+                    itemStyle:{
+                        normal: {
+                            label: {
+                                show: true,
+                                position: 'top',
+                                textStyle: text_style
+                            }
+                        }
+                    },
+                    data: yRate
+                }
+            ]
+        };
+        myChart2.setOption(option2);
+    }
+
+
+    //当日交易情况
+    function dayTransaction(hover,dayTransactionData) {
+        var myChart3 = echarts.init(document.getElementById("jyqk"));
+        var option3 = {
+            title: {
+                text: "交易量（千元）",
+                textStyle: text_style,
+                x: "right"
+            },
+            tooltip: {
+                trigger: "item",
+                formatter: "{a} <br/>{b} : {c}"
+            },
+            color: ['#0000FF'],
+            calculable: true,
+            grid: {
+                x: '5%',
+                y: '10%',
+                x2: '5%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    axisLine: {lineStyle: {color: '#6F6F63'}},
+                    axisTick: {show: false},
+                    axisLabel: {show: true,
+                                textStyle: text_style,
+                                interval: 1},
+                    splitLine: {show: false},
+                    data: hover
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    splitLine: {show: false},
+                    axisLine: {lineStyle: {color: '#6F6F63'}},
+                    axisTick: {show: false},
+                    axisLabel: {show: true,
+                                textStyle: text_style,
+                                interval: 1}
+                }
+            ],
+            series: [
+                {
+                    name: '当日交易情况（千元）',
+                    type: 'line',
+                    smooth: true,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: false
+                            },
+                            lineStyle:{
+                                shadowColor:'orange',
+                                shadowBlur: 35
+                            }
+                        }
+                    },
+                    data: dayTransactionData
+                }
+            ]
+        };
+        myChart3.setOption(option3);
+    }
+    $.ajax({
+        type:"POST",
+        url:'../../jxSocialSecurity/getMiVolumeStatisticsData.do',
+        dataType:'json',
+        success:function(data){
+            var MiVolumeStatisticsData = data.MiVolumeStatisticsData;
+            var transactionNum = MiVolumeStatisticsData.transactionNum,//当日交易笔数
+                    transactionAmount =MiVolumeStatisticsData.transactionAmount; //当日交易金额
+
+            var dayTransactionTypeData = [],//当日交易类型占比
+                    dayTransactionType = ['普通住院','连续转病住院','医疗挂号','门诊规定病','家庭病床','普通门诊','药店购药'];
+            var areaNum =[],areaName = [];//当日各区域交易量排行--区域编码，区域名称
+            var hover = [],//24小时
+                    dayTransactionData = [];//当日交易情况
+            for(var i=0;i<24;i++){
+                hover.push(i);
+            };
+
+            //通告信息
+            $.each(MiVolumeStatisticsData.dayNoticeInfoData,function(i){
+                var transactionType =MiVolumeStatisticsData.dayNoticeInfoData[i].transactionType,//就医类型
+                        transactionTime =(MiVolumeStatisticsData.dayNoticeInfoData[i].transactionTime).substring(11,19),//时间
+                        insuredPerson =(MiVolumeStatisticsData.dayNoticeInfoData[i].insuredPerson).substring(0,1),//患者
+                        nameLenth = MiVolumeStatisticsData.dayNoticeInfoData[i].insuredPerson.length,
+                        transactionAmount =MiVolumeStatisticsData.dayNoticeInfoData[i].transactionAmount;//总金额
+                var span ="<span class='star'></span>";
+
+                $(".donate_bar").append('<tr> <td class="noticeInfo1"><h6>'+transactionType+'</h6><p>参保人：<span>'+insuredPerson+'</span>'+span+'</p></td> <td class="noticeInfo2"><h6>'+transactionTime+'</h6><p><span>总金额:</span>'+transactionAmount+'</p></td> </tr>')
+//                console.log(transactionType+transactionTime+insuredPerson+transactionAmount);
+                for(var z = 0;z<nameLenth-1;z++){
+                    $(".star").eq(i).append("*");
+                }
+            });
+
+            //
+            $.each(MiVolumeStatisticsData.dayTransactionData,function(i){
+                dayTransactionData.push(MiVolumeStatisticsData.dayTransactionData[i]);
+            });
+
+            //医院排行
+            $.each(MiVolumeStatisticsData.dayTransactionHospitalRank,function(i){
+                $(".hospital").eq(i).text(MiVolumeStatisticsData.dayTransactionHospitalRank[i].hospitalName);
+            });
+
+            //交易类型
+            $.each(MiVolumeStatisticsData.dayTransactionTypeData,function(i){
+                dayTransactionTypeData.push({value:MiVolumeStatisticsData.dayTransactionTypeData[i], name:dayTransactionType[i]});
+
+            });
+
+            //交易排行
+            var len=MiVolumeStatisticsData.dayTransactionRankByRegion.length;
+            for(var i=0;i<len;i++){
+                for(var k in MiVolumeStatisticsData.dayTransactionRankByRegion[i]){
+//                    console.log(k);
+                    if(k == "003001001"){
+                        areaNum.push('南湖区');
+                    }else if(k == "003001002"){
+                        areaNum.push('秀洲区');
+                    }else if(k == "003001003"){
+                        areaNum.push('海宁市');
+                    }else if(k == "003001004"){
+                        areaNum.push('平湖市');
+                    }else if(k == "003001005"){
+                        areaNum.push('桐乡市');
+                    }else if(k == "003001006"){
+                        areaNum.push('嘉善县');
+                    }else if(k == "003001007"){
+                        areaNum.push('海盐县');
+                    }
+                    areaName.push(MiVolumeStatisticsData.dayTransactionRankByRegion[i][k]);
+//                    console.log();
+                }
+            }
+            qyph(areaNum,areaName);//图表2--交易排行
+            jylx(dayTransactionTypeData);//图表1--交易类型
+            dayTransaction(hover,dayTransactionData);//图表3--当日交易情况
+        }
+    });
+</script>
+<script>
+    $.fn.extend({
+        Scroll: function(opt,callback){
+            if(!opt) var opt ={};
+            var _this = this.eq(0).find("table:first");
+            var lineH =_this.find("li:first").height(),//获取行高
+                    line = opt.line ? parseInt(opt.line, 10) : parseInt(this.height()/lineH, 10),//每次滚动的行数，默认为一屏，即父容器的高度
+                    speed = opt.speed ? parseInt(opt.speed, 10) : 500,//卷动速度，数值越大，速度越慢（毫秒）
+                    timer = opt.timer ? parseInt(opt.timer, 10) : 3000;//滚动时间间隔（毫秒）
+
+            if(line == 0) line = 1;
+            var upHeight = 0 - line*lineH;
+            //滚动函数
+            scrollUp = function(){
+                _this.animate({
+                    marginTop:upHeight
+                },speed,function(){
+                    for(i = 1;i <=line;i++){
+                        _this.find("tr:first").appendTo(_this);
+
+                    }
+                    _this.css({
+                        marginTop:0
+                    });
+                });
+            }
+            //S鼠标绑定事件
+            _this.hover(function(){
+                clearInterval(timerID);
+            },function(){
+                timerID =setInterval("scrollUp()",timer);
+            }).mouseout();
+        }
+    });
+    $(function(){
+        $("#donate_carousel").Scroll({
+            line:1,
+            speed:500,
+            timer:2000
+        });
+    });
+</script>
+<script>
+    $(function(){
+        var timer={
+            date:"",
+            timeAjax:function(){
+                var me=this;
+                $.ajax({
+                    url:'../../jxsys/getCurrentTime.do',
+                    type:'POST',
+                    dataType:'json',
+                    success:function(date) {
+                        me.date=date;
+                        me.showCurDate();
+                    }
+                });
+                return this
+            },
+            showCurDate:function(){
+                var me=this;
+                function changeNumber(num){
+                    if(num<10){
+                        return '0'+num;
+                    }else{
+                        return ''+num;
+                    }
+                }
+                setInterval(function(){
+                    var T=new Date(me.date)
+                    newDate = changeNumber(T.getFullYear())+"年"+
+                    changeNumber((parseInt(T.getMonth())+1))+"月"+
+                    changeNumber(T.getDate())+"日  "+
+                    changeNumber(T.getHours())+":"+
+                    changeNumber(T.getMinutes())+":"+
+                    changeNumber(T.getSeconds())+""
+                    me.date+=1000;
+                    $(".time").html(newDate)
+                },1000)
+                return this
+            }
+        }
+        timer.timeAjax();
+    })
+</script>
+</body>
+</html>

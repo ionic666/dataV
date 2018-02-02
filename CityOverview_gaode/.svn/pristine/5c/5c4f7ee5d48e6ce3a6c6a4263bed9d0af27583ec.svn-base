@@ -1,0 +1,16 @@
+package com.cetc28.idata.service;
+
+import com.cetc28.idata.dto.SchoolInfoDto;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/10/23.
+ */
+public interface ISerchNameService {
+    List querySchoolName(String name);
+
+    void update();
+}

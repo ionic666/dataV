@@ -1,0 +1,830 @@
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：wangxw
+ * 创建日期：2017/9/12 14:16
+ * 描述信息：社会保障专题展示
+ * ***************************************************************
+ */
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.dto.*;
+import com.cetc28.idata.model.*;
+import com.cetc28.idata.service.JxSocialSecurityService;
+import com.cetc28.util.DynamicSetterAndGetter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+
+@Controller
+@RequestMapping("/jxSocialSecurity")
+public class JxSocialSecurityController {
+
+    @Autowired
+    private JxSocialSecurityService jxSocialSecurityService;
+    /**
+     * 获取社保服务在线办理情况近5年数据
+     * @param
+     * @return
+     */
+    @RequestMapping("getSsOnlineServiceInFiveY.do")
+    @ResponseBody
+    public Map<String,Object> getSsOnlineServiceInFiveY(){
+        Map<String,Object> map = new HashMap<String, Object>();
+        List<JxSsServiceStatistics> jxSsServiceStatisticsList = jxSocialSecurityService.getSsOnlineServiceInFiveY();
+        List<Short> xAxisYear = new ArrayList<Short>();
+        List<Double> onlineServiceData = new ArrayList<Double>();
+        List<Double> selfServiceData = new ArrayList<Double>();
+        List<Double> appServiceData = new ArrayList<Double>();
+        List<Double> messageServiceData = new ArrayList<Double>();
+        for(JxSsServiceStatistics jxSsServiceStatistics:jxSsServiceStatisticsList){
+            xAxisYear.add(jxSsServiceStatistics.getYear());
+            onlineServiceData.add(jxSsServiceStatistics.getOnlineService());
+            selfServiceData.add(jxSsServiceStatistics.getSelfServiceAioMachine());
+            appServiceData.add(jxSsServiceStatistics.getMobileAppService());
+            messageServiceData.add(jxSsServiceStatistics.getPhoneMessageService());
+        }
+        map.put("xAxisYear", xAxisYear);
+        map.put("onlineServiceData", onlineServiceData);
+        map.put("selfServiceData", selfServiceData);
+        map.put("appServiceData", appServiceData);
+        map.put("messageServiceData", messageServiceData);
+        return map;
+    }
+
+    /**
+     * 获取社保自助服务开通率近5年数据
+     * @param
+     * @return
+     */
+    @RequestMapping("getSsSelfServiceInFiveY.do")
+    @ResponseBody
+    public Map<String,Object> getSsSelfServiceInFiveY(){
+        Map<String,Object> map = new HashMap<String, Object>();
+        List<JxSsServiceStatistics> jxSsServiceStatisticsList = jxSocialSecurityService.getSsOnlineServiceInFiveY();
+        List<Short> xAxisYear = new ArrayList<Short>();
+        List<Float> selfServiceTakeRate = new ArrayList<Float>();
+        for(JxSsServiceStatistics jxSsServiceStatistics:jxSsServiceStatisticsList){
+            xAxisYear.add(jxSsServiceStatistics.getYear());
+            float takeRate = (float)Math.round(jxSsServiceStatistics.getSelfServiceTakeRate()*10000)/100;
+            selfServiceTakeRate.add(takeRate);
+        }
+        map.put("xAxisYear", xAxisYear);
+        map.put("selfServiceTakeRate", selfServiceTakeRate);
+        return map;
+    }
+
+    /**
+     * 获取社保异地业务联网办理情况近5年的数据
+     * @param
+     * @return
+     */
+    @RequestMapping("getSsRemoteServiceInFiveY.do")
+    @ResponseBody
+    public Map<String,Object> getSsRemoteServiceInFiveY(){
+        Map<String,Object> map = new HashMap<String, Object>();
+        List<JxSsServiceStatistics> jxSsServiceStatisticsList = jxSocialSecurityService.getSsOnlineServiceInFiveY();
+        List<Short> xAxisYear = new ArrayList<Short>();
+        List<Double> relationTransferData = new ArrayList<Double>();
+        List<Double> benefitsQaData = new ArrayList<Double>();
+        List<Double> medicalSettlementData = new ArrayList<Double>();
+        List<Double> piBenefitsComparisonData = new ArrayList<Double>();
+        for(JxSsServiceStatistics jxSsServiceStatistics:jxSsServiceStatisticsList){
+            xAxisYear.add(jxSsServiceStatistics.getYear());
+            relationTransferData.add(jxSsServiceStatistics.getRemoteSsRelationTarnsfer());
+            benefitsQaData.add(jxSsServiceStatistics.getRemoteSsBenefitsQa());
+            medicalSettlementData.add(jxSsServiceStatistics.getRemoteMedicalSettlement());
+            piBenefitsComparisonData.add(jxSsServiceStatistics.getPiBenefitsComparison());
+        }
+        map.put("xAxisYear", xAxisYear);
+        map.put("relationTransferData", relationTransferData);
+        map.put("benefitsQaData", benefitsQaData);
+        map.put("medicalSettlementData", medicalSettlementData);
+        map.put("piBenefitsComparisonData", piBenefitsComparisonData);
+        return map;
+    }
+
+    /**
+     * 获取嘉兴市市民卡持卡人群最近一年的统计数据
+     * @param
+     * @return
+     */
+    @RequestMapping("getSsCardHolderLatestY.do")
+    @ResponseBody
+    public Map<String,Object> getSsCardHolderLatestY(){
+        Map<String,Object> map = new HashMap<String, Object>();
+        JxSsCardStatistics jxSsCardStatistics = jxSocialSecurityService.getSsCardHolderLatestY(1);
+        Double cardHolderSum = jxSsCardStatistics.getCardHolderSum();
+        map.put("xAxisYear", jxSsCardStatistics.getYear());
+        map.put("cardHolderSum", cardHolderSum);
+        map.put("insuredSum", jxSsCardStatistics.getInsuredSum());
+        JxSsCardStatistics jxSsCardStatistics_lastY = jxSocialSecurityService.getSsCardHolderLatestY(2);
+        Double cardHolderSum_lastY = jxSsCardStatistics_lastY.getCardHolderSum();
+        map.put("growPercent", (cardHolderSum-cardHolderSum_lastY)/cardHolderSum);
+        return map;
+    }
+
+    /**
+     * 获取嘉兴市企业参保情况近3年的数据
+     * @param
+     * @return
+     */
+    @RequestMapping("getSsCorporationInThreeY.do")
+    @ResponseBody
+    public Map<String,Object> getSsCorporationInThreeY(){
+        Map<String,Object> map = new HashMap<String, Object>();
+        List<JxSsCorpStatistics> jxSsCorpStatisticsList = jxSocialSecurityService.getSsCorporationInThreeY();
+        List<Short> xAxisYear = new ArrayList<Short>();
+        List<Double> corpInsuredSumData = new ArrayList<Double>();
+        List<Double> averageInsuredAgeData = new ArrayList<Double>();
+        for(JxSsCorpStatistics jxSsCorpStatistics:jxSsCorpStatisticsList){
+            xAxisYear.add(jxSsCorpStatistics.getYear());
+            corpInsuredSumData.add(jxSsCorpStatistics.getCorpInsuredSum());
+            averageInsuredAgeData.add(jxSsCorpStatistics.getAverageInsuredAge());
+        }
+        map.put("xAxisYear", xAxisYear);
+        map.put("corpInsuredSumData", corpInsuredSumData);
+        map.put("averageInsuredAgeData", averageInsuredAgeData);
+        return map;
+    }
+
+    /**
+     * 获取社保覆盖情况最近一年的统计数据
+     * @param
+     * @return
+     */
+    @RequestMapping("getSsSafeguardRateLatestY.do")
+    @ResponseBody
+    public Map<String,Object> getSsSafeguardRateLatestY(){
+        Map<String,Object> map = new HashMap<String, Object>();
+        JxSsStatistics jxSsStatistics = jxSocialSecurityService.getSsSafeguardRateLatestY();
+        List<Double> coverRateData = new ArrayList<Double>();
+        coverRateData.add(jxSsStatistics.getPiSafeguardRate()*100);
+        coverRateData.add(jxSsStatistics.getMiSafeguardRate()*100);
+        coverRateData.add(jxSsStatistics.getOiiSafeguardRate()*100);
+        coverRateData.add(jxSsStatistics.getBiSafeguardRate()*100);
+        coverRateData.add(jxSsStatistics.getUiSafeguardRate()*100);
+        map.put("xAxisYear", jxSsStatistics.getYear());
+        map.put("coverRateData", coverRateData);
+        return map;
+    }
+
+    /**
+     * 获取市民持卡人员统计分析数据
+     * @param
+     * @return
+     */
+    @RequestMapping("getCardHolderAnalysisData.do")
+    @ResponseBody
+    public Map<String,Object> getCardHolderAnalysisData(){
+        Map<String,Object> map = new HashMap<String, Object>();
+        JxSsCardStatistics jxSsCardStatistics = jxSocialSecurityService.getSsCardHolderLatestY(1);
+        map.put("latestYear", jxSsCardStatistics.getYear());
+        double cardHolderSum = jxSsCardStatistics.getCardHolderSum();
+        map.put("cardHolderSum", cardHolderSum);
+        map.put("insuredSum", jxSsCardStatistics.getInsuredSum());
+        map.put("nativeInsuredSum",jxSsCardStatistics.getNativeInsuredSum());
+        map.put("ruralInsuredSum",jxSsCardStatistics.getRuralInsuredSum());
+        map.put("chMaleSum",jxSsCardStatistics.getChMaleSum());
+        map.put("chFemaleSum",cardHolderSum-jxSsCardStatistics.getChMaleSum());
+        //持卡人年龄分布（0~18,18~30,30~50,50~65,65+）
+        List<Double> chAgeMaleData = new ArrayList<Double>();
+        chAgeMaleData.add((double)Math.round((jxSsCardStatistics.getChAge018SumM()/cardHolderSum)*10000)/100);
+        chAgeMaleData.add((double)Math.round((jxSsCardStatistics.getChAge1830SumM()/cardHolderSum)*10000)/100);
+        chAgeMaleData.add((double)Math.round((jxSsCardStatistics.getChAge3050SumM()/cardHolderSum)*10000)/100);
+        chAgeMaleData.add((double)Math.round((jxSsCardStatistics.getChAge5065SumM()/cardHolderSum)*10000)/100);
+        chAgeMaleData.add((double)Math.round((jxSsCardStatistics.getChAge65UpSumM()/cardHolderSum)*10000)/100);
+        map.put("chAgeMaleData",chAgeMaleData);
+        List<Double> chAgeFemaleData = new ArrayList<Double>();
+        chAgeFemaleData.add((double)Math.round((jxSsCardStatistics.getChAge018SumF()/cardHolderSum)*10000)/100);
+        chAgeFemaleData.add((double)Math.round((jxSsCardStatistics.getChAge1830SumF()/cardHolderSum)*10000)/100);
+        chAgeFemaleData.add((double)Math.round((jxSsCardStatistics.getChAge3050SumF()/cardHolderSum)*10000)/100);
+        chAgeFemaleData.add((double)Math.round((jxSsCardStatistics.getChAge5065SumF()/cardHolderSum)*10000)/100);
+        chAgeFemaleData.add((double)Math.round((jxSsCardStatistics.getChAge65UpSumF()/cardHolderSum)*10000)/100);
+        map.put("chAgeFemaleData",chAgeFemaleData);
+        //持卡人学历分布(博士研究生，硕士研究生，本科，专科，高中，初中，小学，其他)
+        List<Double> educationData = new ArrayList<Double>();
+        educationData.add(jxSsCardStatistics.getChDoctorSum());
+        educationData.add(jxSsCardStatistics.getChMasterSum());
+        educationData.add(jxSsCardStatistics.getChBachelorSum());
+        educationData.add(jxSsCardStatistics.getChTechnicalSum());
+        educationData.add(jxSsCardStatistics.getChSeniorSum());
+        educationData.add(jxSsCardStatistics.getChJuniorSum());
+        educationData.add(jxSsCardStatistics.getChElementarySum());
+        educationData.add(jxSsCardStatistics.getChOtherSum());
+        map.put("educationData",educationData);
+        //持卡民族排行前十名称
+        List<String> nationalityRankNameList = new ArrayList<String>();
+        for(int i=1;i<=10;i++){
+            String field="chNationalityRank"+i+"Name";
+            String nameValue = (String) DynamicSetterAndGetter.get(jxSsCardStatistics, field);
+            nationalityRankNameList.add(nameValue);
+        }
+        map.put("nationalityRankNameList",nationalityRankNameList);
+        //持卡民族排行前十统计数据，与名称对应
+        List<Double> nationalityRankData = new ArrayList<Double>();
+        for(int j=1;j<=10;j++){
+            String field="chNationalityRank"+j;
+            Double rankValue = (Double) DynamicSetterAndGetter.get(jxSsCardStatistics, field);
+            nationalityRankData.add(rankValue);
+        }
+        map.put("nationalityRankData",nationalityRankData);
+        //获取近5年市民卡持卡人数走势
+        List<JxSsCardStatistics> jxSsCardStatisticsList = jxSocialSecurityService.getSsCardStatisticsInFiveY();
+        List<Short> xAxisYear = new ArrayList<Short>();
+        List<Double> cardHolderSumData = new ArrayList<Double>();
+        for(JxSsCardStatistics jxSsCardStatistics1:jxSsCardStatisticsList){
+            xAxisYear.add(jxSsCardStatistics1.getYear());
+            cardHolderSumData.add(jxSsCardStatistics1.getCardHolderSum());
+        }
+        map.put("xAxisYear",xAxisYear);
+        map.put("cardHolderSumData",cardHolderSumData);
+        return map;
+    }
+
+    /**
+     * 获取企业情况统计分析数据
+     * @param regionCode 行政区划
+     * @param legalPersonType 法人类型
+     * @param businessType 经营类型
+     * @return
+     */
+    @RequestMapping("getCorpStatisticsData.do")
+    @ResponseBody
+    public Map<String,Object> getCorpStatisticsData(@RequestParam("regionCode") String regionCode,@RequestParam("legalPersonType") String legalPersonType,@RequestParam("businessType") String businessType){
+        Map<String,Object> map = new HashMap<String, Object>();
+        JxSsCorpStatistics jxSsCorpStatistics = jxSocialSecurityService.getSsCorporationInLatestY(regionCode,legalPersonType,businessType);
+        map.put("corpSum",jxSsCorpStatistics.getCorpSum());
+        List<JxSsCorpStatistics> jxSsCorpStatisticsList = jxSocialSecurityService.getSsCorporationInFiveY(regionCode,legalPersonType,businessType,5);
+        List<Short> xAxisYear = new ArrayList<Short>();
+        List<Double> corpInsuredSumData = new ArrayList<Double>();
+        List<Double> averageInsuredAmountData = new ArrayList<Double>();
+        List<Double> averageInsuredAgeData = new ArrayList<Double>();
+        List<Double> insuredDoctorSumData = new ArrayList<Double>();
+        List<Double> insuredMasterSumData = new ArrayList<Double>();
+        List<Double> insuredBachelorSumData = new ArrayList<Double>();
+        List<Double> insuredTechnicalSumData = new ArrayList<Double>();
+        List<Double> insuredSeniorSumData = new ArrayList<Double>();
+        List<Double> insuredJuniorSumData = new ArrayList<Double>();
+        List<Double> insuredElementarySumData = new ArrayList<Double>();
+        List<Double> insuredOtherSumData = new ArrayList<Double>();
+        for(JxSsCorpStatistics jxSsCorpStatistics1:jxSsCorpStatisticsList){
+            xAxisYear.add(jxSsCorpStatistics1.getYear());
+            corpInsuredSumData.add(jxSsCorpStatistics1.getCorpInsuredSum());
+            averageInsuredAmountData.add(jxSsCorpStatistics1.getAverageInsuredAmount());
+            averageInsuredAgeData.add(jxSsCorpStatistics1.getAverageInsuredAge());
+            insuredDoctorSumData.add(jxSsCorpStatistics1.getInsuredDoctorSum());
+            insuredMasterSumData.add(jxSsCorpStatistics1.getInsuredMasterSum());
+            insuredBachelorSumData.add(jxSsCorpStatistics1.getInsuredBachelorSum());
+            insuredTechnicalSumData.add(jxSsCorpStatistics1.getInsuredTechnicalSum());
+            insuredSeniorSumData.add(jxSsCorpStatistics1.getInsuredSeniorSum());
+            insuredJuniorSumData.add(jxSsCorpStatistics1.getInsuredJuniorSum());
+            insuredElementarySumData.add(jxSsCorpStatistics1.getInsuredElementarySum());
+            insuredOtherSumData.add(jxSsCorpStatistics1.getInsuredOtherSum());
+        }
+        map.put("xAxisYear",xAxisYear);
+        map.put("corpInsuredSumData",corpInsuredSumData);
+        map.put("averageInsuredAmountData",averageInsuredAmountData);
+        map.put("averageInsuredAgeData",averageInsuredAgeData);
+        map.put("insuredDoctorSumData",insuredDoctorSumData);
+        map.put("insuredMasterSumData",insuredMasterSumData);
+        map.put("insuredBachelorSumData",insuredBachelorSumData);
+        map.put("insuredTechnicalSumData",insuredTechnicalSumData);
+        map.put("insuredSeniorSumData",insuredSeniorSumData);
+        map.put("insuredJuniorSumData",insuredJuniorSumData);
+        map.put("insuredElementarySumData",insuredElementarySumData);
+        map.put("insuredOtherSumData",insuredOtherSumData);
+        List<JxSsCorpStatistics> jxSsCorpStatisticsList1 = jxSocialSecurityService.getSsCorporationInFiveY(regionCode,legalPersonType,businessType,6);
+        List<Object> corpInsuredSumData1 = new ArrayList<Object>();
+        List<Object> averageInsuredAmountData1 = new ArrayList<Object>();
+        for(JxSsCorpStatistics jxSsCorpStatistics1:jxSsCorpStatisticsList1){
+            corpInsuredSumData1.add(jxSsCorpStatistics1.getCorpInsuredSum());
+            averageInsuredAmountData1.add(jxSsCorpStatistics1.getAverageInsuredAmount());
+        }
+        List<Double> corpInsuredSumGrowPercent =jxSocialSecurityService.computeGrowPercent(corpInsuredSumData1);
+        List<Double> averageInsuredGrowPercent = jxSocialSecurityService.computeGrowPercent(averageInsuredAmountData1);
+        map.put("corpInsuredSumGrowPercent",corpInsuredSumGrowPercent);
+        map.put("averageInsuredGrowPercent",averageInsuredGrowPercent);
+        return map;
+    }
+
+    /**
+     * 获取企业监测统计数据
+     * @param regionCode 行政区划
+     * @param corpName 企业名称
+     * @return
+     */
+    @RequestMapping("getCorpAnalysisData.do")
+    @ResponseBody
+    public Map<String,Object> getCorpAnalysisData(@RequestParam("regionCode") String regionCode,@RequestParam("corpName") String corpName) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        JxSsCorpAnalysis jxSsCorpAnalysis = jxSocialSecurityService.getSsCorpAnalysisLatestY(regionCode,corpName);
+        if(jxSsCorpAnalysis==null){
+            map.put("searchResult",0);
+            return map;
+        }else{
+            map.put("searchResult",1);
+        }
+        map.put("employeeSum",jxSsCorpAnalysis.getEmployeeSum());
+        map.put("insuredSum",jxSsCorpAnalysis.getInsuredSum());
+        map.put("legalPersonType",jxSsCorpAnalysis.getLegalPersonType());
+        map.put("businessType",jxSsCorpAnalysis.getBusinessType());
+        map.put("businessRange",jxSsCorpAnalysis.getBusinessRange());
+        //学历结构(博士研究生，硕士研究生，本科，专科，高中，初中，小学，其他)
+        List<Short> educationData = new ArrayList<Short>();
+        educationData.add(jxSsCorpAnalysis.getInsuredDoctorSum());
+        educationData.add(jxSsCorpAnalysis.getInsuredMasterSum());
+        educationData.add(jxSsCorpAnalysis.getInsuredBachelorSum());
+        educationData.add(jxSsCorpAnalysis.getInsuredTechnicalSum());
+        educationData.add(jxSsCorpAnalysis.getInsuredSeniorSum());
+        educationData.add(jxSsCorpAnalysis.getInsuredJuniorSum());
+        educationData.add(jxSsCorpAnalysis.getInsuredElementarySum());
+        educationData.add(jxSsCorpAnalysis.getInsuredOtherSum());
+        map.put("educationData",educationData);
+        List<JxSsCorpAnalysis> jxSsCorpAnalysisList = jxSocialSecurityService.getSsCorpAnalysisInFiveY(regionCode,corpName,5);
+        List<Short> xAxisYear = new ArrayList<Short>();
+        List<Short> corpInsuredSumData = new ArrayList<Short>();
+        List<Double> averageInsuredAgeData = new ArrayList<Double>();
+        List<Double> averageInsuredAmountData = new ArrayList<Double>();
+        for(JxSsCorpAnalysis jxSsCorpAnalysis1:jxSsCorpAnalysisList){
+            xAxisYear.add(jxSsCorpAnalysis1.getYear());
+            corpInsuredSumData.add(jxSsCorpAnalysis1.getInsuredSum());
+            averageInsuredAgeData.add(jxSsCorpAnalysis1.getAverageInsuredAge());
+            averageInsuredAmountData.add(jxSsCorpAnalysis1.getAverageInsuredAmount());
+        }
+        map.put("xAxisYear",xAxisYear);
+        map.put("corpInsuredSumData",corpInsuredSumData);
+        map.put("averageInsuredAgeData",averageInsuredAgeData);
+        map.put("averageInsuredAmountData",averageInsuredAmountData);
+        List<Object> corpInsuredSumData1 = new ArrayList<Object>();
+        List<Object> averageInsuredAmountData1 = new ArrayList<Object>();
+        List<JxSsCorpAnalysis> jxSsCorpAnalysisList1 = jxSocialSecurityService.getSsCorpAnalysisInFiveY(regionCode,corpName,6);
+        for(JxSsCorpAnalysis jxSsCorpAnalysis1:jxSsCorpAnalysisList1){
+            corpInsuredSumData1.add(jxSsCorpAnalysis1.getInsuredSum());
+            averageInsuredAmountData1.add(jxSsCorpAnalysis1.getAverageInsuredAmount());
+        }
+        List<Double> corpInsuredSumGrowPercent =jxSocialSecurityService.computeGrowPercent(corpInsuredSumData1);
+        List<Double> averageInsuredGrowPercent = jxSocialSecurityService.computeGrowPercent(averageInsuredAmountData1);
+        map.put("corpInsuredSumGrowPercent",corpInsuredSumGrowPercent);
+        map.put("averageInsuredGrowPercent",averageInsuredGrowPercent);
+        //最近五年的处罚情况统计
+        List<CorpPenaltyCountDto> corpPenaltyCountDtoList = jxSocialSecurityService.getSsCorpPenaltyCountInFiveY(regionCode,corpName);
+        map.put("corpPenaltyCountDtoList",corpPenaltyCountDtoList);
+        //最近的三次处罚明细
+        List<JxSsCorpPenaltyInfo> jxSsCorpPenaltyInfoList = jxSocialSecurityService.getSsCorpPenaltyLatestThree(regionCode,corpName);
+        map.put("jxSsCorpPenaltyInfoList",jxSsCorpPenaltyInfoList);
+        return map;
+    }
+
+    /**
+     * 获取地图标签所需企业检测统计数据
+     * @param regionCode 行政区划
+     * @return
+     */
+    @RequestMapping("getCorpAnalysisTooltipData.do")
+    @ResponseBody
+    public Map<String,Object> getCorpAnalysisTooltipData(@RequestParam("regionCode") String regionCode) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<JxSsCorpAnalysis> jxSsCorpAnalysisList = jxSocialSecurityService.getCorpAnalysisTooltipLatestY(regionCode);
+        List<CorpAnalysisTooltipDto> corpAnalysisTooltipDtoList = new ArrayList<CorpAnalysisTooltipDto>();
+        for(JxSsCorpAnalysis jxSsCorpAnalysis:jxSsCorpAnalysisList){
+            CorpAnalysisTooltipDto corpAnalysisTooltipDto = new CorpAnalysisTooltipDto();
+            corpAnalysisTooltipDto.setCorpName(jxSsCorpAnalysis.getCorpName());
+            corpAnalysisTooltipDto.setEmployeeSum(jxSsCorpAnalysis.getEmployeeSum());
+            corpAnalysisTooltipDto.setInsuredSum(jxSsCorpAnalysis.getInsuredSum());
+            corpAnalysisTooltipDto.setLongitude(jxSsCorpAnalysis.getLongitude());
+            corpAnalysisTooltipDto.setLatitude(jxSsCorpAnalysis.getLatitude());
+            corpAnalysisTooltipDto.setYear(jxSsCorpAnalysis.getYear());
+            List<Short> educationData = new ArrayList<Short>();
+            educationData.add(jxSsCorpAnalysis.getInsuredDoctorSum());
+            educationData.add(jxSsCorpAnalysis.getInsuredMasterSum());
+            educationData.add(jxSsCorpAnalysis.getInsuredBachelorSum());
+            educationData.add(jxSsCorpAnalysis.getInsuredTechnicalSum());
+            educationData.add(jxSsCorpAnalysis.getInsuredSeniorSum());
+            educationData.add(jxSsCorpAnalysis.getInsuredJuniorSum());
+            educationData.add(jxSsCorpAnalysis.getInsuredElementarySum());
+            educationData.add(jxSsCorpAnalysis.getInsuredOtherSum());
+            corpAnalysisTooltipDto.setEducationData(educationData);
+            corpAnalysisTooltipDto.setLegalPersonType(jxSsCorpAnalysis.getLegalPersonType());
+            corpAnalysisTooltipDto.setBusinessType(jxSsCorpAnalysis.getBusinessType());
+            corpAnalysisTooltipDto.setBusinessRange(jxSsCorpAnalysis.getBusinessRange());
+            corpAnalysisTooltipDtoList.add(corpAnalysisTooltipDto);
+        }
+        map.put("corpAnalysisTooltipDtoList",corpAnalysisTooltipDtoList);
+        return map;
+    }
+
+    /**
+     * 获取地图标签所需市民卡持卡人员分析数据
+     * @param regionCode 行政区划
+     * @return
+     */
+    @RequestMapping("getCardStatisticsTooltipData.do")
+    @ResponseBody
+    public Map<String,Object> getCardStatisticsTooltipData(@RequestParam("regionCode") String regionCode) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<CardStatisticsTooltipDto> cardStatisticsTooltipDtoList = jxSocialSecurityService.getCardStatisticsTooltipLatestY(regionCode);
+        for(CardStatisticsTooltipDto cardStatisticsTooltipDto:cardStatisticsTooltipDtoList){
+            float takeRate = (float)Math.round((cardStatisticsTooltipDto.getCardHolderSum()/cardStatisticsTooltipDto.getInsuredSum())*10000)/100;
+            cardStatisticsTooltipDto.setInsuredPercent(takeRate);
+        }
+        map.put("cardStatisticsTooltipDtoList",cardStatisticsTooltipDtoList);
+        return map;
+    }
+
+    /**
+     * 获取医保当日统计数据
+     * @param
+     * @return
+     */
+    @RequestMapping("getMiVolumeStatisticsData.do")
+    @ResponseBody
+    public Map<String,Object> getMiVolumeStatisticsData() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        MiVolumeStatisticsDto miVolumeStatisticsDto = new MiVolumeStatisticsDto();
+        JxSsMiVolumeStatistics jxSsMiVolumeStatistics = jxSocialSecurityService.getSsMiVolumeStatisticsLatestDay();
+        miVolumeStatisticsDto.setTransactionNum(jxSsMiVolumeStatistics.getTransactionNum());
+        miVolumeStatisticsDto.setTransactionAmount(jxSsMiVolumeStatistics.getTransactionAmount());
+        //当日交易情况(0~23,共24个时间点的交易量)
+        List<Double> dayTransactionData = new ArrayList<Double>();
+        for(int i=0;i<24;i++){
+            String field="time"+i+"Volume";
+            Double timeValue = (Double) DynamicSetterAndGetter.get(jxSsMiVolumeStatistics, field);
+            dayTransactionData.add(timeValue);
+        }
+        miVolumeStatisticsDto.setDayTransactionData(dayTransactionData);
+        //当日交易类型占比（普通住院，连续转病住院，医疗挂号，门诊规定病，家庭病床，普通门诊，药店购药）
+        List<Short> dayTransactionTypeData = new ArrayList<Short>();
+        dayTransactionTypeData.add(jxSsMiVolumeStatistics.getNormalInHospitalVolume());
+        dayTransactionTypeData.add(jxSsMiVolumeStatistics.getContinuneInHospitalVolume());
+        dayTransactionTypeData.add(jxSsMiVolumeStatistics.getHospitalRegisterVolume());
+        dayTransactionTypeData.add(jxSsMiVolumeStatistics.getOutpatientDiseaseVolume());
+        dayTransactionTypeData.add(jxSsMiVolumeStatistics.getFamilySickbedVolume());
+        dayTransactionTypeData.add(jxSsMiVolumeStatistics.getNormalOutpatientVolume());
+        dayTransactionTypeData.add(jxSsMiVolumeStatistics.getDrugstoresVolume());
+        miVolumeStatisticsDto.setDayTransactionTypeData(dayTransactionTypeData);
+        //当日各区域交易量排行（南湖区，秀洲区，海宁市，平湖市，桐乡市，嘉善县，海盐县）
+        Map<String, Double> dayTransactionByRegion = new HashMap<String, Double>();
+        for(int j=1;j<=7;j++){
+            String field = "00300100"+j;
+            Double regionValue = (Double) DynamicSetterAndGetter.get(jxSsMiVolumeStatistics, "volume"+field);
+            dayTransactionByRegion.put(field,regionValue);
+        }
+        List<Map.Entry<String,Double>> dayTransactionRankByRegion = jxSocialSecurityService.getRankMap(dayTransactionByRegion);
+        miVolumeStatisticsDto.setDayTransactionRankByRegion(dayTransactionRankByRegion);
+        //当日通告信息
+        List<JxSsMiNoticeInfo> dayNoticeInfoData = jxSocialSecurityService.getSsMiNoticeInfoLatestDay();
+        miVolumeStatisticsDto.setDayNoticeInfoData(dayNoticeInfoData);
+        //排行前五的医院名称及当日交易笔数
+        List<JxSsMiHospitalVolume> dayTransactionHospitalRank = jxSocialSecurityService.getSsMiHospitalVolumeRank5();
+        miVolumeStatisticsDto.setDayTransactionHospitalRank(dayTransactionHospitalRank);
+
+        map.put("MiVolumeStatisticsData",miVolumeStatisticsDto);
+        return map;
+    }
+
+    /**
+     * 获取地图标签所需医保医院交易量统计数据
+     * @param regionCode 行政区划
+     * @return
+     */
+    @RequestMapping("getHospitalStatisticsTooltipData.do")
+    @ResponseBody
+    public Map<String,Object> getHospitalStatisticsTooltipData(@RequestParam("regionCode") String regionCode) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<MiHospitalVolumeStatisticsDto> miHospitalVolumeStatisticsDtoList = jxSocialSecurityService.getHospitalStatisticsTooltipData(regionCode);
+        map.put("miHospitalVolumeStatisticsDtoList",miHospitalVolumeStatisticsDtoList);
+        return map;
+    }
+
+
+    @RequestMapping("getHostpitalInfo.do")
+    @ResponseBody
+    public List getHostpitalInfo(String hostpitalName){
+        return jxSocialSecurityService.getHostpitalInfo(hostpitalName);
+    }
+
+    @RequestMapping("serchSocailSecurityInfo.do")
+    @ResponseBody
+    public List serchSocailSecurityInfo(String name) {
+        return jxSocialSecurityService.serchSbdw(name);
+    }
+
+
+    @RequestMapping("searchYnbxInfo.do")
+    @ResponseBody
+    public Map searchYnbxInfo() {
+        Map<String,Object> map = new HashMap<>();
+        List list = new ArrayList();
+        Map<String, Object> ynbxcbqs = new HashMap<>();
+        ynbxcbqs.put("2013", "22");
+        ynbxcbqs.put("2014", "32");
+        ynbxcbqs.put("2015", "36");
+        ynbxcbqs.put("2016", "43");
+        ynbxcbqs.put("2017", "54");
+        list.add(ynbxcbqs);             //养老保险参保趋势
+        map.put("养老保险参保趋势",list);
+
+        List list2 = new ArrayList();  //养老保险年龄结构统计
+        list2.add("15");
+        list2.add("48");
+        list2.add("37");
+        list2.add("41");
+        list2.add("23");
+        Collections.reverse(list2);
+        map.put("养老保险年龄结构统计",list2);
+
+        Map<String, Object> ylbxxbbltj = new HashMap<>();
+        List list3 = new ArrayList();
+        list3.add("4");
+        list3.add("9");
+        list3.add("16");
+        list3.add("8");
+        list3.add("3");
+        Collections.reverse(list3);
+        ylbxxbbltj.put("female",list3);  //养老保险性别比例统计 女
+
+        List list4 = new ArrayList();
+        list4.add("8");
+        list4.add("11");
+        list4.add("20");
+        list4.add("12");
+        list4.add("9");
+        Collections.reverse(list4);
+        ylbxxbbltj.put("male",list4);   //养老保险性别比例统计 男
+
+        map.put("养老保险性别比例统计",ylbxxbbltj);
+        return map;
+    }
+
+    //养老保险种类人员分布
+    @RequestMapping("searchYnbxzlryfb.do")
+    @ResponseBody
+    public List sybxzlryfb() {
+        List list = new ArrayList();
+        Map<String, Object> sybxzlryfb = new HashMap<>();
+        sybxzlryfb.put("2013","18");
+        sybxzlryfb.put("2014", "24");
+        sybxzlryfb.put("2015", "28");
+        sybxzlryfb.put("2016", "33");
+        sybxzlryfb.put("2017", "42");
+        list.add(sybxzlryfb);
+        return list;
+    }
+
+
+    @RequestMapping("searchSeyubxinfo.do")
+    @ResponseBody
+    public Map searchSeyubxinfo() {
+        Map result=new HashMap();
+        //趋势
+        List trend=new ArrayList();
+        trend.add(11);
+        trend.add(19);
+        trend.add(25);
+        trend.add(28);
+        trend.add(35);
+        result.put("trend",trend);
+        //年龄
+        List age=new ArrayList();
+        age.add(2350);
+        age.add(3130);
+        age.add(5056);
+        age.add(2160);
+        age.add(2900);
+        result.put("age", age);
+        //性别
+        List female=new ArrayList();
+        female.add(55);
+        female.add(2);
+        female.add(16);
+        female.add(20);
+        female.add(14);
+        female.add(3);
+        List male=new ArrayList();
+        male.add(45);
+        male.add(4);
+        male.add(18);
+        male.add(11);
+        male.add(9);
+        male.add(3);
+        Map map=new HashMap();
+        map.put("female",female);
+        map.put("male",male);
+        result.put("sex",map);
+        return result;
+    }
+
+    //生育保险种类人员分布
+    @RequestMapping("searchSyubxzlryfb.do")
+    @ResponseBody
+    public List ynbxzlryfb() {
+        List list = new ArrayList();
+        Map<String, Object> ynbxzlryfb = new HashMap<>();
+        ynbxzlryfb.put("城镇职工养老保险","17");
+        ynbxzlryfb.put("灵活就业人员养老保险","11");
+        ynbxzlryfb.put("城镇居民养老保险","18");
+        ynbxzlryfb.put("新农村养老保险","21");
+        ynbxzlryfb.put("商业保险","23");
+        list.add(ynbxzlryfb);
+        return list;
+    }
+
+
+    //失业保险种类人员分布
+    @RequestMapping("searchSybxzlryfb.do")
+    @ResponseBody
+    public Map sybxzlryfb_female() {
+        List list1 = new ArrayList();
+        Map<String, Object> sybxzlryfb = new HashMap<>();
+        list1.add("11");
+        list1.add("32");
+        list1.add("18");
+        list1.add("23");
+        list1.add("16");
+        List list2 = new ArrayList();
+        list2.add("13");
+        list2.add("37");
+        list2.add("15");
+        list2.add("18");
+        list2.add("17");
+        sybxzlryfb.put("female",list1);
+        sybxzlryfb.put("male",list2);
+        return sybxzlryfb;
+    }
+
+    @RequestMapping("searchSiyebxinfo.do")
+    @ResponseBody
+    public Map searchSiyebxinfo() {
+        Map result=new HashMap();
+        //趋势
+        List trend=new ArrayList();
+        trend.add(13);
+        trend.add(17);
+        trend.add(29);
+        trend.add(33);
+        trend.add(38);
+        result.put("trend",trend);
+        //年龄
+        List age=new ArrayList();
+        age.add(2450);
+        age.add(3030);
+        age.add(5356);
+        age.add(2260);
+        age.add(2600);
+        result.put("age", age);
+        //性别
+        List female=new ArrayList();
+        female.add(62);
+        female.add(4);
+        female.add(17);
+        female.add(21);
+        female.add(15);
+        female.add(5);
+        List male=new ArrayList();
+        male.add(38);
+        male.add(2);
+        male.add(16);
+        male.add(10);
+        male.add(8);
+        male.add(2);
+        Map map=new HashMap();
+        map.put("female",female);
+        map.put("male",male);
+        result.put("sex",map);
+        return result;
+    }
+
+    //医疗保险种类人员分布
+    @RequestMapping("searchYlbxzlryfb.do")
+    @ResponseBody
+    public List ylbxzlryfb() {
+        List list = new ArrayList();
+        Map<String, Object> ylbxzlryfb = new HashMap<>();
+        ylbxzlryfb.put("城镇职工基本医疗保险","18");
+        ylbxzlryfb.put("城镇居民基本医疗保险","21");
+        ylbxzlryfb.put("新型农奴合作医疗","28");
+        ylbxzlryfb.put("商业医疗保险","33");
+        list.add(ylbxzlryfb);
+        return list;
+    }
+
+    @RequestMapping("searchYlbxInfo.do")
+    @ResponseBody
+    public Map searchYlbxInfo() {
+        Map<String,Object> map = new HashMap<>();
+        List list = new ArrayList();
+        Map<String, Object> ylbxcbqs = new HashMap<>();
+        ylbxcbqs.put("2013", "20");
+        ylbxcbqs.put("2014", "34");
+        ylbxcbqs.put("2015", "30");
+        ylbxcbqs.put("2016", "46");
+        ylbxcbqs.put("2017", "50");
+        list.add(ylbxcbqs);             //医疗保险参保趋势
+        map.put("医疗保险参保趋势",list);
+
+        List list2 = new ArrayList();
+        list2.add("15");
+        list2.add("48");
+        list2.add("37");
+        list2.add("41");
+        list2.add("23");
+        Collections.reverse(list2);
+        map.put("医疗保险年龄结构统计",list2);  //医疗保险年龄结构统计
+
+        Map<String, Object> ylbxxbbltj = new HashMap<>();
+        List list3 = new ArrayList();
+        list3.add("5");
+        list3.add("8");
+        list3.add("14");
+        list3.add("10");
+        list3.add("3");
+        Collections.reverse(list3);
+        ylbxxbbltj.put("female",list3);  //医疗保险性别比例统计 女
+
+        List list4 = new ArrayList();
+        list4.add("9");
+        list4.add("12");
+        list4.add("18");
+        list4.add("11");
+        list4.add("10");
+        Collections.reverse(list4);
+        ylbxxbbltj.put("male",list4);   //医疗保险性别比例统计 男
+
+        map.put("医疗保险性别比例统计",ylbxxbbltj);
+        return map;
+    }
+
+
+    //工商保险种类人员分布
+    @RequestMapping("searchGsbxzlryfb.do")
+    @ResponseBody
+    public List gsbxzlryfb() {
+        List list = new ArrayList();
+        Map<String, Object> gsbxzlryfb = new HashMap<>();
+        gsbxzlryfb.put("0-18","10");
+        gsbxzlryfb.put("18-30","45");
+        gsbxzlryfb.put("30-50","15");
+        gsbxzlryfb.put("50-65","18");
+        gsbxzlryfb.put("65","12");
+        list.add("10");
+        list.add("45");
+        list.add("15");
+        list.add("18");
+        list.add("12");
+        list.add(gsbxzlryfb);
+        return  list;
+    }
+
+    @RequestMapping("searchGsbxInfo.do")
+    @ResponseBody
+    public Map searchGsbxInfo() {
+        Map<String,Object> map = new HashMap<>();
+        List list = new ArrayList();
+        Map<String, Object> gsbxcbqs = new HashMap<>();
+        gsbxcbqs.put("2013", "18");
+        gsbxcbqs.put("2014", "36");
+        gsbxcbqs.put("2015", "32");
+        gsbxcbqs.put("2016", "48");
+        gsbxcbqs.put("2017", "54");
+        list.add(gsbxcbqs);                         //工商保险参保趋势
+        map.put("工商保险参保趋势",list);
+
+        List list2 = new ArrayList();
+        list2.add("18");
+        list2.add("45");
+        list2.add("38");
+        list2.add("42");
+        list2.add("24");
+        Collections.reverse(list2);
+        map.put("工商保险年龄结构统计",list2);  //工商保险年龄结构统计
+
+        Map<String, Object> gsbxxbbltj = new HashMap<>();
+        List list3 = new ArrayList();
+        list3.add("6");
+        list3.add("9");
+        list3.add("12");
+        list3.add("10");
+        list3.add("3");
+        Collections.reverse(list3);
+        gsbxxbbltj.put("female",list3);  //工商保险性别比例统计 女
+
+        List list4 = new ArrayList();
+        list4.add("10");
+        list4.add("11");
+        list4.add("17");
+        list4.add("13");
+        list4.add("9");
+        Collections.reverse(list4);
+        gsbxxbbltj.put("male",list4);   //工商保险性别比例统计 男
+
+        map.put("工商保险性别比例统计",gsbxxbbltj);
+        return map;
+    }
+}

@@ -1,0 +1,46 @@
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：linyu
+ * 创建日期：2017/9/24 18:31
+ * 描述信息：加载地图服务
+ *****************************************************************/
+/**
+ * 加载地图
+ * @param serviceUrl 地图服务器地址
+ * @param bh 地图服务编号
+ * @param option 地图样式
+ */
+function loadMapService(serviceUrl, bh,option){
+    /*console.log("******************************")*/
+    var layer;
+    $.ajax({
+        type: 'post',
+        url: "../../jxmap/getMapInfoById.do?mapId="+bh,
+        async: false,
+        dataType: 'JSON',
+        success: function (data) {
+            if(data.type == "Dynamic"){
+                //地址中存在arcgis服务器地址
+                if(data.link.indexOf("http")>=0){
+                    layer = new esri.layers.ArcGISDynamicMapServiceLayer(data.link, option);
+                }else{
+                    layer = new esri.layers.ArcGISDynamicMapServiceLayer(serviceUrl + data.link, option);
+                }
+            }else if(data.type == "Tiled"){
+                if(data.link.indexOf("http")>=0){
+                    layer = new esri.layers.ArcGISTiledMapServiceLayer(data.link, option);
+                }else{
+                    layer = new esri.layers.ArcGISTiledMapServiceLayer(serviceUrl + data.link, option);
+                }
+            }else if(data.type == "Feature"){
+                if(data.link.indexOf("http")>=0){
+                    layer = new esri.layers.FeatureLayer(data.link, option);
+                }else{
+                    layer = new esri.layers.FeatureLayer(serviceUrl + data.link, option);
+                }
+            }
+        }
+    })
+    return layer;
+}

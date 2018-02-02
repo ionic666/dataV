@@ -1,0 +1,55 @@
+package com.cetc28.IntelligentInfrastructure.model;
+
+import java.math.BigDecimal;
+
+public class JxUtilityInternetStatisbyMonth extends JxUtilityInternetStatisbyMonthKey {
+    private BigDecimal id;
+
+    private BigDecimal fixedBbRate;
+
+    private BigDecimal mobileBbRate;
+
+    private BigDecimal fiberToHomeRate;
+
+    private BigDecimal publicWifiRate;
+
+    public BigDecimal getId() {
+        return id;
+    }
+
+    public void setId(BigDecimal id) {
+        this.id = id;
+    }
+
+    public BigDecimal getFixedBbRate() {
+        return fixedBbRate;
+    }
+
+    public void setFixedBbRate(BigDecimal fixedBbRate) {
+        this.fixedBbRate = fixedBbRate;
+    }
+
+    public BigDecimal getMobileBbRate() {
+        return mobileBbRate;
+    }
+
+    public void setMobileBbRate(BigDecimal mobileBbRate) {
+        this.mobileBbRate = mobileBbRate;
+    }
+
+    public BigDecimal getFiberToHomeRate() {
+        return fiberToHomeRate;
+    }
+
+    public void setFiberToHomeRate(BigDecimal fiberToHomeRate) {
+        this.fiberToHomeRate = fiberToHomeRate;
+    }
+
+    public BigDecimal getPublicWifiRate() {
+        return publicWifiRate;
+    }
+
+    public void setPublicWifiRate(BigDecimal publicWifiRate) {
+        this.publicWifiRate = publicWifiRate;
+    }
+}

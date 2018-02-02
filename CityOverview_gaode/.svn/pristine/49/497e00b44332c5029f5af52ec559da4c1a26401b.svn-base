@@ -1,0 +1,10 @@
+package com.cetc28.idata.service;
+
+import com.cetc28.idata.model.PageResult;
+
+/**
+ * Created by FangYan on 2017/9/21.
+ */
+public interface IJxUserService {
+    public PageResult queryUserInfo(Integer pageNumber, Integer pageSize);
+}

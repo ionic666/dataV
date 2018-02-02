@@ -1,0 +1,52 @@
+package com.cetc28.idata.model;
+
+/**
+ * Created by LYLYC on 2017/8/24.
+ */
+public class JxMapZsJcdInfo {
+    private String zstype; //噪声类型，1是交通2是环境
+    private String zsdb;   //噪声值
+    private String jcsj;   //监测时间
+    private String jcdbh;  //监测点编号
+    private String jcdmc;  //监测点名称
+
+    public String getZstype() {
+        return zstype;
+    }
+
+    public void setZstype(String zstype) {
+        this.zstype = zstype;
+    }
+
+    public String getZsdb() {
+        return zsdb;
+    }
+
+    public void setZsdb(String zsdb) {
+        this.zsdb = zsdb;
+    }
+
+    public String getJcsj() {
+        return jcsj;
+    }
+
+    public void setJcsj(String jcsj) {
+        this.jcsj = jcsj;
+    }
+
+    public String getJcdbh() {
+        return jcdbh;
+    }
+
+    public void setJcdbh(String jcdbh) {
+        this.jcdbh = jcdbh;
+    }
+
+    public String getJcdmc() {
+        return jcdmc;
+    }
+
+    public void setJcdmc(String jcdmc) {
+        this.jcdmc = jcdmc;
+    }
+}

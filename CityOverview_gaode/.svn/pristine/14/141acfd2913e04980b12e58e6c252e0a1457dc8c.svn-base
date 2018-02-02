@@ -1,0 +1,175 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="myCss/entironment.css"/>
+	<style>
+		.educationCCC{
+			padding:5px 10px;
+			cursor: pointer;
+		}
+		.educationCCC .point{
+			display: inline-block;
+			width:15px;
+			height:15px;
+			border:1px solid #fff;
+			border-radius: 7px;
+			vertical-align:middle;
+			margin-right: 10px;
+		}
+		.educationCCC.active .point{
+			border:1px solid red;
+		}
+		.educationCCC.active span{
+			color:red;
+		}
+	</style>
+</head>
+<body>
+<div class="modal fade"
+     style="height:250px; width:120px;top:70%; left:85%;display:none;position: absolute"
+     id="educationSchoolChange" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="eduBoxChange">
+	</div>
+
+</div>
+
+<script>
+	function fundraw(){
+		$.ajax({
+			type: "POST",
+			url: 'jxedu/querySchoolMapInfo.do?qhbh='+qhbh,
+			dataType: 'json',
+			success: function (data) {
+				console.log("---------")
+				console.log(data)
+				var len=data.length;
+				var str="";
+				for(var i=0;i<len;i++){
+					var p=$("<p>");
+					var span1=$("<span>");
+					var span2=$("<span>");
+					p.append(span1).append(span2);
+					span1.addClass("point")
+					span2.html(data[i].type)
+					p.addClass("educationCCC");
+					$(".eduBoxChange").append(p);
+					p.data("details",data[i])
+				}
+			}
+		})
+	}
+	fundraw()
+	//根据初始化数据，绘制地图上的点
+	function educationDrawMapPoint(data,layer,img){
+		var len=data.schoolInfos.length;
+		var pointArr=[];
+		for(var n=0;n<len;n++){
+		    if(!data.schoolInfos[n].jd || !data.schoolInfos[n].wd){
+                var geo;
+		        if(data.type == "小学"){
+                    geo = querySchoolInfo(0, data.schoolInfos[n].name);	//querySchoolInfo方法在index 中
+				}else if(data.type == "中学"){
+                    geo = querySchoolInfo(1, data.schoolInfos[n].name);
+				}
+				if(geo!= null){
+                    data.schoolInfos[n].jd = geo.x;
+                    data.schoolInfos[n].wd = geo.y;
+				}
+			}
+			if(data.schoolInfos[n].jd && data.schoolInfos[n].wd){
+				var obj={};
+				var jd=bd09towgs84(parseFloat(data.schoolInfos[n].jd),parseFloat(data.schoolInfos[n].wd))[0];
+				var wd=bd09towgs84(parseFloat(data.schoolInfos[n].jd),parseFloat(data.schoolInfos[n].wd))[1]
+				obj.jd=jd;
+				obj.wd=wd;
+				obj.details=data.schoolInfos[n];
+				pointArr.push(obj)
+			}
+
+		}
+		educationShowLayers(pointArr,layer,img);
+		map.addLayer(layer);
+	}
+
+	function educationShowLayers(data,layer,img) {
+		var pointSymobol = new Array(data.length);
+		var pointGraphic = new Array(data.length);
+		var darkredImage=img;
+		for (var j = 0; j < data.length; j++) {
+			var x = data[j].jd, y = data[j].wd;
+			var z = lonLat2Mercator(x,y);
+			pointSymobol[j] = new esri.symbol.PictureMarkerSymbol(darkredImage, 32, 32);
+			var planePoint = new esri.geometry.Point(z[0], z[1], map.spatialReference);
+			pointGraphic[j] = new esri.Graphic(planePoint, pointSymobol[j]);
+			pointGraphic[j].setAttributes =data[j];
+			layer.add(pointGraphic[j]);
+			layer.refresh();
+		}
+	}
+
+
+	$("#educationSchoolChange").delegate(".educationCCC","click",function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+//		console.log($(this))
+		//根据不同学校类型，清除和地图上的图层，显示对应需要显示的坐标点
+		switch ($(this).text())
+		{
+			case "幼儿园":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/mini.png")
+				break;
+			case "小学":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/x.png")
+				break;
+			case "中学":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/c.png")
+				break;
+			case "高等院校":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/g.png")
+				break;
+			case "中专学校":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/zhuan.png")
+				break;
+			case "职业中学":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/z.png")
+				break;
+			case "特殊学校":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/t.png")
+				break;
+			case "技工学校":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/j.png")
+				break;
+			case "成人高校":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/cg.png")
+				break;
+			case "成人中专":
+				clearAllSchoolLayer();
+				educationDrawMapPoint($(this).data("details"),educationLayer,"images/cz.png")
+				break;
+		}
+	})
+
+
+	//清除所有学校图层
+	function clearAllSchoolLayer(){
+		map.infoWindow.hide();
+		educationLayer.clear();
+	}
+
+
+</script>
+
+</body>
+</html>

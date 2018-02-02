@@ -1,0 +1,1634 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tonghao
+  Date: 2017/11/18
+  Time: 14:56
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../../myCss/bootstrap.min.css">
+	<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+	<link rel="stylesheet" href="../../myCss/headTitle.css"/>
+	<link rel="stylesheet" href="../../myCss/titleImg.css">
+
+	<style>
+		*{
+			color:#fff;
+			font-size: 18px;
+			font-family: "Microsoft YaHei", "宋体", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
+			box-sizing: border-box;
+		}
+		ul,li,h1,h2,h3,h4,h5,h6,p,ol{
+			padding:0;
+			margin:0;
+		}
+		li{
+			list-style: none;
+		}
+		.header {
+			width: 60%;
+			height: 7.8%;
+			margin: 0 auto;
+			background-size: 100% 100%;
+			background-repeat: no-repeat;
+			position: absolute;
+			z-index: 999;
+			top: 2%;
+			margin-left: 50%;
+		}
+		::-webkit-scrollbar{
+			background-color: #1B1B1D;
+		}
+		::-webkit-scrollbar-thumb {
+			background-color: #303030;
+		}
+		.modelBox{
+			height:89%;
+			width:25%;
+			position: absolute;
+			background-color: rgba(0,0,0,0.5);
+			z-index: 400;
+		}
+		.modelNew{
+			height:40%;
+			width:22%;
+			position: absolute;
+			background-color: rgba(0,0,0,0.5);
+			z-index: 400;
+		}
+		.modelBox div.head{
+			padding:1% 0px 0px 5%;
+			width:100%;
+			height:10%;
+		}
+		.modelBox div.head select{
+			background-color: black;
+			width: 40%;
+			float: left;
+			margin: 5% 5% 5% 0;
+			padding: 5px;
+		}
+		.modelBox div.body{
+			padding:1% 0px 0px 5%;
+			width:100%;
+			height:50%;
+		}
+		.modelBox div.body h3{
+			padding:15px 0px;
+		}
+		.modelBox div.body ul li{
+			padding:10px 10px 10px 30px;
+			margin-left:10px;
+			cursor: pointer;
+		}
+		.modelBox div.body ul li.active{
+			 background-color: #10485D;
+			color:#0CD3EE;
+		 }
+		.modelBox div.body ul li:hover{
+			background-color: #1D5B72;
+		}
+		.modelBox div.foot{
+			padding:1% 0px 0px 5%;
+			width:100%;
+			height:39%;
+			border-top:2px solid #0CFFFF
+		}
+		.modelBoxL{
+			top:10%;
+			left:0;
+			border-top:2px solid #0CFFFF;
+			margin-left:20px;
+		}
+		.modelBoxC{
+			height:10%;
+			width: 50%;
+			bottom:2%;
+			right:25%;
+			/*background-color: #fff;*/
+		}
+		.modelBoxR{
+			top:10%;
+			right:0;
+			margin-right: 20px;
+		}
+	/*	左右渐变色*/
+		/*.modelBoxL{*/
+			/*background: -moz-linear-gradient(left, #000000 70%, transparent 100%);*/
+			/*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#000000), color-stop(100%,#ffffff));*/
+			/*background: -webkit-linear-gradient(left, #000000 70%,transparent 100%);*/
+			/*background: -o-linear-gradient(left, #000000 70%,transparent 100%);*/
+			/*background: -ms-linear-gradient(left, #000000 70%,transparent 100%);*/
+			/*background: linear-gradient(to right, #000000 70%,transparent 100%);*/
+		/*}*/
+		/*.modelBoxR{*/
+			/*background: -moz-linear-gradient(right, #000000 70%, transparent 100%);*/
+			/*background: -webkit-gradient(linear, right top, right bottom, color-stop(0%,#000000), color-stop(100%,#ffffff));*/
+			/*background: -webkit-linear-gradient(right, #000000 70%,transparent 100%);*/
+			/*background: -o-linear-gradient(right, #000000 70%,transparent 100%);*/
+			/*background: -ms-linear-gradient(right, #000000 70%,transparent 100%);*/
+			/*background: linear-gradient(to left, #000000 70%,transparent 100%);*/
+		.modelBoxR>div{
+			height:100%;
+			width: 100%;
+			padding: 1% 5% 0px 10px;
+			border-top:2px solid #0CFFFF;
+		}
+		.echartBox{
+			width:100%;
+			height:100%;
+		}
+		.describe{
+			line-height: 30px;
+			font-size:18px;
+		}
+		.modelBoxR>div>h4{
+			 margin-left: 30px;
+			 padding: 10px;
+		 }
+		.modelBoxR>div>ul{
+			margin-left: 40px;
+		}
+		.modelBoxR>div>ul>li{
+			margin-left:10px;
+			padding: 5px;
+		}
+		.modelBoxR .describe>span{
+			color:#0CF5F5;
+		}
+		.modelBoxR .describe>span.details{
+			color:#fff;
+		}
+
+		#tableBody{
+			width: 100%;
+			height: 100%;
+			text-align: left;
+		}
+		#tableBody thead td{
+			/*color: #1292db;*/
+			font-weight: normal;
+			text-align: center;
+		}
+		#tableBody tr,#tableBody2 tr{
+			/*height: 40px;*/
+			text-align: center;
+			cursor: pointer;
+		}
+
+
+		/*地图样式表*/
+		.amap-toolbar{
+			display:none;
+		}
+		.info {
+			border: solid 1px #889DA2;
+			border-radius: 2px;
+			box-shadow: 0px 0px 8px #60d8ef;
+		}
+		div.info-top {
+			position: relative;
+			background-color:rgba(0,29,36,0.8);
+			border-bottom: 1px solid #7A9095;
+			border-radius: 5px 5px 0 0;
+		}
+		div.info-top div {
+			display: inline-block;
+			color: #333333;
+			font-size: 14px;
+			font-weight: bold;
+			line-height: 31px;
+			padding: 0 10px;
+		}
+		div.info-top img {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			transition-duration: 0.25s;
+		}
+		div.info-top img:hover {
+			box-shadow: 0px 0px 5px #000;
+		}
+		div.info-middle {
+			padding: 6px;
+			line-height: 20px;
+			background-color:rgba(0,29,36,0.8) !important;
+		}
+		div.info-middle p{
+			font-size: 18px;
+			display: inline-block;
+			width: 220px;
+		}
+		.info-middle .infoName{
+			display: inline-block;
+			width:95px;
+			color:#32DDE7;
+			vertical-align: top;
+		}
+		div.info-bottom {
+			height: 0px;
+			width: 100%;
+			clear: both;
+			text-align: center;
+		}
+		div.info-bottom img {
+			position: relative;
+			z-index: 104;
+		}
+		.info span{
+			margin-left: 5px;
+		}
+		.info-middle img {
+			float: left;
+			margin-right: 6px;
+		}
+		.amap-icon img{
+			width:100%;
+			height:100%;
+		}
+		.infoContentDiv{
+			padding:8px 0px;
+		}
+		/*._details{*/
+			/*overflow: hidden;*/
+		/*}*/
+		/*企业画像*/
+		.divqy{
+			width: 22%;
+			height: 49%;
+			background-color: red;
+			position: absolute;
+			right: 0;
+			bottom:1%;
+			border-top:2px solid #0CFFFF;
+			background-color: rgba(0,0,0,0.5);
+			margin-right:20px;
+		}
+		.divqy h3{
+			width: 100%;
+			height: 10%;
+			text-align: center;
+			color: #fff;
+			padding: 2% 0;
+		}
+		ul.qyPic{
+			width: 100%;
+			height: 90%;
+			padding-left: 2%;
+		}
+		ul.qyPic li{
+			width: 100%;
+			height: 25%;
+			cursor: pointer;
+		}
+		ul.qyPic li p{
+			padding-left: 7%;
+		}
+		ul.qyPic li .qyBg{
+			width: 100%;
+			height: 75%;
+		}
+		ul.qyPic li .qyBg div{
+			text-align: center;
+			width: 33.3%;
+			height: 100%;
+			float: left;
+			padding-top: 10px;
+			position: relative;
+			border: 1px solid #7F7F7F;
+		}
+		.qyMiddle{
+			border-left:0;
+			border-right: 0;
+		}
+		.qyNum{
+			display: inline-block;
+			color: #0CDAF5;
+			position: absolute;
+			top:2%;
+			right: 15%;
+			font-weight: bold;
+		}
+		#jjPic{
+			width: 100%;
+			height: 70%;
+		}
+		.modal-backdrop{
+			z-index: 0;
+		}
+		#qyhxModal .modal-content{
+			background-color: #02191C;
+		}
+		#qyhxModal .modal-header{
+			font-weight: bold;
+			border: 0;
+		}
+		#qyhxModal .modal-title{
+			color: #39D1E5;
+		}
+		#gqjgBing .modal-content,#qygx .modal-content{
+			background-color: #02191C;
+		}
+		#gqjgBing .modal-header,#qygx .modal-header{
+			font-weight: bold;
+			border: 0;
+		}
+		#gqjgBing .modal-title,#qygx .modal-title{
+			color: #39D1E5;
+		}
+		#qyhxModal .modal-header button.close, #gqjgBing .modal-header button.close,#qygx .modal-header button.close{
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			background-color: #02191C;
+			color: #fff;
+			opacity: 1;
+			margin-top: 2px;
+			outline: none;
+		}
+		.closeBtn{
+			color: #fff;
+		}
+		.qyhxBody table tbody tr td{
+			height: 30px;
+		}
+		.qyhxBody thead th{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<a href="#" onclick="returnMainPage()" style="max-width:3%;position: fixed;left:97%;top: 2%;z-index: 999"><img src="../../images/returnUp.png" alt=""></a>
+<div id="map" style="width:100%; height:100%;"></div>
+<div class="_headerImg">
+	<img src="../../images/hlwqs/hx.png" alt=""/>
+</div>
+<div class="modelBox modelBoxL">
+	<div class="head">
+		<select id="pageJump">
+			<option value="hxqy" selected="selected">互联网核心产业</option>
+			<option value="zdqy">重点企业</option>
+		</select>
+		<select id="dqmc">
+			<option value="" selected="selected">嘉兴全市</option><option value="003001001">南湖区</option><option value="003001002">秀洲区</option><option value="003001003">海宁市</option><option value="003001004">平湖市</option><option value="003001005">桐乡市</option><option value="003001006">嘉善县</option><option value="003001007">海盐县</option><option value="003001008">经开区</option>
+		</select>
+	</div>
+	<div class="body">
+		<div class="listTitle listTitle0">
+			<h3>信息制造产业</h3>
+			<ul>
+				<li class="active" >智能终端产业</li>
+				<%--<li>装备电子产业</li>--%>
+				<%--<li>光伏产业</li>--%>
+				<%--<li>LED照明产业</li>--%>
+				<%--<li>新型电子元器件和电子材料产业</li>--%>
+				<li>集成电路产业</li>
+				<li>物联网产业</li>
+			</ul>
+		</div>
+		<div class="listTitle listTitle1">
+			<h3>服务业</h3>
+			<ul>
+				<li>软件和信息服务业</li>
+				<li>大数据</li>
+				<li>数字内容</li>
+			</ul>
+		</div>
+	</div>
+	<div class="foot">
+		<div id="company">
+			<%--<h3>企业名单：信息制造业----智能终端产业</h3>--%>
+			<table width="100%">
+				<tr width="100%">
+					<td width="100%">
+						<table width="100%">
+							<thead>
+							<tr>
+								<td style="width:20%;font-size: 1.2em;text-align: center;">NO</td>
+								<td style="width:80%;font-size: 1.2em;text-align: center;">企业名称</td>
+							</tr>
+							</thead>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="100%">
+						<div id="miniTable" width="100%">
+							<table width="100%">
+								<tbody id = "tableBody2" width="100%"></tbody>
+							</table>
+						</div>
+						<div id="A1" class="tableA1">
+							<div id="A2" class="tableA2">
+								<table width="100%">
+									<tbody id = "tableBody" width="100%">
+									<tr style="width: 100%;"></tr>
+									<tr style="width: 100%;"></tr>
+									<tr style="width: 100%;"></tr>
+									<tr style="width: 100%;"></tr>
+									<tr style="width: 100%;"></tr>
+									<tr style="width: 100%;"></tr>
+									</tbody>
+
+								</table>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<%--<div class="modelBox modelBoxC">--%>
+<%--</div>--%>
+<div class="searchBox">
+	<input id="search" type="text" placeholder="企业搜索" onkeydown="searchEnter()">
+	<span id="searchBtn" onclick="search()"></span>
+</div>
+<div class="modelNew modelBoxR">
+	<div class="_details">
+		<h3 style="text-align: center">简介</h3>
+		<p class="describe"><span>智能终端产业：</span><span class="details"></span></p>
+		<div id="jjPic"></div>
+	</div>
+</div>
+
+
+<%--企业画像--%>
+<div class="divqy">
+	<h3>企业画像</h3>
+	<ul class="qyPic" comId="3304240000043524" link="">
+		<li>
+			<p>企业背景</p>
+			<div class="qyBg">
+				<div class="qygx">
+					<img src="../../images/hlwqs/qygx.png" alt="">
+					<h5>企业关系</h5>
+				</div>
+				<div class="qyMiddle qyhx" picId="1" id="gdxx">
+					<img src="../../images/hlwqs/gdxx.png" alt="">
+					<h5>股东信息</h5>
+					<span class="qyNum gdxx isshow">1</span>
+				</div>
+				<div class="gqjg">
+					<img src="../../images/hlwqs/gqjg.png" alt="">
+					<h5>股权结构</h5>
+				</div>
+			</div>
+		</li>
+		<li>
+			<p>风险信息</p>
+			<div class="qyBg qyhx" picId="2">
+				<div>
+					<img src="../../images/hlwqs/flss.png" alt="">
+					<h5>法律诉讼</h5>
+					<span class="qyNum flss isshow">0</span>
+				</div>
+			</div>
+		</li>
+		<li>
+			<p>经营信息</p>
+			<div class="qyBg">
+				<div class="qyhx" picId="3">
+					<img src="../../images/hlwqs/zpxx.png" alt="">
+					<h5>招聘信息</h5>
+					<span class="qyNum zpxx isshow">0</span>
+				</div>
+				<div class="qyMiddle qyhx" picId="4">
+					<img src="../../images/hlwqs/ztb.png" alt="">
+					<h5>招投标</h5>
+					<span class="qyNum ztb isshow">0</span>
+				</div>
+				<div class="qyhx" picId="5">
+					<img src="../../images/hlwqs/zzzs.png" alt="">
+					<h5>资质证书</h5>
+					<span class="qyNum zzzs isshow">0</span>
+				</div>
+			</div>
+		</li>
+		<li>
+			<p>知识产权</p>
+			<div class="qyBg">
+				<div>
+					<img src="../../images/hlwqs/sbxx.png" alt="">
+					<h5>商标信息</h5>
+				</div>
+				<div class="qyMiddle qyhx" picId="6">
+					<img src="../../images/hlwqs/zl.png" alt="">
+					<h5>专利信息</h5>
+					<span class="qyNum zlxx isshow">0</span>
+				</div>
+				<div class="qyhx" picId="7">
+					<img src="../../images/hlwqs/zzq.png" alt="">
+					<h5>著作权</h5>
+					<span class="qyNum zzq isshow">0</span>
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
+<%--企业画像模态框--%>
+<div class="modal fade" style="z-index:9999999; width: 1100px;height: 500px;margin: 0 auto;top:20%" id="qyhxModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 100%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button id="ssss" type="button" class="close" data-dismiss="modal">X</button>
+				<h4 class="modal-title qyhxTitle">股东信息</h4>
+			</div>
+			<div class="modal-body qyhxBody" style="width: 100%;height:380px">
+        		<table style="width: 100%;overflow: auto;text-align: center">
+					<thead></thead>
+					<tbody></tbody>
+				</table>
+				<div class="page userManager" style="position: absolute; bottom:20px;left:calc(50% - 135px)">
+
+					<button class="btn btn-info pagePre">
+						<span>上一页</span>
+					</button>
+					<span>第</span><span class="pageCurrent">1</span><span>页/共</span><span class="pageGross">5</span><span>页</span>
+					<%--<button class="pageNext">下一页</button>--%>
+					<button class="btn btn-info pageNext">
+						<span>下一页</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<%--股权结构饼图模态框--%>
+<div class="modal fade" style="z-index:9999999; width: 800px;height: 500px;margin: 0 auto;top:20%" id="gqjgBing" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button id="ssss1" type="button" class="close" data-dismiss="modal">X</button>
+				<h4 class="modal-title qyhxTitle">股权结构</h4>
+			</div>
+			<div class="modal-body">
+				<div id="gqjgBody" style="width: 600px;height:300px;margin:0 auto"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<%--企业关系模态框--%>
+<div class="modal fade" style="z-index:9999999; width: 800px;height: 500px;margin: 0 auto;top:20%" id="qygx" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 100%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button id="ssss2" type="button" class="close" data-dismiss="modal">X</button>
+				<h4 class="modal-title">企业关系</h4>
+			</div>
+			<div class="modal-body">
+				<iframe class="iframbox" src="" style="width: 100%;height: 350px"></iframe>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<script type="text/javascript" src="../../map/js/echarts-all.js"></script>
+<script type="text/javascript" src="../../myjs/index.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+	var headerWidth=$("._header").width();	//获取头部标题的宽度
+	$("._header").css("left",-headerWidth/2-115+"px");//让头部标题居中
+	
+
+	//页面跳转
+	$("#pageJump").on("change",function(){
+		if($(this).val()=="zdqy"){
+			location.href="hlwzdqy.jsp";
+		}
+	})
+
+	function main(dqmc,typeText){
+
+		$.ajax({
+			type: 'post',
+			url: "../../jxecokey/queryCoreComByCondition.do",
+			dataType: 'JSON',
+			data:{
+				bhname:dqmc,
+				industryname:typeText
+			},
+			success:function(data){
+
+//				console.log(data)
+				//右下角所有企业展示
+				var len=data.mapcom.length;
+                trLength=len;
+                if(data.mapcom.length<10){
+                	$("#miniTable").show();
+                	$("#A1").hide();
+                    $("#company  #tableBody").html("");
+                    $("#company  #tableBody2").html("");
+                    for(var i=0;i<len;i++){
+                        var tr=$("<tr>");
+                        tr.data("data",data.mapcom[i]);
+                        var td='<td style="width:20%">'+parseInt(i+1)+'</td>'+'<td style="width:80%">'+data.mapcom[i].NAME+'</td>'
+                        $("#company  #tableBody2").append(tr.html(td));
+                        //地图上点所有企业
+                        if(data.mapcom[i].JD||data.mapcom[i].WD){
+                            drawMap.addPoint([parseFloat(data.mapcom[i].JD),parseFloat(data.mapcom[i].WD)],22,24,'../../images/qy.png',data.mapcom[i])
+                        }
+                    }
+                }else{
+					$("#miniTable").hide();
+					$("#A1").show();
+                    $("#company  #tableBody2").html("");
+                    $("#company  #tableBody").html("");
+                    for(var i=0;i<len;i++){
+                        var tr=$("<tr>");
+                        tr.data("data",data.mapcom[i]);
+                        var td='<td style="width:20%">'+parseInt(i+1)+'</td>'+'<td style="width:80%">'+data.mapcom[i].NAME+'</td>'
+                        $("#company  #tableBody").append(tr.html(td));
+                        //地图上点所有企业
+                        if(data.mapcom[i].JD||data.mapcom[i].WD){
+                            drawMap.addPoint([parseFloat(data.mapcom[i].JD),parseFloat(data.mapcom[i].WD)],22,24,'../../images/qy.png',data.mapcom[i])
+                        }
+                    }
+				}
+
+                drawMap.infoWindow(data.mapcom[0]);
+				$("#A2 #tableBody tr:eq(0)").click();
+				$("#tableBody2 tr:eq(0)").click();
+                map.setCenter([parseFloat(data.mapcom[0].JD),parseFloat(data.mapcom[0].WD)]);
+				var len1=data.pie.length;
+				var dataV=[];
+				for(var i=0;i<len1;i++){
+				    var obj={};
+				    obj.value=data.pie[i].VALUE;
+				    obj.name=data.pie[i].NAME;
+				    dataV.push(obj);
+				}
+                jjPic(dataV)
+				//简介内容
+
+				$(".details").html(data.des);
+				$(".details").prop("title",data.des)
+
+
+			}
+		})
+	}
+    eval(_InitScroll("A1","A2",451,300,100))//延时执行（依据trLength的长度而定）
+    function _InitScroll(_S1,_S2,_W,_H,_T){
+            return "var marqueesHeight"+_S1+"="+_H+";var stopscroll"+_S1+"=false;var scrollElem"+_S1+"=document.getElementById('"+_S1+"');with(scrollElem"+_S1+"){style.width="+_W+";style.height=marqueesHeight"+_S1+";style.overflow='hidden';noWrap=true;}scrollElem"+_S1+".onmouseover=new Function('stopscroll"+_S1+"=true');scrollElem"+_S1+".onmouseout=new Function('stopscroll"+_S1+"=false');var preTop"+_S1+"=0; var currentTop"+_S1+"=0; var stoptime"+_S1+"=0;var leftElem"+_S2+"=document.getElementById('"+_S2+"');scrollElem"+_S1+".appendChild(leftElem"+_S2+".cloneNode(true));tableTimeer2=setTimeout('init_srolltext"+_S1+"()',"+_T+");function init_srolltext"+_S1+"(){scrollElem"+_S1+".scrollTop=0;setInterval('scrollUp"+_S1+"()',50);}function scrollUp"+_S1+"(){if(stopscroll"+_S1+"){return;}currentTop"+_S1+"+=1;if(currentTop"+_S1+"==(marqueesHeight"+_S1+"+1)) {stoptime"+_S1+"+=1;currentTop"+_S1+"-=1;if(stoptime"+_S1+"=="+_T/50+") {currentTop"+_S1+"=0;stoptime"+_S1+"=0;}}else{preTop"+_S1+"=scrollElem"+_S1+".scrollTop;scrollElem"+_S1+".scrollTop +=1;if(preTop"+_S1+"==scrollElem"+_S1+".scrollTop){scrollElem"+_S1+".scrollTop=0;scrollElem"+_S1+".scrollTop +=1;}}}";
+
+    }
+
+    //饼图
+	function jjPic(dataV){
+        var myChart=echarts.init(document.getElementById("jjPic"));
+        var option = {
+            color:['#3e50db','#2880e5','#4a81ff','#25addf','#1bbf1b','#00d6ba'],
+            series: [
+                {
+                    name:'主导产业',
+                    type:'pie',
+                    radius: ['30%', '55%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        normal:{
+                            labelLine: {
+                                show: true
+                            },
+                            label:{
+                                show:true,
+								formatter:function(val){
+                                    return val.name.split(" ").join("\n");
+								},
+                                textStyle:{
+								    color:'#fff',
+									fontSize:16
+								}
+                            }
+                        }
+                    },
+                    data:dataV
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+	drawMap= {
+		addPoint: function addPoint(arr, h, w, img,details) {//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+			var _marker = new AMap.Marker({
+				map: map,
+				position: arr,        //经纬度
+				icon: new AMap.Icon({
+					size: new AMap.Size(h, w),  //图标大小
+					image: img       //自定义图片
+				})
+			});
+			_marker.setExtData(details);
+			map.setCenter(arr);
+			AMap.event.addListener(_marker,'click',function(e){
+				drawMap.infoWindow(details);
+				//传入企业编号
+				$('.qyPic').attr('comId',details.XH);
+				$('.qyPic').attr('link',details.RELATIONSHIP_LINK);
+				map.setCenter([parseFloat(details.JD),parseFloat(details.WD)]);
+				$(".divqy").css('display','block');
+				$.ajax({
+					type: 'post',
+					url: "../../jxcompic/queryPicStatistic.do",
+					dataType: 'JSON',
+					data:{
+						companyId:details.XH
+					},
+					success:function(data){
+						$(".gdxx").html(data.ownerNum);
+						$(".flss").html(data.lawsuitNum);
+						$(".ztb").html(data.bidNum);
+						$(".zzzs").html(data.certificateNum);
+						$(".zpxx").html(data.recruitNum );
+						$(".zlxx").html(data.patentNum);
+						$(".zzq").html(data.copyRightNum);
+					}
+				})
+			});
+		},
+		createInfoWindow: function (title, content) {
+			var info = document.createElement("div");
+			info.className = "info";
+
+			//可以通过下面的方式修改自定义窗体的宽高
+			info.style.width = "350px";
+			// 定义顶部标题
+			var top = document.createElement("div");
+			var titleD = document.createElement("div");
+			var closeX = document.createElement("img");
+			top.className = "info-top";
+			titleD.innerHTML = title;
+			closeX.src = "../../images/gaode-close.png";
+			closeX.onclick = drawMap.closeInfoWindow;
+
+			top.appendChild(titleD);
+			top.appendChild(closeX);
+			info.appendChild(top);
+
+			// 定义中部内容
+			var middle = document.createElement("div");
+			middle.className = "info-middle";
+			middle.style.backgroundColor = 'white';
+			middle.innerHTML = content;
+			info.appendChild(middle);
+
+			// 定义底部内容   //下方的小箭头
+			var bottom = document.createElement("div");
+			bottom.className = "info-bottom";
+			bottom.style.position = 'relative';
+			bottom.style.top = '0px';
+			bottom.style.margin = '0 auto';
+			var sharp = document.createElement("img");
+			sharp.src = "../../images/hlw-sj.png";
+			bottom.appendChild(sharp);
+			info.appendChild(bottom);
+			return info;
+		},
+		infoWindow:function(details){
+//		    console.log(details)
+			var title = '<span style="font-size:20px;color:#0CDAF5;">'+details.NAME+'</span>';
+			var content = [];
+			content.push("<div class=infoContentDiv><span class='infoName'>地址</span><p><span>"+details.ADDR+"</span></p></div>");
+//			content.push("<div class=infoContentDiv><span class='infoName'>联系方式</span><p><span>"+details.TEL+"</span></p></div>");
+			content.push("<div class=infoContentDiv><span class='infoName'>公司类型</span><p><span>"+details.TYPE+"</span></p></div>");
+			
+            content.push("<div class=infoContentDiv><span class='infoName'>注册资本</span><p><span>"+details.REGISTERED_CAPITAL+"万元</span></p></div>");
+            content.push("<div class=infoContentDiv><span class='infoName'>注册时间</span><p><span>"+details.CREATEDATE+"</span></p></div>");
+            content.push("<div class=infoContentDiv><span class='infoName'>法人</span><p><span>"+details.BUSINESS_ENTITY+"</span></p></div>");
+//			content.push("<div class=infoContentDiv><span class='infoName'>企业年产值</span><p><span>"+details.VALUE+"亿元</span></p></div>");
+			content.push("<div class=infoContentDiv><span class='infoName'>经营范围</span><p><span>"+details.SCOPE+"</span></p></div>");
+			var infoWindow = new AMap.InfoWindow({
+				isCustom: true,  //使用自定义窗体
+				content: drawMap.createInfoWindow(title, content.join("")),
+				offset: new AMap.Pixel(0, -36)
+			});
+			infoWindow.open(map,[parseFloat(details.JD),parseFloat(details.WD)]);
+		},
+		closeInfoWindow:function () {
+			map.clearInfoWindow();
+//            $(".divqy").css('display','none');
+            $(".gdxx").html("");
+            $(".flss").html("");
+            $(".zpxx").html("");
+            $(".ztb").html("");
+            $(".zzzs").html("");
+            $(".sbxx").html("");
+            $(".zlxx").html("");
+            $(".zzq").html("");
+		}
+	}
+
+	var map;
+	window.onload=function(){
+		var dqmc=$("#dqmc").val();
+		var typeText= $(".listTitle ul").find("li.active").text();
+		main(dqmc,typeText);
+		//加载地图的方法
+		map = new AMap.Map('map', {
+			mapStyle: 'amap://styles/16e4e3ccd1f66f229a6276fe149db8df'//样式URL
+		});
+	    AMap.event.addListener(map,'click',function(e){
+	      map.clearInfoWindow();
+	    });
+        //获取json数据
+      /*  $.ajax({
+            type: 'post',
+            url: "../../jsonData/region.json",
+            dataType: 'JSON',
+            success: function (data) {
+                var XYarr=data.features;
+                var len=XYarr.length;
+                for(var i=0;i<len;i++){
+                    polygon(XYarr[i].geometry.rings[0])
+                }
+            }
+        })*/
+        //画出嘉兴地图边界
+        /*function polygon(Data){
+            var len=Data.length;
+            var newData=[];
+            for(var i=0;i<len;i++){
+                newData.push(wgs84togcj02(Data[i][0],Data[i][1]));//绘制学区经纬度纠偏
+            }
+            var strokeColor="#1f9265", //设置多边形线颜色
+                strokeOpacity=.6, //设置多边形线透明度
+                strokeWeight=3,    //设置多边形线宽
+                fillColor="rgb(41,229,156)", //设置多边形填充色
+                fillOpacity=0.15;//设置多边形填充透明度
+            var polygon = new AMap.Polygon({
+                path: newData,//设置多边形边界路径
+                strokeColor: strokeColor, //线颜色
+                strokeOpacity: strokeOpacity, //线透明度
+                strokeWeight: strokeWeight,    //线宽
+                fillColor: fillColor, //填充色
+                fillOpacity: fillOpacity//填充透明度
+            });
+            polygon.setMap(map);//绘制多边形
+        }*/
+	}
+
+    function returnMainPage(){
+        location.href="../../hlwqs.html";
+    }
+
+	//左侧列表点击事件
+	$(".listTitle>ul").delegate('li','click',function(){
+
+		if(map){
+			map.clearMap();
+			map.clearInfoWindow();
+		}
+		$("#A1").scrollTop("0");
+		$("#A2").scrollTop("0");
+		$(".listTitle>ul").find('li').removeClass('active');
+		$(this).addClass("active");
+		$(".describe span").html($(this).text()+"：");   //控制简介内容
+		var dqmc=$("#dqmc").val();
+		var typeText= $(".listTitle ul").find("li.active").text();
+		main(dqmc,typeText);
+//		tuceng();
+	})
+	//select事件
+	$("#dqmc").change(function(){
+		if(map){
+			map.clearMap();
+			map.clearInfoWindow();
+		}
+		$("#A1").scrollTop("0");
+		$("#A2").scrollTop("0");
+		var dqmc=$("#dqmc").val();
+		var typeText= $(".listTitle ul").find("li.active").text();
+		main(dqmc,typeText);
+//		tuceng();
+	})
+    function searchEnter() {
+        //回车的key为13,如果是回车就调用搜索方法
+        if (event.keyCode == 13)
+            search();
+    }
+	//左上角查询
+	function search(){
+		var searchValue = $("#search").val();
+		map.clearMap();
+		map.clearInfoWindow();
+		$.ajax({
+			type: 'post',
+			url: "../../jxecokey/serchCoreName.do",
+			dataType: 'JSON',
+			data:{
+				name:searchValue
+			},
+			success:function(data){
+				console.log("111")
+				console.log(data)
+
+				var len=data.length;
+				for(var i=0;i<len;i++){
+					if(data[i].JD||data.WD){
+						drawMap.addPoint([parseFloat(data[i].JD),parseFloat(data[i].WD)],22,24,'../../images/qy.png',data[i])
+						drawMap.infoWindow(data[i]);
+					}
+				}
+				$('.qyPic').attr('comId',data[0].XH);
+				$('.qyPic').attr('link',data[0].RELATIONSHIP_LINK);
+				$.ajax({
+					type: 'post',
+					url: "../../jxcompic/queryPicStatistic.do",
+					dataType: 'JSON',
+					data:{
+						companyId:data[0].XH
+					},
+					success:function(data1){
+						$(".gdxx").html(data1.ownerNum);
+						$(".flss").html(data1.lawsuitNum);
+						$(".ztb").html(data1.bidNum);
+						$(".zzzs").html(data1.certificateNum);
+						$(".zpxx").html(data1.recruitNum );
+						$(".zlxx").html(data1.patentNum);
+						$(".zzq").html(data1.copyRightNum);
+					}
+				})
+			}
+		})
+	}
+//	循环遍历取表格数据,表格中参数名称作为形参传入
+//	function showTable(datas,a,b,c,d,e,f){
+//		var tbodyStr=""
+//		for(var i=0;i<datas.length;i++){
+//			console.log("789");
+//			console.log(datas[i][a]);
+//			tbodyStr+='<tr>' +
+//						'<td>'+datas[i][a]+'</td>'+
+//						'<td>'+datas[i][b]+'</td>'+
+//						'<td>'+datas[i][c]+'</td>'+
+//						'<td>'+datas[i][d]+'</td>'+
+//						'<td>'+datas[i][e]+'</td>'+
+//						'<td>'+datas[i][f]+'</td>'+
+//					'</tr>'
+//		}
+//		console.log(tbodyStr)
+//		$('.qyhxBody tbody').html(tbodyStr);
+//	}
+//	小于10加0
+	function pluszero(input){
+		var res='';
+		if(input<10){
+			res='0'+input;
+		}
+		return res;
+	}
+//	时间戳转换器
+	function changeTime(input){
+		var tt=new Date(input);
+		return tt.getFullYear()+'-'+(tt.getMonth()+1)+'-'+tt.getDate();
+	}
+//	判断是否为空
+	function isUndefined(value){
+		if(typeof(value) == "undefined"){
+			return "";
+		}else{
+			return value;
+		}
+	}
+	//分页
+	function page(){
+		this.data={};
+		this.data.pageSize=5;
+		this.data.pageNumber=1;
+		this.data.companyId="";
+		this.data.picId="";
+//    this.data.rows=3;//默认参数
+//    this.data.page=1;//默认参数
+		this.dom;//存放分页的父级元素
+		this.pageCurrent;//当前页
+		this.pageGross;//总页数
+		this.ajax;
+		this.start=function(dom,ajax){
+			this.dom=dom;
+			this.ajax=ajax;
+			this.ajax(this.data);
+			this.pageCurrent=dom.find(".pageCurrent").html();
+			this.calculate(dom);
+			this.pagePre();
+			this.pageNext();
+			return this
+		};
+		this.pagePre=function(){
+			var me=this;
+			$(me.dom).find(".pagePre").unbind().bind("click",function(){
+				if(--me.pageCurrent<=0){
+					me.pageCurrent++
+					//console.log("已经是第一页了")
+					return
+				}else{
+					//console.log("不是第一页")
+					me.data.pageNumber--;
+					me.dom.find(".pageCurrent").html(me.pageCurrent)
+					//发送ajax请求
+					me.ajax(me.data)
+				}
+			})
+		};
+		this.pageNext=function(){
+			var me=this
+			$(me.dom).find(".pageNext").unbind().bind("click",function(){
+//				console.log("下一页")
+				if(me.pageCurrent++>=me.pageGross){
+					me.pageCurrent--;
+					//console.log("已经是最后一页");
+					return;
+				}else{
+					//console.log("不是最后一页")
+					me.data.pageNumber++;
+					me.dom.find(".pageCurrent").html(me.pageCurrent)
+					//发送ajax请求
+					me.ajax(me.data)
+				}
+			})
+		};
+		this.calculate=function(){
+			//当前页
+			this.pageCurrent= parseFloat(this.dom.find(".pageCurrent").html())
+			//总页数
+			this.pageGross=parseFloat(this.dom.find(".pageGross").html())
+			return this
+		}
+	}
+	var picId;
+	var aa=new page();
+	//console.log(aa);
+	aa.data.pageSize=5;
+	aa.data.pageNumber=1;
+	aa.data.companyId="";
+	aa.data.picId="";
+//	aa.start($(".userManager"),pageAjax);
+	//显示用户列表ajax方法
+	function pageAjax(data1){
+		var me=this;
+		var myid=picId;
+		$.ajax({
+			type:'post',
+			url:'../../jxcompic/queryComPicInfo.do',
+			dataType:'json',
+			data:data1,
+			success: function (data) {
+				//总页数
+				console.log(data.total)
+				me.pageGross=Math.ceil(parseInt(data.total)/parseInt(data1.pageSize));
+				me.dom.find(".pageGross").html(me.pageGross);
+				console.log(me.pageGross)
+				$('#qyhxModal').modal('show');
+				switch (myid) {
+//						股东信息
+					case '1':
+						var theadStr='<tr>' +
+								'<th>股东</th>' +
+								'<th>认缴出资</th>' +
+								'<th>单位</th>' +
+								'</tr>';
+						$('.qyhxBody thead').html(theadStr);
+						var tbodyStr=""
+						var datas=data.rows;
+						for(var i=0;i<datas.length;i++){
+							tbodyStr+='<tr>' +
+									'<td>'+isUndefined(datas[i].OWNER_NAME)+'</td>'+
+									'<td>'+isUndefined(datas[i].CONTRIBUTION)+'</td>'+
+									'<td>'+isUndefined(datas[i].UNIT)+'</td>'+
+									'</tr>'
+						}
+						$('.qyhxBody tbody').html(tbodyStr);
+						break;
+//						法律诉讼
+					case '2':
+						var theadStr='<tr>' +
+								'<th>日期</th>' +
+								'<th>案由</th>' +
+								'<th>案件身份</th>' +
+								'<th>案件号</th>' +
+								'</tr>';
+						$('.qyhxBody thead').html(theadStr);
+						var tbodyStr=""
+						var datas=data.rows;
+						for(var i=0;i<datas.length;i++){
+							tbodyStr+='<tr>' +
+									'<td>'+changeTime(datas[i].TIME)+'</td>'+
+									'<td>'+isUndefined(datas[i].CAUSE)+'</td>'+
+									'<td>'+isUndefined(datas[i].STATUS)+'</td>'+
+									'<td>'+isUndefined(datas[i].CASE_NUM)+'</td>'+
+									'</tr>'
+						}
+						$('.qyhxBody tbody').html(tbodyStr);
+						break;
+//						招聘信息
+					case '3':
+						var theadStr='<tr>' +
+								'<th>发布时间</th>' +
+								'<th>招聘职位</th>' +
+								'<th>薪资</th>' +
+								'<th>工作经验</th>' +
+								'<th>招聘人数</th>' +
+								'<th>所在城市</th>' +
+								'</tr>';
+						$('.qyhxBody thead').html(theadStr);
+						var tbodyStr=""
+						var datas=data.rows;
+						for(var i=0;i<datas.length;i++){
+							tbodyStr+='<tr>' +
+									'<td>'+changeTime(datas[i].TIME)+'</td>'+
+									'<td>'+isUndefined(datas[i].POSITION)+'</td>'+
+									'<td>'+isUndefined(datas[i].SALARY)+'</td>'+
+									'<td>'+isUndefined(datas[i].EXPERIENCE)+'</td>'+
+									'<td>'+isUndefined(datas[i].NUM)+'</td>'+
+									'<td>'+isUndefined(datas[i].SITE)+'</td>'+
+									'</tr>'
+						}
+						$('.qyhxBody tbody').html(tbodyStr);
+						break;
+//						招投标
+					case '4':
+						var theadStr='<tr>' +
+								'<th>发布时间</th>' +
+								'<th>标题</th>' +
+								'<th>采购人</th>' +
+								'</tr>';
+						$('.qyhxBody thead').html(theadStr);
+						var tbodyStr=""
+						var datas=data.rows;
+						for(var i=0;i<datas.length;i++){
+							tbodyStr+='<tr>' +
+									'<td>'+changeTime(datas[i].TIME)+'</td>'+
+									'<td>'+isUndefined(datas[i].TITLE)+'</td>'+
+									'<td>'+isUndefined(datas[i].BUYER)+'</td>'+
+									'</tr>'
+						}
+						$('.qyhxBody tbody').html(tbodyStr);
+						break;
+//						资质证书
+					case '5':
+						var theadStr='<tr>' +
+								'<th>证书类型</th>' +
+								'<th>证书编号</th>' +
+								'<th>发证日期</th>' +
+								'<th>截止日期</th>' +
+								'</tr>';
+						$('.qyhxBody thead').html(theadStr);
+						var tbodyStr=""
+						var datas=data.rows;
+						for(var i=0;i<datas.length;i++){
+							tbodyStr+='<tr>' +
+									'<td>'+isUndefined(datas[i].TYPE)+'</td>'+
+									'<td>'+isUndefined(datas[i].NUM)+'</td>'+
+									'<td>'+changeTime(datas[i].DATE_BEGIN)+'</td>'+
+									'<td>'+isUndefined(datas[i].DATE_END)+'</td>'+
+									'</tr>'
+						}
+						$('.qyhxBody tbody').html(tbodyStr);
+						break;
+//						专利信息
+					case '6':
+						var theadStr='<tr>' +
+								'<th>申请公布日</th>' +
+								'<th>专利名称</th>' +
+								'<th>申请号</th>' +
+								'<th>申请公布号</th>' +
+								'</tr>';
+						$('.qyhxBody thead').html(theadStr);
+						var tbodyStr=""
+						var datas=data.rows;
+						for(var i=0;i<datas.length;i++){
+							tbodyStr+='<tr>' +
+									'<td>'+changeTime(datas[i].TIME)+'</td>'+
+									'<td>'+isUndefined(datas[i].NAME)+'</td>'+
+									'<td>'+isUndefined(datas[i].APPLY_NUM)+'</td>'+
+									'<td>'+isUndefined(datas[i].PUBLIC_NUM)+'</td>'+
+									'</tr>'
+						}
+						$('.qyhxBody tbody').html(tbodyStr);
+						break;
+//						著作权
+					case '7':
+						var theadStr='<tr>' +
+								'<th>批准日期</th>' +
+								'<th>软件全称</th>' +
+								'<th>软件简称</th>' +
+								'<th>登记号</th>' +
+								'<th>分类号</th>' +
+								'<th>版本号</th>' +
+								'</tr>';
+						$('.qyhxBody thead').html(theadStr);
+						var tbodyStr=""
+						var datas=data.rows;
+						for(var i=0;i<datas.length;i++){
+							tbodyStr+='<tr>' +
+									'<td>'+changeTime(datas[i].TIME)+'</td>'+
+									'<td>'+isUndefined(datas[i].NAME)+'</td>'+
+									'<td>'+isUndefined(datas[i].BRIEF)+'</td>'+
+									'<td>'+isUndefined(datas[i].REG_NUM)+'</td>'+
+									'<td>'+isUndefined(datas[i].CLASSIFICATION)+'</td>'+
+									'<td>'+isUndefined(datas[i].VERSION)+'</td>'+
+									'</tr>'
+						}
+						$('.qyhxBody tbody').html(tbodyStr);
+						break;
+					default:
+						$('.qyhxBody').html("暂无数据")
+				}
+
+//				console.log(data.rows);
+			}
+		})
+	}
+//企业画像点击弹出模态框
+
+	$('.divqy').delegate('.qyhx','click',function(e){
+		var companyId=$('.qyPic').attr('comId');
+		var link=$('.qyPic').attr('link');
+		picId=$(this).attr('picId');
+		$('.qyhxTitle').html($(this).find('h5').html());
+		console.log(picId)
+		//如果是0，就不能点击
+		if($(this).find('.qyNum').html()==0) {
+			$(this).on('click', function (e) {
+				e.preventDefault();
+			})
+		}
+		else {
+			e.stopPropagation;
+			$(".userManager .pageCurrent").html("1");
+			aa.data.companyId=companyId;
+			aa.data.picId=picId;
+			aa.data.pageNumber=1;
+			aa.start($(".userManager"),pageAjax);
+//			$.ajax({
+//				type: 'post',
+//				url: "../../jxcompic/queryComPicInfo.do",
+//				dataType: 'JSON',
+//				data: {
+//					companyId: companyId,
+//					picId: picId,
+//					pageNumber: 1,
+//					pageSize: 5
+//				},
+//				success: function (data) {
+//					$('#qyhxModal').modal('show');
+//					switch (picId) {
+////						股东信息
+//						case '1':
+//							var theadStr='<tr>' +
+//							'<th>股东</th>' +
+//							'<th>认缴出资</th>' +
+//							'<th>单位</th>' +
+//							'</tr>';
+//							$('.qyhxBody thead').html(theadStr);
+//							var tbodyStr=""
+//							var datas=data.rows;
+//							for(var i=0;i<datas.length;i++){
+//								tbodyStr+='<tr>' +
+//									'<td>'+datas[i].OWNER_NAME+'</td>'+
+//									'<td>'+datas[i].CONTRIBUTION+'</td>'+
+//									'<td>'+datas[i].UNIT+'</td>'+
+//								'</tr>'
+//							}
+//							$('.qyhxBody tbody').html(tbodyStr);
+//							break;
+////						法律诉讼
+//						case '2':
+//							var theadStr='<tr>' +
+//							'<th>日期</th>' +
+//							'<th>案由</th>' +
+//							'<th>案件身份</th>' +
+//							'<th>案件号</th>' +
+//							'</tr>';
+//							$('.qyhxBody thead').html(theadStr);
+//							var tbodyStr=""
+//							var datas=data.rows;
+//							for(var i=0;i<datas.length;i++){
+//								tbodyStr+='<tr>' +
+//										'<td>'+changeTime(datas[i].TIME)+'</td>'+
+//										'<td>'+datas[i].CAUSE+'</td>'+
+//										'<td>'+datas[i].STATUS+'</td>'+
+//										'<td>'+datas[i].CASE_NUM+'</td>'+
+//										'</tr>'
+//							}
+//							$('.qyhxBody tbody').html(tbodyStr);
+//							break;
+////						招聘信息
+//						case '3':
+//							var theadStr='<tr>' +
+//							'<th>发布时间</th>' +
+//							'<th>招聘职位</th>' +
+//							'<th>薪资</th>' +
+//							'<th>工作经验</th>' +
+//							'<th>招聘人数</th>' +
+//							'<th>所在城市</th>' +
+//							'</tr>';
+//							$('.qyhxBody thead').html(theadStr);
+//							var tbodyStr=""
+//							var datas=data.rows;
+//							for(var i=0;i<datas.length;i++){
+//								tbodyStr+='<tr>' +
+//										'<td>'+changeTime(datas[i].TIME)+'</td>'+
+//										'<td>'+datas[i].POSITION+'</td>'+
+//										'<td>'+datas[i].SALARY+'</td>'+
+//										'<td>'+datas[i].EXPERIENCE+'</td>'+
+//										'<td>'+datas[i].NUM+'</td>'+
+//										'<td>'+datas[i].SITE+'</td>'+
+//										'</tr>'
+//							}
+//							$('.qyhxBody tbody').html(tbodyStr);
+//							break;
+////						招投标
+//						case '4':
+//							var theadStr='<tr>' +
+//							'<th>发布时间</th>' +
+//							'<th>标题</th>' +
+//							'<th>采购人</th>' +
+//							'</tr>';
+//							$('.qyhxBody thead').html(theadStr);
+//							var tbodyStr=""
+//							var datas=data.rows;
+//							for(var i=0;i<datas.length;i++){
+//								tbodyStr+='<tr>' +
+//										'<td>'+changeTime(datas[i].TIME)+'</td>'+
+//										'<td>'+datas[i].TITLE+'</td>'+
+//										'<td>'+datas[i].BUYER+'</td>'+
+//										'</tr>'
+//							}
+//							$('.qyhxBody tbody').html(tbodyStr);
+//							break;
+////						资质证书
+//						case '5':
+//							var theadStr='<tr>' +
+//									'<th>证书类型</th>' +
+//									'<th>证书编号</th>' +
+//									'<th>发证日期</th>' +
+//									'<th>截止日期</th>' +
+//									'</tr>';
+//							$('.qyhxBody thead').html(theadStr);
+//							var tbodyStr=""
+//							var datas=data.rows;
+//							for(var i=0;i<datas.length;i++){
+//								tbodyStr+='<tr>' +
+//										'<td>'+datas[i].TYPE+'</td>'+
+//										'<td>'+datas[i].NUM+'</td>'+
+//										'<td>'+changeTime(datas[i].DATE_BEGIN)+'</td>'+
+//										'<td>'+datas[i].DATE_END+'</td>'+
+//										'</tr>'
+//							}
+//							$('.qyhxBody tbody').html(tbodyStr);
+//							break;
+////						专利信息
+//						case '6':
+//							var theadStr='<tr>' +
+//									'<th>申请公布日</th>' +
+//									'<th>专利名称</th>' +
+//									'<th>申请号</th>' +
+//									'<th>申请公布号</th>' +
+//									'</tr>';
+//							$('.qyhxBody thead').html(theadStr);
+//							var tbodyStr=""
+//							var datas=data.rows;
+//							for(var i=0;i<datas.length;i++){
+//								tbodyStr+='<tr>' +
+//										'<td>'+changeTime(datas[i].TIME)+'</td>'+
+//										'<td>'+datas[i].NAME+'</td>'+
+//										'<td>'+datas[i].APPLY_NUM+'</td>'+
+//										'<td>'+datas[i].PUBLIC_NUM+'</td>'+
+//										'</tr>'
+//							}
+//							$('.qyhxBody tbody').html(tbodyStr);
+//							break;
+////						著作权
+//						case '7':
+//							var theadStr='<tr>' +
+//									'<th>批准日期</th>' +
+//									'<th>软件全称</th>' +
+//									'<th>软件简称</th>' +
+//									'<th>登记号</th>' +
+//									'<th>分类号</th>' +
+//									'<th>版本号</th>' +
+//									'</tr>';
+//							$('.qyhxBody thead').html(theadStr);
+//							var tbodyStr=""
+//							var datas=data.rows;
+//							for(var i=0;i<datas.length;i++){
+//								tbodyStr+='<tr>' +
+//										'<td>'+changeTime(datas[i].TIME)+'</td>'+
+//										'<td>'+datas[i].NAME+'</td>'+
+//										'<td>'+datas[i].BRIEF+'</td>'+
+//										'<td>'+datas[i].REG_NUM+'</td>'+
+//										'<td>'+datas[i].CLASSIFICATION+'</td>'+
+//										'<td>'+datas[i].VERSION+'</td>'+
+//										'</tr>'
+//							}
+//							$('.qyhxBody tbody').html(tbodyStr);
+//							break;
+//						default:
+//							$('.qyhxBody').html("暂无数据")
+//					}
+//
+//					console.log(data.rows);
+//				}
+//			})
+		}
+	})
+//	企业关系iframe
+	$('.divqy').delegate('.qygx','click',function(){
+		$('.iframbox').prop('src','');
+		//		企业序号
+		var companyId=$('.qyPic').attr('comId');
+		//如果没有股东信息，股权结构饼图就不能打开
+		if($(this).next().find('.gdxx').html()==0){
+			$(this).on('click', function (e) {
+				e.preventDefault();
+			})
+		}
+		else {
+			$('#qygx').modal('show');
+			var link = $('.qyPic').attr('link');
+			$('.iframbox').prop('src', link);
+		}
+	})
+//	股权结构饼图
+	$('.divqy').delegate('.gqjg','click',function(){
+//		企业序号
+		var companyId=$('.qyPic').attr('comId');
+		//如果没有股东信息，股权结构饼图就不能打开
+		if($(this).prev().find('.gdxx').html()==0){
+			$(this).on('click', function (e) {
+				e.preventDefault();
+			})
+		}
+		else{
+			$.ajax({
+				type: 'post',
+				url: "../../jxcompic/queryOwnership.do",
+				dataType: 'JSON',
+				data: {
+					companyId: companyId
+				},
+				success: function(data){
+					$('#gqjgBing').modal('show');
+					console.log("890")
+					console.log(data)
+					var len1=data.length;
+					var dataV=[];
+					for(var i=0;i<len1;i++){
+						var obj={};
+						obj.value=data[i].CONTRIBUTION;
+						obj.name=data[i].OWNER_NAME;
+						dataV.push(obj);
+					}
+					gqjg(dataV)
+				}
+			})
+		}
+	});
+//	股权结构饼图Echarts
+	function gqjg(dataV){
+		var myChart=echarts.init(document.getElementById("gqjgBody"));
+		var option = {
+			color:['#3e50db','#2880e5','#4a81ff','#25addf','#1bbf1b','#00d6ba'],
+			series: [
+				{
+					name:'股权结构',
+					type:'pie',
+					radius: ['30%', '55%'],
+					center:['55%','50%'],
+					avoidLabelOverlap: false,
+					itemStyle: {
+						normal:{
+							labelLine: {
+								show: true
+							},
+							label:{
+								show : true,
+								formatter:"{b}：{d}%",
+								textStyle:text_style
+							}
+						}
+					},
+					data:dataV
+				}
+			]
+		};
+		myChart.setOption(option);
+	}
+	$("#A2 #tableBody").delegate('tr','click',function(){
+		console.log("22222")
+		console.log($(this).data('data'))
+        $('.qyPic').attr('comId',$(this).data('data').XH);
+        $('.qyPic').attr('link',$(this).data('data').RELATIONSHIP_LINK);
+		$.ajax({
+			type: 'post',
+			url: "../../jxcompic/queryPicStatistic.do",
+			dataType: 'JSON',
+			data:{
+				companyId:$(this).data('data').XH
+			},
+			success:function(data){
+				$(".gdxx").html(data.ownerNum);
+				$(".flss").html(data.lawsuitNum);
+				$(".ztb").html(data.bidNum);
+				$(".zzzs").html(data.certificateNum);
+				$(".zpxx").html(data.recruitNum );
+				$(".zlxx").html(data.patentNum);
+				$(".zzq").html(data.copyRightNum);
+			}
+		})
+		if($(this).data("data").JD&&$(this).data("data").WD){
+//			if(map){
+//				map.clearMap();
+//				map.clearInfoWindow();
+//			}
+//			tuceng();
+			drawMap.addPoint([parseFloat($(this).data("data").JD),parseFloat($(this).data("data").WD)],22,24,'../../images/qy.png',$(this).data("data"));
+			drawMap.infoWindow($(this).data("data"));
+		}else{
+			alert("没有数据");
+		}
+	})
+    $("#tableBody2").delegate('tr','click',function(){
+		console.log("22222")
+		console.log($(this).data('data'))
+		$('.qyPic').attr('comId',$(this).data('data').XH);
+		$('.qyPic').attr('link',$(this).data('data').RELATIONSHIP_LINK);
+		$.ajax({
+			type: 'post',
+			url: "../../jxcompic/queryPicStatistic.do",
+			dataType: 'JSON',
+			data:{
+				companyId:$(this).data('data').XH
+			},
+			success:function(data){
+				$(".gdxx").html(data.ownerNum);
+				$(".flss").html(data.lawsuitNum);
+				$(".ztb").html(data.bidNum);
+				$(".zzzs").html(data.certificateNum);
+				$(".zpxx").html(data.recruitNum );
+				$(".zlxx").html(data.patentNum);
+				$(".zzq").html(data.copyRightNum);
+			}
+		})
+        if($(this).data("data").JD&&$(this).data("data").WD){
+//			if(map){
+//				map.clearMap();
+//				map.clearInfoWindow();
+//			}
+//			tuceng();
+            drawMap.addPoint([parseFloat($(this).data("data").JD),parseFloat($(this).data("data").WD)],22,24,'../../images/qy.png',$(this).data("data"));
+            drawMap.infoWindow($(this).data("data"));
+        }else{
+            alert("没有数据");
+        }
+    })
+	function tuceng(){
+		//获取json数据
+		$.ajax({
+			type: 'post',
+			url: "../../jsonData/region.json",
+			dataType: 'JSON',
+			success: function (data) {
+				var XYarr=data.features;
+				var len=XYarr.length;
+				for(var i=0;i<len;i++){
+					polygon(XYarr[i].geometry.rings[0])
+				}
+			}
+		})
+	}
+	//画出嘉兴地图边界
+	function polygon(Data){
+		var len=Data.length;
+		var newData=[];
+		for(var i=0;i<len;i++){
+			newData.push(wgs84togcj02(Data[i][0],Data[i][1]));//绘制学区经纬度纠偏
+		}
+		var strokeColor="#1f9265", //设置多边形线颜色
+				strokeOpacity=.6, //设置多边形线透明度
+				strokeWeight=3,    //设置多边形线宽
+				fillColor="rgb(41,229,156)", //设置多边形填充色
+				fillOpacity=0.15;//设置多边形填充透明度
+		var polygon = new AMap.Polygon({
+			path: newData,//设置多边形边界路径
+			strokeColor: strokeColor, //线颜色
+			strokeOpacity: strokeOpacity, //线透明度
+			strokeWeight: strokeWeight,    //线宽
+			fillColor: fillColor, //填充色
+			fillOpacity: fillOpacity//填充透明度
+		});
+		polygon.setMap(map);//绘制多边形
+	}
+
+
+
+</script>
+</body>
+</html>

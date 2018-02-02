@@ -1,0 +1,113 @@
+package com.cetc28.idata.dto;
+
+/**
+ * 宏观经济
+ * Created by Fang on 2017/9/7.
+ */
+public class HgJjDto {
+    private int id;
+    private String sj;
+    private double gyzz;
+    private double fwysczs;
+    private double gdzctz;
+    private double fdckftz;
+    private double shxfplsze;
+    private double jck;
+    private double tbzz;
+    private double hbzz;
+
+    public double getHbzz() {
+        return hbzz;
+    }
+
+    public void setHbzz(double hbzz) {
+        this.hbzz = hbzz;
+    }
+
+    public double getTbzz() {
+        return tbzz;
+    }
+
+    public void setTbzz(double tbzz) {
+        this.tbzz = tbzz;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSj() {
+        return sj;
+    }
+
+    public void setSj(String sj) {
+        this.sj = sj;
+    }
+
+    public double getGyzz() {
+        return gyzz;
+    }
+
+    public void setGyzz(double gyzz) {
+        this.gyzz = gyzz;
+    }
+
+    public double getFwysczs() {
+        return fwysczs;
+    }
+
+    public void setFwysczs(double fwysczs) {
+        this.fwysczs = fwysczs;
+    }
+
+    public double getGdzctz() {
+        return gdzctz;
+    }
+
+    public void setGdzctz(double gdzctz) {
+        this.gdzctz = gdzctz;
+    }
+
+    public double getFdckftz() {
+        return fdckftz;
+    }
+
+    public void setFdckftz(double fdckftz) {
+        this.fdckftz = fdckftz;
+    }
+
+    public double getShxfplsze() {
+        return shxfplsze;
+    }
+
+    public void setShxfplsze(double shxfplsze) {
+        this.shxfplsze = shxfplsze;
+    }
+
+    public double getJck() {
+        return jck;
+    }
+
+    public void setJck(double jck) {
+        this.jck = jck;
+    }
+
+    @Override
+    public String toString() {
+        return "HgJjDto{" +
+                "id=" + id +
+                ", sj='" + sj + '\'' +
+                ", gyzz=" + gyzz +
+                ", fwysczs=" + fwysczs +
+                ", gdzctz=" + gdzctz +
+                ", fdckftz=" + fdckftz +
+                ", shxfplsze=" + shxfplsze +
+                ", jck=" + jck +
+                ", tbzz=" + tbzz +
+                '}';
+    }
+}

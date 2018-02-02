@@ -1,0 +1,96 @@
+package com.cetc28.ConfigurationManagement.dao;
+
+import com.cetc28.ConfigurationManagement.model.JxIndicator;
+import com.cetc28.ConfigurationManagement.model.JxIndicatorsUser;
+import com.cetc28.ConfigurationManagement.model.JxJczb;
+import com.cetc28.ConfigurationManagement.model.Xzqh;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * Created by linyu on 2017/8/17.
+ */
+public interface IJxSysDao {
+
+    /**
+     * 获取系统一级监测指标（已废弃）
+     * @return
+     */
+    public abstract  List<JxIndicator> listIndicators();
+
+    /**
+     * 获取城市运行全景图监测指标
+     * @param bh 上级监测指标编号
+     * @return
+     */
+    public abstract List<JxJczb> listSysIndicators(String bh);
+
+    /**
+     * 根据上级编号获取所有监测指标信息
+     * @param bh 上级监测指标编号
+     * @return
+     */
+    public abstract List<JxJczb> listAllSysIndicators(String bh);
+
+    /**
+     * 新增监测指标
+     * @param indicator 指标信息
+     */
+    public abstract void addSysIndicators(JxJczb indicator);
+
+    /**
+     * 更新指标信息
+     * @param indicator 指标信息
+     */
+    public abstract void updateSysIndicators(JxJczb indicator);
+
+    /**
+     * 删除指标信息
+     * @param indicatorId 指标编号信息
+     */
+    public abstract void deleteSysIndicators(String indicatorId);
+
+    /**
+     *  获取下级行政区划信息
+     * @param qhxh 上级行政区划序号
+     * @return
+     */
+    public abstract List<Xzqh> listJxXzqh(String qhxh);
+
+    /**
+     *  获取下级行政区划信息
+     * @param bH  行政区划编号
+     * @return 行政区划表格中对应的记录
+     */
+    public abstract Xzqh findXzqhByBh(String bH);
+
+    /**
+     * 根据一级指标编号获取二级指标的展示信息
+     * @param bh 上级监测指标编号
+     * @return
+     */
+    public abstract List<JxJczb> listIndicatorsShown(@Param("userId") String userId, @Param("bh")String bh);
+
+
+    /**
+     * 更新指定用户的监测指标
+     * @param
+     * @return
+     */
+    public abstract void saveIndicatorsShown(JxIndicatorsUser indicator);
+
+    /**
+     * 根据用户ID、指标标号删除监测目录
+     * @param userId 用户id
+     * @param sjbh     上级指标编号
+     */
+    public abstract void deleteIndicatorByUseridAndBh(@Param("userId") String userId, @Param("sjbh") String sjbh);
+
+    /**
+     * 根据指标编号获取下级指标最大编号
+     * @param bh 指标比那好
+     * @return
+     */
+    public abstract String getMaxIndicatorNo(String bh);
+}

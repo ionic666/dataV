@@ -1,0 +1,5 @@
+package com.cetc28.ConfigurationManagement.service;
+
+public interface IJxCompanyInfoService {
+    public abstract void companyInfoRenewed();
+}

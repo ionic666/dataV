@@ -1,0 +1,196 @@
+package com.cetc28.importExcel.service;
+
+import com.cetc28.importExcel.dao.JxSchoolInfoDao;
+import com.cetc28.importExcel.model.JxSchoolInfo;
+import com.cetc28.util.general.dto.GeneralMsg;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+/**
+ * Created by wangxw on 2017/8/28.
+ */
+@Service
+public class ImportExcelServiceImpl implements ImportExcelService{
+
+    @Autowired
+    private JxSchoolInfoDao jxSchoolInfoDao;
+
+    @Override
+    public GeneralMsg impSchoolInfo(MultipartFile dataControllerFile, GeneralMsg msg) {
+        // TODO Auto-generated method stub
+        XSSFSheet sheet = null;
+        try{
+             sheet = getSheet(dataControllerFile);//获取sheet
+        }catch(Exception ex){
+            msg.setMsg("读取excel文件异常！");
+            msg.setSuccess(false);
+            return msg;
+        }
+        checkExcel(sheet, msg, getHeadTile());//检查sheet是否存在数据错误记录
+        if(msg.getSuccess()==false){
+            return msg;
+        }
+        //将数据保存至数据库
+        int rowTotal = sheet.getLastRowNum();  //获取所有行;
+        String[][] headTitle = this.getHeadTile();//获取自定义的表头
+        impExcel(sheet, rowTotal, headTitle, msg );//将数据插入进去
+        return msg;
+    }
+
+    public XSSFSheet getSheet(MultipartFile dataControllerFile) throws IOException {
+//        Workbook book = null;
+//        InputStream is = dataControllerFile.getInputStream();
+//        try{
+//            book = new XSSFWorkbook(is);
+//        }catch(Exception ex){
+//            book = new HSSFWorkbook(is);
+//        }
+//        return book.getSheetAt(0);//获取第一个sheet
+        InputStream ipts = dataControllerFile.getInputStream();//找到文件
+        XSSFWorkbook hswk = new XSSFWorkbook(ipts);//打开文件流
+        return hswk.getSheetAt(0);//获取第一个sheet
+    }
+
+    /**
+     * 导入模板的表头
+     * 这个是定死的
+     * <B>TODO</B><P>
+     * @return
+     */
+    public String[][] getHeadTile(){
+        return  new String[][]{{"学校编码","schoolCode"},{"区划编号","qhbh"},{"学校名称","name"},
+                {"学校类型","type"},{"学校性质","attri"},{"经度","jd"},
+                {"纬度","wd"},{"地址","addr"},{"办公电话","tel"},
+                {"行政负责人","contact"},{"行政负责人联系电话","contactTel"},{"教职工总数","teacherNo"},
+                {"学生总数","studentNo"},{"教室总数","roomNumber"},
+                {"备注信息","bz"}};
+    }
+
+    /**
+     * 一、校验Excel
+     * <B>TODO</B><P>
+     * @return
+     */
+    public GeneralMsg checkExcel(XSSFSheet sheet,GeneralMsg msg,String[][] headTitle){
+        msg.setSuccess(true);
+        try {
+            //获取工作薄Sheet
+            if(null==sheet){
+                msg.setSuccess(false);
+                msg.setMsg("抱歉，导入Excel没有Sheet！");
+                return msg;
+            }
+            int rowTotal = sheet.getLastRowNum();//获取 总行数
+            XSSFRow first_cell =  sheet.getRow(0);//获取第一行
+            //获取当前总行数
+            if(rowTotal<1){
+                msg.setSuccess(false);
+                msg.setMsg("抱歉，您导入的Excel 没有数据哟！");
+                return msg;
+            }
+            //获取当前的总列数
+            if(first_cell.getLastCellNum()<=0){
+                msg.setSuccess(false);
+                msg.setMsg("抱歉，您导入的Excel 没有数据哟！");
+                return msg;
+            }
+            //验证表列和自定义表头是否一致
+            for (int i = 0; i < headTitle.length; i++) {
+                XSSFCell cell = first_cell.getCell(i);
+                if(cell == null){//如果当前列为空，直接提示报错
+                    msg.setSuccess(false);
+                    msg.setMsg("抱歉，您导入的模板不否合规范，请重新下载模板进行数据导入，切勿删除表头！");
+                    break;
+                }else if(!cell.toString().trim().equals(headTitle[i][0])){
+                    msg.setSuccess(false);
+                    msg.setMsg("抱歉，您导入的模板不否合规范，请重新下载模板进行数据导入，切勿修改表头！");
+                    break;
+                }
+            }
+        }catch (Exception e) {
+            // TODO Auto-generated catch block
+            msg.setSuccess(false);
+            msg.setMsg("抱歉，系统无法读取您选择的文件，请检查文件路径是否正确!");
+            return msg;
+        }
+        return msg;
+    }
+
+    /**
+     * 二、导入Excel,创建数据结果集表
+     * <B>TODO</B><P>
+     * @param sheet
+     * @return
+     */
+    public GeneralMsg impExcel(XSSFSheet sheet,int rowTotal,String[][] headTitle,GeneralMsg msg){
+        msg.setSuccess(true);
+        try {
+            Object[] obj ;
+            int paramsLength = headTitle.length;
+            for (int j = 1; j <= rowTotal; j++) {
+                JxSchoolInfo jxSchoolInfo = new JxSchoolInfo();
+                obj = new Object[paramsLength];
+                XSSFRow xsr = sheet.getRow(j); //获取当前行
+                if (null == xsr) {  //如果当前行为空跳过
+                    continue;
+                }else if((null==xsr.getCell(0))||(xsr.getCell(0).toString().trim().equals(""))){  //如果学校编码为空则结束
+                    break;
+                }
+                else {
+                    for (int k = 0; k < paramsLength; k++) {
+                        XSSFCell xsc = xsr.getCell(k);
+                        String value = "";
+                        if(xsc != null){
+                            value = xsc.toString().trim();
+
+                        }
+                        obj[k] = value;
+                    }
+                }
+                jxSchoolInfo.setSchoolCode(obj[0].toString());
+                jxSchoolInfo.setQhbh(obj[1].toString());
+                jxSchoolInfo.setName(obj[2].toString());
+                jxSchoolInfo.setType(obj[3].toString());
+                jxSchoolInfo.setAttri(obj[4].toString());
+                jxSchoolInfo.setJd(obj[5].toString());
+                jxSchoolInfo.setWd(obj[6].toString());
+                jxSchoolInfo.setAddr(obj[7].toString());
+                jxSchoolInfo.setTel(obj[8].toString());
+                jxSchoolInfo.setContact(obj[9].toString());
+                jxSchoolInfo.setContactTel(obj[10].toString());
+                Short sum = 0;
+                if(obj[11].toString().equals("")){
+                    jxSchoolInfo.setTeacherNo(sum);
+                }else{
+                    jxSchoolInfo.setTeacherNo(Short.decode(obj[11].toString()));
+                }
+                if(obj[12].toString().equals("")){
+                    jxSchoolInfo.setStudentNo(sum);
+                }else{
+                    jxSchoolInfo.setStudentNo(Short.decode(obj[12].toString()));
+                }
+                if(obj[13].toString().equals("")){
+                    jxSchoolInfo.setRoomNumber(sum);
+                }else{
+                    jxSchoolInfo.setRoomNumber(Short.decode(obj[13].toString()));
+                }
+                jxSchoolInfo.setBz(obj[14].toString());
+                jxSchoolInfoDao.insert(jxSchoolInfo);
+            }
+        }catch (Exception e) {
+            // TODO Auto-generated catch block
+            msg.setSuccess(false);
+            msg.setMsg("抱歉，保存数据出错！");
+            return msg;
+        }
+        return msg;
+    }
+}

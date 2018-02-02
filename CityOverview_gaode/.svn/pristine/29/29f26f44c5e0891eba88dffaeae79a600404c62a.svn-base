@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.FindlocationDao" >
+    <select id="find" resultType="String">
+        select CORP_NAME from JX_SS_CORP_ANALYSIS
+    </select>
+
+    <select id="add">
+        UPDATE JX_SS_CORP_ANALYSIS
+        SET LONGITUDE=#{0},LATITUDE=#{1}
+        WHERE CORP_NAME=#{2}
+    </select>
+</mapper>

@@ -1,0 +1,57 @@
+package com.cetc28.util;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：wangxw
+ * 创建日期：2017/9/25 11:26
+ * 描述信息：运用JAVA反射机制动态调用JAVA Bean的set和get方法
+ * ***************************************************************
+ */
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+public class DynamicSetterAndGetter {
+    public static Object get(Object obj,String field){
+        Object result = null;
+        try{
+            Class clazz = obj.getClass();
+            PropertyDescriptor pd = new PropertyDescriptor(field, clazz);
+
+            Method getMethod = pd.getReadMethod();//获取get方法
+            result = getMethod.invoke(obj);//执行get方法返回一个Object
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static void set(Object obj,String field, String value){
+        try{
+            Class clazz = obj.getClass();
+            PropertyDescriptor pd = new PropertyDescriptor(field,clazz);
+            Method setMethod = pd.getWriteMethod();
+            setMethod.invoke(obj,value);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+}

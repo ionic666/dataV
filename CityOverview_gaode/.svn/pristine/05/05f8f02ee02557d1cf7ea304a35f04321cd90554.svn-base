@@ -1,0 +1,36 @@
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.dao.FindlocationDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/11/15.
+ */
+@Controller
+public class LocationController {
+    @Autowired private FindlocationDao findlocationDao;
+
+    @RequestMapping("findLocation.do")
+    @ResponseBody
+    public List find(Integer num){
+            return findlocationDao.find(num);
+    }
+
+    @RequestMapping("add.do")
+    public void insert(
+                       @RequestParam(value = "jwd[]")String[] jwd,
+                       @RequestParam(value = "address[]")String[] address) throws InterruptedException {
+        for (int i = 0; i < jwd.length; i++) {
+            String jd = jwd[i].split(",")[0];
+            String wd = jwd[i].split(",")[1];
+            findlocationDao.add(jd,wd,address[i]);
+            System.out.println(i+"*****"+jd+"***"+wd+"***"+address[i]);
+        }
+    }
+}

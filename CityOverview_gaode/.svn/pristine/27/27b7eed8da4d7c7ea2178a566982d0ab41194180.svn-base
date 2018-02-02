@@ -1,0 +1,218 @@
+/**
+ * Created by tonghao on 2017/11/6.
+ */
+sthj={
+    sthjAjax:function(){
+        //addPoint([118.78,32.04],40,40,'images/c.png');
+        //addPoint([119.78,32.04],40,40,'images/c.png',"hahah");
+        //水质量AJAX
+        var title,content;var infoWindow;
+        function DwaterShowLayers(data){
+            var water1 = "images/water_new1.png";
+            var water2 = "images/water_new2.png";
+            var water3 = "images/water3.gif";
+            var water4 = "images/water4.gif";
+            var water5 = "images/water5.gif";
+            var water6 = "images/water6.gif";
+            for (var j = 0; j < data.length; j++) {
+                title = '<span style="font-size:11px;color:#F00;">'+data[j].mc+'</span>';
+                content = [];
+                content.push("<p style='color:black;'>PH值："+data[j].ph+"</p>");
+                content.push("<p style='color:black;'>溶解氧："+data[j].rjy+"</p>");
+                content.push("<p style='color:black;'>首要污染物："+data[j].sywrw+"</p>");
+                content.push("<p style='color:black;'>质量等级："+data[j].ph+"</p>");
+                infoWindow = new AMap.InfoWindow({
+                    isCustom: true,  //使用自定义窗体
+                    content: createInfoWindow(title, content.join("")),
+                    offset: new AMap.Pixel(16, -45)
+                });
+                var jwd = [];
+                jwd.push(data[j].jd);
+                jwd.push(data[j].wd);
+
+                if(data[j].zldj=="I类"){
+                    addPoint(jwd,80,80,water1);
+                }
+                if(data[j].zldj=="II类"){
+                    addPoint(jwd,80,80,water2);
+                }
+
+                if(data[j].zldj=="III类"){
+                    addPoint(jwd,40,40,water3);
+                }
+                if(data[j].zldj=="IV类"){
+                    addPoint(jwd,40,40,water4);
+                }
+                if(data[j].zldj=="V类"){
+                    addPoint(jwd,40,40,water5);
+                }
+                if(data[j].zldj=="劣V类"){
+                    addPoint(jwd,40,40,water6);
+                }
+
+
+            }
+        }
+        $.ajax({
+            type: 'post',
+            url: "jxenvir/MapWaterMonitorJcd.do?qhbh=003001",
+            dataType: 'JSON',
+            success: function (data) {
+                DwaterShowLayers(data);
+
+            }
+        });
+        //空气质量
+        function airShowLayers(data){
+            var greenImage = "images/air_new1.png";
+            var yellowImage="images/air_new2.png";
+            var orangeImage = "images/air3.gif";
+            var redImage="images/air4.gif";
+            var bigredImage="images/air5.gif";
+            var darkredImage="images/air6.gif";
+            for (var j = 0; j < data.length; j++) {
+                var jwd = [];
+                jwd.push(data[j].jd);
+                jwd.push(data[j].wd);
+                var aqi=data[j].aqi;
+                //这边做判断 选择放在地图上的点是什么颜色的
+                //大于0小于51 显示绿色  大于51小于等于100 显示黄色，大于100显示红色，
+                //imageSoure 为默认传入的图片
+
+                if(aqi>=0 && aqi<=51){
+                    addPoint(jwd,80,80,greenImage);
+                }
+
+                if(aqi>51 && aqi<=100){
+                    addPoint(jwd,80,80,yellowImage);
+                }
+                if(aqi>100 && aqi<=150){
+                    addPoint(jwd,40,40,orangeImage);
+                }
+                if(aqi>=151 && aqi<=200){
+                    addPoint(jwd,40,40,redImage);
+                }
+                if(aqi>=201 && aqi<=250){
+                    addPoint(jwd,40,40,bigredImage);
+                }
+                if(aqi>=301){
+                    addPoint(jwd,40,40,darkredImage);
+                }
+            }
+        }
+        $.ajax({
+            type: 'post',
+            url: "jxenvir/queryEnvirMapAirJcdInfo.do?qhbh=003001",
+            dataType: 'JSON',
+            success: function (data) {
+                airShowLayers(data);
+            }
+        });
+        //
+        function SwaterShowLayers(data){
+
+            var water1 = "images/water_new1.png";
+            var water2 = "images/water_new2.png";
+            var water3 = "images/water3.gif";
+            var water4 = "images/water4.gif";
+            var water5 = "images/water5.gif";
+            var water6 = "images/water6.gif";
+            for (var j = 0; j < data.length; j++) {
+                var jwd = [];
+                jwd.push(data[j].jd);
+                jwd.push(data[j].wd);
+                if(data[j].zldj=="I类"){
+                    addPoint(jwd,80,80,water1);
+                }
+                if(data[j].zldj=="II类"){
+                    addPoint(jwd,80,80,water2);
+                }
+
+                if(data[j].zldj=="III类"){
+                    addPoint(jwd,40,40,water3);
+                }
+                if(data[j].zldj=="IV类"){
+                    addPoint(jwd,40,40,water4);
+                }
+                if(data[j].zldj=="V类"){
+                    addPoint(jwd,40,40,water5);
+                }
+                if(data[j].zldj=="劣V类"){
+                    addPoint(jwd,40,40,water6);
+                }
+            }
+
+        }
+        $.ajax({
+            type: 'post',
+            url: "jxenvir/MapWaterDmsJcd.do?qhbh=003001",
+            dataType: 'JSON',
+            success: function (data) {
+                SwaterShowLayers(data);
+            }
+        });
+        function addPoint(arr,h,w,img,details) {//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+            var _marker = new AMap.Marker({
+                map: map,
+                position: arr,        //经纬度
+                icon: new AMap.Icon({
+                    size: new AMap.Size(h, w),  //图标大小
+                    image: img       //自定义图片
+                })
+            });
+            map.setCenter(arr);
+            AMap.event.addListener(_marker, 'click', function (e) {
+                //console.log(details)
+
+
+                infoWindow.open(map, _marker.getPosition());
+
+            });
+        }
+        //实例化信息窗体
+        //构建自定义信息窗体
+        function createInfoWindow(title, content) {
+            var info = document.createElement("div");
+            info.className = "info";
+
+            //可以通过下面的方式修改自定义窗体的宽高
+            info.style.width = "200px";
+            // 定义顶部标题
+            var top = document.createElement("div");
+            var titleD = document.createElement("div");
+            var closeX = document.createElement("img");
+            top.className = "info-top";
+            titleD.innerHTML = title;
+            closeX.src = "http://webapi.amap.com/images/close2.gif";
+            closeX.onclick = closeInfoWindow;
+
+            top.appendChild(titleD);
+            top.appendChild(closeX);
+            info.appendChild(top);
+
+            // 定义中部内容
+            var middle = document.createElement("div");
+            middle.className = "info-middle";
+            middle.style.backgroundColor = 'white';
+            middle.innerHTML = content;
+            info.appendChild(middle);
+
+            // 定义底部内容   //下方的小箭头
+            var bottom = document.createElement("div");
+            bottom.className = "info-bottom";
+            bottom.style.position = 'relative';
+            bottom.style.top = '0px';
+            bottom.style.margin = '0 auto';
+            var sharp = document.createElement("img");
+            sharp.src = "http://webapi.amap.com/images/sharp.png";
+            bottom.appendChild(sharp);
+            info.appendChild(bottom);
+            return info;
+        }
+        //关闭信息窗体
+        function closeInfoWindow() {
+            map.clearInfoWindow();
+        }
+
+    }
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.IJxEcoLhrhDao">
+    <select id="queryIndication" parameterType="Integer" resultType="com.cetc28.PeopleBenefitService.model.JxEcoLhrh">
+        select bh,mc from JX_ECO_LHRH WHERE sjbh IS  NULL
+    </select>
+
+    <select id="queryEcoIndex"  resultType="java.util.HashMap">
+        <![CDATA[SELECT * FROM (SELECT a.year,a.value,a.rank from JX_ECO_LHRH_VALUE a WHERE a.bh=#{1} order by year desc) where rownum <= #{0} ORDER by year]]>
+    </select>
+
+    <select id="queryEcoSubIndex"  resultType="java.util.HashMap">
+        SELECT b.mc as submc,a.value from JX_ECO_LHRH_VALUE a left join JX_ECO_LHRH b on a.bh=b.bh  where a.year=#{year} and b.sjbh=#{bh}
+    </select>
+</mapper>

@@ -1,0 +1,303 @@
+/**
+ * Created by tonghao on 2017/11/6.
+ */
+sthj={
+    timer:[],
+    sthjAjax:function(){
+        var greenImage = "images/air_new1.png";
+        var yellowImage="images/air_new2.png";
+        var orangeImage = "images/air3.gif";
+        var redImage="images/air4.gif";
+        var bigredImage="images/air5.gif";
+        var darkredImage="images/air6.gif";
+        var water1 = "images/water_new1.png";
+        var water2 = "images/water_new2.png";
+        var water3 = "images/water3.gif";
+        var water4 = "images/water4.gif";
+        var water5 = "images/water5.gif";
+        var water6 = "images/water6.gif";
+        var allPoint=[];
+        var pointLen1=pointLen2=pointLen3=0;
+        var ok1=ok2=ok3=false;
+        $.ajax({
+            type: 'post',
+            url: "jxenvir/MapWaterMonitorJcd.do?qhbh=003001",
+            dataType: 'JSON',
+            success: function (data) {
+                //pointLen1=data.length;
+
+                $.each(data,function(i){
+
+                    if(i != data.length-1){
+                        ok1=false;
+                    }else{
+                        ok1=true;
+                    }
+                    var jwd = wgs84togcj02(parseFloat(data[i].jd),parseFloat(data[i].wd));
+                    if(data[i].zldj=="I类"){
+                        sthj.addPoint(jwd,60,60,water1,data[i],001);
+                    }
+                    if(data[i].zldj=="II类"){
+                        sthj.addPoint(jwd,60,60,water2,data[i],001);
+                    }
+
+                    if(data[i].zldj=="III类"){
+                        pointLen1++;
+                        allPoint.push(data[i]);
+                        sthj.addPoint(jwd,60,60,water3,data[i],001);
+                    }
+                    if(data[i].zldj=="IV类"){
+                        pointLen1++;
+                        allPoint.push(data[i]);
+                        sthj.addPoint(jwd,60,60,water4,data[i],001);
+                    }
+                    if(data[i].zldj=="V类"){
+                        pointLen1++;
+                        allPoint.push(data[i]);
+                        sthj.addPoint(jwd,60,60,water5,data[i],001);
+                    }
+                    if(data[i].zldj=="劣V类"){
+                        pointLen1++;
+                        allPoint.push(data[i]);
+                        sthj.addPoint(jwd,60,60,water6,data[i],001);
+                    }
+                })
+            }
+        })
+        if(ok1=true){
+            $.ajax({
+                type: 'post',
+                url: "jxenvir/MapWaterDmsJcd.do?qhbh=003001",
+                dataType: 'JSON',
+                success: function (data) {
+
+                    $.each(data,function(i){
+
+                        //console.log(data[i].ph)
+                        if(i != data.length-1){
+                            ok2=false;
+                        }else{
+                            ok2=true;
+                        }
+                        var jwd = wgs84togcj02(parseFloat(data[i].jd),parseFloat(data[i].wd));
+
+                        if(data[i].zldj=="I类"){
+                            sthj.addPoint(jwd,60,60,water1,data[i],002);
+                        }
+                        if(data[i].zldj=="II类"){
+                            sthj.addPoint(jwd,60,60,water2,data[i],002);
+                        }
+
+                        if(data[i].zldj=="III类"){
+                            allPoint.push(data[i]);
+                            pointLen2++;
+                            sthj.addPoint(jwd,60,60,water3,data[i],002);
+                        }
+                        if(data[i].zldj=="IV类"){
+                            allPoint.push(data[i]);
+                            pointLen2++;
+                            sthj.addPoint(jwd,60,60,water4,data[i],002);
+                        }
+                        if(data[i].zldj=="V类"){
+                            allPoint.push(data[i]);
+                            pointLen2++;
+                            sthj.addPoint(jwd,60,60,water5,data[i],002);
+                        }
+                        if(data[i].zldj=="劣V类"){
+                            allPoint.push(data[i]);
+                            pointLen2++;
+                            sthj.addPoint(jwd,60,60,water6,data[i],002);
+                        }
+                    })
+                }
+            })
+        }
+        if(ok2=true){
+            $.ajax({
+                type: 'post',
+                url: "jxenvir/queryEnvirMapAirJcdInfo.do?qhbh=003001",
+                dataType: 'JSON',
+                success: function (data) {
+
+                    $.each(data,function(i){
+
+
+                        if(i != data.length-1){
+                            ok3=false;
+                        }else{
+                            lunbo();
+                            ok3=true;
+                        }
+                        var jwd = wgs84togcj02(parseFloat(data[i].jd),parseFloat(data[i].wd));
+                        var aqi=data[i].aqi;
+                        if(aqi>=0 && aqi<=51){
+                            sthj.addPoint(jwd,60,60,greenImage,data[i],003);
+                        }
+
+                        if(aqi>51 && aqi<=100){
+                            sthj.addPoint(jwd,60,60,yellowImage,data[i],003);
+                        }
+                        if(aqi>100 && aqi<=150){
+                            pointLen3++;
+                            sthj.addPoint(jwd,60,60,orangeImage,data[i],003);
+                            allPoint.push(data[i]);
+                        }
+                        if(aqi>=151 && aqi<=200){
+                            pointLen3++;
+                            sthj.addPoint(jwd,60,60,redImage,data[i],003);
+                            allPoint.push(data[i]);
+                        }
+                        if(aqi>=201 && aqi<=250){
+                            pointLen3++;
+                            sthj.addPoint(jwd,60,60,bigredImage,data[i],003);
+                            allPoint.push(data[i]);
+                        }
+                        if(aqi>=301){
+                            pointLen3++;
+                            sthj.addPoint(jwd,60,60,darkredImage,data[i],003);
+                            allPoint.push(data[i]);
+                        }
+                    })
+                }
+            })
+        }
+        if(ok1==true && ok2==true && ok3==true){
+            lunbo();
+        }
+        function lunbo(){
+            var num=0;
+            console.log(allPoint)
+            var len=allPoint.length;
+            //console.log(len)
+            $.each(allPoint,function(i){
+            //for(var i=0;i<26;i++){
+                    sthj.timer[i]=setTimeout(function(){
+
+                        //console.log(data.corpAnalysisTooltipDtoList)
+                        if(i<pointLen1+pointLen2){
+                            num++;
+                            if(allPoint[i].ph!="0"){
+                                console.log(allPoint[i].ph)
+                                sthj.infoWindow(allPoint[i],001)
+                            }else{
+                                console.log(allPoint[i].ph)
+                                sthj.infoWindow(allPoint[i],002)
+                            }
+                        }else{
+                            //debugger
+                            num++;
+                            //console.log(num)
+                            sthj.infoWindow(allPoint[i],003)
+
+                            if(num==allPoint.length){
+                                //n=0;
+                                //i=0
+                                lunbo();
+                            }
+                        }
+                    },i*2000+1000);
+
+
+            //}
+            })
+        }
+
+    },
+
+    ////关闭信息窗体
+    closeInfoWindow:function () {
+        map.clearInfoWindow();
+        $.each(sthj.timer,function(i,v){
+            //alert(666)
+            clearTimeout(v);   //清空社会保障中轮播定时器
+        })
+    },
+    //实例化信息窗体
+    //构建自定义信息窗体
+    createInfoWindow: function (title, content) {
+        var info = document.createElement("div");
+        info.className = "info";
+
+        //可以通过下面的方式修改自定义窗体的宽高
+        info.style.width = "200px";
+        // 定义顶部标题
+        var top = document.createElement("div");
+        var titleD = document.createElement("div");
+        var closeX = document.createElement("img");
+        top.className = "info-top";
+        titleD.innerHTML = title;
+        closeX.src = "images/gaode-close.png";
+        closeX.onclick = sthj.closeInfoWindow;
+
+        top.appendChild(titleD);
+        top.appendChild(closeX);
+        info.appendChild(top);
+
+        // 定义中部内容
+        var middle = document.createElement("div");
+        middle.className = "info-middle";
+        middle.style.backgroundColor = 'white';
+        middle.innerHTML = content;
+        info.appendChild(middle);
+
+        // 定义底部内容   //下方的小箭头
+        var bottom = document.createElement("div");
+        bottom.className = "info-bottom";
+        bottom.style.position = 'relative';
+        bottom.style.top = '0px';
+        bottom.style.margin = '0 auto';
+        var sharp = document.createElement("img");
+        sharp.src = "images/gaode-sharp.png";
+        bottom.appendChild(sharp);
+        info.appendChild(bottom);
+        return info;
+    },
+    infoWindow:function(details,state){
+
+        if(state==001){
+            //console.log(details.ph)
+            var title = '<span style="font-size:11px;color:#0CDAF5;">'+details.mc+'</span>';
+            content = [];
+            content.push("<p style='color:#fff;'>PH值："+details.ph+"</p>");
+            content.push("<p style='color:#fff;'>溶解氧："+details.rjy+"</p>");
+            content.push("<p style='color:#fff;'>首要污染物："+details.sywrw+"</p>");
+            content.push("<p style='color:#fff;'>质量等级："+details.zldj+"</p>");
+        }else if(state==002){
+            var title = '<span style="font-size:11px;color:#0CDAF5;">'+details.mc+'</span>';
+            content = [];
+            content.push("<p style='color:#fff;'>首要污染物："+details.sywrw+"</p>");
+            content.push("<p style='color:#fff;'>质量等级："+details.zldj+"</p>");
+        }else{
+            var title = '<span style="font-size:11px;color:#0CDAF5;">'+details.mc+'</span>';
+            content = [];
+            content.push("<p style='color:#fff;'>AQI："+details.aqi+"</p>");
+            content.push("<p style='color:#fff;'>首要污染物："+details.sywrw+"</p>");
+            content.push("<p style='color:#fff;'>质量等级："+details.zldj+"</p>");
+        }
+        var infoWindow = new AMap.InfoWindow({
+            isCustom: true,  //使用自定义窗体
+            content: sthj.createInfoWindow(title, content.join("")),
+            offset: new AMap.Pixel(35, -25)
+        });
+        var jw =wgs84togcj02(parseFloat(details.jd),parseFloat(details.wd));
+        infoWindow.open(map, jw);
+        setTimeout(function(){
+            map.setCenter(jw);
+        },500)
+    },
+    addPoint:function addPoint(arr,h,w,img,details,state){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+        var _marker=new AMap.Marker({
+            map: map,
+            position: arr,        //经纬度
+            icon: new AMap.Icon({
+                size: new AMap.Size(h, w),  //图标大小
+                image: img       //自定义图片
+            })
+        });
+        AMap.event.addListener(_marker, 'click', function (e) {
+            //alert(666)
+            sthj.infoWindow(details,state)
+            //infoWindow.open(map, _marker.getPosition());
+        });
+    }
+}

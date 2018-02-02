@@ -1,0 +1,981 @@
+/**
+ * Created by zhoujun on 2017/9/21.
+ * main页面中的模态框方法集合
+ */
+    //图标样式统一设置表
+var font_color = '#fff', font_family = '微软雅黑', font_size = 15;
+var text_style={
+    color:font_color,
+    fontSize:font_size,
+    fontFamily:font_family
+};
+
+
+//互联网经济--（信息经济指数）模态框方法功能
+var ecoModal={
+    start:function(){
+        //添加标题
+        $("#myModal .modal-header h2").html("信息经济指数")
+        var WH=ModalUpdata(60,60);//设置模态框(宽,高)，值为百分比，格式化 modal-body中的内容 将模态框居中显示// ！！返回值为modal-body 的宽高
+        $("#myModal .modal-content .modal-body").append("<div id='ecoModalEcharts'>");//创建DIV
+        //设置创建DIV的宽高， 这种创建方式 只是为了适用于Echarts 图标需要设置宽高；其他情况可直接在main_modal.css 样式表中直接编写样式即可
+        $("#ecoModalEcharts").width(WH[0]+"px");
+        $("#ecoModalEcharts").height(WH[1]/2+"px");
+        this.titleAjax();
+        this.echartsAjax();
+        this.liBindClick();
+        fixedTableHead(100,47);
+        this.tableAjax();
+        $("#myModal").modal("show");
+    },
+    titleAjax:function(){
+        var ul=$('<ul class="ecoTitleUl">').css({
+            "position":"absolute",
+            "left":'7%',
+            "top":'2%'
+        });
+        var li=$('<li>')
+        li.html("总指数");
+        $("#myModal .modal-content .modal-body").append(ul.append(li));
+        $.ajax({
+            type: 'post',
+            url: "jxeco/netEco/queryEcoIndex.do?length=3",
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                for(var i=0;i<len;i++){
+                    var obj={};
+                    obj.years=[];
+                    obj.zs=[];
+                    obj.pm=[];
+                    for(var n=0;n<data[i].statistics.length;n++) {
+                        obj.years.push(data[i].statistics[n].YEAR+'年');
+                        obj.zs.push(data[i].statistics[n].VALUE);
+                        obj.pm.push(-data[i].statistics[n].RANK);
+                        obj.mc = data[i].mc+'指数';
+                    }
+                    var li=$('<li>');
+                    $(".ecoTitleUl").append(li.html(data[i].mc).data("data",obj));
+                }
+            }
+        })
+    },
+    echartsAjax:function(){
+        var me=this;
+        $.ajax({
+            type: 'post',
+            url: "jxeco/netEco/listEcoIndex.do?length=3",
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                var obj={};
+                obj.years=[];
+                obj.zs=[];
+                obj.pm=[];
+                for(var i=0;i<len-1;i++){
+                    obj.years.push(data[i].TIME+"年");
+                    obj.zs.push(data[i].ECO_INDEX);
+                    obj.pm.push(-data[i].MIX_RANK);
+                    obj.mc = '总指数';
+                }
+                $("#myModal .modal-content .modal-body ul li:first").data("data",obj);
+                $("#myModal .modal-content .modal-body ul li:first").click()
+            }
+        })
+
+    },
+    liBindClick:function(){
+        var me=this
+        $("#myModal .modal-content .modal-body").undelegate().delegate("li","click",function(){
+            $(this).siblings().removeClass("active");
+            $(this).addClass("active");
+            me.ecoModalEchart( $(this).data("data"));
+        })
+    },
+    ecoModalEchart: function (data) {
+            var mycharts = echarts.init(document.getElementById('ecoModalEcharts'));
+            var option = {
+                tooltip : {
+                    trigger: 'axis',
+                    formatter:function(value){
+                        var str=value[0].name+'<br/>'+value[0].seriesName+'：'+value[0].value+'<br/>'+value[1].seriesName+'：'+Math.abs(value[1].value)
+                        return str
+                    }
+                },
+                calculable : false,
+                grid: {
+                    x: '10%',
+                    y: '20%',
+                    x2: '10%',
+                    y2: '15%',
+                    containLabel: true,
+                    borderWidth: 0
+                },
+                legend: {
+                    data:['经济指数','排名'],
+                    show: false
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        splitLine:false,
+                        axisLine: { lineStyle: {
+                            color: '#bfbfbf'
+                        }},
+                        axisTick: {show:false},
+                        axisLabel: {show: true,
+                            textStyle: text_style,
+                            clickable:true
+                        },
+                        data : data.years//['5月','6月','7月','8月']//data.years
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        name: data.mc,
+                        splitNumber:4,
+                        nameTextStyle: text_style,
+                        axisLine: { lineStyle: {
+                            color: '#bfbfbf'
+                        }},
+                        splitLine:{show:false},
+                        axisTick: {show: true,lineStyle:{color: '#bfbfbf'}},
+                        axisLabel: {
+                            show: true,
+                            textStyle: text_style,
+                            formatter: '{value} '
+                        }
+                    },
+                    {
+                        type : 'value',
+                        axisLine: { lineStyle: {
+                            color: '#bfbfbf'
+                        }},
+                        name:'全省排名',
+                        nameTextStyle: text_style,
+                        splitLine:{show:false},
+                        min:-5,
+                        max:-1,
+                        splitNumber:4,
+                        axisTick: {show: true,lineStyle:{color: '#bfbfbf'}},
+                        axisLabel: {
+                            show: true,
+                            textStyle: text_style,
+                            formatter: function (value) {
+                                if (value < 0) {
+                                    return -value;
+                                }
+                            }
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:data.mc,
+                        type:'bar',
+                        barWidth:30,
+                        yAxisIndex: 0,
+                        itemStyle:{
+                          color:'#3696d9',
+                          normal:{
+                              label:{
+                                  show: true,
+                                  textStyle: text_style
+                              }
+                          }
+                        },
+                        data:data.zs//[600,700,900,1300]//data.zs
+                    },
+                    {
+                        name:'全省排名',
+                        type:'line',
+                        yAxisIndex: 1,
+                        itemStyle:{
+                            normal:{
+                                label:{
+                                    show: true,
+                                    textStyle: text_style,
+                                    formatter:function(value){
+                                        return Math.abs(value.value)
+                                    }
+                                }
+                            }
+                        },
+                        data:data.pm//[1,2,3,4]//data.pm
+                    }
+                ]
+            };
+            mycharts.setOption(option);
+            mycharts.on('click',function(e){
+                ecoModal.tableAjax((e.name).replace("年",''));
+            })
+        },
+    tableAjax:function(year){
+        if(arguments.length==0){
+            year="2015"
+        }
+        var tr=$("<tr>");
+        var title=["一级指标","二级指标","数值","单位"]
+        for(var i=0;i<title.length;i++){
+            var td=$("<td>");
+            tr.append(td.html(title[i]));
+        }
+        $(".tableBodyBox table thead").html(tr)
+        $.ajax({
+            type: 'post',
+            url: "jxeco/netEco/queryEcoSubIndex.do?year="+year,
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                var str=""
+                for(var i=0;i<len;i++){
+                    var lnn=data[i].substatistics.length;
+                    str+=' <tr> <td rowspan="'+lnn+'">'+data[i].mc+'</td>'
+                    var str1="";
+                    for(var n=0;n<lnn;n++){
+                        str1+= '<td>'+data[i].substatistics[n].SUBMC+'</td>'+
+                               '<td>'+data[i].substatistics[n].VALUE+'</td>'+
+                               '<td>'+data[i].substatistics[n].UNIT+'</td></tr>'
+                    }
+                    str+=str1
+                }
+                $(".tableBodyBox table tbody").html(str);
+                //设置表格隔行变色；
+                $(".tableBodyBox table tr:even").css("background-color",'#303030');
+                $(".tableBodyBox table tr:odd").css("background-color",'#1B1B1D');
+                cloneTableHead()//克隆表头，并让表头固定
+            }
+        })
+    }
+};
+
+//互联网经济--（信息化指数）模态框方法功能
+var xxhModal={
+    start:function(){
+        //添加标题
+        $("#myModal .modal-header h2").html("信息化指数")
+        var WH=ModalUpdata(60,60);//设置模态框(宽,高)，值为百分比，格式化 modal-body中的内容 将模态框居中显示// ！！返回值为modal-body 的宽高
+        $("#myModal .modal-content .modal-body").append("<div id='xxhModalEcharts'>");//创建DIV
+        //设置创建DIV的宽高， 这种创建方式 只是为了适用于Echarts 图标需要设置宽高；其他情况可直接在main_modal.css 样式表中直接编写样式即可
+        $("#xxhModalEcharts").width(WH[0]+"px");
+        $("#xxhModalEcharts").height(WH[1]/2+"px");
+        this.titleAjax();
+        this.echartsAjax();
+        //this.xxhModalEchart($(this).data("data"));怎么调取data的数据
+        fixedTableHead(100,47);
+        this.tableAjax();
+        $("#myModal").modal("show");
+    },
+    titleAjax:function(){
+        var ul=$('<ul class="xxhTitleUl">').css({
+            "position":"absolute",
+            "left":'7%',
+            "top":'1%'
+        });
+        var li=$('<li style="font-size: 1.3em">')
+        li.html("2016年信息化指数全省排名");
+        $("#myModal .modal-content .modal-body").append(ul.append(li));
+    },
+    echartsAjax:function(){
+        var obj={};
+        obj.names=[];
+        obj.ranks=[];
+        $.ajax({
+            type: 'post',
+            url: "jxeco/netEco/listEcoIndex.do?length=3",
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                for(var i=0;i<len;i++){
+                    if(data[i].TIME=='2016'){
+                        obj.names.push('总指数');
+                        obj.ranks.push(6-data[i].INFOR_RANK);
+                    }
+                }
+                $.ajax({
+                    type: 'post',
+                    url: "jxeco/netEco/queryEcoInternetIndex.do",
+                    dataType: 'JSON',
+                    success: function (data) {
+                        var len=data.length;
+                        for(var i=0;i<len;i++){
+                            obj.names.push(data[i].mc);
+                            obj.ranks.push(6-data[i].rank);
+                        }
+                        xxhModal.xxhModalEchart(obj)
+                    }
+                })
+            }
+        })
+    },
+
+    xxhModalEchart: function (data) {
+        var mycharts = echarts.init(document.getElementById('xxhModalEcharts'));
+        var option = {
+            tooltip : {
+                trigger: 'axis',
+                formatter:function(value){
+                    var str=value[0].name+'<br/>'+value[0].seriesName+'：'+ (6 - value[0].value);
+                    return str
+                }
+            },
+            calculable : false,
+            grid: {
+                x: '5%',
+                y: '20%',
+                x2: '5%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    splitLine: {show: false},
+                    axisLine: {show: true},
+                    axisTick: {show: false},
+                    axisLabel: {show: true, textStyle: text_style},
+                    data : data.names
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    name: '全省排名',
+                    nameTextStyle: text_style,
+                    splitNumber:4,
+                    min:1,
+                    max:5,
+                    splitLine: {show: false},
+                    axisLine: {show: true},
+                    axisTick: {show: false},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: function (value) {
+                                return 6-value;
+                        }
+                    }
+                }
+            ],
+            series : [
+                {
+                    name: '全省排名',
+                    nameTextStyle: text_style,
+                    type:'bar',
+                    barWidth: 100,
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show: true,
+                                position: 'top',
+                                textStyle: text_style,
+                                formatter:function(value){
+                                    return 6-Math.abs(value.value)
+                                }
+                            }
+                        }
+                    },
+                    data:data.ranks
+                }
+            ]
+        };
+
+        mycharts.setOption(option);
+    },
+    tableAjax:function(){
+        var tr=$("<tr>");
+        var title=["一级指标","二级指标","三级指标","数值","单位"]
+        for(var i=0;i<title.length;i++){
+            var td=$("<td>");
+            tr.append(td.html(title[i]));
+        }
+        $(".tableBodyBox table thead").html(tr)
+        $.ajax({
+            type: 'post',
+            url: "jxeco/netEco/queryEcoSubInternetIndex.do",
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                firstRowSpanArr=[]
+                for(var i=0;i<len;i++){
+                    var firstRowSpanNo=0;
+                    var slen=data[i].statistics.length;
+                    for(var n=0;n<slen;n++){
+                        var sslen=data[i].statistics[n].third.length;
+                        for(var m=0;m<sslen;m++) {
+                            firstRowSpanNo++;
+                        }
+                    }
+                    firstRowSpanArr.push(firstRowSpanNo)
+                }
+                var str=""
+                for(var i=0;i<len;i++){
+                    var lnn=data[i].statistics.length;
+                    str+=' <tr> <td rowspan="'+firstRowSpanArr[i]+'">'+data[i].mc+'</td>'
+                    var str1="";
+                    for(var n=0;n<lnn;n++){
+                        var lnn2=data[i].statistics[n].third.length;
+                        str1+='<td rowspan="'+lnn2+'">'+data[i].statistics[n].secondmc+'</td>'
+                        var str2="";
+                        for(var m=0;m<lnn2;m++){
+                            str2+= '<td>'+data[i].statistics[n].third[m].THIRDMC+'</td>'+
+                            '<td>'+data[i].statistics[n].third[m].VALUE+'</td>'+
+                            '<td>'+data[i].statistics[n].third[m].UNIT+'</td></tr>'
+                        }
+                        str1+=str2
+                    }
+                    str+=str1
+                }
+                $(".tableBodyBox table tbody").html(str);
+                //设置表格隔行变色；
+                $(".tableBodyBox table tr:even").css("background-color",'#303030');
+                $(".tableBodyBox table tr:odd").css("background-color",'#1B1B1D');
+                cloneTableHead()//克隆表头，并让表头固定
+            }
+        })
+    }
+};
+
+
+//互联网经济--（信息经济核心产业）模态框方法功能
+var industryModal={
+    start:function(){
+        $("#myModal .modal-header h2").html("信息经济核心产业")
+        var WH=ModalUpdata(60,60);//设置模态框(宽,高)，值为百分比，格式化 modal-body中的内容 将模态框居中显示// ！！返回值为modal-body 的宽高
+        $("#myModal .modal-content .modal-body").append("<div id='xxhModalEcharts'>");//创建DIV
+        //设置创建DIV的宽高， 这种创建方式 只是为了适用于Echarts 图标需要设置宽高；其他情况可直接在main_modal.css 样式表中直接编写样式即可
+        $("#xxhModalEcharts").width(WH[0]+"px");
+        $("#xxhModalEcharts").height(WH[1]/2+"px");
+        this.titleAjax();
+        this.liBindClick();
+       /* this.echartsAjax();*/
+        //this.xxhModalEchart($(this).data("data"));//怎么调取data的数据
+        fixedTableHead(100,47);
+        this.tableAjax();
+        $("#myModal").modal("show");
+    },
+    titleAjax:function(){
+        var ul=$('<ul class="ecoTitleUl">').css({
+            "position":"absolute",
+            "left":'7%',
+            "top":'2%'
+        });
+        $.ajax({
+            type: 'post',
+            url: "jxecocore/queryCoreTotalValue.do",
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                for(var i=0;i<len;i++){
+                    var obj={};
+                    obj.industrytotal=[];
+                    obj.industryspeed=[];
+                    obj.years=[];
+                    for(var n=0;n<data[i].value.length;n++) {
+                        obj.years.push(data[i].value[n].year+'年');
+                        obj.industrytotal.push(parseInt(data[i].value[n].industrytotal/10000));
+                        obj.industryspeed.push(data[i].value[n].industryspeed);
+                    }
+                    var li=$('<li>');
+                    $(".ecoTitleUl").append(li.html(data[i].name).data("data",obj));
+                    $("#myModal .modal-content .modal-body").append(ul.append(li));
+                }
+                $("#myModal .modal-content .modal-body ul li:first").click();
+            }
+        })
+    },
+    /*echartsAjax:function(){
+        var me=this;
+        $.ajax({
+            type: 'post',
+            url: "jxecocore/queryCoreTotalValue.do",
+            dataType: 'JSON',
+            success: function (data) {
+
+            }
+        })
+    },*/
+    liBindClick:function(){
+        var me=this;
+        $("#myModal .modal-content .modal-body").undelegate().delegate("li","click",function(){
+            $(this).siblings().removeClass("active");
+            $(this).addClass("active");
+            me.xxhModalEchart( $(this).data("data"));
+        })
+    },
+    xxhModalEchart: function (data) {
+        var mycharts = echarts.init(document.getElementById('xxhModalEcharts'));
+        var option = {
+            tooltip : {
+                trigger: 'axis'
+            },
+            calculable : false,
+
+            legend: {
+                data:['工业总产值','增速'],
+                textStyle: {fontSize: 15, color:'#fff'},
+                x: 'center',
+                y: 'top'
+            },
+            grid: {
+                x: '10%',
+                y: '20%',
+                x2: '10%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    axisTick: {show: false, lineStyle: {color: font_color}},
+                    axisLine: {show: true, lineStyle: {color: font_color}},
+                    axisLabel: {show: true, textStyle: text_style,  clickable:true},
+                    splitLine: {show: false},
+                    data : data.years
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    name : '产值(万元）',
+                    nameTextStyle: text_style,
+                    axisLine: {show: true,lineStyle: {color: font_color}},
+                    axisLabel: {show: true, textStyle: text_style},
+                    axisTick: {show: false, lineStyle: {color: font_color}},
+                    splitLine: {
+                        show: false,
+                        lineStyle: {color: font_color}
+                    }
+                    /*axisLabel : {
+                     formatter: '{value} '
+                     }*/
+                },
+                {
+                    type : 'value',
+                    name : '增速（%）',
+                    nameTextStyle: text_style,
+                    axisLine: {show: true,lineStyle: {color: font_color}},
+                    axisLabel: {show: true, textStyle: text_style},
+                    axisTick: {show: false, lineStyle: {color: font_color}},
+                    splitLine: {
+                        show: false,
+                        lineStyle: {color: font_color}
+                    }
+                    /*axisLabel : {
+                     formatter: '{value} %'
+                     }*/
+                }
+            ],
+            series : [
+                {
+                    name: '工业总产值',
+                    type:'bar',
+                    barWidth: 100,
+                    itemStyle: {
+                        normal: {
+                            color: function(params) {
+                                // build a color map as your need.
+                                var colorList = [
+                                    '#B4A208','#FF7600','#02ABC2'
+                                ];
+                                return colorList[params.dataIndex]
+                            },
+                            label:{
+                                  show: true,
+                                  textStyle: text_style,
+                                  formatter: '{c}万元',
+                                  position: 'inside'
+                                  }
+                            }
+
+                    },
+                    data:data.industrytotal
+                },
+                {
+                    name: '增速',
+                    type:'line',
+                    yAxisIndex: 1,
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:true,
+                                position:'inside',
+                                formatter: '{c}%',
+                                textStyle:text_style
+                            },
+                            lineStyle:{
+                                shadowColor:'green',
+                                shadowBlur: 40
+                            }
+                        }
+                    },
+                    data:data.industryspeed
+                }
+            ]
+        };
+
+
+
+        mycharts.setOption(option);
+        mycharts.on('click',function(e){
+            industryModal.tableAjax((e.name).replace("年",''));
+        })
+    },
+    tableAjax:function(year){
+        var tr=$("<tr>");
+        var title=["一级指标","二级指标","三级指标","数值"]
+        for(var i=0;i<title.length;i++){
+            var td=$("<td>");
+            tr.append(td.html(title[i]));
+        }
+        $(".tableBodyBox table thead").html(tr)
+        $.ajax({
+            type: 'post',
+            url: "jxecocore/queryCoreData.do",
+            data:{year:year},
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                firstRowSpanArr=[]
+                for(var i=0;i<len;i++){
+                    var firstRowSpanNo=0;
+                    var slen=data[i].statistics.length;
+                    for(var n=0;n<slen;n++){
+                        for(var m=0;m<2;m++) {
+                            firstRowSpanNo++;
+                        }
+                    }
+                    firstRowSpanArr.push(firstRowSpanNo)
+                }
+                var str=""
+                for(var i=0;i<len;i++){
+                    var lnn=data[i].statistics.length;
+                    str+=' <tr> <td rowspan="'+firstRowSpanArr[i]+'">'+data[i].mc+'</td>'
+                    var str1="";
+                    for(var n=0;n<lnn;n++){
+                        var lnn2=data[i].statistics[n].third.length;
+                        str1+='<td rowspan="2">'+data[i].statistics[n].secondmc+'</td>'
+                        var str2="";
+                        for(var m=0;m<2;m++){
+                            if(m==0){
+                                str2+= '<td>'+'工业总产值增速'+'</td>'+ '<td>'+parseFloat(data[i].statistics[n].third[0].industryspeed).toFixed(2)+'%</td>'
+                            }else if(m==1){
+                                str2+= '<td>'+'利润总额增速'+'</td>'+ '<td>'+parseFloat(data[i].statistics[n].third[0].profitspeed).toFixed(2)+'%</td>'
+                            }
+                            str2+='</tr>';
+
+                        }
+                        str1+=str2
+                    }
+                    str+=str1
+                }
+                $(".tableBodyBox table tbody").html(str);
+                //设置表格隔行变色；
+                $(".tableBodyBox table tr:even").css("background-color",'#303030');
+                $(".tableBodyBox table tr:odd").css("background-color",'#1B1B1D');
+                cloneTableHead()//克隆表头，并让表头固定
+            }
+        })
+    }
+};
+
+//互联网经济--（“两化”融合指数）模态框方法功能
+var lhrhModal={
+    start:function(){
+        $("#myModal .modal-header h2").html("“两化”融合指数")
+        var WH=ModalUpdata(60,60);//设置模态框(宽,高)，值为百分比，格式化 modal-body中的内容 将模态框居中显示// ！！返回值为modal-body 的宽高
+        $("#myModal .modal-content .modal-body").append("<div id='lhrhModalEcharts'>");//创建DIV
+        //设置创建DIV的宽高， 这种创建方式 只是为了适用于Echarts 图标需要设置宽高；其他情况可直接在main_modal.css 样式表中直接编写样式即可
+        $("#lhrhModalEcharts").width(WH[0]+"px");
+        $("#lhrhModalEcharts").height(WH[1]/2+"px");
+        this.titleAjax();
+        this.echartsAjax();
+        this.liBindClick();
+        fixedTableHead(100,47);
+        this.tableAjax();
+        $("#myModal").modal("show");
+    },
+    titleAjax:function(){
+        var ul=$('<ul class="ecoTitleUl">').css({
+            "position":"absolute",
+            "left":'7%',
+            "top":'2%'
+        });
+        var li=$('<li>')
+        li.html("总指数");
+        $("#myModal .modal-content .modal-body").append(ul.append(li));
+        $.ajax({
+            type: 'post',
+            url: "jxeco/netEco/queryEcoLhrh.do?length=3",
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                for(var i=0;i<len;i++){
+                    var obj={};
+                    obj.years=[];
+                    obj.zs=[];
+                    obj.pm=[];
+                    for(var n=0;n<data[i].statistics.length;n++) {
+                        obj.years.push(data[i].statistics[n].YEAR+'年');
+                        obj.zs.push(data[i].statistics[n].VALUE);
+                        obj.pm.push(-data[i].statistics[n].RANK);
+                        obj.mc = data[i].mc + '指数';
+                    }
+                    var li=$('<li>');
+                    $(".ecoTitleUl").append(li.html(data[i].mc).data("data",obj));
+                }
+            }
+        })
+    },
+    echartsAjax:function(){
+        var me=this
+        $.ajax({
+            type: 'post',
+            url: "jxeco/netEco/listEcoIndex.do?length=3",
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                var obj={};
+                obj.years=[];
+                obj.zs=[];
+                obj.pm=[];
+                for(var i=0;i<len;i++){
+                    obj.years.push(data[i].TIME+'年');
+                    obj.zs.push(data[i].MIX_INDEX);
+                    obj.pm.push(-data[i].MIX_RANK);
+                    obj.mc = '总指数';
+                }
+                $("#myModal .modal-content .modal-body ul li:first").data("data",obj);
+                $("#myModal .modal-content .modal-body ul li:first").click()
+            }
+        })
+    },
+    liBindClick:function(){
+        var me=this
+        $("#myModal .modal-content .modal-body").undelegate().delegate("li","click",function(){
+            $(this).siblings().removeClass("active");
+            $(this).addClass("active");
+            me.lhrhModalEcharts( $(this).data("data"));
+        })
+    },
+    lhrhModalEcharts: function (data) {
+        var mycharts = echarts.init(document.getElementById('lhrhModalEcharts'));
+        var option = {
+            tooltip : {
+                trigger: 'axis',
+                formatter:function(value){
+                    var str=value[0].name+'<br/>'+value[0].seriesName+'：'+value[0].value+'<br/>'+value[1].seriesName+'：'+Math.abs(value[1].value)
+                    return str
+                }
+            },
+            calculable : false,
+            grid: {
+                x: '10%',
+                y: '20%',
+                x2: '10%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data:['经济指数','排名'],
+                show: false
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    splitLine:false,
+                    axisLine: { lineStyle: {
+                        color: '#bfbfbf'
+                    }},
+                    axisTick: {show:false},
+                    axisLabel: {show: true,
+                        textStyle: text_style,
+                        clickable:true
+                    },
+
+                    data : data.years//['5月','6月','7月','8月']//data.years
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    name: data.mc,
+                    splitNumber:4,
+                    axisTick: {show: true,lineStyle:{color: '#bfbfbf'}},
+                    nameTextStyle: text_style,
+                    axisLine: { lineStyle: {
+                        color: '#bfbfbf'
+                    }},
+                    splitLine:{show:false},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: '{value} '
+                    }
+                },
+                {
+                    type : 'value',
+                    axisLine: { lineStyle: {
+                        color: '#bfbfbf'
+                    }},
+                    name:'全省排名',
+                    nameTextStyle: text_style,
+                    splitLine:{show:false},
+                    min:-5,
+                    max:-1,
+                    splitNumber:4,
+                    axisTick: {show: true,lineStyle:{color: '#bfbfbf'}},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: function (value) {
+                            if (value < 0) {
+                                return -value;
+                            }
+                        }
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:data.mc,
+                    type:'bar',
+                    barWidth:30,
+                    yAxisIndex: 0,
+                    itemStyle:{
+                        normal:{
+                            color:'#3696d9',
+                            label:{
+                                show: true,
+                                position: 'top',
+                                textStyle: text_style
+                            }
+                        }
+                    },
+                    data:data.zs//[600,700,900,1300]//data.zs
+                },
+                {
+                    name:'全省排名',
+                    type:'line',
+                    yAxisIndex: 1,
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show: true,
+                                position: 'top',
+                                textStyle: text_style,
+                                formatter:function(value){
+                                    return Math.abs(value.value)
+                                }
+                            }
+                        }
+                    },
+                    data:data.pm//[1,2,3,4]//data.pm
+                }
+            ]
+        };
+        mycharts.setOption(option);
+        mycharts.on('click',function(e){
+            lhrhModal.tableAjax((e.name).replace("年",''));
+        })
+    },
+    tableAjax:function(year){
+        if(arguments.length==0){
+            year="2016"
+        }
+        var tr=$("<tr>");
+        var title=["一级指标","二级指标","数值"]
+        for(var i=0;i<title.length;i++){
+            var td=$("<td>");
+            tr.append(td.html(title[i]));
+        }
+        $(".tableBodyBox table thead").html(tr)
+        $.ajax({
+            type: 'post',
+            url: "jxeco/netEco/queryEcoLhrhSubIndex.do?year="+year,
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                var str=""
+                for(var i=0;i<len;i++){
+                    var lnn=data[i].substatistics.length;
+                    str+=' <tr> <td rowspan="'+lnn+'">'+data[i].mc+'</td>'
+                    var str1="";
+                    for(var n=0;n<lnn;n++){
+                        str1+= '<td>'+data[i].substatistics[n].SUBMC+'</td>'+
+                            '<td>'+data[i].substatistics[n].VALUE+'</td></tr>'
+                    }
+                    str+=str1
+                }
+                $(".tableBodyBox table tbody").html(str);
+                //设置表格隔行变色；
+                $(".tableBodyBox table tr:even").css("background-color",'#303030');
+                $(".tableBodyBox table tr:odd").css("background-color",'#1B1B1D');
+                cloneTableHead()//克隆表头，并让表头固定
+            }
+        })
+    }
+}
+//初始化设置模态框(宽,高)，值为百分比，格式化 modal-body中的内容 将模态框居中显示// ！！返回值为modal-body 的宽高
+function ModalUpdata(width,height){
+    //获取屏幕大小；
+    var windowHeight=window.innerHeight;
+    var windowWidth=window.innerWidth;
+    //设置模态框的宽高
+    $("#myModal .modal-content").width(windowWidth*width/100+"px");
+    $("#myModal .modal-content").height(windowHeight*height/100+"px");
+    //设置模态框居中
+    $("#myModal .modal-content").css("margin-left","50%");
+    $("#myModal .modal-content").css("left",-(windowWidth*width/100/2)+"px");
+    $("#myModal .modal-content").css("margin-top","25%");
+    $("#myModal .modal-content").css("top",-(windowHeight*height/100/2)+"px");
+
+    //设置modal-head 高
+    var modalHeadHeight=windowHeight*height/100*8/100
+    $("#myModal .modal-content .modal-body").height(modalHeadHeight+"px");
+    //设置modal-body 宽高
+    var modalBodyHeight=windowHeight*height/100*92/100
+    $("#myModal .modal-content .modal-body").height(modalBodyHeight+"px");
+    $("#myModal .modal-content .modal-body").width(windowWidth*width/100+"px");
+    //格式化modal-body 中的内容
+    $("#myModal .modal-content .modal-body").html("");
+    //返回值为modal-body的宽高
+    return[windowWidth*width/100,modalBodyHeight]
+}
+
+//modal-body 中创建表格，表格固定表头；此表格为一个小模块 外层容器直接通过JS 创建
+function fixedTableHead(width,height){
+    //$("#myModal .modal-content .modal-body").html("")
+    var tableBox=$('<div class="tableBox">');
+    tableBox.css("width",width+"%");
+    tableBox.css("height",height+"%");
+    tableBox.css("margin-top","1%");
+    var tableHeadBox=$('<div class="tableHeadBox">');
+    var tableBodyBox=$('<div class="tableBodyBox">');
+    $("#myModal .modal-content .modal-body").append( tableBox.append(tableHeadBox).append(tableBodyBox));
+    var table=$("<table>");
+    var thead=$("<thead>");
+    var tbody=$("<tbody>");
+    $("#myModal .modal-content .modal-body .tableHeadBox").html('<table><thead></thead><tbody></tbody></table>');
+    $("#myModal .modal-content .modal-body .tableBodyBox").html('<table><thead></thead><tbody></tbody></table>')
+}
+//固定表头功能
+function cloneTableHead(){
+    var theadFixed=$(".tableBodyBox thead").clone();
+    $("#myModal .modal-content .modal-body .tableHeadBox table").html(theadFixed);
+    var lon=$(".tableBodyBox table thead td");
+    setTimeout(function(){
+        var tableHeight=$("#myModal .modal-content .modal-body .tableBodyBox table").height();
+        var tableBoxHeight=$("#myModal .modal-content .modal-body .tableBodyBox").height();
+        if(tableHeight>tableBoxHeight){
+            $("#myModal .modal-content .modal-body .tableHeadBox table").width($("#myModal .modal-content .modal-body .tableBodyBox table").width())
+        }
+        for(var i=0;i<lon.length;i++){
+            $("#myModal .modal-content .modal-body .tableHeadBox table thead td").eq(i).width($(lon).eq(i).width())
+        }
+    },300)
+}

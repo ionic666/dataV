@@ -1,0 +1,621 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.controller.JxEnvirController;
+import com.cetc28.idata.dao.IJxEnvirDao;
+import com.cetc28.idata.dto.WaterMacro;
+import com.cetc28.idata.model.*;
+import com.cetc28.idata.service.IJxEnvirService;
+import com.cetc28.util.Forecast;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.poi.util.ArrayUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.Format;
+import java.text.NumberFormat;
+import java.util.*;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: LYLYC
+ * Date: 17-8-10
+ * Time: 下午3:56
+ * To change this template use File | Settings | File Templates.
+ */
+@Service
+public class JxEnvirServiceImpl implements IJxEnvirService {
+    @Autowired
+    private IJxEnvirDao jxEnvirDao;
+
+    private String[] influenceAir = new String[]{"空气质量令人满意，基本无空气污染",
+            "空气质量可以接受，但某些污染物可能对极少数异常敏感人群健康有较弱影像",
+            "易感人群症状有轻度加剧，健康人群出现刺激症状",
+            "进一步加剧易感人群症状，可能对健康人群心脏、呼吸系统有影像",
+           "心脏病和肺病患者症状显著加剧，运动耐受力降低，健康人群普遍出现症状",
+            "健康人群运动耐受力降低，有明显强烈症状，提前出现某些疾病"
+    };
+    private String[] adviceAir = new String[]{"各类人群可正常活动",
+           "建议极少数敏感人群应减少户外活动",
+            "建议儿童、老年人及心脏病、呼吸系统疾病患者应减少长时间、高强度的户外锻炼",
+            "建议疾病患者避免长时间、高强度的户外锻炼，一般人适量减少户外运动",
+            "建议儿童、老年人和心脏病、肺病患者应停留在室内，停止户外运动，一般人群减少户外运动",
+            "建议儿童、老年人和病人应当留在室内，避免体力消耗，一般人权应避免户外运动"
+    };
+
+    @Override
+    public List<JxEnvirAir> queryAllEnvirAir() {
+        List<JxEnvirAir> list = jxEnvirDao.queryAllEnvirAir();
+        return list;
+    }
+
+    @Override
+    public List<JxWaterInfo> selectEnvirInfo(String jcdbh) {
+        List<JxWaterInfo> list = jxEnvirDao.selectEnvirInfo(jcdbh);
+        return list;
+    }
+
+    @Override
+    public List<JxKqzljcdInfo> selectKqzljc24Hour(String bh) {
+        List<JxKqzljcdInfo> list = jxEnvirDao.selectKqzljc24Hour(bh);
+        return list;
+    }
+
+    @Override
+
+    public List<JxKqzljcdInfo> selectKqzljc30Day(String bh) {
+        List<JxKqzljcdInfo> list = jxEnvirDao.selectKqzljc30Day(bh);
+        return list;
+    }
+
+    @Override
+    public List queryPreData(String bh, Integer gap, Integer preNum) {
+
+        List returnList = new ArrayList<Map>();
+
+        String[] indexName=new String[]{"AQI","PM25","PM10","CO","NO2","O3","SO2"};//与数据库的字段名对应
+        String[] echartIndexName=new String[]{"AQI指数","PM2.5","PM10","CO","NO2","O3","SO2"};//与echart图上显示的指标名称对应
+        for (int i = 0; i < indexName.length; i++){
+
+            Map<String, Object> info = new HashMap<String, Object>();
+
+            ArrayList<ArrayList> preData = new ArrayList<ArrayList>();
+            List<Map> originData = jxEnvirDao.queryOriginData(bh, gap, indexName[i]);
+            ArrayList<ArrayList> singleResult = new  ArrayList<ArrayList>();
+            for (int j = 0; j < originData.size(); j++){
+                Map map = originData.get(j);
+                ArrayList temp = new ArrayList();
+                temp.add(map.get("JCSJ"));
+                temp.add(map.get(indexName[i]));
+                singleResult.add(temp);
+            }
+            //获取时间点
+            for (int j = 0; j<preNum; j++){
+                String preDay = jxEnvirDao.getNextDay(bh,j);
+                ArrayList temp1 = new ArrayList();
+                temp1.add(preDay);
+                temp1.add(0);
+                singleResult.add(temp1);
+            }
+
+            preData = Forecast.forecastValue(singleResult, gap, preNum);
+            /*for(int k = 0; k < preData.size(); k++){
+                ArrayList test = preData.get(k);
+                System.out.println("pre="+test.get(0)+"+"+test.get(1));
+            }*/
+            info.put("mc", echartIndexName[i]);//前台取数据时按照echart图上的指标名来取
+            info.put("prevalue", preData);
+            returnList.add(info);
+
+        }
+        return returnList;
+    }
+
+    @Override
+    public List queryPre24HourData(String bh, Integer gap, Integer preNum) {
+
+        List returnList = new ArrayList<Map>();
+
+        String[] indexName=new String[]{"AQI","PM25","PM10","CO","NO2","O3","SO2"};//与数据库的字段名对应
+        String[] echartIndexName=new String[]{"AQI指数","PM2.5","PM10","CO","NO2","O3","SO2"};//与echart图上显示的指标名称对应
+        for (int i = 0; i < indexName.length; i++){
+
+            Map<String, Object> info = new HashMap<String, Object>();
+
+            ArrayList<ArrayList> preData = new ArrayList<ArrayList>();
+            List<Map> originData = jxEnvirDao.queryOriginDataBy24Hour(bh, gap, indexName[i]);
+            ArrayList<ArrayList> singleResult = new  ArrayList<ArrayList>();
+            for (int j = 0; j < originData.size(); j++){
+                Map map = originData.get(j);
+                ArrayList temp = new ArrayList();
+                temp.add(map.get("JCSJ"));
+                temp.add(map.get(indexName[i]));
+                singleResult.add(temp);
+            }
+            //获取时间点
+            for (int j = 1; j<=preNum; j++){
+                String preDay = jxEnvirDao.getNextHour(bh,j);
+                ArrayList temp1 = new ArrayList();
+                temp1.add(preDay);
+                temp1.add(0);
+                singleResult.add(temp1);
+            }
+            //调用预测方法
+            preData = Forecast.forecastValue(singleResult, gap, preNum);
+
+            info.put("mc", echartIndexName[i]);//前台取数据时按照echart图上的指标名来取
+            info.put("prevalue", preData);
+            returnList.add(info);
+        }
+        return returnList;
+    }
+
+    @Override
+    public Map selectZsJcdInfo(String jcdbh, String zstype, String time_start, String time_end) {
+        Map map = jxEnvirDao.selectZsJcdInfo(jcdbh, zstype, time_start, time_end);
+        return map;
+    }
+
+    @Override
+    //监测点空气质量数据   没用
+    public List<JxEnvirAir> selectEnvirAirJcdInfo(String bh) {
+        List<JxEnvirAir> list = jxEnvirDao.selectEnvirAirJcdInfo(bh);
+        return list;
+    }
+
+    @Override
+    //空气监测点信息  作图用 监测点最近的空气监测数据
+    public List<JxEnvirAir> selectEnvirAirJcd(String qhbh) {
+        List<JxEnvirAir> jcdmodle = jxEnvirDao.selectEnvirAirJcd(qhbh);
+        List<JxEnvirAir> jcdmodleList = new ArrayList<JxEnvirAir>();
+        if (jcdmodle != null && jcdmodle.size() > 0) {
+            for (int i = 0; i < jcdmodle.size(); i++) {
+                JxEnvirAir jcd = jxEnvirDao.getEnvirAirJcdInfo(jcdmodle.get(i).getBh(), jcdmodle.get(i).getJcsj());
+
+                if (jcd != null) {
+                    getAirRate(jcd);
+                    jcdmodleList.add(jcd);
+                }
+            }
+        }
+        return jcdmodleList;
+    }
+
+    @Override
+    public List<JxKqzljcdInfo> selectAirQXMonitor(String bh) {
+        List<JxKqzljcdInfo> list = jxEnvirDao.selectAirQXMonitor(bh);
+        return list;
+    }
+
+    //**********************************计算增长率***********************************
+    @Override
+    public Integer AirCurrentYear() {
+        return jxEnvirDao.AirCurrentYear();
+    }
+
+    @Override
+    public Double queryAirTotal(Integer year) {
+        return jxEnvirDao.queryAirTotal(year);
+    }
+
+    @Override
+    public Double queryEnvirTotal(Integer year, String flag) {
+        if (flag.equals("airEqualLv"))//写在controller层中作为flag调用
+        {
+            return jxEnvirDao.queryAirTotal(year);//连接xml层，对接数据库计算总数
+        } else {
+            return null;
+        }
+    }
+
+    //***************************************************************************************************
+    @Override
+    public List<JxEnvirMacroMonitor> selectAirQuality() {
+        List<JxEnvirMacroMonitor> list = jxEnvirDao.selectAirQuality();
+        return list;
+    }
+
+    @Override
+    public List<JxEnvirMacroMonitor> selectWaterEnvirLv() {
+        List<JxEnvirMacroMonitor> list = jxEnvirDao.selectWaterEnvirLv();
+        return list;
+    }
+
+    @Override
+    public List<JxEnvirMacroMonitor> selectNoiseOverproof() {
+        List<JxEnvirMacroMonitor> list = jxEnvirDao.selectNoiseOverproof();
+        return list;
+    }
+
+    @Override
+    public List<JxEnvirMacroMonitor> selectCompanyEnvir()  //计算企事业单位环境公开率
+    {
+        List<JxEnvirMacroMonitor> list = jxEnvirDao.selectCompanyEnvir();
+        return list;
+    }
+
+    @Override
+    public List<JxEnvirMacroMonitor> selectPolluteMonitor() //计算污染源监测情况
+    {
+        List<JxEnvirMacroMonitor> list = jxEnvirDao.selectPolluteMonitor();
+        return list;
+    }
+
+    @Override
+    public List<JxEnvirMacroMonitor> selectCityProblem()    //城市问题处置率
+    {
+        List<JxEnvirMacroMonitor> list = jxEnvirDao.selectCityProblem();
+        return list;
+    }
+
+    //*************************************************饮用水*******************************************************
+    @Override
+    public List<JxEnvirWater> selectWaterMonitor30Day(String bh) {
+        List<JxEnvirWater> list = jxEnvirDao.selectWaterMonitor30Day(bh);
+        return list;
+    }
+
+    @Override
+    public List queryWaterPre30Day(String bh, Integer gap, Integer preNum) {
+        List returnList = new ArrayList<Map>();
+
+        String[] indexName=new String[]{"PH","RJY","ZD","DDL","ZL","ZD1","AD"};//与数据库的字段名对应
+        String[] echartIndexName=new String[]{"PH值","溶解氧","浊度","电导率","总磷","总氮","氨氮"};//与echart图上显示的指标名称对应
+        for (int i = 0; i < indexName.length; i++){
+
+            Map<String, Object> info = new HashMap<String, Object>();
+
+            ArrayList<ArrayList> preData = new ArrayList<ArrayList>();
+            List<Map> originData = jxEnvirDao.queryWaterPre30Day(bh, gap, indexName[i]);
+            ArrayList<ArrayList> singleResult = new  ArrayList<ArrayList>();
+            for (int j = 0; j < originData.size(); j++){
+                Map map = originData.get(j);
+                ArrayList temp = new ArrayList();
+                temp.add(map.get("JCSJ"));
+                temp.add(map.get(indexName[i]));
+                singleResult.add(temp);
+            }
+            //获取时间点
+            for (int j = 1; j<=preNum; j++){
+                String preDay = jxEnvirDao.getWaterNextDay(bh,j);
+                ArrayList temp1 = new ArrayList();
+                temp1.add(preDay);
+                temp1.add(0);
+                singleResult.add(temp1);
+            }
+            //调用预测方法
+            preData = Forecast.forecastValue(singleResult, gap, preNum);
+
+            info.put("mc", echartIndexName[i]);//前台取数据时按照echart图上的指标名来取
+            info.put("prevalue", preData);
+            returnList.add(info);
+
+        }
+        return returnList;
+    }
+
+    @Override
+    public List<JxEnvirWater> selectWaterMonitor24Hour(String bh) {
+        List<JxEnvirWater> list = jxEnvirDao.selectWaterMonitor24Hour(bh);
+        return list;
+    }
+
+    @Override
+    public List queryWaterPre24Hour(String bh, Integer gap, Integer preNum) {
+        List returnList = new ArrayList<Map>();
+
+        String[] indexName=new String[]{"PH","RJY","ZD","DDL","ZL","ZD1","AD"};//与数据库的字段名对应
+        String[] echartIndexName=new String[]{"PH值","溶解氧","浊度","电导率","总磷","总氮","氨氮"};//与echart图上显示的指标名称对应
+        for (int i = 0; i < indexName.length; i++){
+
+            Map<String, Object> info = new HashMap<String, Object>();
+
+            ArrayList<ArrayList> preData = new ArrayList<ArrayList>();
+            List<Map> originData = jxEnvirDao.queryWaterPre24Hour(bh, gap, indexName[i]);
+            ArrayList<ArrayList> singleResult = new  ArrayList<ArrayList>();
+            for (int j = 0; j < originData.size(); j++){
+                Map map = originData.get(j);
+                ArrayList temp = new ArrayList();
+                temp.add(map.get("JCSJ"));
+                temp.add(map.get(indexName[i]));
+                singleResult.add(temp);
+            }
+            //获取时间点
+            for (int j = 1; j<=preNum; j++){
+                String preDay = jxEnvirDao.getWaterNextHour(bh,j);
+                ArrayList temp1 = new ArrayList();
+                temp1.add(preDay);
+                temp1.add(0);
+                singleResult.add(temp1);
+            }
+            //调用预测方法
+            preData = Forecast.forecastValue(singleResult, gap, preNum);
+
+            info.put("mc", echartIndexName[i]);//前台取数据时按照echart图上的指标名来取
+            info.put("prevalue", preData);
+            returnList.add(info);
+
+        }
+        return returnList;
+    }
+
+    @Override
+    public List<JxEnvirWater> selectWaterMonitorQX(String bh) {
+        List<JxEnvirWater> list = jxEnvirDao.selectWaterMonitorQX(bh);
+        return list;
+    }
+
+    @Override
+    public List<JxEnvirWater> selectWaterMonitorJcd(String qhbh) {
+        List<JxEnvirWater> jcdmodle = jxEnvirDao.selectWaterMonitorJcd(qhbh);
+        List<JxEnvirWater> jcdmodleList = new ArrayList<JxEnvirWater>();
+        if (jcdmodle != null && jcdmodle.size() > 0) {
+            for (int i = 0; i < jcdmodle.size(); i++) {
+                JxEnvirWater jcd = jxEnvirDao.getWaterMonitorJcd(jcdmodle.get(i).getBh(), jcdmodle.get(i).getJcsj());
+                if (jcd != null) {
+                    jcdmodleList.add(jcd);
+                }
+            }
+        }
+        return jcdmodleList;
+    }
+    //***********************************************断面水***************************************************
+    @Override
+    public List<JxEnvirWater> selectWaterDmsMonth(String bh)
+    {
+        List<JxEnvirWater> list=jxEnvirDao.selectWaterDmsMonth(bh);
+        return list;
+    }
+
+    @Override
+    public List queryDmsPre12Month(String bh, Integer gap, Integer preNum) {
+        List returnList = new ArrayList<Map>();
+
+        String[] indexName=new String[]{"GMSY","AD","ZL"};//与数据库的字段名对应
+        String[] echartIndexName=new String[]{"高锰酸盐","氨氮","总磷"};//与echart图上显示的指标名称对应
+        for (int i = 0; i < indexName.length; i++){
+
+            Map<String, Object> info = new HashMap<String, Object>();
+
+            ArrayList<ArrayList> preData = new ArrayList<ArrayList>();
+            List<Map> originData = jxEnvirDao.queryDmsPre12Month(bh, gap, indexName[i]);
+            ArrayList<ArrayList> singleResult = new  ArrayList<ArrayList>();
+            for (int j = 0; j < originData.size(); j++){
+                Map map = originData.get(j);
+                ArrayList temp = new ArrayList();
+                temp.add(map.get("JCSJ"));
+                temp.add(map.get(indexName[i]));
+                singleResult.add(temp);
+            }
+            //获取时间点
+            for (int j = 1; j<=preNum; j++){
+                String preDay = jxEnvirDao.getDmsNextMonth(bh,j);
+                ArrayList temp1 = new ArrayList();
+                temp1.add(preDay);
+                temp1.add(0);
+                singleResult.add(temp1);
+            }
+            //调用预测方法
+            preData = Forecast.forecastValue(singleResult, gap, preNum);
+
+            info.put("mc", echartIndexName[i]);//前台取数据时按照echart图上的指标名来取
+            info.put("prevalue", preData);
+            returnList.add(info);
+
+        }
+        return returnList;
+    }
+
+    @Override
+    public List<JxEnvirWater> selectWaterDmsDay(String bh)
+    {
+        List<JxEnvirWater> list=jxEnvirDao.selectWaterDmsDay(bh);
+        return list;
+    }
+
+    @Override
+    public List queryDmsPre30Day(String bh, Integer gap, Integer preNum) {
+        List returnList = new ArrayList<Map>();
+
+        String[] indexName=new String[]{"GMSY","AD","ZL"};//与数据库的字段名对应
+        String[] echartIndexName=new String[]{"高锰酸盐","氨氮","总磷"};//与echart图上显示的指标名称对应
+        for (int i = 0; i < indexName.length; i++){
+
+            Map<String, Object> info = new HashMap<String, Object>();
+
+            ArrayList<ArrayList> preData = new ArrayList<ArrayList>();
+            List<Map> originData = jxEnvirDao.queryDmsPre30Day(bh, gap, indexName[i]);
+            ArrayList<ArrayList> singleResult = new  ArrayList<ArrayList>();
+            for (int j = 0; j < originData.size(); j++){
+                Map map = originData.get(j);
+                ArrayList temp = new ArrayList();
+                temp.add(map.get("JCSJ"));
+                temp.add(map.get(indexName[i]));
+                singleResult.add(temp);
+            }
+            //获取时间点
+            for (int j = 1; j<=preNum; j++){
+                String preDay = jxEnvirDao.getDmsNextDay(bh,j);
+                ArrayList temp1 = new ArrayList();
+                temp1.add(preDay);
+                temp1.add(0);
+                singleResult.add(temp1);
+            }
+            //调用预测方法
+            preData = Forecast.forecastValue(singleResult, gap, preNum);
+
+            info.put("mc", echartIndexName[i]);//前台取数据时按照echart图上的指标名来取
+            info.put("prevalue", preData);
+            returnList.add(info);
+
+        }
+        return returnList;
+    }
+
+    @Override
+    public List<JxEnvirWater> selectWaterDmsJcd(String qhbh)
+    {
+        List<JxEnvirWater> jcdmodle=jxEnvirDao.selectWaterDmsJcd(qhbh);
+        List<JxEnvirWater> jcdmodleList=new ArrayList<JxEnvirWater>();
+        if(jcdmodle!=null&&jcdmodle.size()>0)
+        {
+            for (int i=0;i<jcdmodle.size();i++)
+            {
+                JxEnvirWater jcd=jxEnvirDao.getWaterDmsJcd(jcdmodle.get(i).getBh(),jcdmodle.get(i).getJcsj());
+                if(jcd!=null)
+                {
+                    jcdmodleList.add(jcd);
+                }
+            }
+        }
+        return jcdmodleList;
+    }
+
+    @Override
+    public List<WaterMacro> selectWaterMacro() {
+       return jxEnvirDao.selectWaterMacro();
+    }
+
+    //处理3类及以上的水质比例
+    @Override
+    public List<WaterMacro> selectWaterMacroByYear(Integer year) {
+        List<WaterMacro> waterMacros = jxEnvirDao.selectWaterMacroByYear(year);
+        Integer ThreeNum = 0, TotalSum=0;
+        for (int i = 0; i < waterMacros.size(); i++) {
+
+                if (waterMacros.get(i).getQuality()<4) {
+                    ThreeNum += waterMacros.get(i).getNum();
+                    if (waterMacros.get(i).getQuality()==3) {
+                        waterMacros.get(i).setNum(ThreeNum);
+                    }
+                }
+                TotalSum += waterMacros.get(i).getNum();
+            }
+        if (waterMacros.get(0).getQuality() ==1) {
+            waterMacros.remove(0);
+            waterMacros.remove(0);
+        }else if(waterMacros.get(0).getQuality()==2){
+            waterMacros.remove(0);
+        }
+            //System.out.println(waterMacros.size());
+            for (int j = 0; j < waterMacros.size(); j++) {
+               // System.out.println(waterMacros.size() + " " + waterMacros.get(j).getNum() + " " + TotalSum);
+                double caculer = waterMacros.get(j).getNum().doubleValue() / TotalSum.doubleValue();
+                waterMacros.get(j).setPercent(Double.valueOf(getEnvirFormat(2).format(caculer)));
+            }
+        return  waterMacros;
+    }
+
+    @Override
+    public int selectMaxYear() {
+        return jxEnvirDao.selectMaxYear();
+    }
+
+    /**
+     * 处理百分数函数
+     * 0906lyc
+     */
+    public Format getEnvirFormat(Integer num) {
+        NumberFormat format = NumberFormat.getNumberInstance();//不用getpercent，因为不用得到百分号
+        format.setMaximumFractionDigits(num);
+        return format;
+    }
+
+    private void getAirRate(JxEnvirAir jcdInfo){
+        Integer aqi = jcdInfo.getAqi();
+        String msg = "";
+        if(aqi<=50 && aqi>=0){
+            jcdInfo.setZldj("优");
+            msg = "<p>空气质量指数 <span>" + jcdInfo.getAqi() + "</span></p><p>空气质量等级 <span>" + jcdInfo.getZldj() +
+                    "</span></p><p>首要污染物 <span>" + jcdInfo.getSywrw() + "</span></p><p>对健康影响情况：" + influenceAir[0] +
+                    "</p><p>建议采取措施：" + adviceAir[0] + "</p>";
+            jcdInfo.setMsg(msg);
+        }else if(aqi>=51 && aqi<=100){
+            jcdInfo.setZldj("良");
+            msg = "<p>空气质量指数 <span>" + jcdInfo.getAqi() + "</span></p><p>空气质量等级 <span>" + jcdInfo.getZldj() +
+                    "</span></p><p>首要污染物 <span>" + jcdInfo.getSywrw() + "</span></p><p>对健康影响情况：" + influenceAir[1] +
+                    "</p><p>建议采取措施：" + adviceAir[1] + "</p>";
+           /* msg = "空气质量指数 " + jcdInfo.getAqi() + "<br/>空气质量等级 " + jcdInfo.getZldj() +
+                    "<br/>首要污染物 " + jcdInfo.getSywrw() + "<br/>对健康影响情况：" + influenceAir[1] +
+                    "<br/>建议采取措施：" + adviceAir[1];*/
+            jcdInfo.setMsg(msg);
+        }else if(aqi>=101 && aqi<=150){
+            jcdInfo.setZldj("轻度污染");
+            msg = "<p>空气质量指数 <span>" + jcdInfo.getAqi() + "</span></p><p>空气质量等级 <span>" + jcdInfo.getZldj() +
+                    "</span></p><p>首要污染物 <span>" + jcdInfo.getSywrw() + "</span></p><p>对健康影响情况：" + influenceAir[2] +
+                    "</p><p>建议采取措施：" + adviceAir[2] + "</p>";
+           /* msg = "空气质量指数 " + jcdInfo.getAqi() + "<br/>空气质量等级 " + jcdInfo.getZldj() +
+                    "<br/>首要污染物 " + jcdInfo.getSywrw() + "<br/>对健康影响情况：" + influenceAir[2] +
+                    "<br/>建议采取措施：" + adviceAir[2];*/
+            jcdInfo.setMsg(msg);
+        }else if(aqi>=151 && aqi<=200){
+            jcdInfo.setZldj("中度污染");
+            msg = "<p>空气质量指数 <span>" + jcdInfo.getAqi() + "</span></p><p>空气质量等级 <span>" + jcdInfo.getZldj() +
+                    "</span></p><p>首要污染物 <span>" + jcdInfo.getSywrw() + "</span></p><p>对健康影响情况：" + influenceAir[3] +
+                    "</p><p>建议采取措施：" + adviceAir[3] + "</p>";
+          /*  msg = "空气质量指数 " + jcdInfo.getAqi() + "<br/>空气质量等级 " + jcdInfo.getZldj() +
+                    "<br/>首要污染物 " + jcdInfo.getSywrw() + "<br/>对健康影响情况：" + influenceAir[3] +
+                    "<br/>建议采取措施：" + adviceAir[3];*/
+            jcdInfo.setMsg(msg);
+        }else if(aqi>=201 && aqi<=300){
+            jcdInfo.setZldj("重度污染");
+            msg = "<p>空气质量指数 <span>" + jcdInfo.getAqi() + "</span></p><p>空气质量等级 <span>" + jcdInfo.getZldj() +
+                    "</span></p><p>首要污染物 <span>" + jcdInfo.getSywrw() + "</span></p><p>对健康影响情况：" + influenceAir[4] +
+                    "</p><p>建议采取措施：" + adviceAir[4] + "</p>";
+      /*      msg = "空气质量指数 " + jcdInfo.getAqi() + "<br/>空气质量等级 " + jcdInfo.getZldj() +
+                    "<br/>首要污染物 " + jcdInfo.getSywrw() + "<br/>对健康影响情况：" + influenceAir[4] +
+                    "<br/>建议采取措施：" + adviceAir[4];*/
+            jcdInfo.setMsg(msg);
+        }else{
+            jcdInfo.setZldj("严重污染");
+            msg = "<p>空气质量指数 <span>" + jcdInfo.getAqi() + "</span></p><p>空气质量等级 <span>" + jcdInfo.getZldj() +
+                    "</span></p><p>首要污染物 <span>" + jcdInfo.getSywrw() + "</span></p><p>对健康影响情况：" + influenceAir[5] +
+                    "</p><p>建议采取措施：" + adviceAir[5] + "</p>";
+           /* msg = "空气质量指数 " + jcdInfo.getAqi() + "<br/>空气质量等级 " + jcdInfo.getZldj() +
+                    "<br/>首要污染物 " + jcdInfo.getSywrw() + "<br/>对健康影响情况：" + influenceAir[5] +
+                    "<br/>建议采取措施：" + adviceAir[5];*/
+            jcdInfo.setMsg(msg);
+        }
+    }
+
+    public List<JxNoise> selectNoiseMapJcd(String bh)
+    {
+        List <JxNoise> list = jxEnvirDao.selectNoiseMapJcd(bh);
+            return list;
+    }
+
+    public List<JxPollution> selectMapPollution()
+    {
+        List <JxPollution> list=jxEnvirDao.selectMapPollution();
+        return list;
+    }
+
+    public List<JxPollution> selectMapPollutionJcd(String type)
+    {
+        List <JxPollution> list=jxEnvirDao.selectMapPollutionJcd(type);
+        return list;
+    }
+
+    public List<JxPollution> selectPollutionHG()
+    {
+        return jxEnvirDao.selectPollutionHG();
+    }
+
+    public JxWaterManage selectWaterManage()
+    {
+        return  jxEnvirDao.selectWaterManage();
+    }
+
+
+    public List<JxPollution> selectPolluteDisplay()
+    {
+        List<JxPollution> list=jxEnvirDao.selectPolluteDisplay();
+        return list;
+    }
+    @Override
+    public List<JxPollution> displayQYInfo(String mc,int type)
+    {
+        List <JxPollution> list=jxEnvirDao.displayQYInfo(mc, type);
+        return list;
+    }
+
+}

@@ -1,0 +1,56 @@
+package com.cetc28.util.general.dto;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by 13b on 2015/8/17.
+ * @param <T>
+ */
+public class GeneralMsg {
+
+    private Boolean success;
+    private String msg;
+    private List<Map<String, Object>> list;
+    private String tableName;
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public GeneralMsg() {
+    }
+
+    public GeneralMsg(Boolean success, String msg) {
+        this.success = success;
+        this.msg = msg;
+    }
+
+	public List<Map<String, Object>> getList() {
+		return list;
+	}
+
+	public void setList(List<Map<String, Object>> list) {
+		this.list = list;
+	}
+
+}

@@ -1,0 +1,95 @@
+package com.cetc28.ConfigurationManagement.dao;
+
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所十三部
+ * 项目名称：CityOverview
+ * 设计人员：linyu
+ * 创建日期：2017/9/26 8:47
+ * 描述信息：
+ * ***************************************************************
+ */
+public interface IResManageDao {
+    /**
+     * 获取数据的指标分类
+     *
+     * @return
+     */
+    List listIndicatorIndex();
+
+    /**
+     * 根据指标编号获取下属资源目录
+     *
+     * @param bh 指标编号
+     * @return
+     */
+    List queryResByIndicator(String bh);
+
+    /**
+     * 查询字段信息
+     * @param tableName
+     * @return
+     */
+    List queryFieldName(String tableName);
+
+    List queryMcByName(String bhValue);
+    /**
+     * 查询区范围
+     * @param map
+     * @return
+     */
+    List queryBhRange(Map map);
+
+    /**
+     * 获得表的表示时间的字段名
+     * @param map
+     * @return
+     */
+    List queryFieldTimeName(Map map);
+
+    /**
+     * 根据区划值获得时间范围
+     * @param map
+     * @return
+     */
+    List queryTimeRangeBybhValue(Map map);
+    /**
+     * 获得表的表示区划分的字段名
+     * @param map
+     * @return
+     */
+    List queryFieldBHName(Map map);
+
+    /**
+     * 获得表的表示主键的字段名
+     * @param map
+     * @return
+     */
+    List queryPKName(Map map);
+    /**
+     * 获得表的时间类型
+     * @param map
+     * @return
+     */
+    List getTimeType(Map map);
+
+    List queryTimeRange(Map map);
+
+    /**
+     * 获取当前值
+     * @param map
+     * @return
+     */
+    List getCurrentValue(Map map);
+
+    /**
+     * 更新当前值
+     * @param map
+     * @return
+     */
+    List updateCurrentValue(Map map);
+}

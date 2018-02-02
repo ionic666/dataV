@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cetc28.idata.dao.IJxTransBusDao">
+  <resultMap id="BaseResultMap" type="com.cetc28.idata.model.JxTransBus">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="QHBH" jdbcType="VARCHAR" property="qhbh" />
+    <result column="CPH" jdbcType="VARCHAR" property="cph" />
+    <result column="JD" jdbcType="VARCHAR" property="jd" />
+    <result column="WD" jdbcType="VARCHAR" property="wd" />
+    <result column="XL" jdbcType="VARCHAR" property="xl" />
+    <result column="GJGS" jdbcType="VARCHAR" property="gjgs" />
+    <result column="XYZ" jdbcType="VARCHAR" property="xyz" />
+    <result column="XSFX" jdbcType="VARCHAR" property="xsfx" />
+    <result column="FWJ" jdbcType="DECIMAL" property="fwj" />
+    <result column="SJC" jdbcType="VARCHAR" property="sjc" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cetc28.idata.model.JxTransBus">
+    insert into JX_TRANS_GJC (ID, QHBH, CPH,
+      JD, WD, XL, GJGS, 
+      XYZ, XSFX, FWJ, SJC
+      )
+    values (#{id,jdbcType=VARCHAR}, #{qhbh,jdbcType=VARCHAR}, #{cph,jdbcType=VARCHAR}, 
+      #{jd,jdbcType=VARCHAR}, #{wd,jdbcType=VARCHAR}, #{xl,jdbcType=VARCHAR}, #{gjgs,jdbcType=VARCHAR}, 
+      #{xyz,jdbcType=VARCHAR}, #{xsfx,jdbcType=VARCHAR}, #{fwj,jdbcType=DECIMAL}, #{sjc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.idata.model.JxTransBus">
+    insert into JX_TRANS_GJC
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="qhbh != null">
+        QHBH,
+      </if>
+      <if test="cph != null">
+        CPH,
+      </if>
+      <if test="jd != null">
+        JD,
+      </if>
+      <if test="wd != null">
+        WD,
+      </if>
+      <if test="xl != null">
+        XL,
+      </if>
+      <if test="gjgs != null">
+        GJGS,
+      </if>
+      <if test="xyz != null">
+        XYZ,
+      </if>
+      <if test="xsfx != null">
+        XSFX,
+      </if>
+      <if test="fwj != null">
+        FWJ,
+      </if>
+      <if test="sjc != null">
+        SJC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="qhbh != null">
+        #{qhbh,jdbcType=VARCHAR},
+      </if>
+      <if test="cph != null">
+        #{cph,jdbcType=VARCHAR},
+      </if>
+      <if test="jd != null">
+        #{jd,jdbcType=VARCHAR},
+      </if>
+      <if test="wd != null">
+        #{wd,jdbcType=VARCHAR},
+      </if>
+      <if test="xl != null">
+        #{xl,jdbcType=VARCHAR},
+      </if>
+      <if test="gjgs != null">
+        #{gjgs,jdbcType=VARCHAR},
+      </if>
+      <if test="xyz != null">
+        #{xyz,jdbcType=VARCHAR},
+      </if>
+      <if test="xsfx != null">
+        #{xsfx,jdbcType=VARCHAR},
+      </if>
+      <if test="fwj != null">
+        #{fwj,jdbcType=DECIMAL},
+      </if>
+      <if test="sjc != null">
+        #{sjc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

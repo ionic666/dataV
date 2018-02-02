@@ -1,0 +1,121 @@
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.Constant.SysConstant;
+import com.cetc28.idata.model.CityResult;
+import com.cetc28.idata.model.PageResult;
+import com.cetc28.idata.model.User;
+import com.cetc28.idata.service.IJxUserManageService;
+import com.cetc28.idata.shiro.AuthRealm;
+import com.cetc28.util.Encrypt;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by FangYan on 2017/9/21.
+ */
+@Controller
+@RequestMapping("/manage")
+public class JxUserController {
+    @Autowired
+    private IJxUserManageService iJxUserService;
+    @Autowired
+    private AuthRealm authRealm;
+
+    @RequestMapping(value = "/user/userManage.do",method = RequestMethod.GET)
+    @ResponseBody
+    public PageResult queryUserInfo(Integer pageNumber, Integer pageSize){
+        PageResult pageResult = iJxUserService.queryUserInfo(pageNumber, pageSize);
+        return  pageResult;
+    }
+
+    @RequestMapping("user/addUser.do")
+    @ResponseBody
+    public CityResult addUser(String username,String password,String rolename){
+        if(iJxUserService.isExistUser(username)){
+           return  CityResult.build(400,"用户名已存在");
+        }
+        String md5Password = Encrypt.md5(password, username);
+        java.util.Date currentTime = new java.util.Date();
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("username",username);
+        map.put("password",md5Password);
+        map.put("regtime",new java.sql.Timestamp(currentTime.getTime()));
+        map.put("status",1);
+        map.put("lastlogintime",new java.sql.Timestamp(currentTime.getTime()));
+//        iJxUserService.addUser(map);
+        iJxUserService.addUserAndPer(map,rolename);
+        return  CityResult.build(200,"添加成功");
+    }
+
+    @RequestMapping("/user/delUser.do")
+    @ResponseBody
+    public CityResult delUser(Integer userid,HttpSession session){
+        User currentUser = (User) session.getAttribute(SysConstant.CURRENT_USER_INFO);
+        Integer uid=currentUser.getUserid();
+        try {
+            if(uid!=1){
+                return CityResult.build(400,"该用户没有删除的权限");
+            }
+            if(userid==1){
+                return CityResult.build(400,"该用户不能删除");
+            }
+            iJxUserService.delUser(userid);
+            return CityResult.build(200, "删除成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return CityResult.build(400,"删除失败，请重新操作");
+        }
+    }
+
+    @RequestMapping("role/queryRolePermission.do")
+    @ResponseBody
+    public List<String> queryRolePermission(String rolename){
+        return iJxUserService.queryRolePermission(rolename);
+    }
+
+    @RequestMapping("role/updateRolePermission.do")
+    @ResponseBody
+    public CityResult updateRolePermission(Integer userid, String rolename,String password, HttpSession session){
+        if(password!=null&&!password.equals("")){
+            String username=iJxUserService.queryUserByuserid(userid).get(0).getUsername();
+            String md5Password = Encrypt.md5(password, username);
+            iJxUserService.updateUserPwd(md5Password,userid);
+        }
+        Integer roleid = iJxUserService.queryRoleIdByName(rolename);
+        User currentUser = (User) session.getAttribute(SysConstant.CURRENT_USER_INFO);
+        if(iJxUserService.checkRoleId(userid)>0){
+            if(iJxUserService.updateRolePermission(userid,roleid)==1) {
+                if(currentUser.getUserid()==userid){
+                    authRealm.updateCachedAuthorization();
+                }
+                return CityResult.ok();
+            }else{
+                return CityResult.build(400,"添加失败，请重新操作");
+            }
+        }else{
+            if(iJxUserService.insertRolePermission(userid,roleid)==1){
+                return CityResult.ok();
+            }else{
+                return CityResult.build(400,"添加失败，请重新操作");
+            }
+        }
+    }
+
+    @RequestMapping("user/updateUserStatus.do")
+    @ResponseBody
+    public CityResult updateUserStatus(Integer userid, Integer status) {
+
+        iJxUserService.updateUserStatus(status, userid);
+        return CityResult.ok();
+    }
+}

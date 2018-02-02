@@ -1,0 +1,30 @@
+/**
+ * Created by think on 2017/11/8.
+ */
+var citysmx={
+    citysmxAjax:function(){
+        map.addLayer(waterpipeLayer);
+        $(".envirAll").removeClass("active");
+        $.ajax({
+            type: 'post',
+            url: "jxutility/distinct/distinctOverview.do?bH="+qhbh,
+            dataType: 'JSON',
+            success: function (data) {
+                var len=data.length;
+                var pointArr=[];
+                for(var i=0;i<len;i++){
+                    var XY=bd09towgs84(parseFloat(data[i].xzqh.jd),parseFloat(data[i].xzqh.wd))
+                    var jd=XY[0];
+                    var wd=XY[1];
+                    pointArr.push({jd:jd,wd:wd,details:{
+                        key0:data[i].jxUtilityStatisByMonth,
+                        key1:data[i].xzqh}});
+                }
+                citysmx.ShowLayers(pointArr,citysmxLayer,"images/smx.png");
+                map.addLayer(citysmxLayer);
+            }
+        })
+        citysmx.gzd()
+        citysmx.bjd()
+    }
+}

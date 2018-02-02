@@ -1,0 +1,25 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+import com.cetc28.PeopleBenefitService.model.JxSsCorpStatistics;
+
+import java.util.List;
+
+public interface JxSsCorpStatisticsMapper {
+    int deleteByPrimaryKey(Short id);
+
+    int insert(JxSsCorpStatistics record);
+
+    int insertSelective(JxSsCorpStatistics record);
+
+    JxSsCorpStatistics selectByPrimaryKey(Short id);
+
+    int updateByPrimaryKeySelective(JxSsCorpStatistics record);
+
+    int updateByPrimaryKey(JxSsCorpStatistics record);
+
+    List<JxSsCorpStatistics> selectSsCorporationInThreeY();
+
+    JxSsCorpStatistics selectSsCorporationInLatestY(String regionCode, String legalPersonType, String businessType);
+
+    List<JxSsCorpStatistics> selectSsCorporationInFiveY(String regionCode, String legalPersonType, String businessType,Integer rowNo);
+}

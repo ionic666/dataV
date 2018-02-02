@@ -1,0 +1,252 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #companyWindow .modal-dialog{
+      margin-right: 10px;
+      width:660px;
+    }
+    #companyWindow .modal-content{
+      height: 450px;
+      /*background: url("map/images/economicModel/bgw(1).png") no-repeat;
+      background-position: -7px 0;
+      background-size: 102% 101%;*/
+    }
+    #companyWindow .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #companyWindow .modal-title{
+      margin-top: -5px;
+    }
+    #companyWindow .modal-body{
+      padding: 0px;
+    }
+    #companyWindow .nav li{
+      width: 117px;
+      height: 32px;
+        line-height:32px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .lisoft{
+        color: white;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      background-image: url("map/images/Layer24.png");
+    }
+
+    .actsoft{
+        color: #000000;
+      background-image: url("map/images/Layer24copy2.png");
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+
+
+    #companyWindow div .nav{
+      height:32px;
+        margin-top: -10px;
+    }
+    #companyWindow .nav li a:hover{
+      color: #000;
+      text-decoration: none;
+    }
+    #companyWindow{
+      color: #000000;
+    }
+    #comState table tr td{
+      height: 33px;
+      line-height: 33px;
+      margin-left: 20px;
+    }
+    #comState table tr td span{
+      margin-left: 20px;
+    }
+
+    .qwe{
+        width: 60%;
+        height: 100%;
+        margin: 30px auto;
+        padding: 15px;
+        border: 1px solid red;
+    }
+
+    #company1 p{
+        margin: 5px;
+    }
+      .bgColor{
+          width: 90px;
+          background-color: rgba(0,0,7,0.1);
+      }
+  </style>
+</head>
+<body>
+<div class="modal fade" style="width: 700px;height: 480px;top: 10px;left: 70px;" id="companyWindow" tabindex="-1" role="dialog" aria-hidden="true" style=""
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+          <img src="map/images/economicModel/close.png">
+        </button>
+        <div class="nav" style="margin-top: -11px;">
+          <ul class="list-group" style="">
+            <li onclick="toUrl(this,'#company1')" id="lisoft1" class="list-unstyled act_2" value="2"><div class="stext">基本信息</div></li>
+            <li onclick="toUrl(this,'#company2')" id="lisoft2" class="list-unstyled li_3" value="3"><div class="stext">营业收入</div></li>
+            <li onclick="toUrl(this,'#company3')" id="lisoft3" class="list-unstyled li_4" value="4"><div class="stext">员工情况</div></li>
+            <li onclick="toUrl(this,'#company4')" id="lisoft4" class="list-unstyled li_2" value="2"><div class="stext">工商信息</div></li>
+          </ul>
+        </div>
+        <%--<h4 class="modal-title ecoWindowTitle" id="infoModalLabel">社会经济</h4>--%>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content ">
+          <div id="company1" class="tab-pane active"><!--第一页产品规模这个图表-->
+            <div style="height:330px;width:640px;margin-left: 10px;overflow-y: auto;margin-top: 3px">
+                <p>公司名称：南京钢铁集团</p>
+                <p>公司地点：南京市沿江工业开发区幸福路8号</p>
+                <p>公司法人：黄一新</p>
+                <p>人员规模：30000人以上</p>
+                <p>所属行业：钢铁行业</p>
+                <p>营业收入：50000亿以上</p>
+                <p>年纳税额：166亿元</p>
+                <p>社保缴费：3.5亿元</p>
+                <p>年检情况：通过</p>
+                <p>违法情况：无</p>
+                <p>公司简介：主要经营钢铁冶炼，钢材轧制，金属轧制设备配件、耐火材料制品、金属结构及其构件制造，废钢收购、加工，本公司产品销售。沙钢现拥有总资产821亿元，主要工艺装备均达国际先进水平，形成了年产铁2230万吨、钢2720万吨、材2390万吨，其中不锈钢板100万吨的生产能力。
+                </p>
+            </div>
+          </div>
+          <div id="company2" class="tab-pane " ><!--z这是第二页的饼图-->
+            <div style="height:330px;width:640px;padding-left: 10px" id="pie">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr style="background-color:#E7E7E7;">
+                        <th></th>
+                        <th style="text-align: center;">2014年</th>
+                        <th style="text-align: center;">2013年</th>
+                        <th style="text-align: center;">本年比上半年增减</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr style="background-color:#CBCBCB;">
+                        <td>营业收入(元)</td>
+                        <td>10,308,066,919.27</td>
+                        <td>10,786,859,721.70</td>
+                        <td>-4.44%</td>
+                    </tr>
+                    <tr style="background-color:#E7E7E7;">
+                        <td></td>
+                        <td>2014年末</td>
+                        <td>2013年末</td>
+                        <td>本年末比上年末增减</td>
+                    </tr>
+                    <tr style="background-color:#CBCBCB;">
+                        <td>总资产(元)</td>
+                        <td>7,137,412,666.70</td>
+                        <td>8,382,369,631.77</td>
+                        <td>-14.85%</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+          <div id="company3" class="tab-pane "><!--z这是第三页的条形图-->
+            <div style="height:360px;width:640px;padding-left: 10px">
+                <div style="width: 640px">
+                    <p>（1）截止2014年12月，共有4，962人。</p>
+                    <p>（2）人员结构：生产人员3,048人，销售人员79人，技术人员1,220人，财务人员45人，行政人员186人，其他人员384人。</p>
+                </div>
+                <div id="pie1" style="height: 150px;width: 600px;"></div>
+                <div style="width: 640px">  <p>（3）学历情况：大学本科及本科以上人员294人，大专及中专人员2,628人，其他人员2,040人。</p></div>
+                <div id="pie2" style="height: 150px;width: 600px;margin-top: -10px"></div>
+            </div>
+          </div>
+          <div id="company4" class="tab-pane "><!--z这是第三页的条形图-->
+            <div style="height:360px;width:640px;padding-left: 10px">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td class="bgColor">注册号</td>
+                        <td >320582000117266</td>
+                        <td class="bgColor">名称</td>
+                        <td>南京钢铁集团</td>
+                    </tr>
+                    <tr>
+                        <td class="bgColor">类型</td>
+                        <td>有限责任公司</td>
+                        <td class="bgColor">法定代表人</td>
+                        <td>黄一新</td>
+                    </tr>
+                    <tr>
+                        <td class="bgColor">注册资本</td>
+                        <td>132100万元人民币</td>
+                        <td class="bgColor">成立日期</td>
+                        <td>1996年06月19日</td>
+                    </tr>
+                    <tr>
+                        <td class="bgColor">住所</td>
+                        <td colspan="3">张家港市锦镇</td>
+                    </tr>
+                    <tr>
+                        <td class="bgColor">营业期限自</td>
+                        <td>1996年06月19日</td>
+                        <td class="bgColor">营业期至</td>
+                        <td>2016年06月19日</td>
+                    </tr>
+                    <tr>
+                        <td class="bgColor">经营范围</td>
+                        <td colspan="3">钢铁冶炼，钢材轧制，金属轧制设备配件、耐火材料制品、金属结构及其构建制造，废钢收购、加工、本公司产品销售。(国家专项规定的，办理许可证后经营)。经营本企业和本企业成员及相关技术的出口业务；经营本企业和本企业成员企业生产、科研所需的原辅助材料、机械设备、仪表仪器、零配件及相关技术的进口业务；国内贸易(国家禁止或限制经营的项目除外；国家有专项规定的，取得相应许可证后可经营)。</td>
+                    </tr>
+                    <tr>
+                        <td class="bgColor">登记机关</td>
+                        <td>张家港市市场监督管理局</td>
+                        <td class="bgColor">校准日期</td>
+                        <td>2012年12月18日</td>
+                    </tr>
+                    <tr>
+                        <td class="bgColor">登记状态</td>
+                        <td colspan="3">在业</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  <%--弹出页面数据初始化--%>
+//  setMyPie1();
+//  setMyPie2();
+  function toUrlcompany(evt,index){
+    $(evt).addClass("actsoft").removeClass("lisoft");
+    $(evt).siblings().addClass("lisoft").removeClass("actsoft");
+    $("#company"+index).addClass("active");
+    $("#company"+index).siblings().removeClass("active");
+      if(index==3){
+          setMyPie1();
+          setMyPie2();
+      }
+  }
+</script>
+</body>
+</html>

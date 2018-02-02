@@ -1,0 +1,57 @@
+package com.cetc28.ConfigurationManagement.service.impl;
+
+import com.cetc28.ConfigurationManagement.dao.JxLoginDao;
+import com.cetc28.ConfigurationManagement.model.Module;
+import com.cetc28.ConfigurationManagement.model.PageResult;
+import com.cetc28.ConfigurationManagement.model.User;
+import com.cetc28.ConfigurationManagement.model.UserLoginList;
+import com.cetc28.ConfigurationManagement.service.JxLoginService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/9/19.
+ */
+@Service
+public class JxLoginServiceImpl implements JxLoginService {
+    @Autowired private JxLoginDao loginDao;
+
+    @Override
+    public void addUserLoginList(UserLoginList userLoginList) {
+        loginDao.addUserLoginList(userLoginList);
+    }
+
+    @Override
+    public List<User> queryUserByName(String username) {
+        return loginDao.queryUserByName(username);
+    }
+
+    @Override
+    public List<Module> getUserModule(int userid) {
+        return loginDao.getUserModule(userid);
+    }
+
+    @Override
+    public PageResult queryLoginList(Integer pageNumber, Integer pageSize) {
+        //设置分页信息
+        PageHelper.startPage(pageNumber,pageSize);
+        //执行查询
+        List<UserLoginList> list = loginDao.queryLoginList(pageNumber,pageSize);
+        //取查询结果
+        PageInfo<UserLoginList> pageInfo = new PageInfo<UserLoginList>(list);
+        PageResult result = new PageResult();
+        result.setRows(list);  //设置表格每行内容
+        result.setTotal(pageInfo.getTotal());
+        //返回结果
+        return result;
+    }
+
+    @Override
+    public Integer queryUserStatus(String username) {
+        return loginDao.queryUserStatus(username);
+    }
+}

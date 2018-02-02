@@ -1,0 +1,206 @@
+package com.cetc28.util;
+
+/**
+ * 坐标转换通用工具类
+ * Created by linyu on 2017/8/24.
+ */
+public class CoordinateConverter {
+    private static Double x_PI = Math.PI * 300.0 / 180.0;
+    private static Double a = 6378245.0;
+    private static Double ee = 0.00669342162296594323;
+    private static Double PI = Math.PI;
+
+    /**
+     * 判断经纬度范围，不在国内返回true, 不需做纠偏
+     * @param lon
+     * @param lat
+     * @return
+     */
+    public static boolean out_of_china(Double lon, Double lat){
+        return (lon < 72.004 || lon > 137.8347) || ((lat < 0.8293 || lat > 55.8271) || false);
+    }
+
+    /**
+     * 经度转换程序
+     * @param lon
+     * @param lat
+     * @return
+     */
+    public static Double transformlon(Double lon, Double lat) {
+        Double ret = 300.0 +lon + 2.0 * lat + 0.1 *lon *lon + 0.1 *lon * lat + 0.1 * Math.sqrt(Math.abs(lon));
+        ret += (20.0 * Math.sin(6.0 *lon * PI) + 20.0 * Math.sin(2.0 *lon * PI)) * 2.0 / 3.0;
+        ret += (20.0 * Math.sin(lon * PI) + 40.0 * Math.sin(lon / 3.0 * PI)) * 2.0 / 3.0;
+        ret += (150.0 * Math.sin(lon / 12.0 * PI) + 300.0 * Math.sin(lon / 30.0 * PI)) * 2.0 / 3.0;
+        return ret;
+    }
+
+    /**
+     * 纬度转换程序
+     * @param lon
+     * @param lat
+     * @return
+     */
+    public static Double transformlat(Double lon, Double lat) {
+        Double ret = -100.0 + 2.0 * lon + 3.0 * lat + 0.2 * lat * lat + 0.1 * lon * lat + 0.2 * Math.sqrt(Math.abs(lon));
+        ret += (20.0 * Math.sin(6.0 * lon * PI) + 20.0 * Math.sin(2.0 * lon * PI)) * 2.0 / 3.0;
+        ret += (20.0 * Math.sin(lat * PI) + 40.0 * Math.sin(lat / 3.0 * PI)) * 2.0 / 3.0;
+        ret += (160.0 * Math.sin(lat / 12.0 * PI) + 320 * Math.sin(lat * PI / 30.0)) * 2.0 / 3.0;
+        return ret;
+    }
+
+    /**
+     * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
+     * @param bd_lon
+     * @param bd_lat
+     * @return
+     */
+    public static Double[] bd09togcj02(Double bd_lon, Double bd_lat) {
+        Double x = bd_lon - 0.0065;
+        Double y = bd_lat - 0.006;
+        Double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_PI);
+        Double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_PI);
+        Double gg_lon = z * Math.cos(theta);
+        Double gg_lat = z * Math.sin(theta);
+        Double[] result = new Double[2];
+        result[0] = gg_lon;
+        result[1] = gg_lat;
+        return result;
+    }
+
+    /**
+     * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换
+     * @param lon
+     * @param lat
+     * @return
+     */
+    public static Double[] gcj02tobd09(Double lon, Double lat) {
+        Double z = Math.sqrt(lon * lon + lat * lat) + 0.00002 * Math.sin(lat * x_PI);
+        Double theta = Math.atan2(lat, lon) + 0.000003 * Math.cos(lon * x_PI);
+        Double bd_lon = z * Math.cos(theta) + 0.0065;
+        Double bd_lat = z * Math.sin(theta) + 0.006;
+        Double[] result = new Double[2];
+        result[0] = bd_lon;
+        result[1] = bd_lat;
+        return result;
+    }
+
+
+    /**
+     * GCJ02 转换为 WGS84
+     * @param lon
+     * @param lat
+     * @return
+     */
+    public static Double[] gcj02towgs84(Double lon, Double lat) {
+        Double[] result = new Double[2];
+        if (out_of_china(lon, lat)) {
+            result[0] = lon;
+            result[1] = lat;
+        }
+        else {
+            Double dlat = transformlat(lon - 105.0, lat - 35.0);
+            Double dlon = transformlon(lon - 105.0, lat - 35.0);
+            Double radlat = lat / 180.0 * PI;
+            Double magic = Math.sin(radlat);
+            magic = 1 - ee * magic * magic;
+            Double sqrtmagic = Math.sqrt(magic);
+            dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);
+            dlon = (dlon * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);
+            Double mglat = lat + dlat;
+            Double mglon = lon + dlon;
+            result[0] = lon * 2 - mglon;
+            result[1] = lat * 2 - mglat;
+        }
+        return result;
+    }
+
+    /**
+     *  WGS84 转 GCj02
+     * @param lon
+     * @param lat
+     * @return
+     */
+    public static Double[] wgs84togcj02(Double lon, Double lat) {
+        Double[] result = new Double[2];
+        if (out_of_china(lon, lat)) {
+            result[0] = lon;
+            result[1] = lat;
+        }
+        else {
+            Double dlat = transformlat(lon - 105.0, lat - 35.0);
+            Double dlon = transformlon(lon - 105.0, lat - 35.0);
+            Double radlat = lat / 180.0 * PI;
+            Double magic = Math.sin(radlat);
+            magic = 1 - ee * magic * magic;
+            Double sqrtmagic = Math.sqrt(magic);
+            dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);
+            dlon = (dlon * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);
+            Double mglat = lat + dlat;
+            Double mglon = lon + dlon;
+            /*result[0] = lon * 2 - mglon;
+            result[1] = lat * 2 - mglat;*/
+            result[0] = mglon;
+            result[1] = mglat;
+        }
+        return result;
+    }
+
+    /**
+     * WGS84 转 百度坐标系 (BD-09)
+     * @param lon
+     * @param lat
+     * @return
+     */
+    public static Double[] bd09towgs84(Double lon, Double lat){
+        Double[] temp = bd09togcj02(lon , lat);
+        Double[] result = gcj02towgs84(temp[0], temp[1]);
+        return result;
+    }
+
+    public static Double[] wgs84tobd09(Double lon, Double lat){
+        Double[] temp = wgs84togcj02(lon, lat);
+        Double[] result = gcj02tobd09(temp[0], temp[1]);
+        return result;
+    }
+
+
+    /**
+     *  经纬度转球面墨卡托坐标
+     * @param x 经度
+     * @param y 纬度
+     * @return 墨卡托坐标
+     */
+    public static Double[] lonLat2Mercator(Double x, Double y){
+        Double[] cor = new Double[2];
+        Double x_m = x*20037508.34/180;
+        Double y_m = Math.log(Math.tan((90+y)*Math.PI/360))/(Math.PI/180);
+        y_m = y_m*20037508.34/180;
+        cor[0] = x_m;
+        cor[1] = y_m;
+        return cor;
+    }
+
+    /**
+     * 墨卡托转经纬度
+     * @param x 墨卡托横轴坐标
+     * @param y 墨卡托纵轴坐标
+     * @return 经纬度坐标
+     */
+    public static Double[] mercator2Lonlat(Double x, Double y){
+        Double[] cor = new Double[2];
+        Double x_l = x*180/20037508.34;
+        Double y_l = y*180/20037508.34;
+        y_l = 180/Math.PI*(2*Math.atan(Math.exp(y_l*Math.PI/180))-Math.PI/2);
+        cor[0] = x_l;
+        cor[1] = y_l;
+        return cor;
+    }
+
+    public static void main(String args[]){
+        Double lon = 120.5019;
+        Double lat = 30.6628;
+        Double[] result = gcj02towgs84(lon, lat);
+        System.out.println(result[0]+"\n"+result[1]);
+    }
+
+}

@@ -1,0 +1,159 @@
+package com.cetc28.PeopleBenefitService.service.impl;
+
+import com.cetc28.PeopleBenefitService.dao.JxServiceRateCaseDao;
+import com.cetc28.PeopleBenefitService.service.IJxSerRateCaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/23.
+ */
+@Service
+public class JxSerRateCaseServiceImpl implements IJxSerRateCaseService {
+    @Autowired
+    private JxServiceRateCaseDao jxServiceRateCaseDao;
+    @Override
+    public Map queryDefaultData() {
+        Map result=new HashMap();
+        List<String> quanshiRate=jxServiceRateCaseDao.queryQuanshiRate();
+        result.put("quanshiRate",quanshiRate);
+        result.put("quanshitongbirate",jxServiceRateCaseDao.queryQuanshiTongbiRate());
+        List<String> bhRange=jxServiceRateCaseDao.queryBhRange();
+        List bhMcRangeList=new ArrayList();
+        for(String bh:bhRange){
+            Map<String,String> bhMc=new HashMap();
+            String mc=jxServiceRateCaseDao.queryMcByBh(bh);
+            bhMc.put("bhValue",bh);
+            bhMc.put("mc", mc);
+            bhMcRangeList.add(bhMc);
+        }
+        result.put("bhList",bhMcRangeList);
+        //组装建议
+        Map param=new HashMap();
+        param.put("bhValue",bhRange.get(0));
+        param.put("sort","1");
+        List bianming=jxServiceRateCaseDao.querySuggestandPercentbyBh(param);
+        param.put("sort","2");
+        List qiye=jxServiceRateCaseDao.querySuggestandPercentbyBh(param);
+        Map suggest=new HashMap();
+        suggest.put("bianming",bianming);
+        suggest.put("qiye",qiye);
+        result.put("suggest",suggest);
+
+        //组装三率
+        Map rateparam=new HashMap();
+        rateparam.put("sort","1");
+        rateparam.put("category","1");
+        List town=jxServiceRateCaseDao.queryRateCaseBh(rateparam);
+        List item=jxServiceRateCaseDao.queryRateCaseItem(rateparam);
+        result.put("town",town);
+        result.put("item",item);
+
+        return result;
+    }
+
+    @Override
+    public Map querySuggestByBhValue(String bhValue) {
+        Map result=new HashMap();
+        //组装建议
+        Map param=new HashMap();
+        param.put("bhValue",bhValue);
+        param.put("sort","1");
+        List bianming=jxServiceRateCaseDao.querySuggestandPercentbyBh(param);
+        param.put("sort","2");
+        List qiye=jxServiceRateCaseDao.querySuggestandPercentbyBh(param);
+        Map suggest=new HashMap();
+        suggest.put("bianming",bianming);
+        suggest.put("qiye",qiye);
+        result.put("suggest",suggest);
+        return result;
+    }
+
+    @Override
+    public Map queryRateCaseBySort(String sort) {
+        Map result=new HashMap();
+        //组装三率
+        Map rateparam=new HashMap();
+        rateparam.put("sort",sort);
+        rateparam.put("category","1");
+        List town=jxServiceRateCaseDao.queryRateCaseBh(rateparam);
+        List item=jxServiceRateCaseDao.queryRateCaseItem(rateparam);
+        result.put("town",town);
+        result.put("item",item);
+        return result;
+    }
+
+    @Override
+    public List queryQuanshiValueAndGrowth() {
+        List result = new ArrayList<Map>();
+        List<Map> value = jxServiceRateCaseDao.queryQuanshiRateMap();
+        List<String> growth = jxServiceRateCaseDao.queryQuanshiTongbiRate();
+        for (int j = 0; j < value.size(); j++){
+            Map map = value.get(j);
+            Map<String, Object> info = new HashMap<String,Object>();
+            Object sort = map.get("sort");
+            if(j==0){
+                info.put("mc","满意率");
+            }else if(j==1){
+                info.put("mc","实现率");
+            }else if(j==2){
+                info.put("mc","知晓率");
+            }else{
+                info.put("mc","获得感");
+            }
+            info.put("value", map.get("QUANSHI"));
+            info.put("growth", growth.get(j));
+            result.add(info);
+        }
+        return result;
+    }
+
+    @Override
+    public List queryEstateNum() {
+        List result = new ArrayList<Map>();
+        List<Map> originData = jxServiceRateCaseDao.queryEstateNum();
+        for (int j = 0; j < originData.size(); j++){
+            Map map = originData.get(j);
+            Map<String, Object> info = new HashMap<String,Object>();
+            info.put("registertime", map.get("REGISTERTIME"));
+            info.put("finishnum", map.get("FINISHNUM"));
+            result.add(info);
+        }
+        return result;
+    }
+
+    @Override
+    public List queryHotItem() {
+        List result = new ArrayList<Map>();
+        List<Map> originData = jxServiceRateCaseDao.queryHotItem();
+        for (int j = 0; j < originData.size(); j++){
+            Map map = originData.get(j);
+            Map<String, Object> info = new HashMap<String,Object>();
+            info.put("itemname", map.get("ITEMNAME"));
+            info.put("itemnum", map.get("ITEMNUM"));
+            result.add(info);
+        }
+        return result;
+    }
+
+    @Override
+    public List queryRunOnceItemNum() {
+        List result = new ArrayList<Map>();
+        List<Map> originData = jxServiceRateCaseDao.queryRunOnceItemNum();
+        for (int j = 0; j < originData.size(); j++){
+            Map map = originData.get(j);
+            Map<String, Object> info = new HashMap<String,Object>();
+            info.put("qhmc", map.get("MC"));
+            info.put("itemtype", map.get("ITEMTYPE"));
+            info.put("yeartotalnum", map.get("TOTALNUM"));
+            result.add(info);
+        }
+
+        return result;
+    }
+}

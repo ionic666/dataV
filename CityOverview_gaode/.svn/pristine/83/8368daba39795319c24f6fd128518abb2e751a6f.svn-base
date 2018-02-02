@@ -1,0 +1,41 @@
+package com.cetc28.PeopleBenefitService.dto;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所十三部
+ * 项目名称：CityOverview
+ * 设计人员：linyu
+ * 创建日期：2017/9/14 19:50
+ * 描述信息：教育资源承载力统计信息Dto
+ * ***************************************************************
+ */
+public class EduStatisticDto {
+    String year;            //年份
+    Integer overloadNum;   //超载人数
+    Integer idleloadNum;   //空载人数
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+
+    public Integer getOverloadNum() {
+        return overloadNum;
+    }
+
+    public void setOverloadNum(Integer overloadNum) {
+        this.overloadNum = overloadNum;
+    }
+
+    public Integer getIdleloadNum() {
+        return idleloadNum;
+    }
+
+    public void setIdleloadNum(Integer idleloadNum) {
+        this.idleloadNum = idleloadNum;
+    }
+}

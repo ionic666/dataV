@@ -1,0 +1,55 @@
+package com.cetc28.PeopleBenefitService.model;
+
+import java.math.BigDecimal;
+
+public class JxAddminServ {
+    private BigDecimal id;
+
+    private String bh;//区划编号
+
+    private String mc;//区划名称
+
+    private BigDecimal onestoprate;//一站式办理率
+
+    private BigDecimal onlinerate;//网上统一入口率
+
+    public BigDecimal getId() {
+        return id;
+    }
+
+    public void setId(BigDecimal id) {
+        this.id = id;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh == null ? null : bh.trim();
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+
+    public BigDecimal getOnestoprate() {
+        return onestoprate;
+    }
+
+    public void setOnestoprate(BigDecimal onestoprate) {
+        this.onestoprate = onestoprate;
+    }
+
+    public BigDecimal getOnlinerate() {
+        return onlinerate;
+    }
+
+    public void setOnlinerate(BigDecimal onlinerate) {
+        this.onlinerate = onlinerate;
+    }
+}

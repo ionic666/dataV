@@ -1,0 +1,37 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+import com.cetc28.PeopleBenefitService.model.JxEcoCoreIndustry;
+import com.cetc28.PeopleBenefitService.model.JxEcoCoreInformation;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/9/30.
+ */
+public interface JxEcoCoreInformationDao {
+    /**
+     * 查询一级指标
+     * @return
+     */
+    public List<JxEcoCoreIndustry> queryFirstIndex();
+
+    /**
+     * 查询二级指标
+     * @return
+     */
+    public List<JxEcoCoreIndustry> querySecondIndex(String sjbh);
+
+    /**
+     * 查询数据
+     * @param map
+     * @return
+     */
+    public List<JxEcoCoreInformation> queryCoreIndustry(Map map);
+
+    /**
+     * 查询年范围
+     * @return
+     */
+    public List queryYearRange();
+}

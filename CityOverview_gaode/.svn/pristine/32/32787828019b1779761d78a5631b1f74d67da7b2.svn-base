@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.JxEcoKeycomDao">
+    <select id="querykeycomsj" resultType="com.cetc28.idata.model.JxEcoKeycomsj">
+        SELECT * from JX_ECO_KEYCOMSJ
+    </select>
+
+    <select id="querykeycomsjbyid" resultType="com.cetc28.idata.model.JxEcoKeycomsj" parameterType="java.lang.String">
+        SELECT * from JX_ECO_KEYCOMSJ where id=#{id}
+    </select>
+
+    <select id="querykeycomsec" resultType="java.util.HashMap" parameterType="java.lang.String">
+        SELECT * from JX_ECO_KEYCOMSEC where sjid=#{id}
+    </select>
+
+    <select id="queryMcByBh" resultType="java.lang.String" parameterType="java.lang.String">
+        select mc from XXZYGL.XZQH where bh=#{bhValue}
+    </select>
+
+    <select id="queryBhRange" resultType="java.lang.String">
+        SELECT distinct bh from JX_ECO_KEYCOMSEC order by bh
+    </select>
+
+    <select id="queryComByCondition" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT distinct * from JX_ECO_KEYCOMSEC
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="bhValue!=null and bhValue!=''">
+                and bh=#{bhValue}
+            </if>
+            <if test="id!=null and id!=''">
+                and sjid=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="serchKeycom" resultType="java.util.HashMap" parameterType="java.lang.String">
+        SELECT * from JX_ECO_KEYCOMSEC where name like '%'||#{name}||'%'
+    </select>
+
+    <select id="queryType" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        SELECT count(*) from JX_ECO_KEYCOMSEC
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="type!=null and type!=''">
+                and type=#{type}
+            </if>
+            <if test="bhValue!=null and bhValue!=''">
+                and bh=#{bhValue}
+            </if>
+            <if test="id!=null and id!=''">
+                and sjid=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryAge" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        SELECT count(*) from JX_ECO_KEYCOMSEC
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="fromage!=null and fromage!=''">
+                and to_number(age)>=#{fromage}
+            </if>
+            <if test="toage!=null and toage!=''">
+                <![CDATA[and to_number(age)<#{toage}]]>
+            </if>
+            <if test="bhValue!=null and bhValue!=''">
+                and bh=#{bhValue}
+            </if>
+            <if test="id!=null and id!=''">
+                and sjid=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryValue" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        SELECT count(*) from JX_ECO_KEYCOMSEC
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="fromvalue!=null and fromvalue!=''">
+                and to_number(value,'9999.0000')>=#{fromvalue}
+            </if>
+            <if test="tovalue!=null and tovalue!=''">
+                <![CDATA[and to_number(value,'9999.0000')<#{tovalue}]]>
+            </if>
+            <if test="bhValue!=null and bhValue!=''">
+                and bh=#{bhValue}
+            </if>
+            <if test="id!=null and id!=''">
+                and sjid=#{id}
+            </if>
+        </trim>
+    </select>
+</mapper>

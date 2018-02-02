@@ -1,0 +1,45 @@
+package com.cetc28.IntelligentInfrastructure.model;
+
+import java.math.BigDecimal;
+
+public class JxUtilityManteDeviceState extends JxUtilityManteDeviceStateKey {
+    private BigDecimal mesValue;
+
+    private BigDecimal batt;
+
+    private String deviceState;
+
+    private String mesTime;
+
+    public BigDecimal getMesValue() {
+        return mesValue;
+    }
+
+    public void setMesValue(BigDecimal mesValue) {
+        this.mesValue = mesValue;
+    }
+
+    public BigDecimal getBatt() {
+        return batt;
+    }
+
+    public void setBatt(BigDecimal batt) {
+        this.batt = batt;
+    }
+
+    public String getDeviceState() {
+        return deviceState;
+    }
+
+    public void setDeviceState(String deviceState) {
+        this.deviceState = deviceState == null ? null : deviceState.trim();
+    }
+
+    public String getMesTime() {
+        return mesTime;
+    }
+
+    public void setMesTime(String mesTime) {
+        this.mesTime = mesTime == null ? null : mesTime.trim();
+    }
+}

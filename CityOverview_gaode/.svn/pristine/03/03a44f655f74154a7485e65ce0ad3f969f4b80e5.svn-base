@@ -1,0 +1,200 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: linyu
+  Date: 2017/9/16
+  Time: 9:33
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>多媒体教室普及率</title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.multiMediaRoom{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 220px;
+        }
+        div#multiMediaRoom{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="multiMediaRoom">
+    <p class="headerTitle">
+        多媒体教室普及率
+    </p>
+    <%--水环境柱状图--%>
+    <div id="multiMediaRoom">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function echartDataSet(xAxis,legend,series) {
+        var myChart = echarts.init(document.getElementById("multiMediaRoom"));
+        var option = {
+            color: ['#E88535', '#7AC826', '#6691FF','#43CED0'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                /*采用回调函数*/
+                formatter: function (params) {
+                    if(params.length == 0){
+                        return null;
+                    }
+                    else{
+                        var str=params[0].name+"<br />";
+                        for(var i = 0; i< params.length; i++){
+                            str+=params[i].seriesName+"："+params[i].value+"%<br/>";
+                        }
+                    }
+                    return str;
+                }
+            },
+            legend: {
+                data: legend/* ['小学','中学', '职业院校','高等院校']*/,
+                x: 'center',
+                y: 20,
+                textStyle: text_style
+            },
+            grid: {
+                x: '12%',
+                y: '20%',
+                x2: '5%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: {
+                type: 'category',
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: true},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxis
+            },
+            yAxis: {
+                type: 'value',
+                min:0,
+                max:100,
+                splitNumber:4,
+                splitLine: {
+                    show: true,
+                    lineStyle:{
+                        color: ['#8D8C8C'],
+                        width: 1,
+                        type: 'dotted'
+                    }
+                },
+                axisLine: { lineStyle: {
+                    color: '#8D8C8C'
+                 }},
+                 axisTick: {show: false},
+                 axisLabel: {
+                 show: true,
+                        textStyle: text_style,
+                        formatter: '{value} %'}
+            },
+            series:series /*[
+                {
+                    name: '小学',
+                    type: 'bar',
+                    barGap:'20%',
+                    barCategoryGap:'37%',
+                    itemStyle: {
+                        normal: {
+
+                        }
+                    },
+                    data: [70,75,80,84,89,95]
+                },
+                {
+                    name: '中学',
+                    type: 'bar',
+                    barGap: '20%',
+                    barCategoryGap:'37%',
+                    itemStyle: {
+                        normal: {
+
+                        }
+                    },
+                    data: [80,84,86,90,92,96]
+                },
+                {
+                    name: '职业院校',
+                    type: 'bar',
+                    barGap: '20%',
+                    barCategoryGap:'37%',
+                    itemStyle: {
+                        normal: {
+                        }
+                    },
+                    data: [75,78,82,85,87,90]
+                },
+                {
+                    name: '高等院校',
+                    type: 'bar',
+                    barGap:'20%',
+                    barCategoryGap:'37%',
+                    itemStyle: {
+                        normal: {
+
+                        }
+                    },
+                    data: [80,86,90,94,96,96]
+                }
+            ]*/
+        };
+        myChart.setOption(option);
+    }
+
+    $.ajax({
+        type:"POST",
+        url:'../../jxedu/listSchoolStatisticInfo.do',
+        data:{"count":6},
+        dataType:'json',
+        success:function(data){
+            var schoolType = [];
+            var series = [];
+            var xAxis = [];
+            $.each(data, function (i) {
+                schoolType.push(data[i].mc);
+                var value = [];
+                $.each(data[i].info, function (j) {
+                    if(i==0){
+                        xAxis.push(data[i].info[j].year+'年');
+                    }
+                    value.push(data[i].info[j].mediaroom);
+                })
+                series.push({
+                    name:data[i].mc,
+                    type: 'bar',
+                    barGap: '20%',
+                    barCategoryGap:'37%',
+                    itemStyle: {
+                        normal: {
+                        }
+                    },
+                    data: value
+                });
+            });
+            echartDataSet(xAxis,schoolType, series);
+        }
+    });
+
+
+</script>
+</body>
+</html>

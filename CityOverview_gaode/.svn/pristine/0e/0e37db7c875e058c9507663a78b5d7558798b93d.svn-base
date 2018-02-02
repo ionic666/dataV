@@ -1,0 +1,69 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #cityLayoutWindow .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #cityLayoutWindow .modal-title{
+      margin-top: -5px;
+    }
+    #cityLayoutWindow .modal-body{
+      padding: 0px;
+    }
+    #cityLayoutWindow .nav .list-group li{
+      width: 117px;height: 32px;line-height: 32px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+    }
+    #cityLayoutWindow .nav li a:hover{
+      color: #000;
+      text-decoration: none;
+    }
+    #cityLayoutWindow{
+      color: #000000;
+      background-color:white ;
+    }
+
+  </style>
+</head>
+<body>
+<div class="modal fade" style="overflow: hidden;width: 780px;height: 500px;top: 15%;left: 25%;background-color: transparent" id="cityLayoutWindow" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog" style="width: 780px">
+    <div class="modal-content" style="height: 480px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+          <img src="map/images/economicModel/close.png">
+        </button>
+          <h5 class="modal-title" style="margin-top:-2px;"></h5>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content" style="height: 430px">
+          <div id="" class="tab-pane active">
+              <img src="map/images/basicEquipment/cityLayout.jpg" style="width:100%;height:100%;" alt=""/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+</script>
+</body>
+</html>

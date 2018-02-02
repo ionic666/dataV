@@ -1,0 +1,626 @@
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>一站式办理</title>
+    <script src="../../map/js/jquery-1.11.3.js"></script>
+    <script src="../../myjs/echarts-all.js"></script>
+    <script src="../../myjs/myEcharts.js"></script>
+    <style>
+        html{
+            padding:0;
+            margin:0;
+            width:100%;
+            height:100%;
+
+        }
+        body{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background-image: url('../../images/adminService/adminbg.png');
+            position: relative;
+            box-sizing: border-box;
+        }
+        div,h2{
+            margin: 0;
+        }
+        li{
+            list-style: none;
+        }
+        .floatLeft{
+            /*display: inline-block;*/
+            float: left;
+        }
+        p.headerTitle {
+            padding-left: 1%;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            height: 12%;
+            width: 50%;
+            line-height: 35px;
+            margin: 4px 4px;
+            /*background-color: #656565;*/
+        }
+        p.headerTitle2{
+            height: 7%;
+        }
+        p.headerTitle3{
+            height: 10%;
+        }
+        div.hjxxgkl {
+            height: 85%;
+            width: 95%;
+        }
+
+        .header{
+            width: 100%;
+            height: 9%;
+            position: relative;
+            /*border: 1px solid red;*/
+        }
+        .main{
+            width: 100%;
+            height: 87%;
+            margin-top: 1%;
+            /*border: 1px solid blue;*/
+        }
+        #bigLogo{
+            position: absolute;
+        }
+        #bigLogo #cetc{
+            float: left;
+            width: 190px;
+        }
+        #bigLogo #logo{
+            float: left;
+            /*width: 250px;*/
+            width: 100%;
+        }
+        #bigLogo{
+            /*width:510px;*/
+            position: absolute;
+            left:0px;
+            top:0px;
+            /*height:20px;*/
+            width: 20%;
+            height:95%;
+            border-left: 0.3em solid #0CDAF5;
+            padding-left: 0.4em;
+            margin-left: 1em;
+            z-index:66;
+        }
+        div#right{
+            float: left;
+            /*width: 250px;*/
+            width: 100%;
+            height: 100%;
+            padding-top: 10px;
+            padding-left: 10px;
+        }
+        .timer{
+            position: absolute;
+            height: 30px;
+            line-height: 30px;
+            /*width: 250px;*/
+            width: 100%;
+            background-color: #0CDAF5;
+            color: #02282D;
+            margin-top: 1em;
+            padding-left: 10px;
+            top: 35px;
+            z-index: 77;
+            font-size: 1.2em;
+        }
+        /*.header>.log{*/
+            /*width: 50%;*/
+            /*height: 100%;*/
+        /*}*/
+        /*.header>.log>.logoLeft{*/
+            /*width: 30%;*/
+            /*height: 90%;*/
+            /*margin-right: 1%;*/
+        /*}*/
+        /*.header>.log>.logoRight{*/
+            /*width: 40%;*/
+            /*height: 100%;*/
+        /*}*/
+        /*.header>.log>.logoRight>img{*/
+            /*width: 100%;*/
+            /*height: 33%;*/
+            /*margin-top: 10px;*/
+        /*}*/
+        /*.header>.log>.logoRight>.time{*/
+            /*width: 100%;*/
+            /*height: 43%;*/
+            /*line-height: 30px;*/
+            /*text-align: center;*/
+            /*background: #0CDAF5;*/
+        /*}*/
+        #title{
+            width: 20%;
+            height: 130%;
+            position: absolute;
+            left: 40%;
+            top: 10%;
+            z-index: 200;
+            /*background-image: url(../../images/publicServe/zdpyc.png);background-size: 100%,100%;background-repeat: no-repeat;*/
+        }
+        #title>h1{
+            color: #0CDAF5;
+            font-weight: bold;
+            text-align: center;
+            line-height: 100%;
+            margin-top: 10%;
+        }
+
+        /*主体内容*/
+        .main>.mainLeft,.main>.mainRight{
+            width: 25%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .main>.mainLeft>div{
+            width: 96%;
+            height: 32.1%;
+            margin-top: 2%;
+            margin-left: 2%;
+            margin-right: 2%;
+            background-color: rgba(23,33,34,0.6);
+            border-top: 2px #0CDAF5 solid;
+            border-bottom: 1px #12363A solid;
+        }
+        .main>.mainRight>.mainRight-top{
+            width: 96%;
+            height: 38%;
+            margin-top: 2%;
+            margin-left: 2%;
+            background-color: rgba(23,33,34,0.6);
+            border-top: 2px #0CDAF5 solid;
+            border-bottom: 1px #12363A solid;
+        }
+        .main>.mainRight>.mainRight-bottom{
+            width: 96%;
+            height: 60%;
+            margin-top: 2%;
+            margin-left: 2%;
+            background-color: rgba(23,33,34,0.6);
+            border-top: 2px #0CDAF5 solid;
+            border-bottom: 1px #12363A solid;
+        }
+        .main>.mainMiddle{
+            width: 50%;
+            height: 100%;
+        }
+        .main>.mainMiddle>.mainMiddle-top{
+            width: 100%;
+            height: 65.1%;
+            margin-top: 1%;
+        }
+        .main>.mainMiddle>.mainMiddle-top>img{
+            width: 100%;
+            height: 100%;
+        }
+        .main>.mainMiddle>.mainMiddle-bottom{
+            width: 100%;
+            height: 32%;
+            margin-top: 2%;
+        }
+        .main>.mainMiddle>.mainMiddle-bottom>div{
+            width: 49%;
+            height: 100%;
+            background-color: rgba(23,33,34,0.6);
+        }
+        .main>.mainMiddle>.mainMiddle-bottom>.mainMiddle-bottom-a,.main>.mainMiddle>.mainMiddle-bottom>.mainMiddle-bottom-b{
+            border-top: 2px #0CDAF5 solid;
+            border-bottom: 1px #12363A solid;
+        }
+        .main>.mainMiddle>.mainMiddle-bottom>.mainMiddle-bottom-b{
+            margin-left: 2%;
+        }
+        .mainLeft-middle>.hjxxgkl>.cachet-a{
+            width: 100%;
+            height: 30%;
+        }
+        .mainLeft-middle>.hjxxgkl>.cachet-b{
+            width: 100%;
+            height: 20%;
+        }
+        .mainLeft-middle>.hjxxgkl>.cachet-a>img{
+            width: 25%;
+            height: 100%;
+        }
+        .mainLeft-top>div{
+            background-image: url('../../images/adminService/xzsp.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+        .xzsp-p{
+            color: #B4B4B4;
+            font-size: 16px;
+            z-index: 100;
+            position: absolute;
+        }
+        .xzsp-p-a{
+            top: 17%;
+            left: 3%;
+        }
+        .xzsp-p-b{
+            top: 25%;
+            left: 1.2%;
+        }
+        .xzsp-p-c{
+            top: 30%;
+            left: 16%;
+        }
+        #gongzhang,#gaige{
+            width: 69%;
+            height: 60%;
+            padding-left: 18%;
+            padding-top: 2%;
+        }
+        h2#oneGongzhang{
+            color: #D95454;
+            text-align: center;
+            vertical-align: middle;
+        }
+        h2#oneGaige{
+            color: #4B8AD1;
+            text-align: center;
+            vertical-align: middle;
+        }
+        /*四个平台建设*/
+        #fourStage{
+            text-align: center;
+            width: 100%;
+            height: 85%;
+            padding-top: 5%;
+            box-sizing: border-box;
+            /*background-image: url('../../images/adminService/fourStage.png');*/
+            /*background-repeat: no-repeat;*/
+            /*background-position: center 40%;*/
+        }
+        #fourStage img{
+            width: 80%;
+            height: 80%;
+        }
+        /*事件分项*/
+        #sjfx{
+            width: 100%;
+            height: 84%;
+            background-image: url('../../images/adminService/sjfx.png');
+            background-repeat: no-repeat;
+            background-position: center 30%;
+        }
+        /*当前状态*/
+        .dqzt{
+            width: 100%;
+            height: 84%;
+            padding-left: 10%;
+            padding-top: 3%;
+        }
+        .dqzt>div{
+            width: 40%;
+            height: 43%;
+            float: left;
+        }
+        .dqzt-p{
+            color: #B4B4B4;
+            font-size: 24px;
+            text-align: center;
+            line-height: 20px;
+            margin: 8% 0;
+        }
+        .dqzt-p-num{
+            color: #4B8AD1;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 20px;
+            margin: 5% 0;
+        }
+
+
+
+    </style>
+    <script>
+        var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+        var cityId='<%=Web_srcUtil.getString("cityId")%>';
+        var mapHost='<%=Web_srcUtil.getString("mapHost")%>';
+        var mapPort='<%=Web_srcUtil.getString("mapPort")%>';
+        var arcgisServiceUrl='<%=Web_srcUtil.getString("arcgisServiceUrl")%>';
+        var jiaxingJtSslkServiceUrl='<%=Web_srcUtil.getString("jiaxingJtSslkServiceUrl")%>';
+        var mapServiceTpye='<%=Web_srcUtil.getString("mapServiceTpye")%>';
+        var xmin=120.302546;
+        var ymin=30.25204;
+        var xmax=121.547912;
+        var ymax=31.036507;
+        var hostUrl = mapHost+":"+mapPort+"/CityOverview/map";
+        var url = location.search;
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            var strs = new Array();
+            strs = str.split('&');
+//      model = strs[0].slice(strs[0].indexOf("=")+1);
+            mainWin = strs[0].slice(strs[0].indexOf("=")+1);
+        }
+        function returnMainPage(){
+            location.href = "http://"+ mapHost+":" +mapPort+ "/CityOverview/main.jsp?bh="+mainWin;
+        }
+    </script>
+</head>
+
+<body>
+
+<%--返回上一页--%>
+<a href="javascript:void(0);" onclick="returnMainPage()" style="max-width:3%;position: fixed;left:97%;top: 2%;z-index: 1000"><img src="../../images/returnUp.png" alt=""></a>
+<!-- 头部logo主题 -->
+<div class="header">
+    <div id="bigLogo">
+        <%--<img src="../../images/cetc.png" alt="" id="cetc"/>--%>
+        <div id="right">
+            <img src="../../images/logo.png" alt="" id="logo"/>
+            <div class="timer">
+            </div>
+        </div>
+    </div>
+    <div id="title"><h1>"最多跑一次"</h1></div>
+</div>
+
+
+
+
+<!-- 页面主体部分 -->
+<div class="main">
+
+
+
+    <!-- 左侧三个模块 -->
+    <div class="mainLeft floatLeft">
+
+        <!-- 行政审批层级一体化改革 -->
+        <div class="mainLeft-top">
+            <p class="headerTitle">行政审批层级一体化改革</p>
+            <div class="hjxxgkl">
+                <p class="xzsp-p xzsp-p-a">加强监管-立体化</p>
+                <p class="xzsp-p xzsp-p-b">提高效率-集成化</p>
+                <p class="xzsp-p xzsp-p-c">全面放权-扁平化</p>
+            </div>
+        </div>
+
+        <!-- 相对集中行政许可权 -->
+        <div class="mainLeft-middle">
+            <p class="headerTitle">相对集中行政许可权</p>
+            <div class="hjxxgkl">
+                <div class="cachet-a floatLeft">
+                    <img src="../../images/adminService/gongzhang.png" alt="" id="gongzhang"/>
+                </div>
+                <div class="cachet-b floatLeft"><h2 id="oneGongzhang">一枚公章管审批</h2></div>
+                <div class="cachet-a floatLeft">
+                    <img src="../../images/adminService/gaige.png" alt="" id="gaige"/>
+                </div>
+                <div class="cachet-b floatLeft"><h2 id="oneGaige">一证化改革</h2></div>
+            </div>
+        </div>
+
+        <!-- 四个平台建设 -->
+        <div class="mainLeft-bottom">
+            <p class="headerTitle">四个平台建设</p>
+            <div id="fourStage">
+                <img src="../../images/adminService/fourStage.png" alt=""/>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 中间三个模块 -->
+    <div class="mainMiddle floatLeft">
+        <div class="mainMiddle-top"><img src="../../images/publicServe/bg.png" alt=""></div>
+
+
+
+        <div class="mainMiddle-bottom">
+
+            <!-- 事件分项 -->
+            <div class="mainMiddle-bottom-a floatLeft">
+                <p class="headerTitle">事件分项</p>
+                <div id="sjfx">
+
+                </div>
+            </div>
+
+            <!-- 当前状态 -->
+            <div class="mainMiddle-bottom-b floatLeft">
+                <p class="headerTitle">当前状态</p>
+                <div class="dqzt">
+                    <div><p class="dqzt-p">预约数</p><p class="dqzt-p-num"><span class="counter">82</span></p></div>
+                    <div><p class="dqzt-p">取号数</p><p class="dqzt-p-num"><span class="counter">162</span></p></div>
+                    <div><p class="dqzt-p">等待数</p><p class="dqzt-p-num"><span class="counter">62</span></p></div>
+                    <div><p class="dqzt-p">办结数</p><p class="dqzt-p-num"><span class="counter">12</span></p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 右侧三个模块 -->
+    <div class="mainRight floatLeft">
+        <!-- 全市办件量 -->
+        <div class="mainRight-top">
+            <p class="headerTitle headerTitle3">全市办件量</p>
+            <div id="qsbjl" style="width: 95%;height: 75%;"></div>
+        </div>
+
+        <!-- 热点事项 -->
+        <div class="mainRight-bottom">
+            <p class="headerTitle headerTitle2">热点事项</p>
+            <div class="hjxxgkl" id="rdsx"  style="width: 94%;height: 88%;margin-left: 3%;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var myChart=echarts.init(document.getElementById("qsbjl"));
+    var myChart2=echarts.init(document.getElementById("rdsx"));
+    var option = {
+        color:['#4BD184','#4B8AD1','#BF2EB0','#D73535','#E3773C','#D1C64B','#6AD14B'],
+        tooltip : {
+            trigger: 'item',
+            formatter: " {a} <br> {b}:{c}"
+        },
+        legend: {
+            data:['南湖区','秀洲区','桐乡市','海宁市','海盐县','嘉善县','平湖市'],
+            show: false
+        },
+        title: {
+            text: '全市\n办件量\n61752',
+            x: 'center',
+            y: 'center',
+            itemGap: 20,
+            textStyle : {
+                color : '#0CDAF5',
+                fontFamily : '微软雅黑',
+                fontSize : 22,
+                fontWeight : 'bolder'
+            }
+        },
+        calculable : true,
+        series : [
+            {
+                name:'办件量',
+                type:'pie',
+                radius : [80, 100],
+                x: '60%',
+                startAngle: -80,
+                width: '35%',
+                funnelAlign: 'left',
+                itemStyle: {
+                    normal:{
+                        labelLine: {
+                            show: true
+                        },
+                        label:{show:true, textStyle:text_style}
+                    }
+                },
+                data:[
+                    {value:335, name:'南湖区'},
+                    {value:310, name:'秀洲区'},
+                    {value:234, name:'桐乡市'},
+                    {value:1518, name:'海宁市'},
+                    {value:1048, name:'海盐县'},
+                    {value:1568, name:'嘉善县'},
+                    {value:135, name:'平湖市'}
+                ]
+            }
+        ]
+    };
+    option2 = {
+        tooltip : {
+            trigger: 'axis',
+            formatter: " {b}:{c}"
+        },
+        calculable : false,
+        grid: {
+            x: '25%',
+            y: '5%',
+            x2: '15%',
+            y2: '5%',
+            containLabel: false,
+            borderWidth: 0
+        },
+        xAxis : [
+            {
+                type : 'value',
+                splitLine: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                axisLabel: {show: false,textStyle:text_style},
+                boundaryGap : [0, 0.01]
+            }
+        ],
+        yAxis : [
+            {
+                type : 'category',
+                axisLine: {lineStyle: {color: '#60A5AF'}},
+                splitLine: {show: false},
+                axisTick: {show: true},
+                axisLabel: {show: true,
+                    textStyle: text_style},
+                data : ['税费申报','住房公积金审批','养老保险核定','社会保险参保','驾驶证申领','机动车登记','进出口货物申报','抵押登记']
+            }
+        ],
+        series : [
+            {
+                type:'bar',
+                barWidth: 20,
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            textStyle: text_style
+                        }
+                    }
+                },
+                data:[182030, 23489, 29034, 104970, 131744, 230230, 131744, 030230]
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+    myChart2.setOption(option2);
+</script>
+<script>
+    $('.counter').countUp({
+        delay: 2,
+        time: 200
+    });
+</script>
+<script>
+    $(function(){
+        var timer={
+            date:"",
+            timeAjax:function(){
+                var me=this;
+                $.ajax({
+                    url:'../../jxsys/getCurrentTime.do',
+                    type:'POST',
+                    dataType:'json',
+                    success:function(date) {
+                        me.date=date;
+                        me.showCurDate();
+                    }
+                });
+                return this
+            },
+            showCurDate:function(){
+                var me=this;
+                function changeNumber(num){
+                    if(num<10){
+                        return '0'+num;
+                    }else{
+                        return ''+num;
+                    }
+                }
+                setInterval(function(){
+                    var T=new Date(me.date)
+                    newDate = changeNumber(T.getFullYear())+"年"+
+                    changeNumber((parseInt(T.getMonth())+1))+"月"+
+                    changeNumber(T.getDate())+"日  "+
+                    changeNumber(T.getHours())+":"+
+                    changeNumber(T.getMinutes())+":"+
+                    changeNumber(T.getSeconds())+""
+                    me.date+=1000;
+                    $(".timer").html(newDate)
+                },1000)
+                return this
+            }
+        }
+        timer.timeAjax();
+    })
+</script>
+</body>
+</html>

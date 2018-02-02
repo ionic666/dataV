@@ -1,0 +1,859 @@
+<%--
+  Create By FangYan On 2017/09/21
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="toastr.jsp" %>
+<html>
+<head>
+    <title>角色管理</title>
+    <link rel="stylesheet"  type="text/css" href="../myCss/customer-bootstrap.min.css">
+    <%--<link rel="stylesheet" type="text/css" href="../myCss/customer-bootstraptable.css">--%>
+</head>
+
+<style type="text/css">
+    body {
+        height: 100%;
+        overflow: hidden;
+        background-color:#222A2C ;
+        font-family: "microsoft yahei";
+    }
+    a:hover{
+        text-decoration: none;
+    }
+    #toolbar {
+        outline: none;
+        border: 0;
+        padding: 7px 15px;
+        font-size: 14px;
+        background-color: #10CFE8;
+        color: #fff;
+        cursor: pointer;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-control-course {
+        width: 50%;
+        height: 40px;
+        font-size: .9em;
+        line-height: 1.42857143;
+        margin-right: 20%;
+        margin-left: 24px;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+    }
+
+    label {
+        vertical-align: middle;
+        color: #666666;
+    }
+
+    .modal-body {
+        text-align: left;
+        padding-left: 3%;
+    }
+
+    #rp {
+        padding-bottom: 15%;
+    }
+
+    #alert_info {
+        text-align: center;
+    }
+
+    .table-div {
+        background-color: #222A2C;
+        padding: 0 2%;
+    }
+    .table-div table {
+        color: #0CDAF5;
+        border-radius: 0;
+
+    }
+
+    .table-div table th {
+        border: 0;
+    }
+
+    .table-div table td {
+        border: 0;
+    }
+
+    .table-div table tbody {
+        border: 0;
+    }
+
+    .fixed-table-container {
+        border: 0;
+    }
+
+    .table-striped > tbody > tr:nth-of-type(even), .table-striped > thead > tr > th {
+        background-color: #2A3335;
+    }
+
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        border-top: 0;
+    }
+
+    .bootstrap-table .table {
+        border: 0;
+    }
+
+    .bootstrap-table .table > thead > tr > th {
+        border: 0;
+    }
+
+    .checkDiv {
+        display: inline-block;
+        padding-left: 5%;
+        width: 86%;
+    }
+
+    .checkDiv li {
+        color: #1CD4EC;
+        width: 32%;
+        height: 30px;
+        line-height: 30px;
+        float: left;
+        list-style-type: none;
+        text-align: center;
+        cursor: pointer;
+        margin-right: 3%;
+        margin-bottom: 2%;
+    }
+    .checkDiv li i.active{
+        display: inline-block;
+        width: 10px;
+        height: 8px;
+        margin-right: 7px;
+        background-image: url('../images/manager/xz.png');
+    }
+    .checkDiv li.active {
+        background-color: #106371;
+    }
+    #zbzs{
+            pointer-events: none;
+    }
+
+    /*.checkDiv label{*/
+    /*width: 20%;*/
+    /*height: 30px;*/
+    /*padding: 0;*/
+    /*margin-left: 10px;*/
+    /*}*/
+    /*.checked input{*/
+    /*width: 15px;*/
+    /*height: 15px;*/
+    /*}*/
+    .role {
+        vertical-align: top;
+    }
+
+    #role_p {
+        box-sizing: border-box;
+    }
+
+    #role_p li {
+        box-sizing: border-box;
+        border: 1px solid #333;
+    }
+
+    #a_role {
+        box-sizing: border-box;
+    }
+
+    #a_role li {
+        box-sizing: border-box;
+        border: 1px solid #333;
+    }
+    /*滑动效果*/
+    #div1 {
+        width: 52px;
+        height: 28px;
+        border-radius: 50px;
+        position: relative;
+        margin: 0 auto;
+    }
+
+    #div2 {
+        width: 24px;
+        height: 24px;
+        border-radius: 48px;
+        position: absolute;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .open1 {
+        background: rgba(54,116,225, 0.8);
+    }
+
+    .open2 {
+        top: 2px;
+        right: 1px;
+    }
+    .pagination-info{
+        color: #0CDAF5;
+    }
+    .close1 {
+        background: rgba(255, 255, 255, 0.4);
+        border: 3px solid rgba(0, 0, 0, 0.15);
+        border-left: transparent;
+    }
+
+    .close2 {
+        left: 0px;
+        top: 0px;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-content{
+        border-color: #316976;
+        background-color: #02191C;
+    }
+    .modal-title,#alert_info{
+        color: #0CDAF5 !important;
+    }
+    .modal-header{
+        background-color: #06383F;
+        border-bottom: 0;
+    }
+    .modal-footer{
+        border-top:0;
+    }
+    .form-group>label{
+        color: #26AFD3;
+    }
+    .form-group>input,.form-group>select,#permission{
+        color: #0CDAF5;
+        border-color: #356565;
+        background-color: #02191C;
+    }
+    .btn-default,.btn-primary{
+        color: #0CDAF5;
+        border-color: #0CDAF5;
+        background-color: #093E45;
+    }
+    #showPermisionModal .modal-body{
+        padding-left: 0;
+    }
+    #role_detail{
+        display: inline-block;
+        padding-left: 3%;
+        width: 100%;
+    }
+    #role_detail li{
+        color: #1CD4EC;
+        width: 30%;
+        height: 30px;
+        line-height: 30px;
+        float: left;
+        list-style-type: none;
+        text-align: center;
+        cursor: pointer;
+        margin: 1%;
+        background-color: #106371;
+    }
+    #role_detail li i {
+        display: inline-block;
+        width: 10px;
+        height: 8px;
+        margin-right: 7px;
+        background-image: url('../images/manager/xz.png');
+    }
+    #jsqx{
+        font-size: 18px;
+        height: 40px;
+        line-height: 40px;
+
+    }
+    .pagination{
+        margin: 0;
+    }
+    .pagination>li>a{
+        background-color: #21292B;
+        color:#33C4D9;
+        border-color:#33C4D9;
+    }
+    .pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover{
+        background-color: #29464D;
+        border-color:#33C4D9;
+    }
+    .pagination>li>a:hover{
+        color: #fff;
+        background-color: #31A7B7;
+        border-color: #ddd;
+    }
+    .fixed-table-body{
+        height: 90%;
+    }
+    .pagination>.active>a,.pagination>.active>a:focus,.pagination>.active>a:hover{
+        background-color: #2C676F;
+        border-color: #ddd;
+    }
+    #qiModal .modal-dialog{
+        width: 300px;
+    }
+    #delModal .modal-dialog{
+        width: 400px;
+    }
+    #qiModal .modal-content,#delModal .modal-content{
+        height: 185px;
+    }
+    #modal-del,#alert_info,#jstk{
+        text-align: center;
+        padding: 0;
+        margin-left:0;
+    }
+    #q_info{
+        text-align: center;
+        padding: 0;
+        margin-left:0;
+        color: #26AFD3;
+    }
+    #delRecord,#qRecord,#addRecord,#editRecord{
+        margin-right: 40px;
+    }
+    #addModal input{
+        padding-left: 10px;
+    }
+    .btn-primary:hover,.btn-default:hover{
+        color: #0CDAF5;
+        background-color: #0E5F6A;
+        border-color: #29A9BA;
+    }
+    button.close{
+        color: #4FA1AC;
+        /*background-color: #4FA1AC;*/
+    }
+    button.close:hover{
+        color: #4FA1AC;
+    }
+    #showPermisionModal .modal-body{
+        text-align: left;
+        margin-left: 0;
+    }
+    #showPermisionModal .modal-content{
+        width: 420px;
+    }
+    #editModal input{
+        padding-left: 10px;
+    }
+</style>
+
+<body>
+<div id="toolbar">
+    <div id="addMessage" onclick="adds()">添加角色</div>
+</div>
+<div class="table-div">
+    <table id="tableJs" class="table table-striped"></table>
+</div>
+
+<!-- 添加弹框 -->
+<div class="modal fade" id="addModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">添加角色</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" action="javascript:void(0)" id="addForm">
+                    <input type="reset" style="display:none;"/>
+
+                    <div class="form-group">
+                        <input type="hidden" class="form-control-course-course" name="c_id">
+                    </div>
+                    <div class="form-group">
+                        <label>角色名称</label>
+                        <input type="text" class="form-control-course" name="rolename" id="rolename">
+                    </div>
+                    <div class="form-group">
+                        <label>角色详情</label>
+                        <input type="text" class="form-control-course" name="roledescrip" id="roledescrip">
+                    </div>
+                    <div class="form-group">
+                        <label class="role">角色权限</label>
+                        <ul class="checkDiv" id="a_role">
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="addRecord" onclick="addRole()">添加</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel();">取消</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑弹框 -->
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel2" style="color: blue">编辑角色</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" action="javascript:void(0)" id="editForm">
+                    <input type="reset" style="display:none;"/>
+
+                    <div class="form-group">
+                        <input type="hidden" class="form-control-course-course" name="c_id">
+                    </div>
+                    <div class="form-group">
+                        <label>角色名称</label>
+                        <input class="form-control-course select-appearance" id="e_rolename" name="rolename">
+                        </input>
+                    </div>
+                    <div class="form-group">
+                        <label>角色描述</label>
+                        <input class="form-control-course select-appearance" id="e_descrip" name="descrip">
+                        </input>
+                    </div>
+                    <div class="form-group">
+                        <label class="role">角色权限</label>
+                        <ul class="checkDiv" id="role_p">
+                        </ul>
+                    </div>
+                    <input type="hidden" id="e_roleid"/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="editRecord" onclick="distribute()">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 删除弹框 -->
+<div class="modal fade" id="delModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel3" style="text-align: center;color: red">删除用户</h4>
+            </div>
+            <div class="modal-body" id="alert_info">警告此操作不可逆，确认删除该角色吗？
+            </div>
+            <input type="hidden" id="del_roleid" value="">
+            <input type="hidden" id="del_rolename" value="">
+
+            <div class="modal-body" id="modal-del">
+                <button type="button" class="btn btn-primary" id="delRecord" onclick="delRole()">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 查看角色详情弹框 -->
+<div class="modal fade" id="showPermisionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel4" style="color: blue">角色权限</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" action="javascript:void(0)" id="showdetailForm">
+                    <input type="reset" style="display:none;"/>
+
+                    <div class="form-group">
+                        <input type="hidden" class="form-control-course-course" name="c_id">
+                    </div>
+                    <div class="form-group" id="permission" style="text-align: center">
+                        <%--<label class="role" style="color:#27AFC5" id="jsqx">权限</label>--%>
+                        <ul id="role_detail">
+                        </ul>
+                    </div>
+                    <input type="hidden" id="d_roleid"/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 启用弹框 -->
+<div class="modal fade" id="qiModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title">提示</h5>
+            </div>
+            <div class="modal-body" id="q_info">警告此操作不可逆，确认删除该角色吗？
+            </div>
+            <input type="hidden" id="q_roleid" value="">
+            <input type="hidden" id="q_index" value="">
+
+            <div class="modal-body" id="jstk">
+                <button type="button" class="btn btn-primary" id="qRecord" onclick="changeStatusS()">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../map/js/jquery-2.2.1.js"></script>
+<script type="text/javascript" src="../myjs/bootstrap.min.js"></script>
+<script type="text/javascript" src="../myjs/customertable.min.js"></script>
+<script type="text/javascript" src="../myjs/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript">
+    var array = [];
+    $(function () {
+        $('.checkDiv').delegate('li', 'click', function () {
+                if ($(this).attr('class') == 'active') {
+                    $(this).removeClass('active');
+                    $(this).children().removeClass('active');
+                    var index = array.indexOf($(this).attr('txt'));
+                    array.splice(index, 1);
+                }
+                else {
+                    console.log($(this).attr('txt'))
+                    array.push($(this).attr('txt'));
+                    $(this).children().addClass('active');
+                    $(this).addClass('active');
+                }
+        })
+
+        $('#tableJs').bootstrapTable({
+            method: 'GET',
+            url: "../manage/role/queryRoleInfo.do",
+            dataType: "json",
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 8,
+            pageList: [8],
+            sidePagination: "server",
+            searchAlign: "left",
+            queryParamsType: "undefined",
+            queryParams: function (params) {
+                return {
+                    sortName: params.sortName,
+                    sortOrder: params.sortOrder,
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize
+                }
+            },
+            search: false,
+            buttonsAlign: "right",
+            searchOnEnterKey: true,
+            showRefresh: false,
+            showColumns: false,
+            clickToSelect: true,
+            toolbar: "#toolbar",
+            toolbarAlign: "left",
+            sortable: true,
+            sortName: "id",
+            sortOrder: "desc",
+            cache: false,
+            columns: [ {
+                title: '角色名称', field: 'rolename', align: 'center', valign: 'middle'
+            }, {
+                title: '角色详情', field: 'descrip', align: 'center', valign: 'middle'
+            }, {
+                title: '角色状态',
+                field: 'status',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var status;
+                     if (row.status == 1) {
+                         var show = '<div  id= "div1" class="open1"><div id="div2" class="open2" onclick="javascript:changeStatus(\'' + row.roleid + '\',\'' + index + '\')"></div></div>'
+                     } else {
+                         var show = '<div  id= "div1" class="close1"><div id="div2" class="close2" onclick="javascript:changeStatus(\'' + row.roleid + '\',\'' + index + '\')"></div></div>'
+                     }
+                    /*var show = '<a class="a" onclick="javascript:isstauts(' + row.roleid + ')" style="color:#EBCA43;cursor: pointer"><span class="glyphicon" aria-hidden="true"></span>'+status+'</a>';*/
+
+/*
+                    var show = '<div  id= "div1" class="open1"><div id="div2" class="open2" onclick="javascript:changeStatus(\'' + row.roleid + '\',\'' + index + '\')"></div></div>'
+*/
+                    return show;
+                }
+            }, {
+                title: '角色权限',
+                field: 'modulename',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var show = '<a class="a" onclick="javascript:showpermisionModule(' + row.roleid + ')" style="color:#EBCA43;cursor: pointer"><span class="glyphicon" aria-hidden="true"></span>查看详情</a>';
+                    return show;
+                }
+            }, {
+                title: '操作',
+                field: 'operation',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var edit = '<a class="a" onclick="javascript:edit(\'' + row.rolename + '\',\'' + row.descrip + '\',\'' + row.roleid + '\')" style="color:#2B75B7;cursor: pointer"><span class="glyphicon" aria-hidden="true"></span>编辑</a>';
+                    var del = '<a class="a" onclick="javascript:showDelmodal(\'' + row.roleid + '\',\'' + row.rolename + '\')" style="color:#eb7373;margin-left: 10%;cursor: pointer"><span class="glyphicon" aria-hidden="true"></span>删除</a>';
+                    return edit + del;
+                }
+            }],
+            locale: "zh-CN",
+            detailView: false
+        })
+    })
+
+    function cancel(){
+        $("#rolename,#roledescrip").val("");
+    }
+
+    function adds() {
+        $("#rolename,#roledescrip").val("");
+        $("#addModal").modal('show');
+        $.ajax({
+            url: "../manage/role/queryPermissionName.do",
+            type: "post",
+            dataType: 'json',
+            success: function (data) {
+                $("#a_role").empty();
+                for (var i = 0; i < data.length; i++) {
+                    if(data[i]!='页面配置') {
+                        var li = "<li txt=" + data[i] + "><i></i>" + data[i] + "</li>";
+                        $("#a_role").append(li);
+                    }
+                }
+                var li="<li id='zbzs'  class='active' txt='页面配置'><i class='active'></i>页面配置</li>";
+                $("#a_role").append(li)
+            }
+        })
+    }
+
+
+    function edit(name, descrip, roleid) {
+        $("#e_rolename").val(name);
+        $("#e_descrip").val(descrip);
+        $("#e_roleid").val(roleid);
+        $.ajax({
+            url: "../manage/role/getPermissionName.do",
+            type: "post",
+            dataType: 'json',
+            data: {
+                roleid: roleid
+            },
+            success: function (data) {
+                $("#role_p").empty();
+                array = [];
+                var allMoudule = data.allMoudule;
+                var havMoudule = data.havMoudule;
+                for (var i = 0; i < allMoudule.length; i++) {
+                    if(allMoudule[i]!='页面配置') {
+                        var li = "<li txt=" + allMoudule[i] + "><i></i>" + allMoudule[i] + "</li>";
+                        for (var j = 0; j < havMoudule.length; j++) {
+                            if (allMoudule[i] == havMoudule[j]) {
+                                li = "<li class='active' txt=" + allMoudule[i] + "><i class='active'></i>" + allMoudule[i] + "</li>";
+                                array.push(allMoudule[i]);
+                            }
+                        }
+                        $("#role_p").append(li);
+                    }
+                }
+                var li="<li id='zbzs'  class='active' txt='页面配置'><i class='active'></i>页面配置</li>";
+                $("#role_p").append(li)
+            }
+        })
+        $("#editModal").modal('show');
+    }
+
+    //清空添加弹框
+    $("#editModal").on('hide.bs.modal', function () {
+        $("#role_p li").remove();
+    })
+
+
+    //增加角色
+    function addRole() {
+        array.push('页面配置');
+        if ($("#rolename").val() == null || $("#rolename").val() == "") {
+            toastr.error("角色名不能为空");
+            $("#rolename").focus();
+            return;
+        } else {
+            if (array == null || array.length == 0) {
+                toastr['error']("请选择权限");
+                return;
+            }
+            $.ajax({
+                url: "../manage/role/addRole.do",
+                type: "post",
+                dataType: 'json',
+                data: {
+                    roleName: $("#rolename").val(),
+                    descrip: $("#roledescrip").val(),
+                    permision: array
+                },
+                success: function (data) {
+                    array=[];
+                    if (data.status == 200) {
+                        /*$("input[type=reset]").trigger("click");*/
+                        toastr['success'](data.msg);
+                        $("#addModal").modal('hide');
+                        $("#tableJs").bootstrapTable('refresh');
+                    }
+                    if (data.status == 400) {
+                        toastr['error'](data.msg);
+                        $("#rolename").focus();
+                    }
+                }
+            })
+        }
+    }
+
+    //分配权限
+    function distribute() {
+        /*var liList=$("#role_p li");
+         var p;
+         for(var i=0;i<liList.length;i++){
+         if($(liList[i]).attr('class') == 'active'){
+         p.push($(liList[i]).html());
+         }
+         }*/
+        array.push('页面配置');
+        if (array == null || array.length == 0) {
+            toastr['error']("请选择权限");
+            return;
+        }
+        $.ajax({
+            url: "../manage/role/updateRolePer.do",
+            type: "post",
+            dataType: 'json',
+            data: {
+                roleid: $("#e_roleid").val(),
+                roleName: $("#e_rolename").val(),
+                descrip: $("#e_descrip").val(),
+                permision: array
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    array=[];
+                    toastr['success']('设置成功');
+                    $("#editModal").modal('hide');
+                    $("#tableJs").bootstrapTable('refresh');
+                } else {
+                    toastr['error'](data.msg);
+                }
+            }
+        })
+    }
+
+
+    function showDelmodal(roleid, rolename) {
+        $("#del_roleid").val(roleid);
+        $("#del_rolename").val(rolename);
+        $("#alert_info").html("警告此操作不可逆，确认删除" + rolename + "角色吗？");
+        $("#delModal").modal('show');
+    }
+    //删除角色
+    function delRole() {
+        $.ajax({
+            url: "../manage/role/delRole.do",
+            type: "post",
+            dataType: 'json',
+            data: {
+                roleid: $("#del_roleid").val()
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    toastr['success'](data.msg);
+                    $("#delModal").modal('hide');
+                    $("#tableJs").bootstrapTable('refresh');
+                }
+                if (data.status == 400) {
+                    toastr['error'](data.msg);
+                }
+            }
+        })
+    }
+
+    //查看角色详情
+    function showpermisionModule(roleid) {
+        $.ajax({
+            url: "../manage/role/getHavPermissionName.do",
+            type: "post",
+            dataType: 'json',
+            data: {
+                roleid: roleid
+            },
+            success: function (data) {
+                $("#role_detail").empty();
+                $("span").remove("#span_p");
+                if(data==null||data.length<1){
+                    $("#permission").append("<span id='span_p' style='color: red;font-size:1.5em;'>该角色未分配权限</span>");
+                }else{
+                    for (var i = 0; i < data.length; i++) {
+                        $("#role_detail").append("<li><i></i>" + data[i] + "</li>");
+                    }
+                }
+            }
+        })
+        $("#showPermisionModal").modal('show');
+    }
+
+    function changeStatus(roleid, index) {
+        var div2 = $("div #div2")[index];
+        var div1 = $("div #div1")[index];
+        if(roleid==0){
+            toastr['error']("该角色是超级管理员，不能被停用");
+            return;
+        }
+        if(div2.className == "close2"){
+            $("#q_info").html("确定启用该角色吗？");
+        }else{
+            $("#q_info").html("确定停用该角色吗？");
+        }
+        $("#q_roleid").val(roleid);
+        $("#q_index").val(index);
+        $("#qiModal").modal('show');
+    }
+
+    function changeStatusS() {
+        var roleid=$("#q_roleid").val();
+        var index=$("#q_index").val();
+        var status;
+        var div2 = $("div #div2")[index];
+        var div1 = $("div #div1")[index];
+        if(div2.className == "close2"){
+            status=1;
+        }else{
+            status=0;
+        }
+        div1.className = (div1.className == "close1") ? "open1" : "close1";
+        div2.className = (div2.className == "close2") ? "open2" : "close2";
+        $.ajax({
+            url: "../manage/role/updateRoleStatus.do",
+            type: "post",
+            dataType: 'json',
+            data: {
+                roleid: roleid,
+                status:status
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    $("#qiModal").modal('hide');
+                }
+
+            }
+        })
+
+    }
+</script>
+</body>
+</html>
+

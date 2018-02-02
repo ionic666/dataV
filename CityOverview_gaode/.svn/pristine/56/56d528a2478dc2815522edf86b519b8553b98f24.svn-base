@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cetc28.ConfigurationManagement.dao.JxMapServiceMapper">
+  <resultMap id="BaseResultMap" type="com.cetc28.ConfigurationManagement.model.JxMapService">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="LINK" jdbcType="VARCHAR" property="link" />
+    <result column="KIND" jdbcType="VARCHAR" property="kind" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="MAP_TYPE" jdbcType="VARCHAR" property="mapType" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, NAME, LINK, KIND, TYPE, MAP_TYPE
+  </sql>
+  <select id="selectByExample" parameterType="com.cetc28.ConfigurationManagement.model.JxMapServiceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from JX_SYS_MAP_SERVICE
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from JX_SYS_MAP_SERVICE
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from JX_SYS_MAP_SERVICE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cetc28.ConfigurationManagement.model.JxMapServiceExample">
+    delete from JX_SYS_MAP_SERVICE
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cetc28.ConfigurationManagement.model.JxMapService">
+    insert into JX_SYS_MAP_SERVICE (ID, NAME, LINK, 
+      KIND, TYPE, MAP_TYPE
+      )
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR}, 
+      #{kind,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{mapType,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.ConfigurationManagement.model.JxMapService">
+    insert into JX_SYS_MAP_SERVICE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="link != null">
+        LINK,
+      </if>
+      <if test="kind != null">
+        KIND,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="mapType != null">
+        MAP_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="kind != null">
+        #{kind,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="mapType != null">
+        #{mapType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update JX_SYS_MAP_SERVICE
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.link != null">
+        LINK = #{record.link,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kind != null">
+        KIND = #{record.kind,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        TYPE = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mapType != null">
+        MAP_TYPE = #{record.mapType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update JX_SYS_MAP_SERVICE
+    set ID = #{record.id,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      LINK = #{record.link,jdbcType=VARCHAR},
+      KIND = #{record.kind,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=VARCHAR},
+      MAP_TYPE = #{record.mapType,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cetc28.ConfigurationManagement.model.JxMapService">
+    update JX_SYS_MAP_SERVICE
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        LINK = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="kind != null">
+        KIND = #{kind,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="mapType != null">
+        MAP_TYPE = #{mapType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cetc28.ConfigurationManagement.model.JxMapService">
+    update JX_SYS_MAP_SERVICE
+    set NAME = #{name,jdbcType=VARCHAR},
+      LINK = #{link,jdbcType=VARCHAR},
+      KIND = #{kind,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      MAP_TYPE = #{mapType,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="queryMapServiceByIndicator" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from JX_SYS_MAP_SERVICE
+    where id like #{0}||'%' and map_type = #{1}
+  </select>
+
+  <select id="listIndicatorIndex" resultType="java.util.HashMap" parameterType="java.lang.String">
+    SELECT  distinct(b.mc) as INDICATORNAME, substr(a.id,1,3) AS INDICATORNUM from JX_SYS_MAP_SERVICE a left join JX_SYS_INDICATORS b on substr(a.id,1,3) = b.bh WHERE substr(a.id,1,3) != '000' and a.map_type = #{0} order by substr(a.id,1,3)
+  </select>
+</mapper>

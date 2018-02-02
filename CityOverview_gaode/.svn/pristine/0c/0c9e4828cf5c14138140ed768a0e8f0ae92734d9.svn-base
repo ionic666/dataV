@@ -1,0 +1,40 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/11/20.
+ */
+public interface IJxEcoClusterDao {
+    /**
+     * 获取集群信息
+     * @return
+     */
+    List findClusterType();
+
+    /**
+     * 根据集群类型以及企业名称查询公司信息
+     * @param clusterType
+     * @param companyName
+     * @return
+     */
+    List findCompanyInfo(@Param("clusterType") String clusterType, @Param("companyName") String companyName);
+
+    /**
+     * 根据企业名称查询产业集群中的企业信息
+     * @param companyName
+     * @return
+     */
+    List searchCluserCompanyInfo(@Param("companyName") String companyName);
+
+    /**
+     * 根据集群种类查找集群信息
+     * @param clusterType
+     * @return
+     */
+    List findClusterInfoByType(String clusterType);
+
+
+}

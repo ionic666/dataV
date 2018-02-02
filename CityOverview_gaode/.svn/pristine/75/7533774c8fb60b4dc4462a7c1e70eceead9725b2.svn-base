@@ -1,0 +1,90 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.dto.*;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/22 18:52
+ * 描述信息：故障、预警、投诉信息查询
+ *****************************************************************/
+public interface IJxUtilityMainteDao {
+
+    /**
+     * 查找最新月份各类管网的故障点信息
+     * @return JxUtilityManteFaultDto故障点信息实体类
+     */
+    public List<JxUtilityManteFaultDto> findLatestFaultAll();
+
+    public Map findLastMonthDate();
+
+    /**
+     * 按多组条件查找故障点信息，可选条件包括：管网类型、起止日期、故障处理状态，排序方式
+     * @param utilityTypeDes 管网类别（如："供水管网"）
+     * @param dateBegin  起始日期（如："2017-08-01"）
+     * @param dateEnd 截止日期（如："2017-08-01"）
+     * @param faultStateDes 故障处理状态（如："已处理"、"未处理"、"处理中"）
+     * @param order 排序方式（如："date"、"rank"）
+     * @return JxUtilityManteFaultDto故障点信息实体类
+     */
+    public List<JxUtilityManteFaultDto> findFault( @Param("utilityTypeDes")String utilityTypeDes, @Param("dateBegin")String dateBegin,
+                                                    @Param("dateEnd")String dateEnd, @Param("faultStateDes")String faultStateDes,
+                                                    @Param("order")String order);
+
+   /* *//**
+     * 按管网类别查找最新月份的故障点信息,按日期降序
+     * @param utilityTypeDes 管网类别（"供水管网"）
+     * @return JxUtilityManteFaultDto故障点信息实体类
+     *//*
+    public List<JxUtilityManteFaultDto> findLatestFaultByUtDate(String utilityTypeDes, String dateBegin, String dateEnd, String faultState);*/
+
+   /* *//**
+     * 按管网类别查找最新月份的故障点信息，按故障严重等级降序
+     * @param utilityTypeDes 管网类别（如："供水管网"）
+     * @return JxUtilityManteFaultDto故障点信息实体类
+     *//*
+    public List<JxUtilityManteFaultDto> findLatestFaultByUtRank(String utilityTypeDes, String dateBegin, String dateEnd, String faultState);*/
+
+    /**
+     * 查找最新月份各类管网的故障点数量、百分比信息
+     * @return JxUtilityManteFaultDto 故障点数量统计实体类，只填充故管网类别，故障数量，时间
+     */
+    public List<JxUtilityManteFaultByMonth> findLatestFaultNum();
+
+    /**
+     * 查找所有故障点涉及到的管网类别集合
+     * @return List<JxUtilityManteFaultDto> 故障点数量统计实体类，只填充故管网类别
+     */
+    public List<JxUtilityManteFaultByMonth> findUtilityType();
+
+    /**
+     * 查找近几个月的某类管网故障点数量、百分比信息
+     * @param monthSize 倒数月数
+     * @param utilityTypeDes 管网类别（"供水管网"）
+     * @return JxUtilityManteFaultDto 故障点数量统计实体类，只填充故管网类别，故障数量，时间
+     */
+    public List<JxUtilityManteFaultByMonth> findFaultNumByUtAndMs(Integer monthSize,String utilityTypeDes);
+
+    /**
+     * 查找最新月份按故障原因分布信息，包括数量、百分比
+     * @return JxUtilityManteFaultDto 故障点数量统计实体类，只填充故障原因类别，各原因类别的故障数量，时间
+     */
+    public List<JxUtilityManteFaultByMonth> findLatestFaultFactNum();
+
+    /**
+     * 按设备编号查找监测设备信息
+     * @param DeviceId 设备编号
+     * @return JxUtilityManteDeviceBaseDto 监测设备信息实体类
+     */
+    public JxUtilityManteDeviceBaseDto findDeviceInfoById(String DeviceId);
+
+    public List<JxUtilityManteAlarmPointDto> findLatestAlarmPointAll();
+    public List<JxUtilityManteDeviceStateDto> findLatestDeviceStateAll();
+
+}
+

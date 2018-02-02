@@ -1,0 +1,108 @@
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.dto.CompanyDto;
+import com.cetc28.idata.service.IJxEcoClusterjService;
+import com.cetc28.idata.service.IJxEcoIndPlatService;
+import com.cetc28.idata.service.IJxEcoKeycomsjService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/18.
+ */
+@Controller
+@RequestMapping("/jxecokey")
+public class JxEcoKeycomController {
+
+    @Autowired
+    private IJxEcoKeycomsjService iJxEcoKeycomsjService;
+    @Autowired
+    private IJxEcoClusterjService iJxEcoClusterjService;
+    @Autowired
+    private IJxEcoIndPlatService iJxEcoIndPlatService;
+
+    /**
+     * 查询重点企业基本数据
+     * @return
+     */
+    @RequestMapping("/findkeycomdata.do")
+    @ResponseBody
+    public Map findkeycomdata(){
+        return iJxEcoKeycomsjService.queryKeycomData();
+    }
+
+
+    @RequestMapping("/findClusterNameAndJwd.do")
+    @ResponseBody
+    public  List findClusterData(){
+        return  iJxEcoClusterjService.findClusterType();
+    }
+
+
+    @RequestMapping("/findClusterInfo.do")
+    @ResponseBody
+    public  Map findClusterInfo(String clusterName){
+        Map<String,List> map = new HashMap();
+        List clusterInfo = iJxEcoClusterjService.findClusterInfo(clusterName);
+        List clusterTypes = iJxEcoClusterjService.findClusterTypes();
+        map.put("clusterInfo",clusterInfo);
+        map.put("clusterType",clusterTypes);
+        return map;
+    }
+
+    @RequestMapping("/findClusterInfoByType.do")
+    @ResponseBody
+    public  List findClusterInfoByType(String clusterType){
+        return  iJxEcoClusterjService.findClusterInfoByType(clusterType);
+    }
+
+    @RequestMapping("/findCompanyInfo.do")
+    @ResponseBody
+    public  List<CompanyDto> findCompanyInfo(String clusterName){
+        return  iJxEcoClusterjService.findCompanyInfo(clusterName);
+    }
+
+    /**
+     * 根据重点企业id和区号值查询相关公司
+     * @param id
+     * @param bhValue
+     * @return
+     */
+    @RequestMapping("/queryComByCondition.do")
+    @ResponseBody
+    public Map queryComByCondition(String id, String bhValue){
+        return iJxEcoKeycomsjService.queryComByCondition(id, bhValue);
+    }
+
+    @RequestMapping("/serchKeycomName.do")
+    @ResponseBody
+    public List serchKeycomName(String name) {
+        return iJxEcoKeycomsjService.serchKeycom("闻泰通讯");
+    }
+
+    /**
+     * 查询平台基本数据
+     * @return
+     */
+    @RequestMapping("/findIndPlatdata.do")
+    @ResponseBody
+    public Map findIndPlatdata(){
+        return iJxEcoIndPlatService.queryIndustrialPlatform();
+    }
+
+    /**
+     * 查询平台基本数据
+     * @return
+     */
+    @RequestMapping("/findIndPlatbyName.do")
+    @ResponseBody
+    public Map findIndPlatbyName(String name){
+        return iJxEcoIndPlatService.queryEcoPlatbyName(name);
+    }
+}

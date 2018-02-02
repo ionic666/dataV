@@ -1,0 +1,26 @@
+package com.cetc28.PeopleBenefitService.service;
+
+import com.cetc28.PeopleBenefitService.model.JxEcoCoreIndustry;
+
+import java.util.List;
+
+/**
+ * Created by jianglulu on 2017/9/30.
+ */
+public interface IJxEcoCoreInformationService {
+    /**
+     * 查询一级指标
+     * @return
+     */
+    public List<JxEcoCoreIndustry> queryFirstIndex();
+
+    public List querySecondIndex();
+
+    public List queryCoreData(String year);
+
+    /**
+     * 查询最近几年信息经济核心产业工业总产值累计和增速
+     * @return
+     */
+    public List queryCoreTotalValue();
+}

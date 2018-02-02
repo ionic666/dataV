@@ -1,0 +1,190 @@
+﻿<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%--<%--%>
+<%--String path = request.getContextPath();--%>
+<%--String basePath = request.getScheme() + "://"--%>
+<%--+ request.getServerName() + ":" + request.getServerPort()--%>
+<%--+ path + "/";--%>
+<%--%>--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<html>
+<head>
+	<%--<base href="<%=basePath%>">--%>
+	<base>
+	<title>测量</title>
+	<style type="text/css">
+		#selectFixed{
+			border: 1px solid #00BBD4;
+		}
+		#selectFixed .modal-header{
+			background-color: #06383F;
+			border-bottom: 0;
+			width: 100%;
+			height: 15%;
+			margin: 0;
+			padding: 10px 20px;
+		}
+		#selectFixed .modal-content{
+			padding: 0;
+		}
+		#selectFixed .modal-dialog {
+			width: 360px;
+			margin-right: 10px;
+		}
+
+		#selectFixed .modal-content {
+			height: 300px;
+			/*background: url("map/modalPages/toolPages/images/w_bg.png" )repeat;*/
+		}
+
+		#selectFixed .modal-body {
+			padding: 0px;
+		}
+
+		#selectFixed .subtitle {
+			font-size: 16px;
+			float: left;
+			width: 25%;
+			text-align: center;
+		}
+		#clearMap, #jwselected{
+			margin-top: 30px;
+			color: #39D1E5;
+			width: 80px;
+			height: 32px;
+			background-color: #02545D;
+			border: 1px solid #00AEC6;
+		}
+		.jdIpt, .wdIpt{
+			margin-top: 20px;
+			color: #16C9DC;
+			background-color: #02191C;
+			border: 1px solid #00AEC6;
+			padding-left: 10px;
+		}
+		/*drawtool .subtitleChange1 {*/
+		/*color: white !important;*/
+		/*}*/
+
+		/*drawtool .subtitleChange2 {*/
+		/*color: #ffffff !important;*/
+		/*}*/
+
+		/*#drawtool .contentTitle {*/
+		/*width: 96%;*/
+		/*height: 80px;*/
+		/*border-bottom: #Ebeaea solid 3px;*/
+		/*}*/
+
+		/*#drawtool .contentBody {*/
+		/*height: 120px;*/
+		/*font-size: 16px;*/
+		/*padding-left: 18px;*/
+		/*}*/
+
+		/*#drawtool .tablebody {*/
+		/*color: #474747;*/
+		/*height: 100px;*/
+		/*width: 70%;*/
+		/*}*/
+
+		/*#drawtool .tablebody tr {*/
+		/*height: 33px;*/
+		/*line-height: 33px;*/
+		/*}*/
+
+		/*#drawtool .tablebody tr td {*/
+		/*text-align: left;*/
+		/*}*/
+
+		/*#drawtool .tablesub {*/
+		/*color: #ababab;*/
+		/*}*/
+
+		/*.showOn {*/
+		/*display: block;*/
+		/*}*/
+
+		/*.showOff {*/
+		/*display: none;*/
+		/*}*/
+
+		/*.modal-header .close{*/
+
+		/*padding:0px 10px !important;*/
+		/*}*/
+
+		/*.subtitle,.subtitleChange1{*/
+		/*display: inline-block;*/
+		/*}*/
+	</style>
+
+</head>
+<body>
+<div class="modal fade"
+	 style="width: 365px;height: 305px;top: 60px;left:auto;right: 95px;display:none;position: absolute;z-index: 9999"
+	 id="selectFixed" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<p>查询定位</p>
+				<img style="float:right;display:inline-block" class="close" data-dismiss="modal" aria-label="close" style="" src="images/close.png" >
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<label class="col-sm-3 col-sm-offset-1 control-label" style="margin-top: 20px">目标经度</label>
+					<div class = "col-sm-8">
+						<input class="jdIpt" value="" type="text" placeholder="请输入查询经度"/>
+					</div>
+				</div>
+				<div class="row">
+					<label class="col-sm-3 col-sm-offset-1 control-label" style="margin-top: 20px">目标纬度</label>
+					<div class = "col-sm-8">
+						<input class="wdIpt" value="" type="text" placeholder="请输入查询纬度"/>
+					</div>
+				</div>
+				<div class="col-sm-offset-1 col-sm-4">
+					<button id="jwselected" class="btn">查询</button>
+				</div>
+				<div class="col-sm-offset-1 col-sm-4">
+					<button id="clearMap" class="btn">清除</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<%--<script type="text/javascript" src="map/modalPages/toolPages/js/GeoMath.js"></script>--%>
+<%--<script type="text/javascript" src="myjs/index.js"></script>--%>
+<script>
+	$("#jwselected").click(function(){
+		var pointArr=[]
+//			console.log($(".jdIpt").val())
+//			console.log($(".wdIpt").val())
+		var jd=$(".jdIpt").val();
+		var wd=$(".wdIpt").val();
+		if(jd=='' || wd == ''){
+			return;
+		}
+		pointArr.push({jd:parseFloat(jd),wd:parseFloat(wd)})
+		//		查询定位
+		showLayers(pointArr,posLayer,'images/mark.png');
+		map.addLayer(posLayer);
+		var point=esri.geometry.Point(jd, wd, map.spatialReference)
+		map.centerAt(point)
+	})
+	$("#clearMap").click(function(){
+		map.removeLayer(posLayer);
+	})
+
+	//模态框拖动
+	$("#selectFixed").draggable()
+
+</script>
+</body>
+</html>

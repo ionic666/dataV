@@ -1,0 +1,178 @@
+/**
+ * Created by lenovo on 2016/11/9.
+ */
+//显示核扩散和人员疏散按钮
+function showNuclear(){
+    drawNuclearDispersal();//初始化
+    $('#nuclearControl>ul>li:first-child').find('img').attr('src','map/images/nuclear/hover_09.png');
+    var imgs=$('#nuclearControl>ul>li:first-child').siblings().find('img');//.attr('src','map/images/nuclear/raw_06.png')
+    for(var i=0;i<imgs.length;i++){
+        if($(imgs[i]).attr('src').indexOf('hover')>0){
+            var se=$(imgs[i]).attr('src').replace('hover','raw');
+            $(imgs[i]).attr('src',se);
+        }
+    }
+    $('#nuclearControl').css('display','block');
+    //按钮切换
+    $('#nuclearControl>ul').on('click','li',function(){
+        var url=$(this).find('img');
+        var re=url.attr('src').replace('raw','hover');
+        url.attr('src',re);
+        var sibs=$(this).siblings().find('img');
+        for(var i=0;i<sibs.length;i++){
+            if($(sibs[i]).attr('src').indexOf('hover')>0){
+                var se=$(sibs[i]).attr('src').replace('hover','raw');
+                $(sibs[i]).attr('src',se);
+            }
+        }
+        switch ($(this).index()){
+            case 0: drawNuclearDispersal(); break;
+            case 1: evacuation(); break;
+        }
+    });
+}
+//绘制核扩散
+function drawNuclearDispersal(){
+    nuclearLayer.graphics.length>0 && nuclearLayer.clear();
+    evacuationLayer.graphics.length>0 && evacuationLayer.clear();
+    nuclearStation(nuclearLayer);//添加核电站图标
+    var pointSymobol,pointGraphic;
+    var x =114.6240167236328,y=22.674969482421872;
+    pointSymobol=new esri.symbol.PictureMarkerSymbol('map/images/nuclear/nuclear.png',1300,587);
+    pointSymobol.setOffset(-580, -100);
+    var planePoint =new esri.geometry.Point(x,y, map.spatialReference);
+    pointGraphic=new esri.Graphic(planePoint,pointSymobol);
+    nuclearLayer.add(pointGraphic);
+    nuclearLayer.refresh();
+    map.addLayer(nuclearLayer);
+    var l=map.getLevel();
+    var w=1300/l;var h=587/l;
+    map.on("zoom-end", function(zoom){
+        evacuationLayer.graphics.length>0 && evacuationLayer.clear();
+        nuclearLayer.graphics.length>0 && nuclearLayer.clear();
+        nuclearLayer.clear();
+        var level = zoom.level;
+        console.log(w*level);console.log(h*level);
+        var symbol =new esri.symbol.PictureMarkerSymbol('map/images/nuclear/nuclear.png', w*level, h*level);
+        var woffset=w*level/200;
+        symbol.setOffset(-woffset*level/l, -100*level/l);
+        var graphics = new esri.Graphic(planePoint,symbol);
+        nuclearLayer.add(graphics);
+        nuclearLayer.refresh();
+        map.addLayer(nuclearLayer);
+    });
+}
+
+function evacuation(){  //人员疏散evacuationLayer
+    evacuationLayer.graphics.length>0 && evacuationLayer.clear();
+    nuclearLayer.graphics.length>0 && nuclearLayer.clear();
+    nuclearStation(evacuationLayer);//添加核电站图标
+    var pointSymobol,pointGraphic;
+    var x =114.08705993652343,y=22.558239746093747;
+    pointSymobol=new esri.symbol.PictureMarkerSymbol('map/images/nuclear/line_06.png',1920,1080);
+    //pointSymobol.setOffset(-450, -100);
+    var planePoint =new esri.geometry.Point(x,y, map.spatialReference);
+    pointGraphic=new esri.Graphic(planePoint,pointSymobol);
+    evacuationLayer.add(pointGraphic);
+    evacuationLayer.refresh();
+    map.addLayer(evacuationLayer);
+    var l=map.getLevel();
+    var w=1920/l;var h=1080/l;
+    map.on("zoom-end", function(zoom){
+        evacuationLayer.graphics.length>0 && evacuationLayer.clear();
+        nuclearLayer.graphics.length>0 && nuclearLayer.clear();
+        var level = zoom.level;
+        var symbol =new esri.symbol.PictureMarkerSymbol('map/images/nuclear/line_06.png', w*level, h*level);
+        var woffset=w*level/2;
+        //symbol.setOffset(-woffset*level/l, -100*level/l);
+        var graphics = new esri.Graphic(planePoint,symbol);
+        evacuationLayer.add(graphics);
+        evacuationLayer.refresh();
+        map.addLayer(evacuationLayer);
+    });
+}
+
+function nuclearStation(layer){
+    layer.clear();
+    var symobol=new esri.symbol.PictureMarkerSymbol('map/images/nuclear/nuclearStation.png',40,40);
+    //var point =new esri.geometry.Point(114.10353942871093,22.562359619140622, map.spatialReference);
+    var point =new esri.geometry.Point(114.5277,22.5997, map.spatialReference);
+    var  ts = esri.symbol.TextSymbol('大亚湾核电站',esri.symbol.Font('12pt','WEIGHT_BOLD') ,new dojo.Color([200,21,34]));
+    ts.setOffset(0,25);
+    var graphic=new esri.Graphic(point,symobol);
+    var textGraphic=new esri.Graphic(point,ts);
+    layer.add(graphic);
+    layer.add(textGraphic);
+    layer.refresh();
+}
+
+function closeNuclearPage(){
+    evacuationLayer.graphics.length>0 && evacuationLayer.clear();
+    nuclearLayer.graphics.length>0 && nuclearLayer.clear();
+    $('#nuclearControl').css('display','none');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

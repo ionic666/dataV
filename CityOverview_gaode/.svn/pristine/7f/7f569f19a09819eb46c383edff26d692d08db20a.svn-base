@@ -1,0 +1,955 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: zhoujun
+  Date: 2017/9/21
+  Time: 10:27
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title>企业参保整体监测</title>
+  <script src="../../map/js/jquery-1.11.3.js"></script>
+  <script src="../../myjs/echarts-all.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/tundra/tundra.css">
+  <link rel="stylesheet" type="text/css" href="../../map/arcgis_js/esri/css/esri.css" />
+  <link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dojox/layout/resources/ExpandoPane.css" />
+  <link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/soria/soria.css" />
+
+  <style>
+    html,body{
+      width:100%;
+      height:100%;
+      margin:0;
+      padding:0;
+      box-sizing: border-box;
+      background-color:rgba(15,15,15,0.8);
+    }
+    ul{
+      list-style: none;
+    }
+    ul,li,p{
+      margin: 0;
+    }
+    .header{
+      height:7%;
+    }
+    .content{
+      width:100%;
+      height:91%;
+      margin-top:1%;
+    }
+    #bigLogo{
+      position: absolute;
+    }
+    #bigLogo #cetc{
+      float: left;
+      width: 190px;
+    }
+    #bigLogo #logo{
+      float: left;
+      /*width: 250px;*/
+      width: 100%;
+    }
+
+    #bigLogo{
+      /*width:510px;*/
+      position: absolute;
+      left:0px;
+      top:0px;
+      /*height:20px;*/
+      width: 22%;
+      height:9%;
+      border-left: 0.3em solid #0CDAF5;
+      padding-left: 0.4em;
+      margin-left: 1em;
+      z-index:66;
+    }
+    div#right{
+      float: left;
+      /*width: 250px;*/
+      width: 100%;
+      padding-top: 10px;
+      padding-left: 10px;
+    }
+    .timer{
+      position: absolute;
+      height: 30px;
+      line-height: 30px;
+      /*width: 250px;*/
+      width: 95%;
+      background-color: #0CDAF5;
+      color: #02282D;
+      margin-top: 0.8em;
+      padding-left: 10px;
+      top: 35px;
+      z-index: 77;
+      font-size: 1.2em;
+    }
+    .corpStatistics-main{
+      width: 100%;
+      height: 90%;
+      margin-top: 1%;
+    }
+    .corpStatistics-left{
+      width: 40%;
+      height: 90%;
+      position: absolute;
+      left: 3%;
+    }
+    .corpStatistics-right{
+      width: 50%;
+      height: 90%;
+      position: absolute;
+      margin-left: 46%;
+    }
+    .corpStatistics-left-a{
+      width: 100%;
+      height: auto;
+      margin-bottom: 2%;
+    }
+    .corpStatistics-left-c{
+      color: #fff;
+      font-size: 1.3em;
+      width: 100%;
+      max-height: 12%;
+      padding:0.5em 0;
+      text-align: center;
+      background-color: #282828;
+      border: 4px solid #282828;;
+    }
+    .corpStatistics-left-c>span{
+      font-size: 1.5em;
+      font-weight: bold;
+      display: inline-block;
+      margin-left: 1em;
+      /*padding: 0 2%;*/
+    }
+    .corpStatistics-left-c>a{
+      color: #fff;
+      font-size: 0.6em;
+      font-style:italic;
+      display: inline-block;
+      margin-left: 1em;
+      /*padding: 0 2%;*/
+    }
+    .corpStatistics-left-b{
+      width: 100%;
+      height: 85%;
+      border:4px solid #06A7B5;
+    }
+    .corpStatistics-right-a{
+      width: 100%;
+      height: 51%;
+      margin-top: 2%;
+      margin-bottom: 3%;
+      background-color: #282828;
+    }
+    .corpStatistics-right-b{
+      width: 100%;
+      height: 43%;
+      background-color: #282828;
+    }
+    #selectCorp{
+      margin-top: 1em;
+    }
+    #selectCorp>li{
+      display: inline-block;
+      color: #fff;
+      margin: 0 1em;
+    }
+    .selectCorp-regionCode{
+      margin-left:2em !important;
+    }
+    #selectCorp select{
+      padding: 0.2em 1.2em;
+      color: #fff;
+      font-size: 15px;
+      background-color: rgba(16,30,56,0.5);
+    }
+    .corpStatistics-right p{
+      font-size: 1.3em;
+      line-height: 1.3em;
+      padding: 0.5em;
+      font-weight: bold;
+      color: #fff;
+      background-color: #434343;
+    }
+    .corpStatistics-right-a>div,.corpStatistics-right-b>div{
+      position: relative;
+      width: 100%;
+      height: 90%;
+      background-color: #282828;
+      overflow: hidden;
+    }
+    .corpStatistics-echarts{
+      background-color: #282828;
+    }
+
+    #map_zoom_slider{
+      display: none;
+    }
+    .modal-backdrop.in{
+      display:none ;
+    }
+    .esriPopupWrapper{
+      border-radius: 0;
+      border:2px solid #4C96C5;
+      background-color: #244C66;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .esriPopup .titlePane{
+      background-color: #245273;
+      padding-left: 10px;
+      border-radius: 0;
+    }
+    .esriPopup .title{
+      color: #3EA7F8;
+      font-size: 14px;
+    }
+    .esriPopup .contentPane{
+      background-color: #244C66;
+      margin: 0;
+      padding: 10px 5px 0 10px;
+    }
+    .esriPopup .actionsPane{
+      padding: 0;
+    }
+    .mapDetails{
+      color: #fff;
+      background-color: #244C66;
+    }
+    .mapDetails p{
+      margin: 0;
+      padding: 0;
+      padding-bottom: 5px;
+      border-bottom: 1px dotted #3A79A5;
+      font-size: 14px;
+    }
+    .mapDetails p:last-child{
+      border-bottom: 0;
+    }
+    .mapDetails p span{
+      color: red;
+      margin-left: 5px;
+    }
+    .esriPopup .titleButton.maximize{
+      display: none;
+    }
+    .esriPopup .outerPointer.left{
+      background-color: #244C66;
+      border:2px solid #4C96C5;
+      left: 9px;
+    }
+    #jx_map_zoom_slider{
+      display:none;
+    }
+    /*高德地图样式表*/
+    .amap-toolbar{
+      display:none;
+    }
+    .info {
+      border: solid 1px #7A9095 !important;
+      border-radius: 5px;
+    }
+    div.info-top {
+      position: relative;
+      background-color:rgba(0,29,36,0.8);
+      border-bottom: 1px solid #7A9095;
+      border-radius: 5px 5px 0 0;
+    }
+    div.info-top div {
+      display: inline-block;
+      color: #333333;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 31px;
+      padding: 0 10px;
+    }
+    div.info-top img {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      transition-duration: 0.25s;
+    }
+    div.info-top img:hover {
+      box-shadow: 0px 0px 5px #000;
+    }
+    div.info-middle {
+      font-size: 14px;
+      padding: 6px;
+      line-height: 20px;
+      background-color:rgba(0,29,36,0.8) !important;
+    }
+    div.info-bottom {
+      height: 0px;
+      width: 100%;
+      clear: both;
+      text-align: center;
+    }
+    div.info-bottom img {
+      position: relative;
+      z-index: 104;
+    }
+    .info span {
+      margin-left: 5px;
+      font-size: 11px;
+    }
+    .info-middle img {
+      float: left;
+      margin-right: 6px;
+    }
+    .amap-icon img{
+      width:100%;
+      height:100%;
+    }
+  </style>
+  <script>
+    var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+    var cityId='<%=Web_srcUtil.getString("cityId")%>';
+    var mapHost='<%=Web_srcUtil.getString("mapHost")%>';
+    var mapPort='<%=Web_srcUtil.getString("mapPort")%>';
+    var arcgisServiceUrl='<%=Web_srcUtil.getString("arcgisServiceUrl")%>';
+    var jiaxingJtSslkServiceUrl='<%=Web_srcUtil.getString("jiaxingJtSslkServiceUrl")%>';
+    var mapServiceTpye='<%=Web_srcUtil.getString("mapServiceTpye")%>';
+    var xmax=121.11625,xmin=120.4570703125,ymax=30.927933502197263,ymin=30.591820526123044;
+    /*var xmin=120.302546;
+     var ymin=30.25204;
+     var xmax=121.547912;
+     var ymax=31.036507;*/
+    var hostUrl = mapHost+":"+mapPort+"/CityOverview/map";
+    //返回上一层界面
+    var mainWin;
+    var url = location.search;
+    if (url.indexOf("?") != -1) {
+      var str = url.substr(1);
+      var strs = new Array();
+      strs = str.split('&');
+//      model = strs[0].slice(strs[0].indexOf("=")+1);
+      mainWin = strs[0].slice(strs[0].indexOf("=")+1);
+    }
+    function returnMainPage(){
+      location.href = "http://"+ mapHost+":" +mapPort+ "/CityOverview/main.jsp?bh="+mainWin;
+    }
+  </script>
+</head>
+<body>
+<a href="#" onclick="returnMainPage()" style="max-width:3%;position: fixed;left:97%;top: 2%;"><img src="../../images/returnUp.png" alt=""></a>
+<div class="header">
+  <div id="bigLogo">
+    <%--<img src="../../images/cetc.png" alt="" id="cetc"/>--%>
+    <div id="right">
+      <img src="../../images/logo.png" alt="" id="logo"/>
+      <div class="timer">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="corpStatistics-main">
+
+  <%--左侧地图--%>
+  <div class="corpStatistics-left">
+    <%--条件搜索--%>
+    <div class="corpStatistics-left-a">
+      <ul id="selectCorp">
+        <li class="selectCorp-regionCode">
+          <span>区域选择</span>
+          <select id="regionCode" class="corpStatistics-select">
+            <option value ="003001001">南湖区</option>
+            <option value ="003001002">秀洲区</option>
+            <option value ="003001003">海宁市</option>
+            <option value ="003001004">平湖市</option>
+            <option value ="003001005">桐乡市</option>
+            <option value ="003001006">嘉善县</option>
+            <option value ="003001007">海盐县</option>
+          </select>
+        </li>
+        <li>
+          <span>法人类型</span>
+          <select id="legalPersonType" class="corpStatistics-select">
+            <option value ="企业法人" selected="selected">企业法人</option>
+          </select>
+        </li>
+        <li>
+          <span>经营类型</span>
+          <select id="businessType" class="corpStatistics-select">
+            <option value ="民营企业">民营企业</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+    <p class="corpStatistics-left-c">
+      企业数量:<span style="display: inline-block;" id="corpSum"></span>家
+      <a href="javascript:void(0);" onclick="turnSpecificPage()" style="font-size: 14px" >点击查看该区域的具体企业参保情况</a>
+    </p>
+    <%--地图--%>
+    <div id="jx_map" class="corpStatistics-left-b">
+
+    </div>
+
+  </div>
+
+  <%--右侧图表--%>
+  <div class="corpStatistics-right">
+    <%--参保人数走势--%>
+    <div id="" class="corpStatistics-right-a">
+      <p>参保人数走势</p>
+      <div id="corpInsuredSumData" class="corpStatistics-echarts">
+
+      </div>
+    </div>
+    <%--学历结构变化情况--%>
+    <div class="corpStatistics-right-b">
+      <p>学历结构变化情况</p>
+      <div id="education" class="corpStatistics-echarts">
+
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<script type="text/javascript" src="../../map/js/echarts.min.js"></script>
+<script type="text/javascript" src="../../myjs/index.js"></script>
+<script type="text/javascript" src="../../myjs/myEcharts.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.1&key=608d75903d29ad471362f8c58c550daf"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+<script>
+  var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+var map = new AMap.Map('jx_map', {
+//	resizeEnable: false, //缩放控件
+//	showIndoorMap:false,//隐藏地图自带的室内地图图层
+  mapStyle: 'amap://styles/dark',//样式URL
+  zoom:14,
+  center: [119.218843,36.478494]
+});
+var qycb={
+  qycbAjax:function(qhbh){
+    $.ajax({
+      type: 'post',
+      url: "../../jxSocialSecurity/getCorpAnalysisTooltipData.do?regionCode="+qhbh ,
+      dataType: 'JSON',
+      success: function (data) {
+        console.log(data)
+        var len=data.corpAnalysisTooltipDtoList.length;
+        for(var i=0;i<len;i++){
+          qycb.addPoint(wgs84togcj02(parseFloat(data.corpAnalysisTooltipDtoList[i].longitude),parseFloat(data.corpAnalysisTooltipDtoList[i].latitude)),25,25,'../../images/qiyeshebao.png',data.corpAnalysisTooltipDtoList[i]);
+//          (function(i){
+//            qycb.timer[i]=setTimeout(function(){
+//              //console.log(data.corpAnalysisTooltipDtoList)
+//              qycb.infoWindow(data.corpAnalysisTooltipDtoList[i])
+//            },i*4000)
+//          })(i)
+        }
+        qycb.infoWindow(data.corpAnalysisTooltipDtoList[0])
+      }
+    })
+  },
+
+  ////关闭信息窗体
+  closeInfoWindow:function () {
+    map.clearInfoWindow();
+  },
+  //实例化信息窗体
+  //构建自定义信息窗体
+  createInfoWindow: function (title, content) {
+    var info = document.createElement("div");
+    info.className = "info";
+
+    //可以通过下面的方式修改自定义窗体的宽高
+    info.style.width = "280px";
+    info.style.height = "280px";
+    // 定义顶部标题
+    var top = document.createElement("div");
+    var titleD = document.createElement("div");
+    var closeX = document.createElement("img");
+    top.className = "info-top";
+    titleD.innerHTML = title;
+    closeX.src = "../../images/gaode-close.png";
+    closeX.onclick = qycb.closeInfoWindow;
+
+    top.appendChild(titleD);
+    top.appendChild(closeX);
+    info.appendChild(top);
+
+    // 定义中部内容
+    var middle = document.createElement("div");
+    middle.className = "info-middle";
+    middle.style.backgroundColor = 'white';
+    middle.innerHTML = content;
+    info.appendChild(middle);
+
+    // 定义底部内容   //下方的小箭头
+    var bottom = document.createElement("div");
+    bottom.className = "info-bottom";
+    bottom.style.position = 'relative';
+    bottom.style.top = '0px';
+    bottom.style.margin = '0 auto';
+    var sharp = document.createElement("img");
+    sharp.src = "../../images/gaode-sharp.png";
+    bottom.appendChild(sharp);
+    info.appendChild(bottom);
+    return info;
+  },
+  infoWindow:function(details){
+    var title = '<span style="font-size:14px;color:#0CDAF5;">'+details.corpName+'</span>';
+    var content = [];
+    content.push("<p style='color:#fff;'>从业人员数量："+details.employeeSum+"人</p>");
+    content.push("<p style='color:#fff;'>参保人员数量："+details.insuredSum+"人</p>");
+    content.push("<div id='qycbMapEchart' style='height:210px;width:100%;'></div>");
+    var infoWindow = new AMap.InfoWindow({
+      isCustom: true,  //使用自定义窗体
+      content: qycb.createInfoWindow(title, content.join("")),
+      offset: new AMap.Pixel(15, -45)
+    });
+    infoWindow.open(map, wgs84togcj02(parseFloat(details.longitude),parseFloat(details.latitude)));
+    var xl=['博士研究生','硕士研究生','本科','专科','高中','初中','小学','其他'];
+    var sum=0;
+    for(var n=0;n<details.educationData.length;n++){
+      sum+=details.educationData[n]
+    }
+    var dataArr=[];
+    for(var i=0;i<details.educationData.length;i++){
+      var obj={};
+     // obj.value=(details.educationData[i]/sum).toFixed(2);
+      obj.value=details.educationData[i];
+      obj.name=xl[i];
+      dataArr.push(obj)
+    }
+    setTimeout(function(){
+      shbzMap_EchartsShow(dataArr,xl);
+      map.setCenter(wgs84togcj02(parseFloat(details.longitude),parseFloat(details.latitude)));
+    },500)
+  },
+  addPoint:function addPoint(arr,h,w,img,details){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+    var _marker=new AMap.Marker({
+      map: map,
+      position: arr,        //经纬度
+      icon: new AMap.Icon({
+        size: new AMap.Size(h, w),  //图标大小
+        image: img       //自定义图片
+      })
+    });
+    AMap.event.addListener(_marker,'click',function(e){
+      qycb.infoWindow(details)
+    });
+  }
+}
+  window.onload=function(){
+    qycb.qycbAjax("003001001");
+  }
+
+  //社会保障 点击地图上的图标，显示echarts 图表
+  function shbzMap_EchartsShow(dataArr,xl){
+    var mycharts=echarts.init(document.getElementById('qycbMapEchart'));
+    option = {
+      color: ['#FF8262','#AFD482','#FFD959','#62C2DD','#0088CB','#DC514B','#C9E979','#26BFC1'],
+      tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} 人({d}%)"
+      },
+      legend: {
+        orient : 'vertical',
+        x : 'left',
+        y:'5%',
+        data:['博士研究生','硕士研究生','本科','专科','高中','初中','小学','其他'],
+        itemWidth: 10,
+        itemHeight:10,
+        textStyle:{
+            color:font_color,
+            fontSize:15,
+            fontFamily:font_family
+        }
+      },
+      calculable : false,
+      series : [
+        {
+          name:'学历结构',
+          type:'pie',
+          radius : ['15%', '60%'],
+          center : ['65%', '50%'],
+          //roseType : 'area',
+          x: '50%',               // for funnel
+          //max: 40,                // for funnel
+          sort : 'ascending',     // for funnel
+          data: dataArr,
+          itemStyle : {
+            normal : {
+              label : {
+                show : false
+              },
+              labelLine : {
+                show : false
+              }
+            }
+          }
+        }
+      ]
+    };
+    mycharts.setOption(option);
+  }
+
+  function turnSpecificPage(){
+    var regionCode = $(".corpStatistics-select").eq(0).children('option:selected').val();
+    window.open("specificCorpAnalysis.jsp?regionCode="+regionCode);
+  }
+</script>
+
+
+
+<%--<script src="../../myjs/echarts3.4.0.min.js"></script>--%>
+<script>
+  function corpEdu(xAxisYear,insuredElementarySumData,insuredJuniorSumData,insuredSeniorSumData,insuredTechnicalSumData,insuredBachelorSumData,insuredMasterSumData,insuredDoctorSumData,insuredOtherSumData){
+    var mycharts1 = echarts.init(document.getElementById('education'));
+    var option1 = {
+      color: ['#FF8262','#AFD482','#FFD959','#62C2DD','#0088CB','#DC514B','#C9E979','#26BFC1'],
+      tooltip : {
+        trigger: 'axis',
+        formatter: function (params,ticket,callback) {
+          var res =params[0].name+'年';
+          for (var i = 0, l = params.length; i < l; i++) {
+            res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'万人';
+          }
+          setTimeout(function (){
+            // 仅为了模拟异步回调
+            callback(ticket, res);
+          }, 100)
+        }
+      },
+      grid: {
+        x: '15%',
+        y: '15%',
+        x2: '5%',
+        y2: '12%',
+        containLabel: true,
+        borderWidth: 0
+      },
+      legend: {
+        data:['小学','初中','高中','专科','本科','硕士研究生','博士研究生','其他'],
+        textStyle: text_style,
+        itemGap:2,
+        itemWidth: 10,
+        itemHeight:10,
+        x:'center'
+      },
+      xAxis : [
+        {
+          type : 'category',
+          data : xAxisYear,
+          axisLine: { lineStyle: {
+            color: '#BFBFBF'
+          }},
+          splitLine: {show: false},
+          axisLabel: {show: true, textStyle: text_style,formatter: '{value} 年'}
+        }
+      ],
+      yAxis : [
+        {
+          type : 'value',
+          name:'人数（万人）',
+          nameTextStyle: text_style,
+          splitLine: {show: false},
+          axisLine: { lineStyle: {
+            color: '#BFBFBF'
+          }},
+          axisTick: {show: false},
+          axisLabel: {show: true, textStyle: text_style}
+        }
+      ],
+      series : [
+        {
+          name:'小学',
+//          barWidth: 15,
+          type:'bar',
+//          barGap:'5%',
+          barCategoryGap:'30%',
+          data:insuredElementarySumData
+        },
+        {
+          name:'初中',
+//          barWidth: 15,
+          type:'bar',
+//          barGap:'5%',
+          barCategoryGap:'30%',
+          data:insuredJuniorSumData
+        },
+        {
+          name:'高中',
+//          barWidth: 15,
+          type:'bar',
+//          barGap:'5%',
+          barCategoryGap:'30%',
+          data:insuredSeniorSumData
+        },
+        {
+          name:'专科',
+//          barWidth: 15,
+          type:'bar',
+//          barGap:'5%',
+          barCategoryGap:'30%',
+          data:insuredTechnicalSumData
+        }
+        ,
+        {
+          name:'本科',
+//          barWidth: 15,
+          type:'bar',
+//          barGap:'5%',
+          barCategoryGap:'30%',
+          data:insuredBachelorSumData
+        },
+        {
+          name:'硕士研究生',
+//          barWidth: 15,
+          type:'bar',
+//          barGap:'5%',
+          barCategoryGap:'30%',
+          data:insuredMasterSumData
+        },
+        {
+          name:'博士研究生',
+//          barWidth: 15,
+          type:'bar',
+//          barGap:'5%',
+          barCategoryGap:'30%',
+          data:insuredDoctorSumData
+        },
+        {
+          name:'其他',
+//          barWidth: 15,
+          type:'bar',
+//          barGap:'5%',
+          barCategoryGap:'30%',
+          data:insuredOtherSumData
+        }
+      ]
+    };
+    mycharts1.setOption(option1);
+  }
+
+  //确定同比增长或同比下降图片
+  function determineImage(res,value){
+    value = value*100;
+    if(value>=0){
+      res +='<img src="../../images/socialSecurity/growPercent.png" alt="" style="margin-left: 5px"/>'+value.toFixed(2)+'%';
+
+    }else{
+      res +='<img src="../../images/socialSecurity/dropPercent.png" alt="" style="margin-left: 5px"/>'+(-value).toFixed(2)+'%';
+    }
+    return res;
+  }
+
+  //参保人数走势
+  function corpInsuredSum(xAxisYear,corpInsuredSumData,averageInsuredAmountData,averageInsuredAgeData,corpInsuredSumGrowPercent,averageInsuredGrowPercent){
+    var mycharts2 = echarts.init(document.getElementById('corpInsuredSumData'));
+    var option2 = {
+     // color:['#02CBD9','#037443'],
+      tooltip : {
+        trigger: 'axis',
+        formatter: function (params,ticket,callback) {
+          var res = params[0].name + '年';
+          for (var i = 0, l = params.length; i < l; i++) {
+            if(i==1){
+              res = determineImage(res,params[i].value);
+            }else if(i==3){
+              res = determineImage(res,params[i].value);
+            }
+            else{
+              res += '<br/>' + params[i].seriesName + ' : ' + params[i].value;
+            }
+          }
+          setTimeout(function (){
+            // 仅为了模拟异步回调
+            callback(ticket, res);
+          }, 100)
+        }
+      },
+      legend: {
+        data:['参保人数（万人）','平均参保金额（元）'],
+        textStyle: text_style
+      },
+
+      grid:{
+        borderWidth:0
+      },
+      calculable : false,
+      xAxis : [
+        {
+          type : 'category',
+          boundaryGap : false,
+          splitLine: {show: false},
+          axisLine: {show: true,lineStyle:{color:'#fff'}},
+          axisTick: {show: false},
+          axisLabel: {show: true, textStyle: text_style,formatter: '{value} 年'},
+          data : xAxisYear
+        }
+      ],
+      yAxis : [
+        {
+          name : '参保人数（万人)',
+          nameTextStyle:text_style,
+          type : 'value',
+          min:0,
+          splitLine: {show: false},
+          axisLine: {show: true,lineStyle:{color:'#fff'}},
+          axisTick: {show: false},
+          axisLabel: {show: true,
+            textStyle: text_style
+          }
+        },
+        {
+          name : '平均参保金额（元）',
+          nameTextStyle:text_style,
+          min:0,
+          splitLine: {show: false},
+          axisLine: {show: true,lineStyle:{color:'#fff'}},
+          axisTick: {show: false},
+          axisLabel: {show: true,
+            textStyle: text_style
+          },
+          type : 'value'
+
+        }
+      ],
+      series : [
+        {
+          name:'参保人数（万人）',
+          type:'line',
+          smooth:true,
+          itemStyle: {normal: {
+            areaStyle: {type: 'default'},
+            color:'#0084C7'
+          }},
+          symbol:'rectangle',
+          data:corpInsuredSumData
+        },
+        {
+          name:'参保人数同比增长率',
+          type:'scatter',
+          symbol:'none',
+          data:corpInsuredSumGrowPercent
+        },
+        {
+          name:'平均参保金额（元）',
+          type:'line',
+          symbol:'emptyCircle',
+          itemStyle: {
+            normal: {color:'#02CBD9'}
+          },
+          smooth:true,
+          yAxisIndex:1,
+          data:averageInsuredAmountData
+        },
+        {
+          name:'平均参保金额同比增长率',
+          type:'scatter',
+          symbol:'none',
+          data:averageInsuredGrowPercent
+        },
+        {
+          name:'参保人平均年龄（岁）',
+          type:'scatter',
+          yAxisIndex:1,
+          symbol:'none',
+          data:averageInsuredAgeData
+        }
+      ]
+    };
+
+    mycharts2.setOption(option2);
+  }
+  //查询社保服务网上办理情况近5年的数据
+  function cityPeopleCardAjax(regionCode,legalPersonType,businessType){
+    $.ajax({
+      type:"POST",
+      url:'../../jxSocialSecurity/getCorpStatisticsData.do?regionCode='+regionCode+'&legalPersonType='+legalPersonType+'&businessType='+businessType+'',
+      dataType:'json',
+      success:function(data){
+        var xAxisYear=data.xAxisYear;//最近五年的年份
+        var corpSum=data.corpSum;//最近一年的企业数量统计
+        var corpInsuredSumData=data.corpInsuredSumData;//最近五年的参保人数（万）
+        var averageInsuredAmountData=data.averageInsuredAmountData;//最近五年的平均参保金额
+        var averageInsuredAgeData=data.averageInsuredAgeData;//最近五年的参保人平均年龄
+        var insuredElementarySumData=data.insuredElementarySumData,//最近五年的小学参保人数
+                insuredJuniorSumData=data.insuredJuniorSumData,//最近五年的初中参保人数
+                insuredSeniorSumData=data.insuredSeniorSumData,//最近五年的高中参保人数
+                insuredTechnicalSumData=data.insuredTechnicalSumData,//最近五年的专科参保人数
+                insuredBachelorSumData=data.insuredBachelorSumData,//最近五年的本科参保人数
+                insuredMasterSumData=data.insuredMasterSumData,//最近五年的硕士研究生参保人数
+                insuredDoctorSumData=data.insuredDoctorSumData,//最近五年的博士研究生参保人数
+                insuredOtherSumData=data.insuredOtherSumData;//最近五年的其他学历参保人数
+        var corpInsuredSumGrowPercent=data.corpInsuredSumGrowPercent;//参保人数同比增长率
+        var averageInsuredGrowPercent=data.averageInsuredGrowPercent;//平均参保金额同比增长率
+        $("#corpSum").text(corpSum);
+        corpInsuredSum(xAxisYear,corpInsuredSumData,averageInsuredAmountData,averageInsuredAgeData,corpInsuredSumGrowPercent,averageInsuredGrowPercent);
+        corpEdu(xAxisYear,insuredElementarySumData,insuredJuniorSumData,insuredSeniorSumData,insuredTechnicalSumData,insuredBachelorSumData,insuredMasterSumData,insuredDoctorSumData,insuredOtherSumData);
+      }
+    });
+  }
+  cityPeopleCardAjax("003001001","企业法人","民营企业");
+  //监测年份发生改变后后立即发送ajax请求
+  $(".corpStatistics-select").on('change',function(){
+   map.clearMap();
+    var select_value = $(".corpStatistics-select").eq(0).children('option:selected').val(),//
+            select_value1 = $(".corpStatistics-select").eq(1).children('option:selected').val(),
+            select_value2 = $(".corpStatistics-select").eq(2).children('option:selected').val();
+    qycb.qycbAjax(select_value);
+    cityPeopleCardAjax(select_value,select_value1,select_value2);
+  });
+</script>
+
+<script>
+
+  var timer={
+    date:"",
+    timeAjax:function(){
+//			console.log($(".timer").height())
+      $(".timer").css("lineHeight",$(".timer").height()+"px")
+      var me=this;
+      $.ajax({
+        url:'../../jxsys/getCurrentTime.do',
+        type:'POST',
+        dataType:'json',
+        success:function(date) {
+          me.date=date;
+          me.showCurDate();
+        }
+      });
+      return this
+    },
+    showCurDate:function(){
+      var me=this;
+      function changeNumber(num){
+        if(num<10){
+          return '0'+num;
+        }else{
+          return ''+num;
+        }
+      }
+      setInterval(function(){
+        var T=new Date(me.date)
+        newDate = changeNumber(T.getFullYear())+"年"+
+                changeNumber((parseInt(T.getMonth())+1))+"月"+
+                changeNumber(T.getDate())+"日  "+
+                changeNumber(T.getHours())+":"+
+                changeNumber(T.getMinutes())+":"+
+                changeNumber(T.getSeconds())+""
+        me.date+=1000;
+        $(".timer").html(newDate)
+      },1000)
+      return this
+    }
+  }
+  timer.timeAjax();
+</script>
+</body>
+</html>

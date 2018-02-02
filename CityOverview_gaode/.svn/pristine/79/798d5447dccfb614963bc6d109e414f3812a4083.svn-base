@@ -1,0 +1,68 @@
+package com.cetc28.ConfigurationManagement.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所十三部
+ * 项目名称：CityOverview
+ * 设计人员：linyu
+ * 创建日期：2017/9/25 21:27
+ * 描述信息：
+ * ***************************************************************
+ */
+public interface IResManageService {
+    /**
+     *  获取资源目录树
+     * @return
+     */
+    public abstract List listResourceTable();
+
+    /**
+     * 查询表的数据(字段信息，时间范围，区划范围)
+     * @param tableName
+     * @return
+     */
+    public Map queryFieldData(String tableName);
+
+
+    /**
+     * 查询数据
+     * @param tableName
+     * @param fieldNames
+     * @param timeValue
+     * @param bhValue
+     * @return
+     */
+    public List queryData(String tableName,String fieldNames,String timeValue,String bhValue);
+
+    /**
+     * 更新数据
+     * @param tableName
+     * @param fieldNames
+     * @param fieldValues
+     * @param timeValue
+     * @param bhValue
+     * @return
+     */
+    String updateData(String tableName, String fieldNames, String fieldValues, String timeValue, String bhValue);
+
+    /**
+     * 根据区划值获得时间范围
+     * @param bhValue
+     * @return
+     */
+    List queryTimeRangeBybhValue(String bhValue,String tableName);
+
+    /**
+     * 根据区划值获得时间范围和最新数据
+     * @param bhValue
+     * @param tableName
+     * @param fieldNames
+     * @return
+     */
+    Map getTimeRangeAndData(String bhValue,String tableName,String fieldNames);
+
+}

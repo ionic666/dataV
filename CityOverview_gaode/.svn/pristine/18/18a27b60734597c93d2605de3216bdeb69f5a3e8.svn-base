@@ -1,0 +1,200 @@
+var administration = {
+    admiTime:null,
+    adminAjax: function () {
+        var posiData = [];
+
+        $.ajax({
+            type: 'post',
+            url: "jxaddmin/queryPictureData.do",
+            dataType: 'JSON',
+            success: function (data) {
+                posiData = data
+            }
+        })
+
+        map.panTo([120.851, 30.722]);//默认第一个参数的坐标点居中
+
+        //just some colors
+        var colors = [
+            "#412929", "#402B41", "#414129", "#2B3941", "#413729", "#2A3E2F", "#2B2C41", "#66aa00",
+            "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#000000", "#000000", "#000000",
+            "#000000", "#000000", "#000000", "#000000"
+        ];
+
+        var point = [
+            {name: '平湖市', po: '121.114666, 30.698921'},
+            {name: '海盐县', po: '120.942017, 30.522223'},
+            {name: '南湖区', po: '120.829953, 30.734652'},
+            {name: '嘉善县', po: '120.921871, 30.891352'},
+            {name: '秀洲区', po: '120.680431, 30.763323'},
+            {name: '海宁市', po: '120.688821, 30.475544'},
+            {name: '桐乡市', po: '120.521085, 30.629065'}
+        ];
+        var markers = [];
+        var features = [];
+        var adcodes = [330400];
+        for (var i = 0; i < point.length; i++) {
+            markers[i] = new AMap.Marker({ //添加自定义点标记
+                map: map,
+                position: point[i].po.split(','), //基点位置
+                offset: new AMap.Pixel(-36, -15), //相对于基点的偏移位置
+                draggable: false,  //是否可拖动
+                content: '<div class="marker-xxqy-name"><span>' + point[i].name + '</span></div>'   //自定义点标记覆盖物内容
+            });
+        }
+
+
+        AMapUI.loadUI(['geo/DistrictExplorer'], function (DistrictExplorer) {
+
+            //创建一个实例
+            var districtExplorer = new DistrictExplorer({
+                eventSupport: true, //打开事件支持
+                map: map
+            });
+
+            function renderAreaNode(areaNode) {
+                features = [];
+                //绘制子区域
+                districtExplorer.renderSubFeatures(areaNode, function (feature, i) {
+                    var fillColor = colors[i % colors.length];
+                    var strokeColor = colors[colors.length - 1 - i % colors.length];
+                    features.push(feature);
+                    return {
+                        cursor: 'default',
+                        bubble: true,
+                        strokeColor: strokeColor, //线颜色
+                        strokeOpacity: 1, //线透明度
+                        strokeWeight: 1, //线宽
+                        fillColor: fillColor, //填充色
+                        fillOpacity: 1 //填充透明度
+                    };
+                });
+
+                //绘制父区域
+                districtExplorer.renderParentFeature(areaNode, {
+                    cursor: 'default',
+                    bubble: true,
+                    strokeColor: 'black', //线颜色
+                    strokeOpacity: 1, //线透明度
+                    strokeWeight: 1, //线宽
+                    fillColor: null, //填充色
+                    fillOpacity: 1//填充透明度
+                });
+            }
+
+            function renderClickFeatures(feature) {
+                //绘制点击区域
+                districtExplorer.renderFeature(feature, {
+                    cursor: 'default',
+                    bubble: true,
+                    strokeColor: '#000', //线颜色
+                    strokeOpacity: 1, //线透明度
+                    strokeWeight: 1, //线宽
+                    fillColor: '#16a1bb', //填充色
+                    fillOpacity: 1 //填充透明度
+                });
+
+            }
+
+
+            function loadMap(adcodes, clickFeature) {
+                districtExplorer.loadMultiAreaNodes(adcodes, function (error, areaNodes) {
+                    //清除已有的绘制内容
+                    districtExplorer.clearFeaturePolygons();
+                    for (var i = 0, len = areaNodes.length; i < len; i++) {
+                        renderAreaNode(areaNodes[i]);
+                    }
+                    //更新地图视野
+                    //map.setFitView(districtExplorer.getAllFeaturePolygons());
+                    if (clickFeature) {
+                        renderClickFeatures(clickFeature)
+                    }
+                });
+            }
+            loadMap(adcodes);
+            //feature被点击
+            districtExplorer.on('featureClick', function (e, feature) {
+                clearInterval(administration.admiTime);
+                loadMap(adcodes, feature);
+                var arr=searchData(feature.properties.name);
+                $("#regionLayer2Box p.details span.finishnum").html(arr[0]+"件");//完成
+                $("#regionLayer2Box p.details span.applynum").html(arr[1]+"件");//申请
+                $("#regionLayer2Box p.details span.bjl").html(arr[2]+"%");//办结率
+                $(".regionLayer2BoxText").html(feature.properties.name);
+                showModal();
+                administration.admiTime = setInterval(function () {
+                    if (step >= 6) {
+                        step = 0;
+                    }
+                    loadMap(adcodes, features[step]);
+                    var arr=searchData(features[step].properties.name);
+                    $("#regionLayer2Box p.details span.finishnum").html(arr[0]+"件");//完成
+                    $("#regionLayer2Box p.details span.applynum").html(arr[1]+"件");//申请
+                    $("#regionLayer2Box p.details span.bjl").html(arr[2]+"%");//办结率
+                    $(".regionLayer2BoxText").html(features[step].properties.name);
+                    showModal();
+                    step++;
+                }, 8000)
+            });
+            var step = 0;
+            administration.admiTime = setInterval(function () {
+                if (step >= 6) {
+                    step = 0;
+                }
+                loadMap(adcodes, features[step]);
+                var arr=searchData(features[step].properties.name);
+                $("#regionLayer2Box p.details span.finishnum").html(arr[0]+"件");//完成
+                $("#regionLayer2Box p.details span.applynum").html(arr[1]+"件");//申请
+                $("#regionLayer2Box p.details span.bjl").html(arr[2]+"%");//办结率
+                $(".regionLayer2BoxText").html(features[step].properties.name);
+                showModal();
+                step++;
+            }, 8000)
+
+        });
+        function showModal() {
+            $("#regionLayer2Box").css("display", "block");
+            var n = 100;
+            var op = 0.1;
+            var top = 150;
+            /*这边的150需要和样式表里面的对应*/
+            var fontSize = 14;//设置字体大小
+            var regionLayer2BoxTimer = setInterval(function () {
+                top += 5;
+                n += 15;
+                op += 0.05;
+                if (fontSize < 28) {
+                    fontSize += 0.5;
+                    $(".regionLayer2BoxText").css("font-size", fontSize + "px")
+                }
+                if (n <= 400) {
+                    $("#regionLayer2Box").css("width", n + "px");
+                    if (n <= 250) {
+                        $("#regionLayer2Box").css("height", n + "px");
+                    }
+                    $("#regionLayer2Box").css("opacity", op);
+                    $("#regionLayer2Box").css("left", -n / 2 + "px");
+                    $("#regionLayer2Box").css("top", top + "px");
+                    $(".regionLayer2BoxText").css("line-height", $(".regionLayer2BoxText").height() + "px");
+                    $("#regionLayer2Box p.details").css("line-height", $("#regionLayer2Box p.details").height() + "px")
+                } else {
+                    clearInterval(regionLayer2BoxTimer);
+                }
+            }, 50)
+        }
+        $("#regionLayer2BoxX").click(function () {
+            $("#regionLayer2Box").css("display", "none");
+        })
+        function searchData(name){
+            var result=[];
+            $.each(posiData,function(i,v){
+                if(v.mc==name){
+                    result.push(v.finishnum);
+                    result.push(v.applynum);
+                    result.push(parseFloat((v.finishnum/v.applynum*100).toFixed(2)));
+                }
+            })
+            return result;
+        }
+    }
+}

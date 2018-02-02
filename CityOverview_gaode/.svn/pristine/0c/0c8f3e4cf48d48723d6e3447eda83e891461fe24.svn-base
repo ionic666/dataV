@@ -1,0 +1,55 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface IJxEcoIndexDao {
+
+    /**
+     * 获取一级指标信息
+     * @return
+     */
+    public List queryIndication();
+
+    /**
+     * 查询最近几年的信息经济主要指标值
+     * @param length 年份数
+     * @param bh 一级指标编号
+     * @return
+     */
+    public List queryEcoIndex(int length, String bh);
+
+    /**
+     *  输入年份查询该年嘉兴的信息经济主要指标的二级指标的单位及值
+     * @param year 年份
+     * @param bh 一级指标编号
+     * @return
+     */
+    public List queryEcoSubIndex(@Param("year")String year,@Param("bh")String bh);
+
+    /**
+     * 查询最近一年的信息化指数 一级指标值
+     * @return
+     */
+    public List queryInternetIndication();
+
+    /**
+     * 查询最近一年的信息化指数 二级指标信息
+     * * @param year 年份
+     * @param bh 一级指标编号
+     * @return
+     */
+    public List queryEcoSubInternetIndex(@Param("bh")String bh);
+
+    /**
+     * 查询最近一年的信息化指数 三级指标信息
+     * * @param year 年份
+     * @param bh 二级指标编号
+     * @return
+     */
+    public List queryEcoThirdInternetIndex(@Param("year")String year,@Param("bh")String bh);
+
+
+
+}

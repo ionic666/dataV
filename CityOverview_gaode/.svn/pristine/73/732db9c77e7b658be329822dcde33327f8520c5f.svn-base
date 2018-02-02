@@ -1,0 +1,123 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/22
+  Time: 9:01
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title>"河长制"治水</title>
+  <link rel="stylesheet" href="../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    div.river{
+      width: 100%;
+      height: 100%;
+    }
+    p.headerTitle{
+      width: 230px;
+    }
+    div#river{
+      height: 80%;
+      width: 95%;
+      padding: 5% 0 0 1%;
+    }
+    div#river ul{
+      width: 100%;
+      height: 100%;
+      padding-left: 5%;
+    }
+    #river h2 .counter{
+      color:#0CDAF5;
+    }
+    div#river ul li{
+      width: 50%;
+      height: 50%;
+      float: left;
+    }
+    div#river ul li img{
+      width: 50px;
+      float: left;
+    }
+    div#river ul li div{
+      float: left;
+      text-align: center;
+      width: 60%;
+      height: 100%;
+    }
+    div#river ul li div p{
+      font-size: 14px;
+    }
+    span.dw{
+      font-size: 16px;
+      color:#F2F2F2;
+    }
+  </style>
+</head>
+<body>
+<div class="river">
+  <p class="headerTitle">
+    "河长制"治水
+    <%--<img src="../../images/environment/river.png" alt=""/>--%>
+  </p>
+  <div id="river">
+    <ul>
+      <li>
+        <img src="../../images/environment/hc.png" alt=""/>
+        <div>
+          <h2><span id="hc" class="counter"></span><span class="dw">&nbsp;人</span></h2>
+          <p>河长总数</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/environment/hd.png" alt=""/>
+        <div class="double">
+          <h2><span id="hd" class="counter"></span><span class="dw">&nbsp;米</span></h2>
+          <p>河道总数</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/environment/hdwry.png" alt=""/>
+        <div>
+          <h2><span id="hdwry" class="counter"></span><span class="dw">&nbsp;个</span></h2>
+          <p>河道污染源</p>
+        </div>
+      </li>
+      <li>
+        <img src="../../images/environment/hdpwk.png" alt=""/>
+        <div class="double">
+          <h2><span id="hdpwk" class="counter"></span><span class="dw">&nbsp;个</span></h2>
+          <p>河道排污口</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script>
+
+  $.ajax({
+    type:"POST",
+    url:'../../jxenvir/WaterManage.do',
+    dataType:'json',
+    success:function(data){
+      $('#hc').html(data.totalhz);
+      $('#hd').html(data.totalhd);
+      $('#hdwry').html(data.totalhdpollute);
+      $('#hdpwk').html(data.totalhdpwk);
+      $('.counter').countUp({
+        delay: 2,
+        time: 200
+      });
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LinYu
+  Comments:学校无线网络覆盖率
+  Date: 2017/9/15
+  Time: 10:29
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>网络学习空间覆盖率</title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.internetLearning{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 240px;
+        }
+        div#internetLearning{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="internetLearning">
+    <p class="headerTitle">
+        网络学习空间覆盖率
+    </p>
+    <%--网络学习空间覆盖率--%>
+    <div id="internetLearning">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function echartDataSet(xAxis,legend,series) {
+        var mycharts = echarts.init(document.getElementById('internetLearning'));
+        option = {
+            color: ['#559BDB', '#F67B28', '#9F9F9F','#FFC600'],
+            tooltip : {
+                trigger: 'axis',
+                /*采用回调函数*/
+                formatter: function (params) {
+                    if(params.length == 0){
+                        return null;
+                    }
+                    else{
+                        var str=params[0].name+"<br />";
+                        for(var i = 0; i< params.length; i++){
+                            str+=params[i].seriesName+"："+params[i].value+"%<br/>";
+                        }
+                    }
+                    return str;
+                }
+            },
+            grid: {
+                x: '5%',
+                y: '15%',
+                x2: '5%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                y:20,
+                data:legend/*['小学','中学','职业院校','高等院校']*/,
+                textStyle: text_style
+            },
+            calculable : false,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap: ['20%', '20%'],
+                    axisLine: {show: false},
+                    splitLine: {show: false},
+                    axisLabel: {show: true, textStyle: text_style},
+                    axisTick: {show: false},
+                    data : xAxis/*['2012年','2013年','2014年','2015年','2016年','2017年']*/
+                }
+            ],
+            yAxis : [
+                {
+                    axisLine: {show: false},
+                    axisLabel: {show: false},
+                    axisTick: {show: false},
+                    splitLine: {
+                        show: false
+                    }
+                }
+            ],
+            series : series
+            /*[
+                {
+                    name:'小学',
+                    type:'line',
+                    data:[50, 60, 63, 74, 76, 82],
+                    itemStyle:{
+                        normal:{
+                            lineStyle:{
+                                color:'#5B9BD5',
+                                shadowColor:'#5B9BD5',
+                                shadowBlur:40
+
+                            }
+                        }
+                    }
+                },
+                {
+                    name:'中学',
+                    type:'line',
+                    data:[52, 59, 64, 72, 75, 80],
+                    itemStyle:{
+                        normal:{
+                            lineStyle:{
+                                color:'#ED7D31',
+                                shadowColor:'#ED7D31',
+                                shadowBlur:40
+
+                            }
+                        }
+                    }
+                },
+                {
+                    name:'职业院校',
+                    type:'line',
+                    data:[40, 55, 60, 65, 72, 74],
+                    itemStyle:{
+                        normal:{
+                            lineStyle:{
+                                color:'#A5A5A5',
+                                shadowColor:'#A5A5A5',
+                                shadowBlur:40
+
+                            }
+                        }
+                    }
+                },
+                {
+                    name:'高等院校',
+                    type:'line',
+                    data:[50, 62, 70, 75, 81, 86],
+                    itemStyle:{
+                        normal:{
+                            lineStyle:{
+                                color:'#FFC000',
+                                shadowColor:'#FFC000',
+                                shadowBlur:40
+
+                            }
+                        }
+                    }
+                }
+            ]*/
+        };
+        mycharts.setOption(option);
+    }
+
+    $.ajax({
+        type:"POST",
+        url:'../../jxedu/listSchoolStatisticInfo.do',
+        data:{"count":6},
+        dataType:'json',
+        success:function(data){
+            var schoolType = [];
+            var series = [];
+            var xAxis = [];
+            $.each(data, function (i) {
+                schoolType.push(data[i].mc);
+                var value = [];
+                $.each(data[i].info, function (j) {
+                    if(i==0){
+                        xAxis.push(data[i].info[j].year+'年');
+                    }
+                    value.push(data[i].info[j].networklearn);
+                })
+                series.push({
+                    name:data[i].mc,
+                    type:'line',
+                    data:value,
+                    itemStyle:{
+                    normal:{
+                        lineStyle:{
+                                shadowColor:'#FFC000',
+                                shadowBlur:40
+
+                        }
+                    }
+                }
+            });
+            });
+            echartDataSet(xAxis,schoolType, series);
+        }
+    });
+
+</script>
+</body>
+</html>

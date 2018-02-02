@@ -1,0 +1,278 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #safetyWindow .modal-dialog{
+      margin-right: 10px;
+      width:460px;
+    }
+    #safetyWindow .modal-content{
+      /*background: url("map/images/economicModel/bgw(1).png") no-repeat;
+      background-position: -7px 0;
+      background-size: 102% 101%;*/
+    }
+    #safetyWindow .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #safetyWindow .modal-title{
+      margin-top: -5px;
+    }
+    #safetyWindow .modal-body{
+      padding: 0;
+    }
+    #safetyWindow .nav li{
+      width: 117px;
+      height: 32px;
+      line-height: 32px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+    }
+
+    #safetyWindow div .nav{
+      height:32px;
+      margin-top: -5px;
+    }
+    #safetyWindow .nav li a:hover{
+      color: #000;
+      text-decoration: none;
+    }
+    #safetyWindow{
+      color: #000000;
+      background-color:white ;
+    }
+    #comState table tr td{
+      height: 33px;
+      line-height: 33px;
+      margin-left: 20px;
+    }
+    #comState table tr td span{
+      margin-left: 20px;
+    }
+    #safetyWindowdata1 td{
+      height: 10px;line-height: 10px;
+    }
+
+    .lisf3{
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      background-image: url("map/images/economicModel/bgwsf(5).png");
+    }
+    .actsf3{
+      background-image: url("map/images/economicModel/bgwsf(6).png");
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+  </style>
+</head>
+<body>
+<div class="modal fade" style="overflow: hidden;width: 460px;height: 400px;top: 10px;left: 70px;background-color: transparent" id="safetyWindow" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog" style="width: 460px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+          <img src="map/images/economicModel/close.png">
+        </button>
+        <div class="nav" style="margin-top: -11px;">
+          <ul class="list-group">
+            <li onclick="toUrl(this,'#safety1')" id="lisafty1" class="list-unstyled act_3" value="3"><div class="stext">数据</div></li>
+            <li onclick="toUrl(this,'#safety2')" id="lisafty2" class="list-unstyled li_3" value="3"><div class="stext">统计图</div></li>
+            <li onclick="toUrl(this,'#safety3')" id="lisafty3" class="list-unstyled li_4" value="4"><div class="stext">区域统计</div></li>
+          </ul>
+        </div>
+        <%--<h4 class="modal-title ecoWindowTitle" id="infoModalLabel">社会经济</h4>--%>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content" style="border: none;padding: 0">
+          <div id="safety1" class="tab-pane active"><!--第一页产品规模这个图表-->
+            <div style="height:250px;width:450px;overflow-y: auto;padding:10px 0 0 10px">
+                <table id="safetyWindowdata1" class="table table-striped table-bordered table-hover">
+                  <%--<thead>--%>
+                  <%--<tr>--%>
+                        <%--<td>区域名称</td>--%>
+                        <%--<td>时间</td>--%>
+                        <%--<td>数量</td>--%>
+                  <%--</tr>--%>
+                  <%--</thead>--%>
+                </table>
+            </div>
+          </div>
+          <div id="safety2" class="tab-pane " ><!--z这是第二页的饼图-->
+            <div style="height:250px;width:460px;" id="saftypie">
+
+            </div>
+          </div>
+          <div id="safety3" class="tab-pane"><!--第一页产品规模这个图表-->
+            <div style="height:250px;width:450px;overflow-y: auto;padding:10px 0 0 10px">
+              <table id="safetyWindowdata3" class="table table-striped table-bordered table-hover">
+                <%--<thead>--%>
+                <%--<tr>--%>
+                <%--<td>区域名称</td>--%>
+                <%--<td>时间</td>--%>
+                <%--<td>数量</td>--%>
+                <%--</tr>--%>
+                <%--</thead>--%>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  <%--弹出页面数据初始化--%>
+
+  function toUrlsafety(evt,index){
+      if(1==index) {
+        if ($(evt).hasClass("act1")) {
+          $("#lisafty1").addClass("li1").removeClass("act1");
+        } else {
+          $("#lisafty1").addClass("act1").removeClass("li1");
+          $("#lisafty2").addClass("li2").removeClass("act2");
+          $("#lisafty3").addClass("lisf3").removeClass("actsf3");
+          $("#safety1").addClass("active").siblings().removeClass("active");
+        }
+      }
+      if(2==index){
+        if($(evt).hasClass("act2")){
+          $("#lisafty2").addClass("li2").removeClass("act2");
+        }else{
+          $("#lisafty2").addClass("act2").removeClass("li2");
+          $("#lisafty1").addClass("li1").removeClass("act1");
+          $("#lisafty3").addClass("lisf3").removeClass("actsf3");
+          $("#safety2").addClass("active").siblings().removeClass("active");
+        }
+      }
+    if(3==index){
+      if($(evt).hasClass("actsf3")){
+        $("#lisafty3").addClass("lisf3").removeClass("actsf3");
+      }else{
+        $("#lisafty3").addClass("actsf3").removeClass("lisf3");
+        $("#lisafty1").addClass("li1").removeClass("act1");
+        $("#lisafty2").addClass("li2").removeClass("act2");
+        $("#safety3").addClass("active").siblings().removeClass("active");
+      }
+    }
+  }
+
+  var saftyText,saftylayer,saftyImg;
+function initSaftyWindow(url,layers,imgSource,text){
+  saftyText=text
+  saftylayer=layers;
+  saftyImg=imgSource;
+  $.ajax({
+    type:'post',
+    url:url,
+    dataType:'JSON',
+    success:function(data){
+      if(data){
+//        console.log(data);
+        $("#safetyWindowdata3").html("");
+        var str1="  <thead> <tr> <td>区域</td> <td>数量</td> </tr> </thead><tbody>";
+        for(var i=0;i<data[0].list.length;i++){
+          str1+='<tr><td>'+data[0].list[i].QY+'</td><td>'+data[0].list[i].NUM+'</td></tr>';
+        }
+        str1+="</tbody>";
+        $("#safetyWindowdata3").append(str1);
+        layers.clear();
+        showLayers(data,layers,imgSource);
+      }
+    }
+  })
+  initSaftyChart("icom/Ggaq_listGgaqCountByType.action?type="+text);
+}
+  function initSaftyChart(url){
+    $.ajax({
+      type:'post',
+      url:url,
+      dataType:'JSON',
+      success:function(data){
+        if(data){
+//          console.log(data);
+          var Xdata=new Array();
+          var Ydata=new Array();
+          $("#safetyWindowdata1").html("");
+          var str="  <thead> <tr> <td>时间</td> <td>数量</td> </tr> </thead><tbody>";
+          for(var i=0;i<data.length;i++){
+            Xdata.push(data[i].sj);
+            Ydata.push(data[i].value);
+            str+='<tr><td>'+data[i].sj+'</td><td>'+data[i].value+'</td></tr>';
+          }
+          str+="</tbody>";
+          Xdata.reverse();
+          Ydata.reverse();
+          $("#safetyWindowdata1").append(str);
+          var myechart = echarts.init(document.getElementById('saftypie'));
+          var option = {
+            calculable: true,
+            grid: {
+              borderWidth: 0,
+              x: 50,
+              y: 20,
+              x2: 30,
+              y2: 30
+            },
+            xAxis: [{
+              type: 'category',
+              show: true,
+              axisLine: {show: false},
+              splitLine: {show: false},
+              axisLabel: {show: true, textStyle: {color: 'black', fontSize: '14'}},
+              data: Xdata
+            }],
+            yAxis: [{
+              axisLine: {show: true, lineStyle: {color: 'gray', width: 2}},
+              type: 'value',
+              splitLine: {show: true, lineStyle: {color: 'gray', width: 2}},
+              axisLabel: {
+                show: true, textStyle: {color: 'black', fontSize: '14'}, formatter: function (value) {
+                  // Function formatter
+                  return value
+                }
+              },
+              show: true
+            }],
+            series: [
+              {
+                name: '',
+                type: 'bar',
+                barWidth: '20',
+                itemStyle: {
+                  normal: {
+                    color: '#0095B4',
+                    label: {
+                      show: true,
+                      position: 'top',
+                      textStyle: {color: '#7ADBFF', fontSize: '14', fontWeight: 'bold'},
+                      formatter: '{c}'
+                    }
+                  }
+                },
+                data: Ydata
+              }
+            ]
+          };
+          myechart.setOption(option);
+        }
+      }
+    })
+  }
+</script>
+</body>
+</html>

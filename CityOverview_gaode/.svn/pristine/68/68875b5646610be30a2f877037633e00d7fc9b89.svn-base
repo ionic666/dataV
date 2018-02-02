@@ -1,0 +1,482 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/19
+  Time: 15:21
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<%--<link rel="stylesheet" type="text/css" href="map/css/bootstrap.css"/>--%>
+	<%--<link rel="stylesheet" href="myCss/entironment.css"/>--%>
+	<style>
+		*{
+			font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+			font-size: 16px;
+		}
+		.modal-dialog,.modal-content{
+			width:100%;
+		}
+		#pollute .modal-dialog{
+			margin: 0;
+			height: 97%;
+			width: 100%;
+		}
+		#pollute .modal-content{
+			padding: 4% 2%;
+			border-top: 2px #0cdaf5 solid;
+			border-radius: 0;
+			width: 100%;
+			height: 100%;
+		}
+		#pollute .modal-body{
+			padding: 0;
+			width: 100%;
+			height: 96%;
+		}
+		#polluteTitle{
+			font-size: 1.5em;
+			width: 100%;
+			height: 4%;
+			line-height: 30px;
+			color: #fff;
+			padding-left: 5%;
+		}
+		.polluteBox{
+			height: 52%;
+			padding: 0 5%;
+		}
+		.polluteBox li{
+			font-size: 1.2em;
+			cursor: pointer;
+			color: #fff;
+			height: 8%;
+			padding: 2% 10%;
+			margin-top: 7%;
+			position: relative;
+
+		}
+		.polluteBox li.clickactive{
+			background-color: rgba(37,172,222,0.4);
+			color: #0cdaf5;
+			font-weight: bold;
+		}
+		.polluteBox li span{
+			position: absolute;
+			right: 6%;
+		}
+		#polluteTest{
+			width: 380px;
+			height: 300px;
+			margin-left: -8%;
+		}
+		#polluteText{
+			color: #fff;
+			width: 100%;
+			font-size: 22px;
+			padding: 5%;
+			border-top: 2px solid #049CD4;
+		}
+		/*.amap-toolbar{*/
+			/*display:none;*/
+		/*}*/
+		/*.info {*/
+			/*border: solid 1px #7A9095 !important;*/
+			/*border-radius: 5px;*/
+		/*}*/
+		/*div.info-top {*/
+			/*position: relative;*/
+			/*background-color:rgba(0,29,36,0.8);*/
+			/*border-bottom: 1px solid #7A9095;*/
+			/*border-radius: 5px 5px 0 0;*/
+		/*}*/
+		/*div.info-top div {*/
+			/*display: inline-block;*/
+			/*color: #333333;*/
+			/*font-size: 14px;*/
+			/*font-weight: bold;*/
+			/*line-height: 31px;*/
+			/*padding: 0 10px;*/
+		/*}*/
+		/*div.info-top img {*/
+			/*position: absolute;*/
+			/*top: 10px;*/
+			/*right: 10px;*/
+			/*transition-duration: 0.25s;*/
+		/*}*/
+		/*div.info-top img:hover {*/
+			/*box-shadow: 0px 0px 5px #000;*/
+		/*}*/
+		/*div.info-middle {*/
+			/*font-size: 14px;*/
+			/*padding: 6px;*/
+			/*line-height: 20px;*/
+			/*background-color:rgba(0,29,36,0.8) !important;*/
+		/*}*/
+		div.info-middle p span{
+            color: #0CDAF5;
+		}
+		/*div.info-bottom {*/
+			/*height: 0px;*/
+			/*width: 100%;*/
+			/*clear: both;*/
+			/*text-align: center;*/
+		/*}*/
+		/*div.info-bottom img {*/
+			/*position: relative;*/
+			/*z-index: 104;*/
+		/*}*/
+		/*.info-middle img {*/
+			/*float: left;*/
+			/*margin-right: 6px;*/
+		/*}*/
+		/*.amap-icon img{*/
+			/*width:100%;*/
+			/*height:100%;*/
+		/*}*/
+	</style>
+</head>
+<body>
+<div class="modal fade"
+     style="height:89%;width: 21%;top:10%;left: 10px;display:none;position: absolute"
+     id="pollute" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<p id="polluteTitle">重点污染源监测</p>
+			<div class="modal-body">
+				<ul class="polluteBox"></ul>
+				<p id="polluteText">重点污染监测企业合格率</p>
+				<div id="polluteTest"></div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<%--<script src="myjs/echarts3.4.0.min.js"></script>--%>
+<%--<script type="text/javascript" src="map/js/jquery-1.11.3.js"></script>--%>
+<%--<script type="text/javascript" src="map/js/bootstrap.js"></script>--%>
+<%--<script type="text/javascript" src="myjs/myEcharts.js"></script>--%>
+<script>
+	//初始化页面调用左侧污染源监测
+	function polluteAjax(){
+//
+//			//加载地图的方法
+//			map = new AMap.Map('map', {
+//				mapStyle: 'amap://styles/dark',//样式URL
+//				center: [120.76, 30.77]
+//			});
+
+		$.ajax({
+			type: 'post',
+			url: "jxenvir/Pollution.do",
+			success: function (data) {
+				console.log(data);
+				var len=data.length;
+				var str="";
+				for(var i=0;i<len;i++){
+					str+='<li type='+data[i].type+'>'+data[i].zypfwrw+'<span>'+data[i].counttype+'</span>'+'</li>';
+				}
+				$(".polluteBox").html(str);
+				//默认第一个为选中状态
+				$(".polluteBox li:eq(0)").addClass('clickactive');
+				$(".polluteBox li:eq(0)").click();
+			}
+		});
+		setTimeout(function(){
+			$("#pollute #polluteTest").width('110%');
+			$("#pollute #polluteTest").height('40%');
+			$.ajax({
+				type: 'post',
+					url: "jxenvir/PollutionHG.do",
+					dataType: 'JSON',
+					success: function (data) {
+					var len=data.length;
+					var serData=[];
+					for(var i=0;i<len;i++){
+						serData.push(parseFloat(data[i].hglv));
+					}
+					satisfaction(serData);
+				}
+			});
+		},500)
+	}
+
+
+	//每个li绑定点击事件，在地图上显示点
+	$(".polluteBox").delegate('li','click',function(){
+		$(this).siblings().removeClass('clickactive');
+		$(this).addClass('clickactive');
+		//关闭信息提示框
+//		map.infoWindow.hide();
+		var type=$(this).attr('type');
+		$.ajax({
+			type: 'post',
+			url: "jxenvir/PollutionJcd.do?type="+type,
+			dataType: 'JSON',
+			success: function (data) {
+				//根据type类型，画出不同的点
+				drawMapPointPollute(data,type);
+			}
+		})
+	});
+	//根据初始化数据，绘制地图上的点（重点污染源）
+	function drawMapPointPollute(data,type){
+		//map.removeLayer(polluteLayer);
+		//清空图层
+//		polluteLayer.clear();
+		map.clearMap();
+		var img="";
+		var len=data.length;
+		var pointArr=[];
+		for(var i=0;i<len;i++){
+			//经纬度纠偏方法
+			var XY=wgs84togcj02(parseFloat(data[i].jd),parseFloat(data[i].wd))
+			var jd=XY[0];
+			var wd=XY[1];
+			pointArr.push({jd:jd,wd:wd,details:data[i]});
+		}
+		polluteshowLayers(pointArr,type);
+	}
+	//数据 图层 图片
+	function polluteshowLayers(data,type) {
+			for (var i = 0; i < data.length; i++) {
+				var prr = [];
+				prr.push(parseFloat(data[i].jd));
+				prr.push(parseFloat(data[i].wd));
+//				var img = manufacture.pointImg[data[i].details['indus_key']];
+				//console.log(dd[j].value)
+				//根据不同类型设置不同图片
+				switch(type){
+					//废水
+					case '1':img="images/pollute/wasteWater.png";
+						break;
+					//废气
+					case '2':img="images/pollute/wasteGas.png";
+						break;
+					//重金属
+					case '3':img="images/pollute/heavyMetal.png";
+						break;
+					//污水
+					case '4':img="images/pollute/sewage.png";
+						break;
+					//养殖场
+					case '5':img="images/pollute/breedPlace.png";
+						break;
+					//废物生产
+					case '6':img="images/pollute/wasteProduce.png";
+						break;
+					//废物经营
+					case '7':	img="images/pollute/wasteRun.png";
+						break;
+				}
+				//上点
+				aPoint(prr, 30, 30, img,data[i].details,type);
+			}
+	}
+	function aPoint(arr,h,w,img,details,type){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+		var _marker = new AMap.Marker({
+			map: map,
+			position: arr,        //经纬度
+			icon: new AMap.Icon({
+				size: new AMap.Size(h, w),  //图标大小
+				image: img       //自定义图片
+			})
+		});
+		//设置当前点为中心
+		map.setCenter(arr);
+		//点击坐标点弹出信息窗口
+		AMap.event.addListener(_marker, 'click', function (e) {
+			showPolluteInfoWindow(details,type);
+		});
+	}
+	////关闭信息窗体
+	function closeInfoWindow() {
+		map.clearInfoWindow();
+	}
+	//实例化信息窗体
+	//构建自定义信息窗体
+	function createInfoWindow(title, content) {
+		var info = document.createElement("div");
+		info.className = "info";
+
+		//可以通过下面的方式修改自定义窗体的宽高
+		info.style.width = "220px";
+		// 定义顶部标题
+		var top = document.createElement("div");
+		var titleD = document.createElement("div");
+		var closeX = document.createElement("img");
+		top.className = "info-top";
+		titleD.innerHTML = title;
+		closeX.src = "images/gaode-close.png";
+		closeX.onclick = closeInfoWindow;
+
+		top.appendChild(titleD);
+		top.appendChild(closeX);
+		info.appendChild(top);
+
+		// 定义中部内容
+		var middle = document.createElement("div");
+		middle.className = "info-middle";
+		middle.style.backgroundColor = 'white';
+		middle.innerHTML = content;
+		info.appendChild(middle);
+
+		// 定义底部内容   //下方的小箭头
+		var bottom = document.createElement("div");
+		bottom.className = "info-bottom";
+		bottom.style.position = 'relative';
+		bottom.style.top = '0px';
+		bottom.style.margin = '0 auto';
+		var sharp = document.createElement("img");
+		sharp.src = "images/gaode-sharp.png";
+		bottom.appendChild(sharp);
+		info.appendChild(bottom);
+		return info;
+	}
+	function showPolluteInfoWindow(details,type) {
+         //不同类型对应的信息框内容不同
+		switch (type) {
+			case '1':
+			//数据类型为001时加载info窗口样式
+			    var title = '<span style="font-size:11px;color:#0CDAF5;">' + details.mc + '</span>';
+				content = [];
+				content.push("<p>地址：" +'<span>'+ details.dz + "</span></p>");
+				content.push("<p>组织机构代码："+'<span>'+ details.orgnum + "</span></p>");
+				content.push("<p>PH：" + '<span>'+details.ph + "</p></span>");
+				content.push("<p>悬浮物：" + '<span>'+details.xfw + "mg/m³</span></p>");
+				content.push("<p>总磷：" + '<span>'+details.zl + "mg/m³<span></p>");
+				content.push("<p>氨氮：" + '<span>'+details.ad + "mg/m³</span></p>");
+				content.push("<p>生化需氧：" + '<span>'+details.biooag + "mg/m³</span></p>");
+                break;
+			case '2':
+			//数据类型为002时加载info窗口样式
+			    var title = '<span style="font-size:11px;color:#0CDAF5;">' + details.mc + '</span>';
+			    content = [];
+			    content.push("<p>地址：" + '<span>'+details.dz + "</span></p>");
+			    content.push("<p>组织机构代码：" + '<span>'+details.orgnum + "</span></p>");
+			    content.push("<p>氨氮化物：" + '<span>'+details.adhw + "</span></p>");
+			    content.push("<p>汞：" + '<span>'+details.gong + "mg/L</span></p>");
+			    content.push("<p>so2：" + '<span>'+details.so2 + "mg/L</span></p>");
+			    content.push("<p>颗粒物：" + '<span>'+details.klw + "mg/L</span></p>");
+		    break;
+			case '4':
+				var title = '<span style="font-size:11px;color:#0CDAF5;">' + details.mc + '</span>';
+				content = [];
+				content.push("<p>地址：'<span>'+" + details.dz + "</span></p>");
+				content.push("<p>组织机构代码：" + '<span>'+details.orgnum + "</span></p>");
+				content.push("<p>生化需氧：" + '<span>'+details.biooag1 + "mg/m³</span></p>");
+				content.push("<p>化学需氧：" + '<span>'+details.chsoag + "mg/m³</span></p>");
+				content.push("<p>磷酸盐：" + '<span>'+details.lsy + "mg/m³</span></p>");
+				content.push("<p>PH：" + '<span>'+details.ph1 + "</span></p>");
+				content.push("<p>色度：" + '<span>'+details.sd + "</span></p>");
+				content.push("<p>悬浮物：" + '<span>'+details.xfw1 + "mg/m³</span></p>");
+				content.push("<p>阴离子表：" + '<span>'+details.ylzb + "mg/m³</span></p>")
+				break;
+			case '5':
+				var title = '<span style="font-size:11px;color:#0CDAF5;">' + details.mc + '</span>';
+				content = [];
+				content.push("<p>地址：" +'<span>'+ details.dz + "</span></p>");
+				content.push("<p>组织机构代码：" +'<span>'+ details.orgnum + "</span></p>");
+				content.push("<p>氨氮：" + '<span>'+details.ad1 + "mg/m³</sapn></p>");
+				content.push("<p>化学需氧：" + '<span>'+details.chsoag1 + "mg/m³</span></p>");
+				content.push("<p>生化需氧：" + '<span>'+details.biooag2 + "mg/m³</span></p>");
+				content.push("<p>粪大肠菌：" + '<span>'+details.fdcj + "mg/m³</span></p>")
+				content.push("<p>磷酸盐：" + '<span>'+details.lsy1 + "mg/m³</span></p>");
+				content.push("<p>悬浮物：" + '<span>'+details.xfw2 + "mg/m³</span></p>");
+				break;
+			default :
+				var title = '<span style="font-size:11px;color:#0CDAF5;">' + details.mc + '</span>';
+				content = [];
+				content.push("<p>地址：" + '<span>'+details.dz + "</span></p>");
+				content.push("<p>组织机构代码：" + '<span>'+details.orgnum + "</span></p>");
+				break;
+	}
+		var infoWindow = new AMap.InfoWindow({
+			isCustom: true,  //使用自定义窗体
+			content: createInfoWindow(title, content.join("")),
+			offset: new AMap.Pixel(18,-35)
+		});
+		var jw =wgs84togcj02(parseFloat(details.jd),parseFloat(details.wd));
+		infoWindow.open(map, jw);
+		setTimeout(function(){
+			map.setCenter(jw);
+		},500)
+	}
+//	雷达图
+	function satisfaction(serData){
+		console.log(serData)
+		var myChart = echarts.init(document.getElementById("polluteTest"));
+		var option = {
+			color: ['#5B9BD5'],
+			tooltip : {
+				trigger: 'axis',
+				formatter: " {d}<br> {a}:{c}%<br>"
+			},
+//			legend: {
+//				data:['重点污染源'],
+//				x: 'right',
+//				y: 'top',
+//				textStyle: text_style,
+//				show: false
+//			},
+			calculable : false,
+//			grid: {
+//				x: '12%',
+//				y: '5%',
+//				x2: '12%',
+//				y2: '5%',
+//				containLabel: true,
+//				borderWidth: 0
+//			},
+			polar : [
+				{
+					indicator : [
+						{text : '废水监控企业', max  : 100},
+						{text : '废气监控企业', max  : 100},
+						{text : '重金属监控企业', max  : 100},
+						{text : '监控污水处理厂', max  : 100},
+						{text : '规模化畜禽养殖场', max  : 100},
+						{text : '危险废物产生单位', max  : 100},
+						{text : '危险废物经营单位', max  : 100}
+					],
+					radius : 80,
+					name : {
+						textStyle:{
+                            color:font_color,
+                            fontSize:15,
+                            fontFamily:font_family
+                        }
+					}
+				}
+			],
+			series : [
+				{
+					name: '监测合格率',
+					type: 'radar',
+					itemStyle: {
+						normal: {
+							areaStyle: {
+								type: 'default'
+							}
+						}
+					},
+					data : [
+						{
+							value : serData,
+						}
+					]
+				}
+			]
+		};
+		myChart.setOption(option);
+	}
+
+
+</script>
+</body>
+</html>

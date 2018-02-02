@@ -1,0 +1,27 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxEcoKeycomsj;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/18.
+ */
+public interface JxServiceRateCaseDao {
+
+    List<String> queryQuanshiRate();
+    List<String> queryQuanshiTongbiRate();
+
+    String queryMcByBh(String bhValue);
+
+    List<String> queryBhRange();
+
+    List<HashMap<String,String>> querySuggestandPercentbyBh(Map map);
+    List<HashMap<String,String>> queryRateCaseBh(Map map);
+    List<HashMap<String,String>> queryRateCaseItem(Map map);
+
+
+
+}

@@ -1,0 +1,957 @@
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>阳光医保</title>
+    <link rel="stylesheet" href="../../myCss/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../myCss/titleImg.css">
+    <%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/tundra/tundra.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/esri/css/esri.css" />--%>
+    <%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dojox/layout/resources/ExpandoPane.css" />--%>
+    <%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/soria/soria.css" />--%>
+
+    <style>
+        html {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            color: #fff;
+            font-family: "Microsoft YaHei";
+            font-size: 18px;
+            background-image: url('../../images/socialSecurity/sbbg.png');
+            background-size: 100% 100%;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        div, h2, h1, p {
+            margin: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .floatLeft {
+            /*display: inline-block;*/
+            float: left;
+        }
+
+        p.headerTitle {
+            padding-left: 20px;
+            font-size: 24px;
+            /*font-weight: bold;*/
+            color: #fff;
+            height: 26px;
+            width: 100%;
+            line-height: 30px;
+            margin: 10px 4px;
+            text-align: center;
+        }
+
+        /*.header {*/
+        /*width: 100%;*/
+        /*height: 9%;*/
+        /*position: relative;*/
+        /*!*border: 1px solid red;*!*/
+        /*}*/
+
+        .main {
+            width: 100%;
+            height: 100%;
+            /*margin-top: 1%;*/
+            padding: 5% 1% 1%;
+            /*z-index: 300;*/
+            /*border: 1px solid blue;*/
+        }
+
+        div#right {
+            float: left;
+            /*width: 250px;*/
+            width: 100%;
+            height: 100%;
+            padding-top: 10px;
+            padding-left: 10px;
+        }
+
+        /*.title {*/
+        /*width: 20%;*/
+        /*height: 100%;*/
+        /*line-height: 100px;*/
+        /*color: #0CDAF5;*/
+        /*padding: 0.2em 1em;*/
+        /*font-size: 42px;*/
+        /*font-weight: bold;*/
+        /*!*position: absolute;*!*/
+        /*text-align: center;*/
+        /*margin: 0 auto;*/
+        /*!*left: 40%;*!*/
+        /*!*top: 37%;*!*/
+        /*z-index: 200;*/
+        /*!*background-image: url(../../images/publicServe/zdpyc.png);background-size: 100%,100%;background-repeat: no-repeat;*!*/
+        /*}*/
+
+        /*主体内容*/
+        .main > .mainLeft {
+            width: 28%;
+            height: 100%;
+            margin-right: 0.6%;
+            /*margin-top: 5%;*/
+        }
+
+        .main > .mainLeft > div {
+            width: 96%;
+            /*margin-top: 2%;*/
+            margin-left: 2%;
+            margin-right: 2%;
+            background-color: rgba(23, 33, 34, 0.8);
+            border-top: 2px #0CDAF5 solid;
+            border-bottom: 1px #12363A solid;
+        }
+
+        .main #introduce {
+            height: 65%;
+        }
+
+        div.introduceDetails, div#rulesDetails {
+            height: 81%;
+            width: 99%;
+            color: #fff;
+            font-size: 18px;
+
+        }
+
+        div.introduceDetails p {
+            text-indent: 2em;
+            font-size: 23px;
+        }
+
+        .main #rules {
+            height: 32%;
+            margin-top: 3%;
+            position: relative;
+        }
+
+        .main > .mainMiddle {
+            width: 70%;
+            height: 100%;
+            position: relative;
+            /*margin-top: 5%;*/
+        }
+
+        .main #search {
+            position: absolute;
+            top: 2%;
+            left:0;
+            width: 30%;
+            height: 9%;
+            margin-left: 1%;
+            padding: 1.7% 2%;
+            background-color: transparent;
+            z-index: 1000;
+        }
+
+        #searchText {
+            font-size: 16px;
+            height: 35px;
+            width: 20%;
+            margin-left: 2%;
+            padding-left: 1%;
+            border: 1px solid #414142;
+            outline: 0;
+            background-color: #17191B;
+        }
+
+        #searchBtn {
+            margin-left: 2%;
+            padding: 5px 20px;
+            border-radius: 3px;
+            background-color: #CC7A29;
+            outline: 0;
+            border: 0;
+        }
+
+        .main > .mainMiddle > .mainMiddle-top {
+            width: 98%;
+            height: 64.5%;
+            margin: 0 0 0 1%;
+            position: relative;
+            border: 2px solid #0FC9E2;
+        }
+
+        .main > .mainMiddle > .mainMiddle-bottom {
+            width: 98%;
+            height: 32%;
+            margin: 1.5% 0 0 1%;
+            background-color: rgba(23, 33, 34, 0.8);
+            border-top: 2px #0CDAF5 solid;
+            border-bottom: 1px #12363A solid;
+        }
+
+        #time {
+            width: 90%;
+            height: 20%;
+            padding-left: 10%;
+        }
+
+        #steps {
+            width: 80%;
+            height: 57%;
+            /* margin: 0 auto; */
+            margin-left: 15.7%;
+        }
+
+        .step {
+            width: 20%;
+            height: 100%;
+            float: left;
+            background: url('../../images/biananbeij.png') no-repeat;
+            background-size: 75% 100%;
+            padding: 2% 6% 0 1%;
+            font-size: 21px;
+        }
+
+        .info {
+            border: solid 1px #889DA2;
+            border-radius: 2px;
+            box-shadow: 0px 0px 8px #60d8ef;
+            z-index: 5;
+        }
+
+        div.info-top {
+            position: relative;
+            background-color: rgba(0, 29, 36, 0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+
+        div.info-middle {
+            /*padding: 6px;*/
+            line-height: 20px;
+            background-color: rgba(0, 29, 36, 0.8) !important;
+        }
+
+        div.info-middle p {
+            font-size: 18px;
+            display: inline-block;
+            width: 320px;
+        }
+
+        .info-middle .infoName {
+            display: inline-block;
+            width: 220px;
+            color: #32DDE7;
+            vertical-align: top;
+            font-size: 23px;
+            padding: 9px 0;
+        }
+
+        .info-middle .infoName-before {
+            display: inline-block;
+            color: #2cbdff;
+            vertical-align: top;
+            font-size: 23px;
+            padding: 9px 0;
+        }
+
+        .wzs{
+            font-size: 20px;
+            line-height: 20px;
+        }
+
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+
+        .info span {
+            margin-left: 5px;
+        }
+
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+
+        .amap-icon img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .infoContentDiv {
+            padding: 8px 50px;
+        }
+
+        ._header h1 {
+            font-weight: bold;
+            font-size: 42px;
+            color: #0cdaf1;
+            font-family: 微软雅黑;
+            -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(255, 255, 255, 0.2)));
+            display: inline-block;
+            padding: 0;
+            margin: 0px 20px 0px 20px;
+        }
+
+        ._header span {
+            font-size: 30px;
+            color: #b8d1d1;
+            font-family: 微软雅黑;
+            background-color: #166D76;
+            margin: 0px 20px;
+            padding: 0px 10px;
+        }
+
+        ._header img {
+            position: relative;
+            top: -10%;
+        }
+
+        ._header {
+            /*position: absolute;*/
+            height: 9%;
+            z-index: 7777;
+            padding-top: 0.5%;
+            text-align: center;
+            top: 0;
+        }
+
+
+        /*页面导航*/
+        #pageNav{
+            color: #fff;
+            font-size: 18px;
+            position: absolute;
+            top:3%;
+            right: 2%;
+            z-index: 1000;
+        }
+        #pageNav #chooseNav{
+            font-size: 18px;
+            margin-left: 10px;
+            background: #01050B;
+            outline: 0;
+            color: #d5d5d5;
+            padding: 3px 0 3px 5px;
+
+        }
+
+
+        /*流程图*/
+        #rules>.title-yb{
+            /*position: absolute;
+            top:5px;
+            left:5px;*/
+            text-align: center;
+            font-size: 24px;
+        }
+
+
+        #ybContainer{
+            padding:20px 30px 10px;
+            width:100%;
+            height:95%;
+        }
+
+        #ybContainer .left {
+            width: 25%;
+            height: 42px;
+            float: left;
+            position: relative;
+        }
+
+        #ybContainer .middle {
+            width: 50%;
+            height: 42px;
+            float: left;
+            position: relative;
+        }
+
+        #ybContainer .right {
+            width: 25%;
+            height: 42px;
+            float: left;
+            position: relative;
+        }
+
+        #ybContainer .left > div {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            margin: auto;
+            background: #0F3C42;
+            color: #03C3DC;
+            border-radius: 6px;
+            line-height: 42px;
+            transition: all 0.5s;
+        }
+
+        #ybContainer .right > div {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            margin: auto;
+            background: #0F3C42;
+            color: #03C3DC;
+            border-radius: 6px;
+            line-height: 42px;
+            transition: all 0.5s;
+        }
+
+        /*线*/
+        #ybContainer .right > p {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        /*线*/
+        #ybContainer .left > p {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        /*线*/
+        #ybContainer .middle > div {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*光点*/
+        #ybContainer .middle > div > img {
+            position: absolute;
+            top: 35%;
+            left: 0;
+            display: none;
+            /*-webkit-filter: blur(2px);*/
+        }
+        /*光点*/
+        #ybContainer .left > p > img {
+            position: absolute;
+            top: -20px;
+            left: 44%;
+            display: none;
+            /*-webkit-filter: blur(2px);*/
+        }
+        /*光点*/
+        #ybContainer .right > p > img {
+            position: absolute;
+            top: -20px;
+            left: 44%;
+            display: none;
+            /*-webkit-filter: blur(2px);*/
+        }
+
+        #ybContainer .active {
+            background: #005C69 !important;
+            color:#fff !important;
+            box-shadow: 0 0 10px #008ca0;
+        }
+
+        /*线背景*/
+        #ybContainer .bg-1{
+            background: url(../../images/arrow1.png) no-repeat center;
+            background-size: contain;
+        }
+        /*线背景*/
+        #ybContainer .bg-2{
+            background: url(../../images/arrow2.png) no-repeat center;
+            background-size: contain;
+        }
+        /*线背景*/
+        #ybContainer .bg-3{
+            background: url(../../images/arrow3.png) no-repeat center;
+            background-size: contain;
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="pageNav">
+    <span>当前页面</span>
+    <select id="chooseNav">
+        <option value="001">首页</option>
+        <option value="002">企业参保</option>
+        <option value="003">五险覆盖</option>
+        <option value="004">异地结算</option>
+        <option value="005" selected="selected">阳光医保</option>
+    </select>
+</div>
+<%--返回上一页--%>
+<a href="javascript:void(0);" onclick="returnMainPage()"
+   style="max-width:3%;position: fixed;left:97%;top: 2%;z-index: 1000; display: none;"><img src="../../images/returnUp.png" alt=""></a>
+<%--<div class="_header">--%>
+    <%--<img src="../../images/btz.png" alt="" class="outerWidth"/>--%>
+    <%--<h1 class="outerWidth">智慧社保</h1>--%>
+    <%--<span class="outerWidth">阳光医保</span>--%>
+    <%--<img src="../../images/bty.png" alt="" class="outerWidth"/>--%>
+<%--</div>--%>
+<div class="_headerImg">
+    <img src="../../images/title/shbz-ygyb.png" alt=""/>
+</div>
+<!-- 页面主体部分 -->
+<div class="main">
+    <!-- 左侧两个模块 -->
+    <div class="mainLeft floatLeft">
+        <!-- 简介 -->
+        <div class="mainLeft-top" id="introduce">
+            <p class="headerTitle" style="font-size:30px;">阳光医保简介</p>
+            <div class="introduceDetails" style="margin-top:10%;">
+                <p style="line-height:47px">为了防止各种违规行为的发生，节约医保基金，规范医疗行为，节省各县(市)人力、物力、财力，嘉兴市医保监管部门根据嘉兴医保监管的特色，打造建设了<span style="color:yellow;">嘉兴市阳光医保监管平台</span>。主要通过建立全市统一的基础信息库和规则知识库，实现参保人在医院端就医过程当中给予医生各种违规项事前提醒、以及参保人档案调阅，完善事中控制的支付结算系统，实现事后智能审核监督系统，从而达到<span style="color:yellow;">事前、事中、事后全程监管</span>的效果。
+                </p>
+            </div>
+        </div>
+
+        <!-- 医保审核规则 -->
+        <div class="mainLeft-bottom" id="rules">
+            <p class="title-yb">阳光医保事后系统处理流程</p>
+            <div id="ybContainer">
+                <!--1-->
+                <div class="left">
+                    <div id="di-1">系统预审</div>
+                </div>
+                <div class="middle">
+                    <div class="bg-1">
+                        <img id="img-1" src="../../images/ydd.png" alt="">
+                    </div>
+                </div>
+                <div class="right">
+                    <div id="di-2">数据质量管理</div>
+                </div>
+
+                <!--2-->
+                <div class="left"></div>
+                <div class="middle"></div>
+                <div class="right" style="overflow: hidden;">
+                    <p class="bg-2">
+                        <img id="img-2" src="../../images/ydd1.png" alt="">
+                    </p>
+                </div>
+
+                <!--3-->
+                <div class="left">
+                    <div id="di-4">申诉管理</div>
+                </div>
+                <div class="middle">
+                    <div class="bg-3">
+                        <img id="img-3" src="../../images/ydd2.png" alt="">
+                    </div>
+                </div>
+                <div class="right">
+                    <div id="di-3">审核管理</div>
+                </div>
+
+                <!--4-->
+                <div class="left" style="overflow: hidden;">
+                    <p class="bg-2">
+                        <img id="img-4" src="../../images/ydd1.png" alt="">
+                    </p>
+                </div>
+                <div class="middle"></div>
+                <div class="right"></div>
+
+                <!--5-->
+                <div class="left">
+                    <div id="di-5">稽核管理</div>
+                </div>
+                <div class="middle">
+                    <div class="bg-1">
+                        <img id="img-5" src="../../images/ydd.png" alt="">
+                    </div>
+                </div>
+                <div class="right">
+                    <div id="di-6">进销存管理</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 中间三个模块 -->
+    <div class="mainMiddle floatLeft">
+        <%--医院检索--%>
+        <div id="search">
+            <span style="margin:0 10px;">医院选择：</span>
+            <select id="yyselect" style="background: black;">
+                <option value="">嘉兴市第一医院</option>
+                <option value="">嘉兴市第二医院</option>
+                <option value="">武警浙江总队嘉兴医院</option>
+                <option value="">浙江省荣军医院</option>
+                <option value="">浙江新安国际医院</option>
+                <option value="">嘉兴市中医院</option>
+                <option value="">嘉兴市妇幼保健院</option>
+            </select>
+            <%--医院检索--%>
+            <%--搜索框--%>
+            <%--<input type="text" placeholder="输入医院名称" id="searchText" onkeydown="searchEnter()"/>--%>
+            <%--<button id="searchBtn" onclick="search()">搜 索</button>--%>
+        </div>
+        <%--地图  --%>
+        <div class="mainMiddle-top" id="mapBG">
+            <%--<img src="../../images/onlineDetails-map.png" alt="" id="map"/>--%>
+        </div>
+        <div class="mainMiddle-bottom">
+            <p class="headerTitle">阳光医保建设历程</p>
+            <img src="../../images/sjz-1.png" alt="" id="time">
+            <div id="steps">
+                <div class="step">完成“阳光医保”立项申报。</div>
+                <div class="step">开展市妇保、市新安医院，以及海宁、海盐试点建设。</div>
+                <div class="step">完成市本级全覆盖运行，开通事前、事中全面监管。</div>
+                <div class="step">推动市级社保集中业务系统立项。</div>
+                <div class="step">建成并完成大市集中系统与阳关医保对接。</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<script type="text/javascript" src="../../myjs/index.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script src="../../myjs/vTicker.js"></script>
+<script>
+//    var sumWidth=0;//计算头部div中所有元素的宽度
+//    $('.outerWidth').each(function(){
+//        var myWidth=$(this).outerWidth(true);//计算头部div中每个元素的宽度
+//        sumWidth+=myWidth;
+//    })
+//    $("._header").css("left",-sumWidth/2+"px");//让头部标题居中
+    //    导航切换
+    $('#chooseNav').change(function(){
+        var navText=$('#chooseNav').val();
+        console.log(navText)
+        switch(navText){
+            case '001':shouye();break;
+            case '002':qycb();break;
+            case '003':wxfg();break;
+            case '004':ydcb();break;
+            case '005':ygyb();break;
+
+        }
+    });
+    function shouye(){
+        location.href="../../shbz1.html";
+    }
+    function qycb(){
+        location.href="qycb.jsp";
+    }
+    function wxfg(){
+        location.href="wxfgqk.jsp";
+    }
+    function ydcb(){
+        location.href="ywbl.jsp";
+    }
+    function ygyb(){
+        location.href="sunPublicServe.jsp";
+    }
+    <%--头部阳光医保--%>
+    var headerWidth = $("._header").width();	//获取头部标题的宽度
+    console.log(headerWidth)
+    $("._header").css("left", -headerWidth / 2 + "px");//让头部标题居中
+    function returnMainPage() {
+        location.href = "../../shbz1.html";
+    }
+
+
+    var img = "../../images/socialSecurity/hospital.png";
+    $('#yyselect').change(function(){
+        map.clearMap();
+        var text=$("#yyselect").find("option:selected").text();
+        $.ajax({
+            url:'yb.json',
+            type:'get',
+            dataType:'json',
+            success:function(data){
+                $.each(data,function(i,v){
+                    if(v.NAME==text){
+                        var jwd = [v.JD, v.WD];//经纬度纠偏
+                        showPoint(jwd, 30, 24, img, v);
+                        showInfoWindow(v)
+                    }
+                })
+            }
+        })
+    })
+
+    //两种方式搜索医院
+//    //搜索框回车事件
+//    function searchEnter() {
+//        //回车的key为13,如果是回车就调用搜索方法
+//        if (event.keyCode == 13)
+//            search();
+//    }
+//    //搜索框
+//    function search() {
+//        var searchValue = $("#searchText").val();
+//        map.clearMap();
+//
+//        $.ajax({
+//            type: "POST",
+//            url: "../../jxSocialSecurity/getHostpitalInfo.do",
+//            dataType: 'JSON',
+//            data: {hostpitalName: searchValue},
+//            success: function (data) {
+//                console.log(data)
+//                //添加地图信息---开始
+//                for (var i = 0; i < data.length; i++) {
+//                    var jwd = [data[i].JD, data[i].WD];//经纬度纠偏
+//                    showPoint(jwd, 30, 24, img, data[i]);
+//                }
+////            默认展开第一个搜索结果的信息框
+//                showInfoWindow(data[0]);
+//            }
+//        })
+//    }
+
+
+    function showPoint(arr, h, w, img, details) {//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+        var _marker = new AMap.Marker({
+            map: map,
+            position: arr,        //经纬度
+            icon: new AMap.Icon({
+                size: new AMap.Size(h, w),  //图标大小
+                image: img       //自定义图片
+            })
+
+        })
+        //设置当前点为中心
+        arr[1]=parseFloat(arr[1])+0.0076
+        map.setCenter(arr);
+        AMap.event.addListener(_marker, 'click', function (e) {
+            showInfoWindow(details)
+        })
+
+    }
+    ////关闭信息窗体
+    function closeInfoWindow() {
+        map.clearInfoWindow();
+    }
+    //实例化信息窗体
+    //构建自定义信息窗体
+    function createInfoWindow(title, content) {
+        var info = document.createElement("div");
+        info.className = "info";
+
+        //可以通过下面的方式修改自定义窗体的宽高
+        info.style.width = "460px";
+        // 定义顶部标题
+        var top = document.createElement("div");
+        var titleD = document.createElement("div");
+        var closeX = document.createElement("img");
+        top.className = "info-top";
+        titleD.innerHTML = title;
+        closeX.src = "../../images/gaode-close.png";
+        closeX.onclick = closeInfoWindow;
+
+        top.appendChild(titleD);
+        top.appendChild(closeX);
+        info.appendChild(top);
+
+        // 定义中部内容
+        var middle = document.createElement("div");
+        middle.className = "info-middle";
+        middle.style.backgroundColor = 'white';
+        middle.innerHTML = content;
+        info.appendChild(middle);
+
+        // 定义底部内容   //下方的小箭头
+        var bottom = document.createElement("div");
+        bottom.className = "info-bottom";
+        bottom.style.position = 'relative';
+        bottom.style.top = '0px';
+        bottom.style.margin = '0 auto';
+        var sharp = document.createElement("img");
+        sharp.src = "../../images/hlw-sj.png";
+        bottom.appendChild(sharp);
+        info.appendChild(bottom);
+        return info;
+    }
+    function showInfoWindow(details) {
+
+        var title = '<span style="font-size:24px;color:#0CDAF5;">' + details.NAME + '</span>';
+        content = [];
+        content.push("<div class=infoContentDiv>" +
+                "<span class='infoName-before'>系统初审：</span>" +
+                "<br>" +
+                "<p style='margin-bottom: 9px;'>" +
+                "<span class='wzs'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;待初审单据数：" + details.dayEx  +
+                "<p style='margin-bottom: 9px;'>" +
+                "<span class='wzs'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;待初审明细数：" + details.monthEx+
+                "</p>" +
+                "</div>");
+        content.push("<div class=infoContentDiv>" +
+                "<span class='infoName-before'>审核管理：</span>" +
+                "<br>" +
+                "<p style='margin-bottom: 9px;'>" +
+                "<span class='wzs'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会审单据数：" + details.dayMWG  +
+                "</p>" +
+                "<p style='margin-bottom: 9px;'>" +
+                "<span class='wzs'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会审明细数：" + details.monthMWG +
+                "</p>" +
+                "</div>");
+        content.push("<div class=infoContentDiv>" +
+                "<span class='infoName-before'>申诉管理：</span>" +
+                "<br>" +
+                "<p style='margin-bottom: 9px;'>" +
+                "<span class='wzs'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;待申诉单据数：" + details.dayQWG  +
+                "</p>" +
+                "<p style='margin-bottom: 9px;'>" +
+                "<span class='wzs'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;待申诉明细数：" + details.monthQWG  +
+                "</p>" +
+                "</div>");
+        var infoWindow = new AMap.InfoWindow({
+            isCustom: true,  //使用自定义窗体
+            content: createInfoWindow(title, content.join("")),
+            offset: new AMap.Pixel(10, -35)
+        });
+        var jw = [parseFloat(details.JD), parseFloat(details.WD)];
+        infoWindow.open(map, jw);
+//        setTimeout(function () {
+            //map.setCenter(jw);
+//        }, 500)
+    }
+    //上点方法
+    window.onload = function () {
+        //加载地图的方法
+        map = new AMap.Map('mapBG', {
+            mapStyle: 'amap://styles/16e4e3ccd1f66f229a6276fe149db8df',//样式URL,
+            zoom: 15
+
+        });
+//        $.ajax({
+//            type: 'post',
+//            url: "../../jxSocialSecurity/getHostpitalInfo.do",
+//            dataType: 'JSON',
+//            data: {hostpitalName: ''},
+//            success: function (data) {
+//                console.log(data)
+////            医院图片
+//                var img = "../../images/socialSecurity/hospital.png";
+//                for (var i = 0; i < data.length; i++) {
+//                    var X = data[i].JD, Y = data[i].WD;
+//                    var prr = [X, Y];
+//                    //地图上点
+//                    showPoint(prr, 30, 24, img, data[i]);
+//                }
+//
+//            }
+//        })
+
+        $('#yyselect').trigger('change');
+    }
+
+    var arrs=[
+            '../../images/sjz-1.png',
+            '../../images/sjz-2.png',
+            '../../images/sjz-3.png',
+            '../../images/sjz-4.png',
+            '../../images/sjz-5.png'
+    ];
+    var i=0;
+    setInterval(function(){
+        $('#steps div.step').css('backgroundImage','url(../../images/biananbeij.png)');
+        if(i>=5){
+            i=0;
+        }
+        $('#steps div.step').eq(i).css('backgroundImage','url(../../images/socialSecurity/step.png)');
+        $('.mainMiddle-bottom>img').attr('src',arrs[i]);
+        i++;
+    },2000)
+
+
+//    流程图js
+    var time = 2000;
+
+    function step() {
+        $('#img-1').css('display', 'block');
+        removeActive();
+        $('#di-1').addClass('active');
+        $('#img-1').animate({left: "92%"}, time, 'linear', function () {
+            $('#img-1').css('display', 'none');
+            $('#img-2').css('display', 'block');
+            removeActive();
+            $('#di-2').addClass('active');
+            $('#img-2').animate({top: "35%"}, time / 2, 'linear', function () {
+                $('#img-2').css('display', 'none');
+                $('#img-3').css('display', 'block');
+                removeActive();
+                $('#di-3').addClass('active');
+                $('#img-3').animate({left: "4px"}, time, 'linear', function () {
+                    $('#img-3').css('display', 'none');
+                    $('#img-4').css('display', 'block');
+                    removeActive();
+                    $('#di-4').addClass('active');
+                    $('#img-4').animate({top: "35%"}, time / 2, 'linear', function () {
+                        $('#img-4').css('display', 'none');
+                        $('#img-5').css('display', 'block');
+                        removeActive();
+                        $('#di-5').addClass('active');
+                        $('#img-5').animate({left: "92%"}, time, 'linear', function () {
+                            $('#img-5').css('display', 'none');
+                            removeActive();
+                            $('#di-6').addClass('active');
+                        })
+                    })
+                })
+            })
+        });
+    }
+
+
+    step();
+    setInterval(step, time * 5)
+
+    function removeActive() {
+        $('#di-1').removeClass('active');
+        $('#di-2').removeClass('active');
+        $('#di-3').removeClass('active');
+        $('#di-4').removeClass('active');
+        $('#di-5').removeClass('active');
+        $('#di-6').removeClass('active');
+        $('#img-1').css({'top': '35%', 'left': '0'});
+        $('#img-2').css({'top': '-20px', 'left': '44%'});
+        $('#img-3').css({'top': '35%', 'left': '96%'});
+        $('#img-4').css({'top': '-20px', 'left': '44%'});
+        $('#img-5').css({'top': '35%', 'left': '0'});
+    }
+</script>
+</body>
+</html>

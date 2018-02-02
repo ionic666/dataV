@@ -1,0 +1,24 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+import com.cetc28.PeopleBenefitService.dto.MiHospitalVolumeStatisticsDto;
+import com.cetc28.PeopleBenefitService.model.JxSsMiHospitalVolume;
+
+import java.util.List;
+
+public interface JxSsMiHospitalVolumeMapper {
+    int deleteByPrimaryKey(Short id);
+
+    int insert(JxSsMiHospitalVolume record);
+
+    int insertSelective(JxSsMiHospitalVolume record);
+
+    JxSsMiHospitalVolume selectByPrimaryKey(Short id);
+
+    int updateByPrimaryKeySelective(JxSsMiHospitalVolume record);
+
+    int updateByPrimaryKey(JxSsMiHospitalVolume record);
+
+    List<JxSsMiHospitalVolume> selectSsMiHospitalVolumeRank5();
+
+    List<MiHospitalVolumeStatisticsDto> selectHospitalStatisticsTooltipData(String regionCode);
+}

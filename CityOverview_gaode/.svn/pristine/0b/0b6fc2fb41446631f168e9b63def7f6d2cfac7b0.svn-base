@@ -1,0 +1,169 @@
+<%--
+Created by IntelliJ IDEA.
+User: linyu
+Date: 2017/9/16
+Time: 9:33
+To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<html>
+<head>
+    <title>教育信息化</title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+
+        /*添加动画效果*/
+        .school{
+            width: 64%;
+            height: 18px;
+            margin-top: 1%;
+            background-color: #D7D7D7;
+            text-align: center;
+            /* border: 1px solid #41719C; */
+            margin-left: 30%;
+        }
+        .bar_pro{
+            width: 0;
+            height: 100%;
+            background-color: #53A6E2;
+            /*box-shadow: -2px 0 6px 9px #204079;*/
+        }
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.multiMediaRoom{
+            width: 100%;
+            height: 100%;
+        }
+        div#multiMediaRoom{
+            height: 84%;
+            width: 100%;
+            padding-left: 3%;
+        }
+        div#multiMediaRoom p{
+            font-size: 1em;
+            width: 30%;
+            float: left;
+        }
+        ul#informCount{
+            width: 100%;
+            height: 75%;
+            padding-top: 2%;
+        }
+        ul#informCount li{
+            float: left;
+            height: 50%;
+            width: 50%;
+        }
+        ul#informCount div{
+            padding: 2% 5%;
+        }
+        ul#informCount img{
+            width: 40px;
+            height: 40px;
+            float: left;
+            vertical-align: middle;
+        }
+        ul#informCount span{
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            color: #0CDAF5;
+            margin-left: 10%;
+            font-size: 20px;
+        }
+        h5{
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+<div class="multiMediaRoom">
+    <p class="headerTitle">
+        教育信息化
+    </p>
+    <div id="multiMediaRoom">
+       <div style="margin:10px 0px">
+           <p>校园网建设比例</p>
+           <div class="school">
+               <div class="bar_pro" id="internetNum"><span id="internet"></span></div>
+           </div>
+       </div>
+        <div style="margin:10px 0px">
+            <p>网络课程比例</p>
+            <div class="school">
+                <div class="bar_pro" id="classNum"><span id="interClass"></span></div>
+            </div>
+        </div>
+        <ul id="informCount">
+            <li>
+                <h5>百名学生拥有终端台数</h5>
+                <div>
+                    <img src="../../images/education/computer.png" alt=""/>
+                    <span id="computerNum" class="counter"></span>台
+                </div>
+            </li>
+            <li>
+                <h5>百名学生拥有多媒体教室座位数</h5>
+                <div>
+                    <img src="../../images/education/seat.png" alt=""/>
+                    <span id="multimediaNum" class="counter"></span>个
+                </div>
+            </li>
+            <li>
+                <h5>百名学生拥有数字资源量</h5>
+                <div>
+                    <img src="../../images/education/digital.png" alt=""/>
+                    <span id="digitalResource" class="counter"></span>G
+                </div>
+            </li>
+            <li>
+                <h5>教师教育信息化应用水平</h5>
+                <div>
+                    <img src="../../images/education/level.png" alt=""/>
+                    <span id="teacherLevel"></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+</script>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script>
+    $.ajax({
+        type:"POST",
+        url:'../../jxedu/queryInformazationInfo.do',
+        dataType:'json',
+        data:{qhbh:qhbh},
+        success:function(data){
+           // $('#cardHolderSum').html(cardHolderSum);
+            var internetNum=data.internetNum+'%';
+            var classNum=data.classNum+'%';
+            $("#internet").html(internetNum);
+            $("#interClass").html(classNum);
+           // $('#insuredPercent').html(insuredPercent.toFixed(2));
+            $("#internetNum").animate({
+                width: internetNum
+            },2000);
+            $("#classNum").animate({
+                width: classNum
+            },2000);
+            $('#computerNum').html(data.compuiterNum);
+            $('#multimediaNum').html(data.multimediaNum);
+            $('#digitalResource').html(data.digitalResource);
+            $('#teacherLevel').html(data.teacherLevel);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+        }
+    });
+</script>
+</body>
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IJxAddminServDao" >
+  <select id="selectOnestopAndOnline" resultType="com.cetc28.idata.model.JxAddminServ">
+    SELECT  t.onestoprate,t.onlinerate,x.mc FROM  JX_ADDMINSERV_STAT t LEFT JOIN xxzygl.XZQH x ON t.bh=x.bh
+  </select>
+  <select id="selectCertFrequency" resultType="com.cetc28.idata.model.JxAddminCert">
+    SELECT c.usedate,c.frequency from JX_ADDMINSERV_CERT c where substr(c.usedate,0,4)=2017 order by TO_DATE(c.usedate,'YYYY-MM')
+  </select>
+  <select id="selectItems" resultType="com.cetc28.idata.model.JxAddminItems">
+     SELECT c.icode,c.iname,c.starttime,c.depart from JX_ADDMINSERV_ITEMS c order by c.starttime
+</select>
+  <select id="selectAllItems" resultType="com.cetc28.idata.model.JxAddminItems">
+    SELECT c.* from JX_ADDMINSERV_ITEMS c order by c.starttime DESC
+  </select>
+  <select id="selectPictureData" resultType="com.cetc28.idata.model.JxAddminPicture">
+    /*林宇修改20171006*/
+    /* SELECT t.mc,a.month,a.applynum,a.finishnum,t.jd,t.wd from JX_ADDMINSERV_PICTURE a left join xxzygl.XZQH t on a.bh=t.bh where to_char(TO_DATE(a.month,'YYYY-MM'),'mm')=to_char(sysdate,'mm')*/
+    SELECT t.mc,a.month,a.applynum,a.finishnum,t.jd,t.wd from JX_ADDMINSERV_PICTURE a left join xxzygl.XZQH t on a.bh=t.bh where a.month = (SELECT MAX(month) from JX_ADDMINSERV_PICTURE)
+  </select>
+  <select id="selectYearAreaItems" resultType="java.util.HashMap">
+    select b.mc as qhmc,sum(t.finishnum) as sumnum from JX_ADDMINSERV_PICTURE t left join xxzygl.XZQH b on t.bh=b.bh  where substr(month,0,4)=to_char(sysdate,'yyyy') group by b.mc
+  </select>
+  <select id="selectYearAllItems" resultType="java.lang.Integer">
+    select sum(t.finishnum) as sumnum from JX_ADDMINSERV_PICTURE t where substr(month,0,4)=to_char(sysdate,'yyyy')
+  </select>
+</mapper>

@@ -1,0 +1,50 @@
+package com.cetc28.idata.service;
+
+import com.cetc28.idata.dto.JxUtilityStatisByMonth;
+import com.cetc28.idata.dto.JxUtilityStatisByYear;
+
+import java.util.List;
+import java.util.Map;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/14 10:12
+ * 描述信息：
+ *****************************************************************/
+
+/**
+ * 该接口类中的所有方法，均与com.cetc28.idata.dao.IJxUtilityService中的方法完全一致，方法注释请参考该文件。
+ */
+public interface IJxUtilityService {
+
+    public JxUtilityStatisByMonth findLatestWaterSupplyByBh(String bH);
+    public JxUtilityStatisByMonth findLatestWaterSupplyBySjbh(String sJBH);
+
+    public List<JxUtilityStatisByMonth> findWaterStsRateByBh(Integer monthSize, String bH);
+    public List<JxUtilityStatisByMonth>findWaterStsRateBySjbh(Integer monthSize, String sJBH);
+
+    public JxUtilityStatisByMonth findLatestDrainageByBh(String bH);
+    public JxUtilityStatisByMonth findLatestDrainageBySjbh(String sJBH);
+
+    public JxUtilityStatisByMonth findLatestElecSupByBh(String bH);
+
+    public List<JxUtilityStatisByMonth> findPowerLoadingRate(Integer monthSize, String bH);
+
+    public JxUtilityStatisByMonth findLatestGasSupByBh(String bH);
+
+    public List<JxUtilityStatisByMonth> findGasStsRateByBh(Integer monthSize, String bH);
+
+    public JxUtilityStatisByMonth findLatestHeatSupByBh(String bH);
+
+    public JxUtilityStatisByMonth findManteInfoByBh(String bH);
+
+    public List<JxUtilityStatisByYear> findUtilityNetInfoByBh(Integer yearSize, String bH);
+
+    public List<JxUtilityStatisByYear> findUtilityPipeSurveilInfoByBh(Integer yearSize,String bH);
+
+    public List<JxUtilityStatisByYear> findUtilityInternetByBh(Integer yearSize, String bH);
+
+    public List<Map> findLatestUtilitySupplyByBh(String bH);
+}

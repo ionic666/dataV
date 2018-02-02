@@ -1,0 +1,127 @@
+var administration={
+    adminAjax:function(){
+        var posiData=[];
+
+        $.ajax({
+            type: 'post',
+            url: "jxaddmin/queryPictureData.do",
+            dataType: 'JSON',
+            success:function(data){
+                posiData=data
+            }
+        })
+
+        map.panTo([120.851,30.722]);//默认第一个参数的坐标点居中
+
+        //just some colors
+        var colors = [
+            "#412929", "#402B41", "#414129", "#2B3941", "#413729", "#2A3E2F", "#2B2C41", "#66aa00",
+            "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#000000", "#000000", "#000000",
+            "#000000", "#000000", "#000000", "#000000"
+        ];
+
+        var point = [
+            {name: '平湖市', po: '121.114666, 30.698921'},
+            {name: '海盐县', po: '120.942017, 30.522223'},
+            {name: '南湖区', po: '120.829953, 30.734652'},
+            {name: '嘉善县', po: '120.921871, 30.891352'},
+            {name: '秀洲区', po: '120.680431, 30.763323'},
+            {name: '海宁市', po: '120.688821, 30.475544'},
+            {name: '桐乡市', po: '120.521085, 30.629065'}
+        ];
+        var markers=[];
+        for (var i = 0; i < point.length; i++) {
+            markers[i]=new AMap.Marker({ //添加自定义点标记
+                map: map,
+                position: point[i].po.split(','), //基点位置
+                offset: new AMap.Pixel(-36, -15), //相对于基点的偏移位置
+                draggable: false,  //是否可拖动
+                content: '<div class="marker-xxqy-name"><span>' + point[i].name + '</span></div>'   //自定义点标记覆盖物内容
+            });
+        }
+
+
+        AMapUI.loadUI(['geo/DistrictExplorer'], function(DistrictExplorer) {
+
+            //创建一个实例
+            var districtExplorer = new DistrictExplorer({
+                eventSupport: true, //打开事件支持
+                map: map
+            });
+
+            function renderAreaNode(areaNode) {
+
+                //绘制子区域
+                districtExplorer.renderSubFeatures(areaNode, function(feature, i) {
+
+                    var fillColor = colors[i % colors.length];
+                    var strokeColor = colors[colors.length - 1 - i % colors.length];
+
+                    return {
+                        cursor: 'default',
+                        bubble: true,
+                        strokeColor: strokeColor, //线颜色
+                        strokeOpacity: 1, //线透明度
+                        strokeWeight: 1, //线宽
+                        fillColor: fillColor, //填充色
+                        fillOpacity: 1 //填充透明度
+                    };
+                });
+
+                //绘制父区域
+                districtExplorer.renderParentFeature(areaNode, {
+                    cursor: 'default',
+                    bubble: true,
+                    strokeColor: 'black', //线颜色
+                    strokeOpacity: 1, //线透明度
+                    strokeWeight: 1, //线宽
+                    fillColor: null, //填充色
+                    fillOpacity: 1//填充透明度
+                });
+            }
+
+            function renderClickFeatures(feature) {
+                //绘制点击区域
+                districtExplorer.renderFeature(feature, {
+                    cursor: 'default',
+                    bubble: true,
+                    strokeColor: '#000', //线颜色
+                    strokeOpacity: 1, //线透明度
+                    strokeWeight: 1, //线宽
+                    fillColor: 'red', //填充色
+                    fillOpacity: 1 //填充透明度
+                });
+
+            }
+
+            var adcodes = [330400];
+
+            function loadMap(adcodes,clickFeature){
+                districtExplorer.loadMultiAreaNodes(adcodes, function(error, areaNodes) {
+
+                    //清除已有的绘制内容
+                    districtExplorer.clearFeaturePolygons();
+
+
+                    for (var i = 0, len = areaNodes.length; i < len; i++) {
+                        renderAreaNode(areaNodes[i]);
+                    }
+
+                    //更新地图视野
+                    map.setFitView(districtExplorer.getAllFeaturePolygons());
+
+                    if(clickFeature){
+                        renderClickFeatures(clickFeature)
+                    }
+                });
+            }
+
+            loadMap(adcodes);
+
+            //feature被点击
+            districtExplorer.on('featureClick', function (e, feature) {
+                loadMap(adcodes,feature);
+            });
+        });
+    }
+}

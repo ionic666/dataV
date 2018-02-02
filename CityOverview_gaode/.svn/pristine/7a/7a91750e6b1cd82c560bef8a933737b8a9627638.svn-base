@@ -1,0 +1,213 @@
+package com.cetc28.PeopleBenefitService.service.impl;
+
+import com.cetc28.PeopleBenefitService.dao.JxEcoKeycomDao;
+import com.cetc28.PeopleBenefitService.model.JxEcoKeycomsj;
+import com.cetc28.PeopleBenefitService.service.IJxEcoKeycomsjService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/18.
+ */
+@Service
+public class JxEcoKeycomsjImpl implements IJxEcoKeycomsjService {
+
+    @Autowired
+    private JxEcoKeycomDao jxEcoKeycomDao;
+
+    @Override
+    public Map queryKeycomData() {
+        Map result=new HashMap();
+        List pie=new ArrayList();
+        Map pieparam=new HashMap();
+
+        List<JxEcoKeycomsj> firstlist=jxEcoKeycomDao.querykeycomsj();
+        result.put("first",firstlist);
+        pieparam.put("id",firstlist.get(0).getId());
+        List<String> bhRange=jxEcoKeycomDao.queryBhRange();
+        List bhMcRangeList=new ArrayList();
+        for(String bhValue:bhRange){
+            Map<String,String> bhMc=new HashMap();
+            String mc=jxEcoKeycomDao.queryMcByBh(bhValue);
+            bhMc.put("bhValue",bhValue);
+            bhMc.put("mc", mc);
+            bhMcRangeList.add(bhMc);
+
+            pieparam.put("bhValue",bhValue);
+            Integer pievalue=jxEcoKeycomDao.queryPie(pieparam);
+            Map piemap=new HashMap();
+            piemap.put("name",mc);
+            piemap.put("value",pievalue);
+            pie.add(piemap);
+        }
+        result.put("bhRange",bhMcRangeList);
+        Map param=new HashMap();
+//        param.put("bhValue",bhRange.get(0));
+        param.put("id",firstlist.get(0).getId());
+        result.put("keycom",jxEcoKeycomDao.querykeycomsec(firstlist.get(0).getId()));
+        result.put("mapcom",jxEcoKeycomDao.queryComByCondition(param));
+        //组装数据
+        /*String[] type=new String[]{"国企","中外合资","股份制","外资","私企"};
+        List typeList=new ArrayList();
+        for (int i = 0; i <type.length ; i++) {
+            param.put("type",type[i]);
+            Integer a=jxEcoKeycomDao.queryType(param);
+            typeList.add(a);
+        }
+        result.put("typeList",typeList);
+
+        Integer[] age=new Integer[]{0,5,10,15,20,25};
+        List ageList=new ArrayList();
+        for (int i = 0; i <age.length ; i++) {
+            if(i==5){
+                param.put("fromage",String.valueOf(age[i]));
+                param.put("toage","");
+            }else {
+                param.put("fromage",String.valueOf(age[i]));
+                param.put("toage",String.valueOf(age[i]+5));
+            }
+            Integer b=jxEcoKeycomDao.queryAge(param);
+            ageList.add(b);
+        }
+        result.put("ageList",ageList);
+
+
+        Integer[] value=new Integer[]{0,2,5,10,15,20,25,30};
+        List valueList=new ArrayList();
+        for (int i = 0; i <value.length ; i++) {
+            if (i==0){
+                param.put("fromvalue",String.valueOf(value[i]));
+                param.put("tovalue",String.valueOf(value[i]+2));
+            }else if(i==1){
+                param.put("fromvalue",String.valueOf(value[i]));
+                param.put("tovalue",String.valueOf(value[i]+3));
+            }else if(i==7){
+                param.put("fromvalue",String.valueOf(value[i]));
+                param.put("tovalue","");
+            }else {
+                param.put("fromvalue",String.valueOf(value[i]));
+                param.put("tovalue",String.valueOf(value[i]+5));
+            }
+            Integer c=jxEcoKeycomDao.queryValue(param);
+            valueList.add(c);
+        }
+        result.put("valueList",valueList);*/
+
+        result.put("pie",pie);
+        return result;
+    }
+
+    @Override
+    public Map queryComByCondition(String id, String bhValue) {
+        Map result=new HashMap();
+        List pie=new ArrayList();
+        Map pieparam=new HashMap();
+        List<JxEcoKeycomsj> firstlist=jxEcoKeycomDao.querykeycomsjbyid(id);
+        result.put("first",firstlist);
+
+        pieparam.put("id",id);
+
+        List<String> bhRange=jxEcoKeycomDao.queryBhRange();
+        List bhMcRangeList=new ArrayList();
+        for(String bh:bhRange){
+            Map<String,String> bhMc=new HashMap();
+            String mc=jxEcoKeycomDao.queryMcByBh(bh);
+            bhMc.put("bhValue",bh);
+            bhMc.put("mc", mc);
+            bhMcRangeList.add(bhMc);
+
+            pieparam.put("bhValue",bh);
+            Integer pievalue=jxEcoKeycomDao.queryPie(pieparam);
+            Map piemap=new HashMap();
+
+            piemap.put("name",mc);
+            piemap.put("value",pievalue);
+            pie.add(piemap);
+        }
+        Map param=new HashMap();
+        param.put("bhValue",bhValue);
+        param.put("id",id);
+        result.put("bhRange",bhMcRangeList);
+        result.put("keycom",jxEcoKeycomDao.querykeycomsec(id));
+        result.put("mapcom",jxEcoKeycomDao.queryComByCondition(param));
+
+
+        //组装数据
+       /* String[] type=new String[]{"国企","中外合资","股份制","外资","私企"};
+        List typeList=new ArrayList();
+        for (int i = 0; i <type.length ; i++) {
+            param.put("type",type[i]);
+            Integer a=jxEcoKeycomDao.queryType(param);
+            typeList.add(a);
+        }
+        result.put("typeList",typeList);
+
+        Integer[] age=new Integer[]{0,5,10,15,20,25};
+        List ageList=new ArrayList();
+        for (int i = 0; i <age.length ; i++) {
+            if(i==5){
+                param.put("fromage",String.valueOf(age[i]));
+                param.put("toage","");
+            }else {
+                param.put("fromage",String.valueOf(age[i]));
+                param.put("toage",String.valueOf(age[i]+5));
+            }
+            Integer b=jxEcoKeycomDao.queryAge(param);
+            ageList.add(b);
+        }
+        result.put("ageList",ageList);
+
+        Integer[] value=new Integer[]{0,2,5,10,15,20,25,30};
+        List valueList=new ArrayList();
+        for (int i = 0; i <value.length ; i++) {
+            if (i==0){
+                param.put("fromvalue",String.valueOf(value[i]));
+                param.put("tovalue",String.valueOf(value[i]+2));
+            }else if(i==1){
+                param.put("fromvalue",String.valueOf(value[i]));
+                param.put("tovalue",String.valueOf(value[i]+3));
+            }else if(i==7){
+                param.put("fromvalue",String.valueOf(value[i]));
+                param.put("tovalue","");
+            }else {
+                param.put("fromvalue",String.valueOf(value[i]));
+                param.put("tovalue",String.valueOf(value[i]+5));
+            }
+            Integer c=jxEcoKeycomDao.queryValue(param);
+            valueList.add(c);
+        }
+        result.put("valueList",valueList);
+*/
+        result.put("pie",pie);
+        return result;
+    }
+
+    @Override
+    public List serchKeycom(String name) {
+        List<HashMap<String,String>> list=jxEcoKeycomDao.serchKeycom(name);
+        List<HashMap<String,String>> result=new ArrayList();
+        for(HashMap a:list){
+            String sname= (String) a.get("NAME");
+            boolean flag=false;
+            for(HashMap b:result){
+                String bname = "";
+                if(b.containsKey("NAME")){
+                    bname = (String) b.get("NAME");
+                }
+                if(bname.equals(sname)){
+                    flag=true;
+                    break;
+                }
+            }
+            if(!flag){
+                result.add(a);
+            }
+        }
+        return result;
+    }
+}

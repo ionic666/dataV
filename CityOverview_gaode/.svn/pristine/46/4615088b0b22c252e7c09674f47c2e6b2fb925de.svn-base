@@ -1,0 +1,155 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/18
+  Time: 16:18
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="../../myCss/iframe.css"/>
+	<style type="text/css">
+		body{
+			padding: 10px 0 0 10px;
+		}
+		div.netPointCount{
+			width: 100%;
+			height: 100%;
+		}
+		p.headerTitle{
+			width: 240px;
+		}
+		div#netPointCount{
+			height: 85%;
+			width: 100%;
+		}
+		div#netPointCount span{
+			font-size: 1em;
+		}
+		div#netPointCount>ul#acount{
+			height: 50%;
+			width: 100%;
+		}
+		div#netPointCount span.addBigBlue{
+			font-size: 26px;
+			font-weight: bold;
+			color: #119EE8;
+		}
+		div#netPointCount span.addBigRed{
+			font-size: 26px;
+			font-weight: bold;
+			color: #F9258E;
+		}
+		div#netPointCount>ul#acount li{
+			float: left;
+			width: 50%;
+			height: 100%;
+			padding-top: 5%;
+			padding-left: 5%;
+		}
+		div#netPointCount ul#acount li img{
+			float: left;
+			padding-top: 5%;
+		}
+		div#netPointCount ul#acount .right{
+			float: left;
+			margin-left: 5%;
+		}
+		ul#top3{
+			float: left;
+			width: 70%;
+			height: 50%;
+			padding: 1px 0 0 8%;
+		}
+		ul#top3 li{
+			width: 33.3%;
+			height: 100%;
+			float: left;
+		}
+		#top3 .blueP{
+			color: #E3CD55;
+			font-size: 1.4em;
+			font-weight: bold;
+			padding: 10px 0 0 10px;
+		}
+		.blueP b{
+			color: #E3CD55;
+		}
+		#netPointCount .blueP span{
+			color: #FFC000;
+			vertical-align: top;
+			font-size: 14px;
+		}
+		.centerP span{
+			width:97px;
+			text-align: center;
+			display:block;
+		}
+	</style>
+</head>
+<body>
+<div class="netPointCount">
+	<p class="headerTitle">
+		社保经办网点服务量
+	</p>
+	<div id="netPointCount">
+		<ul id="acount">
+			<li>
+				<img src="../../images/socialSecurity/todayCount.png" alt=""/>
+				<div class="right">
+					<p class="centerP"><span class="addBigBlue counter">6,580</span></p>
+					<p class="centerP"><span>当日社保业务</span></p>
+					<p class="centerP"><span>服务量</span></p>
+				</div>
+			</li>
+			<li>
+				<img src="../../images/socialSecurity/averageCount.png" alt=""/>
+				<div class="right">
+					<p class="centerP"><span class="addBigRed counter">363</span></p>
+					<p class="centerP"><span>社保经办网点</span></p>
+					<p class="centerP"><span>平均服务量</span></p>
+				</div>
+			</li>
+		</ul>
+		<div style="float: left;padding-left: 5%">
+		<div class="centerP">
+			<span>
+		   	 <img src="../../images/socialSecurity/buest.png" alt=""/>
+			</span>
+		</div>
+		<p class="centerP"><span>最忙经办点</span></p>
+		</div>
+		<ul id="top3">
+			<li>
+				<p class="centerP"><span>1.新嘉街道</span></p>
+				<p class="centerP"><span>社会事业所</span></p>
+				<p class="blueP"><b class="counter">1,040</b><span>+10</span></p>
+			</li>
+			<li>
+				<p class="centerP"><span>2.解放街道</span></p>
+				<p class="centerP"><span>社会事业所</span></p>
+				<p class="blueP"><b class="counter">832</b><span>+6</span></p>
+			</li>
+			<li>
+				<p class="centerP"><span>3.建设街道</span></p>
+				<p class="centerP"><span>社会事业所</span></p>
+				<p class="blueP"><b class="counter">671</b><span>+3</span></p>
+			</li>
+		</ul>
+	</div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+	$('.counter').countUp({
+		delay: 2,
+		time: 200
+	});
+</script>
+</body>
+</html>

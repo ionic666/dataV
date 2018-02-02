@@ -1,0 +1,101 @@
+#myModal .modal-header button.close, #alert .modal-header button.close {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url(../images/close.png) no-repeat center;
+    background-size: 100% 100%;
+    opacity: 1;
+    margin-top: 2px;
+}
+#myModal .modal-dialog{
+    width:100%;
+    height:50%;
+    margin:0 auto;
+}
+#myModal .modal-content {
+    background-color: #1B1B1D;
+    position: relative;
+    /*margin-left:50%;*/
+    /*margin-top:25%;*/
+}
+#myModal .modal-body{
+    color:#000000;
+    padding:0;
+    margin:0;
+    /*height:90%;*/
+    /*width:100%;*/
+}
+#myModal .modal-header{
+    height:8%;
+    width:100%;
+    border:none;
+    padding:0;
+}
+#myModal .modal-header button.close{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background: url(../images/close_b.png) no-repeat center;
+    background-size: 100% 100%;
+    opacity: 1;
+    margin-right: 15px;
+    position: relative;
+    top:-28px;
+}
+
+/*模态框中固定表头 表格 样式表*/
+/*.tableBox*/
+.tableBox{
+    position: relative;
+}
+.tableBodyBox{
+    width:100%;
+    height:100%;
+    position: absolute;
+}
+.tableHeadBox{
+    position: absolute;
+    background-color: #303030;
+    z-index: 1;
+    text-align: center;
+    width:100%;
+}
+.tableHeadBox table{
+    text-align: center;
+}
+.tableBodyBox{
+    overflow: auto;
+    /*overflow: hidden;*/
+}
+.tableHeadBox table,.tableBodyBox table{
+    width:100%;
+    text-align: center;
+}
+table tr td,table tr th{
+    border:1px solid #5B5B5B;
+    border-collapse:collapse;
+    color:#fff
+
+}
+
+
+
+
+
+/*其他样式表*/
+.ecoTitleUl li{
+    margin: -12px 0px;
+    padding: 5px 20px;
+    background-image: url("../images/listTitle.png");
+    background-size: 100% 100%;
+    color: rgb(21,203,227);
+    cursor: pointer;
+    float: left;
+}
+.ecoTitleUl li.active{
+    background-image: url("../images/listTitleActive.png");
+    background-size: 100% 100%;
+    font-size: 20px;
+    color: rgb(2, 14, 16);
+    float: left;
+}

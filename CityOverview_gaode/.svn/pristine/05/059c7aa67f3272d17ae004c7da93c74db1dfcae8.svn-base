@@ -1,0 +1,554 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    <title>嘉兴城市运行全景特征图分系统</title>
+    <!--<link rel="stylesheet" type="text/css" href="myCss/indexAndMain.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/main_modal.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/toastr.css">-->
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script type="text/javascript"
+            src="http://webapi.amap.com/maps?v=1.4.1&key=608d75903d29ad471362f8c58c550daf"></script>
+    <!--<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>-->
+    <!--<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>-->
+    <script type="text/javascript" src="myjs/jquery-2.1.4.js"></script>
+    <!--<script type="text/javascript" src="myjs/toastr.min.js"></script>-->
+    <!--<script type="text/javascript" src="myjs/jquery.cookie.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/bootstrap.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.dataTables.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.easyui.min.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery-ui.js"></script>-->
+    <script type="text/javascript" src="map/js/echarts-all.js"></script>
+    <!--<%--<script type="text/javascript" src="myjs/loadMapService.js"></script>--%>-->
+
+    <style>
+        body{
+            box-sizing: border-box;
+            overflow: hidden !important;
+        }
+        ::-webkit-scrollbar{
+            background-color: #1B1B1D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+        .modelBox{
+            height:90%;
+            width:25%;
+            position: absolute;
+            z-index:101;
+        }
+        .modelBoxL{
+            top:10%;
+            left:0
+        }
+        .modelBoxC{
+            height:10%;
+            width: 50%;
+            bottom:2%;
+            right:25%;
+        }
+        .modelBoxC>div{
+            height:100%;
+            width: 35%;
+        }
+        .modelBoxC-a{
+            float: left;
+        }
+        .modelBoxC-b{
+            float: right;
+        }
+        .modelBoxR{
+            top:10%;
+            right:0
+        }
+        .modelBox .model{
+            height:32.8%;
+            width:100%;
+            margin-bottom:1%;
+            border-top: 2px #0cdaf5 solid;
+            position: relative;
+        }
+        .modelBox .model{ /*iframe*/
+            /*width:100%;*/
+            /*height:100%;*/
+            background: rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        .more{
+            position: absolute;
+            top:2%;
+            right:2%;
+            color: #0DD4EE;
+            cursor: pointer;
+        }
+        #changeImg img{
+            width:120px;
+            height:87px;
+        }
+        #login>button{
+            width: auto;
+            height: auto;
+            font-size: 1.5em;
+            color: #12C6D8;
+            background-color: #1E2222;
+            border: 0;
+            padding:0 0.2em;
+            float: right;
+            margin-right: 0.1em;
+        }
+        #login>button:hover{
+            color: #fff;
+        }
+        #login>h4{
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0.2em 0;
+            text-align: center;
+            color: #0CD9F4;
+
+        }
+        #login>form{
+            width: 100%;
+            height: 80%;
+
+        }
+        #login>form>input{
+            border-size: 0;
+            background-color: #00191C !important;
+        }
+        #login>form>input,#login>form>button{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+            line-height: 10%;
+        }
+        #login>form>button{
+            border-color: #e9ca3d;
+            border-color: #e9ca3d;
+            border-color: #0096AA;
+            background-color: #0096AA;
+        }
+        #login>form>label{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+        }
+
+        #legend div{
+            display: none;
+        }
+        #legend div p{
+            float: left;
+            display:block;
+            padding:10px;
+        }
+        #legend div p span{
+            margin:0px 3px;
+        }
+
+        /*地图infowindow样式表*/
+        .tundra{
+            position: relative;
+        }
+        #settingModal td{
+            border:0;
+            font-size: 1.3em;
+            color: #0a36e9;
+        }
+        a:hover{
+            color: #c74072;
+            text-decoration:none;
+        }
+        body{
+            width: 100%;
+        }
+
+        /*头部logo*/
+        .header {
+            width: 60%;
+            height: 7.8%;
+            margin: 0 auto;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: absolute;
+            z-index: 999;
+            top: 2%;
+            margin-left:50%;
+        }
+        .header>div{
+            display: inline-block;
+        }
+
+
+        /*高德地图info窗口样式开始*/
+        .amap-toolbar{
+            display:none;
+        }
+        .info {
+            border: solid 1px #7A9095 !important;
+            border-radius: 5px;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 14px;
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        .info span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        /*高德地图info窗口样式开结束*/
+
+        .modelBox>.model>div:first-child{
+            padding-top:10px;
+            height:15%;
+            width:100%;
+        }
+        .modelBox>.model>div:last-child{
+            height:85%;
+            width:100%;
+        }
+        p.headerTitle{
+            padding-left: 3%;
+            font-size: 20px;
+            font-weight: bold;
+            color:#F2F2F2;
+            width: 40%;
+            font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+            margin:0;
+            float: left;
+            height: 100%;
+            position: relative;
+        }
+        .details{
+            /*margin-left:40%;*/
+        }
+        .details p{
+            font-size: 10px;
+            color:#fff;
+            margin:0px;
+        }
+        .details img{
+            width: 34px;
+        }
+        .details img,.details div,.detail span{
+            float: left;
+            margin-left: 15px;
+            text-align: center;
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 18px;
+            margin:0px;
+        }
+        #wrType{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            margin-left: 15px;
+        }
+
+       /*供水保障*/
+
+    </style>
+</head>
+<body class="tundra">
+<div id="map" style="width:100%; height:100%;background-color: black">
+</div>
+
+<div class="header"></div>
+
+<div class="modelBox modelBoxL">
+    <div class="model model1" >
+        <!--<span class="more">更多▶</span>-->
+        <!--<iframe id="iframe1" src="" frameborder="0"></iframe>-->
+        <div class="modelBoxHasHead">
+                <p class="headerTitle">
+                    供水保障
+                </p>
+            <div class="details">
+                <img src="images/gsbz.png" alt=""/>本月供水
+                <div>
+                    <h2 id="gsl" class="BlueFont"></h2>
+                    <p>亿立方米</p>
+                </div>
+            </div>
+            </div>
+        <div id="model1"></div>
+    </div>
+    <div class="model model2">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">	排水保障</p>
+            <div class="details">
+                <img src="images/psbz.png" alt=""/>本月排污
+                <div>
+                    <h2 id="pwl" class="BlueFont"></h2>
+                    <p>亿立方米</p>
+                </div>
+            </div>
+        </div>
+        <div id="model2"></div>
+    </div>
+    <div class="model model3">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">河长总数</p>
+        </div>
+        <div id="model3">
+            <div id="river">
+                <ul>
+                    <li>
+                        <img src="images/environment/hc.png" alt=""/>
+                        <div>
+                            <h2><span id="hc" class="counter"></span><span class="dw">&nbsp;人</span></h2>
+                            <p>河长总数</p>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="images/environment/hd.png" alt=""/>
+                        <div class="double">
+                            <h2><span id="hd" class="counter"></span><span class="dw">&nbsp;米</span></h2>
+                            <p>河道总数</p>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="images/environment/hdwry.png" alt=""/>
+                        <div>
+                            <h2><span id="hdwry" class="counter"></span><span class="dw">&nbsp;个</span></h2>
+                            <p>河道污染源</p>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="images/environment/hdpwk.png" alt=""/>
+                        <div class="double">
+                            <h2><span id="hdpwk" class="counter"></span><span class="dw">&nbsp;个</span></h2>
+                            <p>河道排污口</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modelBox modelBoxC">
+    <div class="modelBoxC-a"><img src="images/air.png" alt=""></div>
+    <div class="modelBoxC-b"><img src="images/water.png" alt=""></div>
+</div>
+<div class="modelBox modelBoxR">
+    <div class="model model4">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">声环境</p>
+            <div class="details">
+                <img src="images/environment/cbl.png" alt=""/>
+                <div>
+                    <h2 id="zszbl" class="BlueFont">22.3%</h2>
+                    <p>功能区昼夜噪声综合超标率</p>
+                </div>
+            </div>
+        </div>
+        <div id="model4"></div>
+    </div>
+    <div class="model model5">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">重点污染源在线监测</p>
+        </div>
+        <div id="model5">
+            <div id="zdwry">
+                <ul id="gkwry">
+                    <li>
+                        <img src="images/environment/gkPollute.png" alt="" class="picPollute"/>
+                        <p class="pollute">烟气污染源</p>
+                    </li>
+                    <li>
+                        <img src="images/environment/green.png" alt=""/>
+                        <p id="yqwry" class="greenFont counter"></p>
+                    </li>
+                    <li>
+                        <img src="images/environment/red.png" alt=""/>
+                        <p  class="redFont counter">11</p>
+                    </li>
+                </ul>
+                <ul id="skwry">
+                    <li>
+                        <img src="images/environment/polluteR.png" alt="" class="picPollute"/>
+                        <p class="pollute">污水污染源</p>
+                    </li>
+                    <li>
+                        <img src="images/environment/green.png" alt=""/>
+                        <p id="wswry" class="greenFont counter"></p>
+                    </li>
+                    <li>
+                        <img src="images/environment/red.png" alt=""/>
+                        <p class="redFont counter">23</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="model model6">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle" style="position: absolute !important;">环境问题处置率</p>
+        </div>
+        <div id="model6"></div>
+    </div>
+</div>
+</body>
+<script src="myjs/myEcharts.js"></script>
+<script src="myjs/map/sthj.js"></script>
+<script src="myjs/index.js"></script>
+<script src="map/js/jquery.waypoints.min.js"></script>
+<script src="map/js/jquery.countup.js"></script>
+
+<script>
+//    var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+    var headerWidth=$(".header").width();	//获取头部标题的宽度
+    function CreatSsServiceChart(month,tapWaterStsRate){
+        var mycharts = echarts.init(document.getElementById('model1'));
+        var option = {
+            tooltip : {
+                trigger: 'axis',
+                formatter: '{a}<br/>{b}:{c}%'
+            },
+            legend: {
+                data:['自来水产销率'],
+                textStyle: text_style,
+                x: 'right'
+            },
+            calculable : true,
+            grid:{
+                x: '10%',
+                y: '20%',
+                x2: '15%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth:0
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    splitLine: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    axisLabel: {show: true,textStyle:text_style},
+                    data : month
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    show: false,
+                    splitLine: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    axisLabel: {show: false}
+
+                }
+            ],
+            series : [
+                {
+                    name:'自来水产销率',
+                    type:'line',
+                    stack: '总量',
+                    itemStyle: {normal: {borderWidth: 0,label:{show:true,textStyle: text_style,formatter: '{c}%'},areaStyle: {type: 'default'},color:'#5B9BD5'}},
+                    data:tapWaterStsRate
+                }
+            ]
+        };
+
+        mycharts.setOption(option);
+    }
+    //  查询近四个月的供水量的数据
+    $.ajax({
+        type:"POST",
+        url:'jxutility/water/tapWaterStsRateByBh.do?bH=003001'+'&monthSize=4',
+        dataType:'json',
+        success:function(data){
+            var mon=[],
+                tapWater=[],
+                month,
+                tapWaterStsRate;
+
+            $.each(data,function(i){
+                var date=data[i].dateYm;
+                mon.push(date.substr(date.length-1,1)+'月');
+                tapWater.push(data[i].tapWaterStsRate*100);
+            });
+            month = mon.reverse();
+            tapWaterStsRate = tapWater.reverse();
+            CreatSsServiceChart(month,tapWaterStsRate);
+        }
+    });
+
+
+
+    //当月供水量
+    $.ajax({
+        type:"POST",
+        url:'jxutility/water/waterSupplyByBh.do?bH=003001',
+        dataType:'json',
+        success:function(data){
+            $('#gsl').append(data.tapWaterSupply/10000);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+        }
+    });
+    window.onload=function(){
+        //加载地图的方法
+        map = new AMap.Map('map', {
+            mapStyle: 'amap://styles/dark'//样式URL
+        });
+        AMap.event.addListener(map,'click',function(e){
+            map.clearInfoWindow();
+            console.log("666")
+        });
+        sthj.sthjAjax();
+    }
+</script>
+</html>

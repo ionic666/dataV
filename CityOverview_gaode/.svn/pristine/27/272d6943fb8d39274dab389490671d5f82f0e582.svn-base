@@ -1,0 +1,64 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.JxMapServiceMapper;
+import com.cetc28.idata.model.JxMapService;
+import com.cetc28.idata.model.JxMapServiceExample;
+import com.cetc28.idata.service.IJxMapService;
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所十三部
+ * 项目名称：CityOverview
+ * 设计人员：linyu
+ * 创建日期：2017/9/24 16:42
+ * 描述信息：
+ * ***************************************************************
+ */
+@Service
+public class JxMapServiceImpl implements IJxMapService {
+    @Autowired
+    private JxMapServiceMapper jxMapServiceMapper;
+
+    @Override
+    public List queryBaseMapService() {
+        JxMapServiceExample example = new JxMapServiceExample();
+        example.or().andKindEqualTo("001");
+        return jxMapServiceMapper.selectByExample(example);
+    }
+
+    @Override
+    public List queryMapServiceByIndicator() {
+        List result = new ArrayList();
+        List<HashMap> indicators = jxMapServiceMapper.listIndicatorIndex();
+        for(HashMap zb : indicators){
+            Map mapInfo = new HashedMap();
+            mapInfo.put("indicatorName",zb.get("INDICATORNAME"));
+            mapInfo.put("mapInfos", jxMapServiceMapper.queryMapServiceByIndicator(zb.get("INDICATORNUM").toString()));
+            result.add(mapInfo);
+        }
+        return result;
+    }
+
+    @Override
+    public JxMapService getMapInfoById(String mapId) {
+       return  jxMapServiceMapper.selectByPrimaryKey(mapId);
+    }
+
+    @Override
+    public String updateMapInfoService(JxMapService mapService) {
+        try{
+            jxMapServiceMapper.updateByPrimaryKeySelective(mapService);
+        }catch (Exception e){
+            return "failed";
+        }
+        return "success";
+    }
+}

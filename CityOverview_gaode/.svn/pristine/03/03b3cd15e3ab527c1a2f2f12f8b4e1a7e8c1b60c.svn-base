@@ -1,0 +1,633 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tonghao
+  Date: 2017/9/15
+  Time: 9:01
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title>教育资源分布情况</title>
+	<link rel="stylesheet" href="myCss/entironment.css"/>
+	<style>
+		.educationCCC{
+			padding:5px 10px;
+			cursor: pointer;
+			color:#fff;
+			margin:0;
+		}
+		.educationCCC .point{
+			display: inline-block;
+			width:15px;
+			height:15px;
+			border:1px solid #fff;
+			border-radius: 7px;
+			vertical-align:middle;
+			margin-right: 10px;
+		}
+		.educationCCC.active .point{
+			border:1px solid red;
+		}
+		.educationCCC.active span{
+			color:red;
+		}
+		#eduSelectReturn p{
+			cursor: pointer;
+			background-color: rgba(0,0,0,0.3);
+			color:#0cdaf5;
+			padding:5px;
+		}
+		#eduSelectReturn p:hover{
+			background-color:rgba(12,218,245,0.3);
+		}
+	</style>
+</head>
+<body>
+
+<div class=" "
+     style="height:89%;width:25%;top:10%;left: 10px;display:none;position: absolute;background-color:rgba(0, 0, 0,0.5)"
+     id="education" >
+	<div class="" style="padding:0;margin:0;height:100%;width:100%">
+		<div class="" style="padding:0;margin:0;height:100%;width:100%">
+			<%--<div class="modal-header">--%>
+				<p class="headerTitles">教育资源分布情况</p>
+			<%--</div>--%>
+			<div class="modal-body" style="padding:0;margin:0;width:100%;height: calc( 100% - 70px)">
+				<div class="echartsHeight33" >
+					<p class="echartsHeight33P">各类院校数</p>
+					<div id="glyxNo" style="height:100%"></div>
+				</div>
+				<div class="echartsHeight33">
+					<p class="echartsHeight33P">各类院校学生数</p>
+					<div id="schoolNo" style="height:100%"></div>
+				</div>
+				<div class="echartsHeight33" >
+					<p class="echartsHeight33P">各类院校专任教师数</p>
+					<div id="teacherNo" style="height:100%"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class=""
+	 style="height: 250px; width:150px;top:70%; left:85%;display:none;position: absolute;background-color:rgba(0, 0, 0,0.5)"
+	 id="educationSchoolChange">
+	<div class="eduBoxChange">
+	</div>
+</div>
+
+<div class=""
+	 style=" border:1px solid #0cdaf5;border-radius: 4px; height: 30px; width:350px;top:14%; left:35%;display:none;position: absolute;background-color:#232323"
+	 id="eduFixedSelect" >
+		<input id="eduSchoolName"  style="padding-left:5px; border-radius: 4px; background-color:#232323;border:none;height:100%;width:89%; z-index:55;color:#0cdaf5" type="text" placeholder="请输入学校名称进行查询"/>
+		<span style="cursor: pointer; display:inline-block;vertical-align:bottom;width:8%;height:100%;"><img id="eduSelect" src="images/eduSelect.png"style="left:5px;position: relative;top:5px" /></span>
+		<div id="eduSelectReturn" style="height:400px;overflow: auto;display: none"></div>
+</div>
+
+
+<script>
+	//点击查询按钮进行查询
+	$("#eduSelect").click(function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		var name=$("#eduSchoolName").val();
+		$("#eduSelectReturn").css("display","none");
+//		map.infoWindow.hide();
+//		$("#eduSchoolName").val("");
+		if(name.trim().length>0){
+			$.ajax({
+				type:"POST",
+				url:'serch/serchName.do?',
+				dataType:'json',
+				data:{name:name.trim()},
+				success:function(data){
+					$("#eduSelectReturn").html("")
+					var len=data.length;
+					for(var i=0;i<data.length;i++){
+						var p=$("<p>");
+						p.html(data[i].name);
+						p.data("data",data[i])
+						$("#eduSelectReturn").append(p);
+					}
+//					educationLayer.clear();
+					eduSelectDataDispose(data,'s')
+				}
+			})
+		}
+	})
+
+//	学校查询事件
+	var cpLock=false;	//判断中文输入法是否结束
+	$("#eduSchoolName").keyup(function(){
+		$("#eduSelectReturn").css("display","block");
+		if(!cpLock){
+			var name=$("#eduSchoolName").val();
+			if(name.trim().length>0){
+				$.ajax({
+					type:"POST",
+					url:'serch/serchName.do',
+					data:{name:name.trim()},
+					dataType:'json',
+					success:function(data){
+						$("#eduSelectReturn").html("")
+						var len=data.length;
+						for(var i=0;i<data.length;i++){
+							var p=$("<p>");
+							p.html(data[i].name);
+							p.data("data",data[i])
+							$("#eduSelectReturn").append(p)
+						}
+					}
+				})
+			}else{
+				$("#eduSelectReturn").html("")
+			}
+		}
+		return this
+	}).on('compositionstart',function(){
+		cpLock=true
+	}).on('compositionend',function(){
+		cpLock=false
+	})
+	//根据模糊搜索出来的东西点击进行单个查询
+	$("#eduSelectReturn").delegate("p","click",function(){
+		eduSelectDataDispose([$(this).data("data")],'s');
+		$("#eduSelectReturn").css("display","none");
+		$("#eduSchoolName").val($(this).text());
+	})
+
+	function educationAddPoint(arr,h,w,img,details,type){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径 type是用来判断是否需要显示学校名称的，s需要显示学校名称，m则不用显示学校名称
+		console.log(type)
+		var _marker=new AMap.Marker({
+			map: map,
+			position: arr,        //经纬度
+			icon: new AMap.Icon({
+				size: new AMap.Size(h, w),  //图标大小
+				image: img       //自定义图片
+			})
+		});
+		_marker.setExtData(details);
+		if(type=='s'){
+			var __content= "<p style='min-width: 250px;text-align: center' class = 'SchoolName'>"+details.name+"</p>";
+			var __name = new AMap.Marker({
+				content: __content,
+				position: arr,
+				offset: new AMap.Pixel(-125,0),
+				map: map
+			});
+			map.setCenter(__name.getPosition());
+		}
+		AMap.event.addListener(_marker,'click',function(e){
+			eduInfoWindowModel.infoWindow(e.target.Pg.extData)
+		    console.log(e.target.Pg.extData)
+		});
+	}
+	var eduInfoWindowModel={
+		createInfoWindow: function (title, content) {
+			var info = document.createElement("div");
+			info.className = "info";
+
+			//可以通过下面的方式修改自定义窗体的宽高
+			info.style.width = "250px";
+			// 定义顶部标题
+			var top = document.createElement("div");
+			var titleD = document.createElement("div");
+			var closeX = document.createElement("img");
+			top.className = "info-top";
+			titleD.innerHTML = title;
+			closeX.src = "images/gaode-close.png";
+			closeX.onclick = eduInfoWindowModel.closeInfoWindow;
+
+			top.appendChild(titleD);
+			top.appendChild(closeX);
+			info.appendChild(top);
+
+			// 定义中部内容
+			var middle = document.createElement("div");
+			middle.className = "info-middle";
+			middle.style.backgroundColor = 'white';
+			middle.innerHTML = content;
+			info.appendChild(middle);
+
+			// 定义底部内容   //下方的小箭头
+			var bottom = document.createElement("div");
+			bottom.className = "info-bottom";
+			bottom.style.position = 'relative';
+			bottom.style.top = '0px';
+			bottom.style.margin = '0 auto';
+			var sharp = document.createElement("img");
+			sharp.src = "images/gaode-sharp.png";
+			bottom.appendChild(sharp);
+			info.appendChild(bottom);
+			return info;
+		},
+		infoWindow:function(details){
+			console.log(details.name)
+			var title = '<span style="font-size:14px;color:#0CDAF5;">'+details.name+'</span>';
+			var content = [];
+			content.push("<p style='color:#fff;'>教师数量："+details.teacherNo+"</p>");
+			content.push("<p style='color:#fff;'>学生数量："+details.studentNo+"</p>");
+			content.push("<p style='color:#fff;'>师生比 ：1 : "+(parseFloat(details.studentNo)/parseFloat(details.teacherNo)).toFixed(2)+"</p>");
+			var infoWindow = new AMap.InfoWindow({
+				isCustom: true,  //使用自定义窗体
+				content: eduInfoWindowModel.createInfoWindow(title, content.join("")),
+				offset: new AMap.Pixel(15, -35)
+			});
+			infoWindow.open(map, wgs84togcj02(parseFloat(details.jd),parseFloat(details.wd)));
+		},
+		//关闭信息窗体
+		closeInfoWindow:function () {
+			map.clearInfoWindow();
+		}
+	}
+
+	//根据搜索条件数据处理
+	function eduSelectDataDispose(data,type){
+		map.clearMap();//清除地图
+		var len=data.length;
+		var pointArr=[];
+		for(var i=0;i<len;i++){
+			if(!data[i].jd || !data[i].wd){
+				var geo = null;
+				if(data[i].type == "sc002"){
+					geo = querySchoolInfo(0, data[i].name);
+				}else if(data[i].type == "sc003"){
+					geo = querySchoolInfo(1, data[i].name);
+				}
+				if(geo!= null){
+					data[i].jd = geo.x;
+					data[i].wd = geo.y;
+				}
+			}
+			if(data[i].jd && data[i].wd){
+				var darkredImage='';
+				switch(data[i].type){
+					case "sc001":
+						darkredImage="images/mini.png";
+						break;
+					case "sc002":
+						darkredImage="images/x.png";
+						break;
+					case "sc003":
+						darkredImage="images/c.png";
+						break;
+					case "sc004":
+						darkredImage="images/g.png";
+						break;
+					case "sc005":
+						darkredImage="images/zhuan.png";
+						break;
+					case "sc006":
+						darkredImage="images/z.png";
+						break;
+					case "sc007":
+						darkredImage="images/t.png";
+						break;
+					case "sc008":
+						darkredImage="images/j.png";
+						break;
+					case "sc009":
+						darkredImage="images/cg.png";
+						break;
+					case "sc010":
+						darkredImage="images/cz.png";
+						break;
+				}
+				educationAddPoint(wgs84togcj02(parseFloat(data[i].jd),parseFloat(data[i].wd)),24,24,darkredImage,data[i],type);
+			}
+		}
+	}
+	//查询json文件获取学校地理信息
+	function querySchoolInfo(type, schoolName){
+		var jsonPath = "";
+		var result = null;
+		if(type==0){
+			jsonPath = "jsonData/primarySchool.json";
+		}else{
+			jsonPath = "jsonData/juniorSchool.json";
+		}
+		$.ajaxSettings.async = false;
+		$.getJSON(jsonPath, function (data) {
+			for(var i in data.features){
+				if(data.features[i].attributes.NAME == schoolName){
+					result = data.features[i].geometry;
+					break;
+				}
+			}
+		})
+		return result;
+	}
+
+	//		模块初始化方法 教育类的所有子模块 都应该以educationAjax 方法中做为程序的入口
+	function educationAjax(qhbh) {
+		$("#educationSchoolChange").modal("show");
+		$("#eduFixedSelect").css("display","block");
+		fundraw(qhbh)
+		$.ajax({
+			type:"POST",
+			url:'jxedu/querySchoolStatisticInfo.do?qhbh='+qhbh+'&num=1',
+			dataType:'json',
+			success:function(data){
+				var data=data[0].statisticInfo;
+				var len=data.length;
+				var schoolNum=[];
+				var schoolType=[];
+				var teacherNum=[]
+				for(var i=0;i<len;i++){
+					schoolNum.push(data[i].schoolNum)
+					schoolType.push(data[i].type)
+					teacherNum.push(data[i].teacherNum)
+				}
+				csxbb(schoolType,schoolNum);
+				glyxzrjssNO(schoolType,teacherNum)
+			}
+		});
+		$.ajax({
+			type:"POST",
+			url:'jxedu/querySchoolStatisticInfo.do?qhbh='+qhbh+'&num=2',
+			dataType:'json',
+			success:function(data){
+				var years=[];
+				var schools=[];
+				var series=[];
+				var len=data.length;
+				for(var i=0;i<len;i++){
+					var obj={};
+					obj.name=data[i].year+'年';
+					obj.type='bar';
+					obj.data=[];
+					years.push(data[i].year+'年');
+					var lnn=data[i].statisticInfo.length;
+					var arr=[];
+					for(var n=0;n<lnn;n++){
+						arr.push(data[0].statisticInfo[n].type);
+						obj.data.push(data[i].statisticInfo[n].studentNum);
+						schools.push(arr)
+					}
+					series.push(obj);
+				}
+				schools=schools[0]
+				glyxxss(schools,years,series);
+			}
+		});
+	}
+	//各类院校数 图表
+	function csxbb(schoolType,schoolNum){
+		var mycharts = echarts.init(document.getElementById('glyxNo'));
+		var option = {
+			tooltip: {
+				trigger: 'axis'
+			},
+			legend: {
+				data: ["学校数"],
+				show:true,
+				textStyle:text_style,
+				x:'right'
+			},
+			calculable: false,
+			grid: {
+				borderWidth: 0
+			},
+			xAxis: [
+				{
+					type : 'category',
+					boundaryGap: false,
+					data: schoolType,
+					axisLabel: {
+						interval: 0,  //横轴信息全部显示
+						rotate: 35,
+						textStyle: text_style
+					},
+					axisLine: {
+						show:false,
+						lineStyle: {
+							color: '#fff',
+							width: 2,
+							type: 'solid'
+						}
+					},
+					axisTick: {
+						show: false,
+						lineStyle: {
+							color: '#fff'
+						}
+					},
+					splitLine: {show: false}
+				}
+			],
+			yAxis:{show:false},
+			series: [
+				{
+					name:'学校数',
+					type: 'line',
+					itemStyle:{
+						normal:{
+							label:{
+								show:true,
+								position:'top',
+								formatter: '{c}',
+								textStyle:text_style
+							},
+							lineStyle:{
+								shadowColor:'green',
+								shadowBlur: 20
+							}
+						}
+					},
+					label:{
+						normal:{
+							show: true,
+							position: 'top',
+							textStyle:text_style
+						}
+					},
+					data:schoolNum
+				}
+			]
+		};
+		mycharts.setOption(option);
+	}
+	//各类院校学生数 图表
+	function glyxxss(schools,years,series){
+		var mycharts = echarts.init(document.getElementById('schoolNo'));
+		option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+			legend: {
+				data:years,
+				x:'right',
+				textStyle:{
+					color:'#fff'
+				}
+			},
+			calculable : false,
+			grid: {
+				borderWidth: 0
+			},
+			xAxis : [
+				{
+					type : 'category',
+					data :schools,
+					axisLabel: {
+						interval: 0,  //横轴信息全部显示
+						rotate: 35,
+						textStyle: text_style
+					},
+					axisLine: {
+						show:false,
+						lineStyle: {
+							color: '#fff',
+							width: 2,
+							type: 'solid'
+						}
+					},
+					axisTick: {
+						show: false,
+						lineStyle: {
+							color: '#fff'
+						}
+					},
+					splitLine: {show: false}
+				}
+			],
+			yAxis : [
+				{
+					type : 'value',
+					show:false
+				}
+			],
+			series : series
+		};
+		mycharts.setOption(option);
+	}
+	//各类院校专任教师数 图表
+	function glyxzrjssNO(schoolType,teacherNum){
+		var mycharts = echarts.init(document.getElementById('teacherNo'));
+		option = {
+			tooltip : {
+				trigger: 'axis'
+			},
+			legend: {
+				data:['教师数'],
+				x:'right',
+				textStyle:{
+					color:'#fff'
+				}
+			},
+			grid: {
+				borderWidth: 0
+			},
+			calculable : false,
+			xAxis : [
+				{
+					type : 'category',
+					boundaryGap : false,
+					data :schoolType,
+					axisLabel: {
+						interval: 0,  //横轴信息全部显示
+						rotate: 35,
+						textStyle: text_style
+					},
+					axisLine: {
+						show:false,
+						lineStyle: {
+							color: '#fff',
+							width: 2,
+							type: 'solid'
+						}
+					},
+					axisTick: {
+						show: true,
+						lineStyle: {
+							color: '#fff'
+						}
+					},
+					splitLine: {show: false}
+				}
+			],
+			yAxis : [
+				{
+					type : 'value',
+					axisLine: {
+						show:false,
+						lineStyle: {
+							color: '#fff',
+							width: 2,
+							type: 'solid'
+						}
+					},
+					axisLabel: {
+						interval: 0,  //横轴信息全部显示
+						rotate: 0,
+						textStyle: text_style
+					},
+					axisTick: {
+						show: false,
+						lineStyle: {
+							color: '#fff'
+						}
+					},
+					splitLine: {show: false}
+				}
+			],
+			series : [
+				{
+					name:'教师数',
+					type:'line',
+					smooth:true,
+					itemStyle: {normal: {areaStyle: {type: 'default'}}},
+					data:teacherNum
+				}
+			]
+		};
+		mycharts.setOption(option);
+	}
+	//右下角所有学校类型
+	function fundraw(){
+		$.ajax({
+			type: "POST",
+			url: 'jxedu/querySchoolMapInfo.do?qhbh='+qhbh,
+			dataType: 'json',
+			success: function (data) {
+				var len=data.length;
+				var str="";
+				for(var i=0;i<len;i++){
+					var p=$("<p>");
+					var span1=$("<span>");
+					var span2=$("<span>");
+					p.append(span1).append(span2);
+					span1.addClass("point")
+					span2.html(data[i].type)
+					p.addClass("educationCCC");
+					$(".eduBoxChange").append(p);
+					p.data("details",data[i])
+				}
+				$(".eduBoxChange .educationCCC:first").click();
+			}
+		})
+	}
+
+	$("#educationSchoolChange").delegate(".educationCCC","click",function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		eduSelectDataDispose($(this).data("details").schoolInfos,'m')
+	})
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

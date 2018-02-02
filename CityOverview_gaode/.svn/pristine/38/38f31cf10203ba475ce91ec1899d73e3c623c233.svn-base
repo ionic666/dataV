@@ -1,0 +1,93 @@
+a{text-decoration:none}
+._header h1{
+	font-weight: bold;
+	font-size: 42px;
+	color:#0cdaf1;
+	font-family:'微软雅黑';
+	-webkit-box-reflect: below 0px
+	-webkit-gradient(linear,left top,left bottom, from(rgba(0,0,0,0)),to(rgba(255,255,255,0.2)));
+	display: inline-block;
+	padding: 0;
+	margin:0px 20px 0px 20px;
+}
+._header span{
+	font-size: 30px;
+	color:#b8d1d1;
+	font-family:'微软雅黑';
+	background-color: #166D76;
+	margin:0px 20px;
+	padding:0px 10px;
+}
+._header img{
+	position: relative;
+	top: -10%;
+}
+.outerWidth{
+	display:inline-block;
+}
+._header{
+	position: absolute;
+	height: 10%;
+	z-index: 7777;
+	margin-left: 50%;
+	padding-top:0.5%;
+	top:0;
+}
+/*搜索框--开始*/
+.searchBox{
+	position: absolute;
+	width: 16em !important;
+	height: 2em !important;
+	top: 2%;
+	left: 2%;
+}
+#search{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	z-index: 1000;
+	left: 1%;
+	top: 4%;
+	padding-left: 1%;
+	font-size: 1.1em;
+	border: 1px solid #0AAABE;
+	color: #0AAABE;
+	outline: 0;
+	background-color: transparent;
+}
+#searchBtn{
+	position: absolute;
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	right: 3%;
+	top: 36%;
+	z-index: 1000;
+	cursor: pointer;
+	background: url('../images/hlwqs/search.png') no-repeat;
+}
+/*搜索框--结束*/
+/*页面导航*/
+#pageNav{
+      color: #fff;
+      font-size: 18px;
+      position: absolute;
+      top:3%;
+      right: 2%;
+	z-index: 1000;
+    }
+#pageNav span{
+	font-size: 18px;
+}
+    #pageNav #chooseNav{
+		max-height: 30px;
+      font-size: 18px;
+      margin-left: 10px;
+      background: #01050B;
+      outline: 0;
+      color: #d5d5d5;
+      padding: 3px 0 3px 5px;
+    }
+#pageNav #chooseNav>option{
+	font-size: 18px;
+}

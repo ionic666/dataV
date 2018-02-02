@@ -1,0 +1,50 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.ISerchNameDao;
+import com.cetc28.idata.dto.SchoolInfoDto;
+import com.cetc28.idata.service.ISerchNameService;
+import com.cetc28.util.HanyuPinyinUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/10/23.
+ */
+@Service
+public class SerchNameServiceImpl implements ISerchNameService{
+
+    @Autowired
+    private ISerchNameDao serchName;
+    @Override
+    public List querySchoolName(String name) {
+        String pinyin= HanyuPinyinUtil.toPinyin(name);
+
+        //对拼音进行查询
+       /* int i;
+        if ((i=pinyin.lastIndexOf("xiaoxue"))>0){
+            String end="xiaoxue";
+            String fenci=pinyin.substring(0,i);
+        }*/
+        List<SchoolInfoDto> sList=serchName.querySchoolNameByPinyin(pinyin);
+
+        return sList;
+    }
+
+    @Override
+    public void update() {
+        List<SchoolInfoDto> sList=serchName.queryAll();
+        for(SchoolInfoDto t:sList){
+            String name=t.getName();
+            String pinyin= HanyuPinyinUtil.toPinyin(name);
+            Map map=new HashMap();
+            map.put("pinyin",pinyin);
+            map.put("name",name);
+            serchName.update(map);
+        }
+    }
+}

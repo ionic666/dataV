@@ -1,0 +1,216 @@
+package com.cetc28.util;
+
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
+/**
+ * Created by Jessica on 2017/10/8.
+ * @param : ArrayList<ArrayList>    "originData":原始实测数据，为二位数组，0位为时间，1位为数值
+ * @param : int    "gap":用于预测下一数据的基础数据长度
+ * @param : int    "prenum" :比实际值日期多预测的点数(1或者2)
+ * @return : ArrayList<ArrayList>   "result" ：返回值为二位数组，0位为时间，1位为数值
+ */
+public class Forecast {
+
+    private static double[] cumulativeArray(double[] originalArray) {
+        double[] cumulativeArray = new double[originalArray.length];
+        double sum = 0.0D;
+        for (int i = 0; i < cumulativeArray.length; i++) {
+            sum += originalArray[i];
+            cumulativeArray[i] = sum;
+        }
+        return cumulativeArray;
+    }
+
+
+    private static double[] averageArray(double[] cumulativeArray) {
+        double[] averageArray = new double[cumulativeArray.length - 1];
+        for (int i = 0; i < averageArray.length; i++) {
+            averageArray[i] = ((cumulativeArray[i] + cumulativeArray[(i + 1)]) / 2.0D);
+        }
+        return averageArray;
+    }
+
+    private static double[][] matrixB(double[] averageArray) {
+        double[][] matrixB = new double[averageArray.length][2];
+        for (int i = 0; i < matrixB.length; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (j == 1)
+                    matrixB[i][j] = 1.0D;
+                else {
+                    matrixB[i][j] = (-averageArray[i]);
+                }
+            }
+        }
+        return matrixB;
+    }
+
+    private static double[][] matrixBT(double[][] matrixB) {
+        double[][] matrixBT = new double[2][matrixB.length];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < matrixB.length; j++) {
+                matrixBT[i][j] = matrixB[j][i];
+            }
+        }
+        return matrixBT;
+    }
+
+    private static double[][] matrixYn(double[] originalArray) {
+        double[][] matrixYn = new double[originalArray.length - 1][1];
+        for (int i = 0; i < matrixYn.length; i++) {
+            for (int j = 0; j < 1; j++) {
+                matrixYn[i][j] = originalArray[(i + 1)];
+            }
+        }
+        return matrixYn;
+    }
+
+    private static double[][] matrixBxBT(double[][] matrixB, double[][] matrixBT) {
+        double[][] matrixBxBT = new double[2][2];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                for (int k = 0; k < matrixB.length; k++) {
+                    matrixBxBT[i][j] += matrixBT[i][k] * matrixB[k][j];
+                }
+            }
+        }
+        return matrixBxBT;
+    }
+
+    private static double[][] inverseMatrixBxBT(double[][] matrixBxBT) {
+        if (matrixBxBT == null)
+            return null;
+        double[][] inverseMatrixBxBT = new double[2][2];
+        inverseMatrixBxBT[0][0] = (1.0D / (matrixBxBT[0][0] * matrixBxBT[1][1] - matrixBxBT[0][1]
+                * matrixBxBT[1][0]) * matrixBxBT[1][1]);
+        inverseMatrixBxBT[0][1] = (1.0D / (matrixBxBT[0][0] * matrixBxBT[1][1] - matrixBxBT[0][1]
+                * matrixBxBT[1][0]) * -matrixBxBT[0][1]);
+        inverseMatrixBxBT[1][0] = (1.0D / (matrixBxBT[0][0] * matrixBxBT[1][1] - matrixBxBT[0][1]
+                * matrixBxBT[1][0]) * -matrixBxBT[1][0]);
+        inverseMatrixBxBT[1][1] = (1.0D / (matrixBxBT[0][0] * matrixBxBT[1][1] - matrixBxBT[0][1]
+                * matrixBxBT[1][0]) * matrixBxBT[0][0]);
+        return inverseMatrixBxBT;
+    }
+
+    private static double[][] inverseMatrixBxBT_xBT(
+            double[][] inverseMatrixBxBT, double[][] matrixBT) {
+        if ((inverseMatrixBxBT == null) || (matrixBT == null))
+            return null;
+        double[][] inverseMatrixBxBT_xBT = new double[2][matrixBT[0].length];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < matrixBT[0].length; j++) {
+                for (int k = 0; k < 2; k++) {
+                    inverseMatrixBxBT_xBT[i][j] += inverseMatrixBxBT[i][k]
+                            * matrixBT[k][j];
+                }
+            }
+        }
+        return inverseMatrixBxBT_xBT;
+    }
+
+    private static double[][] inverseMatrixBxBT_xBTxYN(
+            double[][] inverseMatrixBxBT_xBT, double[][] matrixYN) {
+        if ((inverseMatrixBxBT_xBT == null) || (matrixYN == null))
+            return null;
+        double[][] inverseMatrixBxBT_xBTxYN = new double[2][1];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 1; j++) {
+                for (int k = 0; k < matrixYN.length; k++) {
+                    inverseMatrixBxBT_xBTxYN[i][j] += inverseMatrixBxBT_xBT[i][k]
+                            * matrixYN[k][j];
+                }
+            }
+        }
+        return inverseMatrixBxBT_xBTxYN;
+    }
+
+    private static double[][] inverseMatrixBxBT_xBTxYN(double[] originalArray) {
+        double[][] matrixYn = matrixYn(originalArray);
+        double[] cumulativeArray = cumulativeArray(originalArray);
+        double[] averageArray = averageArray(cumulativeArray);
+        double[][] matrixB = matrixB(averageArray);
+        double[][] matrixBT = matrixBT(matrixB);
+        double[][] matrixBxBT = matrixBxBT(matrixB, matrixBT);
+        double[][] inverseMatrixBxBT = inverseMatrixBxBT(matrixBxBT);
+        double[][] inverseMatrixBxBT_xBT = inverseMatrixBxBT_xBT(
+                inverseMatrixBxBT, matrixBT);
+        double[][] inverseMatrixBxBT_xBTxYN = inverseMatrixBxBT_xBTxYN(
+                inverseMatrixBxBT_xBT, matrixYn);
+        return inverseMatrixBxBT_xBTxYN;
+    }
+
+
+    private static double getPredictiveValue(double[] originalArray, int num) {
+        if ((originalArray == null) || (originalArray.length < 3))
+            return 0.0D;
+        double[][] inverseMatrixBxBT_xBTxYN = inverseMatrixBxBT_xBTxYN(originalArray);
+        double a = inverseMatrixBxBT_xBTxYN[0][0];
+        double u = inverseMatrixBxBT_xBTxYN[1][0];
+        double au = 0.0D;
+        if (a != 0.0D) {
+            au = u / a;
+        }
+        double r = (originalArray[0] - au) * (Math.exp(-a * (num - 1)) - Math.exp(-a * (num - 2)));
+
+        //取小数点后两位
+        BigDecimal b = new BigDecimal(r);
+        double f1 = b.setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue();
+        return f1;
+    }
+    public static ArrayList<ArrayList> forecastValue(ArrayList<ArrayList> originData, int gap, int prenum) {
+        int realLength = originData.size() - prenum;//实测数据List的长度
+        //int preLength = realLength - gap + 1;//预测数据的长度
+        double[] originalArray=new double[realLength];
+        for(int i = 0; i < realLength; i++){
+            originalArray[i] = Double.valueOf(originData.get(i).get(1).toString());
+        }
+        ArrayList resultList = new ArrayList();
+        for(int i = gap;i <= realLength;i++){
+            ArrayList tempList = new ArrayList();
+            double[] temp = new double[gap];
+            System.arraycopy(originalArray, i - gap, temp, 0, gap);
+            tempList.add(originData.get(i).get(0));
+            tempList.add(getPredictiveValue(temp, gap + 1)) ;
+            resultList.add(tempList);
+            if(realLength==i && 2 == prenum){
+                ArrayList tempListPlus = new ArrayList();
+                tempListPlus.add(originData.get(i+1).get(0));
+                tempListPlus.add(getPredictiveValue(temp, gap + 2)) ;
+                resultList.add(tempListPlus);
+            }
+        }
+        return resultList;
+    }
+
+    /*public static void main(String[] args) {
+        double[] array = { 5.03D,5.14D,5.66D,6.17D,5.42D,5.51D,5.92D,6.66D,6.99D,7.38D,7.40D,8.56D,7.41D,6.70D,6.85D,7.52D,8.45D,7.53D,7.36D,6.63D, 8.14D,8.64D };
+        int m=20;
+        ArrayList list=new ArrayList();
+        int k = array.length;
+        for(int i=0;i<k;i++){
+            List li=new ArrayList();
+            li.add(i);
+            li.add(array[i]);
+            list.add(li);
+        }
+
+        //预测几个点就预留几个时间位
+        int prenum=1;
+        for(int i=0;i<prenum;i++){
+            List lii=new ArrayList();
+            lii.add(k++);
+            lii.add(0);
+            list.add(lii);
+        }
+
+        //结果接收
+        ArrayList<ArrayList> list1 = result(list, m, prenum);
+        for(int i = 0;i < list1.size();i++){
+            ArrayList list2 = list1.get(i);
+            System.out.println(list2.get(0)+"-------"+list2.get(1));
+        }
+    }*/
+
+
+}

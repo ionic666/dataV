@@ -1,0 +1,145 @@
+package com.cetc28.IntelligentInfrastructure.model;
+
+import java.math.BigDecimal;
+
+public class JxUtilityManteFault {
+    private String id;
+
+    private String bh;
+
+    private String utilityType;
+
+    private BigDecimal lat;
+
+    private BigDecimal lon;
+
+    private String des;
+
+    private String loca;
+
+    private String dateYmd;
+
+    private String state;
+
+    private String admi;
+
+    private String tel;
+
+    private String faultTypeCode;
+
+    private String faultDiag;
+
+    private String faultFactCode;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh == null ? null : bh.trim();
+    }
+
+    public String getUtilityType() {
+        return utilityType;
+    }
+
+    public void setUtilityType(String utilityType) {
+        this.utilityType = utilityType == null ? null : utilityType.trim();
+    }
+
+    public BigDecimal getLat() {
+        return lat;
+    }
+
+    public void setLat(BigDecimal lat) {
+        this.lat = lat;
+    }
+
+    public BigDecimal getLon() {
+        return lon;
+    }
+
+    public void setLon(BigDecimal lon) {
+        this.lon = lon;
+    }
+
+    public String getDes() {
+        return des;
+    }
+
+    public void setDes(String des) {
+        this.des = des == null ? null : des.trim();
+    }
+
+    public String getLoca() {
+        return loca;
+    }
+
+    public void setLoca(String loca) {
+        this.loca = loca == null ? null : loca.trim();
+    }
+
+    public String getDateYmd() {
+        return dateYmd;
+    }
+
+    public void setDateYmd(String dateYmd) {
+        this.dateYmd = dateYmd == null ? null : dateYmd.trim();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state == null ? null : state.trim();
+    }
+
+    public String getAdmi() {
+        return admi;
+    }
+
+    public void setAdmi(String admi) {
+        this.admi = admi == null ? null : admi.trim();
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel == null ? null : tel.trim();
+    }
+
+    public String getFaultTypeCode() {
+        return faultTypeCode;
+    }
+
+    public void setFaultTypeCode(String faultTypeCode) {
+        this.faultTypeCode = faultTypeCode == null ? null : faultTypeCode.trim();
+    }
+
+    public String getFaultDiag() {
+        return faultDiag;
+    }
+
+    public void setFaultDiag(String faultDiag) {
+        this.faultDiag = faultDiag == null ? null : faultDiag.trim();
+    }
+
+    public String getFaultFactCode() {
+        return faultFactCode;
+    }
+
+    public void setFaultFactCode(String faultFactCode) {
+        this.faultFactCode = faultFactCode == null ? null : faultFactCode.trim();
+    }
+}

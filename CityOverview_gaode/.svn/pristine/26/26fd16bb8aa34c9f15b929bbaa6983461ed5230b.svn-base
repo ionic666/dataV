@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.IJxPopDao">
+   <select id="queryAllCsrktj" resultType="com.cetc28.PeopleBenefitService.dto.CsrkDto">
+       SELECT  SUM(czrk) AS czrk, SUM(hjrk) AS hjrk,SUM(nyrk) AS nyrk
+       FROM  JX_POP_CSRK WHERE  year=(SELECT MAX(year) FROM JX_POP_CSRK)
+   </select>
+
+    <select id="queryTotalAndNyrk" parameterType="java.lang.String" resultType="com.cetc28.PeopleBenefitService.dto.CsrkDto">
+        SELECT  t.zrk,t.nyrk,x.mc FROM  JX_POP_CSRK t LEFT JOIN xxzygl.XZQH x ON t.bh=x.bh
+        WHERE year=(SELECT MAX(year) FROM JX_POP_CSRK)
+    </select>
+
+    <select id="queryAllLdnlrk" parameterType="java.lang.Integer" resultType="java.lang.Double">
+        SELECT  SUM(ldnlrk) FROM  JX_POP_CSRK WHERE  year=#{year}
+    </select>
+
+    <select id="queryTotalrk" parameterType="java.lang.Integer" resultType="java.lang.Double">
+        SELECT  SUM(zrk) FROM  JX_POP_CSRK WHERE year=#{year}
+    </select>
+
+    <select id="queryLdrk" parameterType="java.lang.Integer" resultType="java.lang.Double">
+        SELECT SUM(ldrk) FROM JX_POP_CSRK WHERE  year=#{year}
+    </select>
+
+    <select id="queryQcdTop5" parameterType="java.lang.Integer" resultType="com.cetc28.PeopleBenefitService.dto.RkqrqcDto">
+       <![CDATA[ SELECT num,qrd FROM(
+        SELECT count(t.qrd) as num,t.qrd from xxzygl.JX_RK_LDTJ t group by t.qrd order by num desc) where rownum<6]]>
+    </select>
+
+    <select id="queryHjrk" parameterType="java.lang.Integer" resultType="java.lang.Double">
+        SELECT  SUM(hjrk) FROM JX_POP_CSRK WHERE  year=#{year}
+    </select>
+
+    <select id="queryLnrk" resultType="java.lang.Double" parameterType="java.lang.Integer">
+        SELECT SUM(lnrk) FROM  JX_POP_CSRK WHERE  year=#{year}
+    </select>
+
+    <select id="queryLnrkTop3" parameterType="java.lang.Integer" resultType="com.cetc28.PeopleBenefitService.dto.CsrkDto">
+        <![CDATA[select lnrk,mc from (select t.lnrk,x.mc,rownum from JX_POP_CSRK t
+        left join xxzygl.XZQH x on x.bh=t.bh  where t.year=#{year} order by lnrk DESC) where rownum<4]]>
+    </select>
+
+    <select id="queryCurrentYear" resultType="java.lang.Integer">
+        SELECT MAX(year) FROM JX_POP_CSRK
+    </select>
+
+    <select id="queryMaleAndFemale" parameterType="java.lang.Integer" resultType="com.cetc28.PeopleBenefitService.dto.CsrkDto">
+        SELECT sum(t.csmale) as csMale,sum(t.csfemale) as csFemale FROM JX_POP_CSRK t WHERE  year=#{year}
+    </select>
+</mapper>
+
+
+

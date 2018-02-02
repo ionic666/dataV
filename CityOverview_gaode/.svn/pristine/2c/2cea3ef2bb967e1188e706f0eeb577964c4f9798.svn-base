@@ -1,0 +1,63 @@
+package com.cetc28.PeopleBenefitService.controller;
+
+import com.cetc28.ConfigurationManagement.model.PageResult;
+import com.cetc28.PeopleBenefitService.service.IJxEcoComPicService;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 嘉兴企业画像
+ * Created by linyu on 2017/12/28.
+ */
+@Controller
+@RequestMapping("/jxcompic")
+public class JxEcoComPicController {
+    @Autowired
+    private IJxEcoComPicService iJxEcoComPicService;
+
+    /**
+     * 根据企业画像获取企业画像统计信息
+     * @param companyId
+     * @return
+     */
+    @RequestMapping("/queryPicStatistic.do")
+    @ResponseBody
+    public Map queryPicStatistic(@RequestParam("companyId") String companyId){
+        Map map = new HashMap();
+        map = iJxEcoComPicService.queryPicStatistic(companyId);
+        return map;
+    }
+
+    /**
+     * 根据企业id、图像id获取企业画像数据
+     * @param companyId 企业id
+     * @param picId 画像id
+     * @param pageNumber 页码
+     * @param pageSize  分页大小
+     * @return
+     */
+    @RequestMapping("/queryComPicInfo.do")
+    @ResponseBody
+    public PageResult queryComPicInfo(@RequestParam("companyId") String companyId, @RequestParam("picId") String picId, @RequestParam("pageNumber") Integer pageNumber, @RequestParam("pageSize") Integer pageSize){
+        return iJxEcoComPicService.queryComPicInfo(companyId, picId, pageNumber, pageSize);
+    }
+
+    /**
+     * 查询某一企业的股权构成，用于绘制饼状图
+     * @param companyId
+     * @return
+     */
+    @RequestMapping("/queryOwnership.do")
+    @ResponseBody
+    public List queryOwnership(@RequestParam("companyId") String companyId){
+        return iJxEcoComPicService.queryOwnership(companyId);
+    }
+}

@@ -1,0 +1,871 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: sunyuan
+  Date: 2017/11/22
+  Time: 10:57
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>业务办理</title>
+    <link rel="stylesheet" href="../../myCss/map/ywbl.css">
+</head>
+<body>
+<div id="pageNav">
+    <span>当前页面</span>
+    <select id="chooseNav">
+        <option value="001">首页</option>
+        <option value="002">企业参保</option>
+        <option value="003">五险覆盖</option>
+        <option value="004" selected="selected">异地社保</option>
+        <option value="005">阳光医保</option>
+    </select>
+</div>
+<div class="container">
+    <div class="top">
+        <img src="../../images/btz.png" alt="" style="position: relative;top: -10%;">
+        <h1 class="title-btn">社保异地联网实时结算业务办理情况</h1>
+        <img src="../../images/bty.png" alt="" style="position: relative;top: -10%;">
+        <%--<img src="../../images/fh.png" alt="" class="return-btn" onclick="returnMainPage()">--%>
+    </div>
+    <div class="middle">
+        <div class="middle-left">
+            <div class="middle-left-1">
+                <span>异地社保资格待遇认证</span>
+                <span>人员年龄结构和性别比例统计</span>
+                <div>
+                    <div class="man-per">60%</div>
+                    <div class="woman-per">40%</div>
+                    <span class="man"></span>
+                    <div class="tool">
+                        <div class="tool-man"></div>
+                        <div class="tool-woman"></div>
+                    </div>
+                    <span class="woman"></span>
+                </div>
+                <div id="echarts-1"></div>
+            </div>
+            <div class="middle-left-2">
+                <span>异地社保资格待遇认证参保地</span>
+                <div>
+                    <span>NO</span>
+                    <span>参保地名称</span>
+                </div>
+                <div id="industrials">
+                    <ul>
+                        <li>
+                            <span>1</span>
+                            <span>浙江省杭州市</span>
+                        </li>
+                        <li>
+                            <span>2</span>
+                            <span>上海市</span>
+                        </li>
+                        <li>
+                            <span>3</span>
+                            <span>北京市</span>
+                        </li>
+                        <li>
+                            <span>4</span>
+                            <span>江苏省南京市</span>
+                        </li>
+                        <li>
+                            <span>5</span>
+                            <span>浙江省宁波市</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="middle-middle">
+            <div class="middle-middle-1">
+                <div class="ts-map">
+                    <div>异地社保关系转入转出流向top10</div>
+                </div>
+                <div id="echarts-5">
+                </div>
+            </div>
+            <div class="middle-middle-2">
+                <span>异地社保关系转入转出</span>
+                <div class="middle-middle-2-1">
+                    <span>转入转出年龄结构统计</span>
+                    <div id="echarts-2"></div>
+                </div>
+                <div class="middle-middle-2-2">
+                    <span>转入转出人员总量统计</span>
+                    <div id="echarts-3"></div>
+                </div>
+            </div>
+        </div>
+        <div class="middle-right">
+            <div class="middle-right-1">
+                <span>异地就医</span>
+                <span>异地就医年龄结构和性别比例统计</span>
+                <div>
+                    <div class="man-per">60%</div>
+                    <div class="woman-per">40%</div>
+                    <span class="man"></span>
+                    <div class="tool">
+                        <div class="tool-man"></div>
+                        <div class="tool-woman"></div>
+                    </div>
+                    <span class="woman"></span>
+                </div>
+                <div id="echarts-4"></div>
+            </div>
+            <div class="middle-right-2">
+                <span>异地就医结算排名</span>
+                <div>
+                    <span>NO</span>
+                    <span>结算地医院名称</span>
+                </div>
+                <div id="industrials1">
+                    <ul>
+                        <li>
+                            <span>1</span>
+                            <span>北京协和医院</span>
+                        </li>
+                        <li>
+                            <span>2</span>
+                            <span>四川大学华西医院</span>
+                        </li>
+                        <li>
+                            <span>3</span>
+                            <span>中国人民解放军总医院</span>
+                        </li>
+                        <li>
+                            <span>4</span>
+                            <span>首都医科大学附属北京朝阳医院</span>
+                        </li>
+                        <li>
+                            <span>5</span>
+                            <span>天津市肿瘤医院</span>
+                        </li>
+                        <li>
+                            <span>6</span>
+                            <span>大连市第三人民医院</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../myjs/jquery-2.1.4.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/vTicker.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    //    导航切换
+    $('#chooseNav').change(function(){
+        var navText=$('#chooseNav').val();
+        console.log(navText)
+        switch(navText){
+            case '001':shouye();break;
+            case '002':qycb();break;
+            case '003':wxfg();break;
+            case '004':ydcb();break;
+            case '005':ygyb();break;
+
+        }
+    });
+    function shouye(){
+        top.location.href="../../shbz1.html";
+    }
+    function qycb(){
+        top.location.href="qycb.jsp";
+    }
+    function wxfg(){
+        top.location.href="wxfgqk.jsp";
+    }
+    function ydcb(){
+        top.location.href="ywbl.jsp";
+    }
+    function ygyb(){
+        top.location.href="sunPublicServe.jsp";
+    }
+
+    $(function () {
+        var ys = parseFloat($('.middle-left-2').css('height')) - 110 + 'px';
+        var ys1 = parseFloat($('.middle-right-2').css('height')) - 140 + 'px';
+        $('#industrials').vTicker();
+        $('#industrials1').vTicker();
+        $('#industrials').css('height', ys);
+        $('#industrials1').css('height', ys1);
+
+    })
+
+    //人员年龄结构和性别比例统计
+    function fun2() {
+        var myChart_rqnl = echarts.init(document.getElementById("echarts-1"));
+        var option_rqnl = {
+            color: ['#BFBF39', '#3696D9'],
+            calculable: false,
+            legend: {
+                show:false,
+                data: ['异地就医(女)', '异地就医(男)'],
+                x: 'center',
+                y: 'bottom',
+                itemGap: 40,
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            grid: {
+                y: '5%',
+                containLabel: true,
+                borderWidth: 0,
+                y2: 50
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params, ticket, callback) {
+                    var res = '人群年龄分布(' + params[0].name + ')';
+                    for (var i = 0, l = params.length; i < l; i++) {
+                        if (params[i].value < 0) {
+                            params[i].value = -params[i].value;
+                        }
+                        res += '<br/>' + params[i].seriesName + ' : ' + params[i].value + '%';
+                    }
+                    setTimeout(function () {
+                        // 仅为了模拟异步回调
+                        callback(ticket, res);
+                    }, 100)
+                }
+            },
+            xAxis: [
+                {
+                    type: 'value',
+                    max: 25,
+                    min: -25,
+                    splitLine: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: function (value) {
+                            if (value < 0) {
+                                return (-value + "%");
+                            } else {
+                                return (value + '%');
+                            }
+                        }
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'category',
+                    splitLine: {show: false},
+                    axisLine: {show: false},
+                    axisLabel: {show: true, textStyle: text_style},
+                    axisTick: {show: false},
+                    data: ['0-18岁', '18-30岁', '30-50岁', '50-65岁', '65岁以上']
+                }
+            ],
+            series: [
+
+                {
+                    name: '异地就医(男)',
+                    type: 'bar',
+                    stack: '总量',
+                    barWidth: 15,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: false
+                            }
+                        }
+                    },
+                    data: [-4, -18, -11, -15, -10]
+                },
+                {
+                    name: '异地就医(女)',
+                    type: 'bar',
+                    stack: '总量',
+                    barWidth: 15,
+                    data: [3, 15, 7, 10, 7]
+                }
+            ]
+        };
+        myChart_rqnl.setOption(option_rqnl);
+    }
+
+    fun2()
+
+    //异地就医年龄结构和性别比例统计
+    function fun3() {
+        var myChart_rqnl = echarts.init(document.getElementById("echarts-4"));
+        var option_rqnl = {
+            color: ['#00A6A6', '#CC9949'],
+            calculable: false,
+            legend: {
+                show:false,
+                data: ['异地就医(女)', '异地就医(男)'],
+                x: 'center',
+                y: 'bottom',
+                itemGap: 40,
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            grid: {
+                y: '5%',
+                containLabel: true,
+                borderWidth: 0,
+                y2: 50
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params, ticket, callback) {
+                    var res = '人群年龄分布(' + params[0].name + ')';
+                    for (var i = 0, l = params.length; i < l; i++) {
+                        if (params[i].value < 0) {
+                            params[i].value = -params[i].value;
+                        }
+                        res += '<br/>' + params[i].seriesName + ' : ' + params[i].value + '%';
+                    }
+                    setTimeout(function () {
+                        // 仅为了模拟异步回调
+                        callback(ticket, res);
+                    }, 100)
+                }
+            },
+            xAxis: [
+                {
+                    type: 'value',
+                    max: 25,
+                    min: -25,
+                    splitLine: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: function (value) {
+                            if (value < 0) {
+                                return (-value + "%");
+                            } else {
+                                return (value + '%');
+                            }
+                        }
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'category',
+                    splitLine: {show: false},
+                    axisLine: {show: false},
+                    axisLabel: {show: true, textStyle: text_style},
+                    axisTick: {show: false},
+                    data: ['0-18岁', '18-30岁', '30-50岁', '50-65岁', '65岁以上']
+                }
+            ],
+            series: [
+
+                {
+                    name: '异地就医(男)',
+                    type: 'bar',
+                    stack: '总量',
+                    barWidth: 15,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: false
+                            }
+                        }
+                    },
+                    data: [-4, -18, -11, -15, -10]
+                },
+                {
+                    name: '异地就医(女)',
+                    type: 'bar',
+                    stack: '总量',
+                    barWidth: 15,
+                    data: [3, 15, 7, 10, 7]
+                }
+            ]
+        };
+        myChart_rqnl.setOption(option_rqnl);
+    }
+
+    fun3()
+
+
+    // 转入转出人员总量统计
+    function fun() {
+        var mycharts = echarts.init(document.getElementById('echarts-3'));
+        option = {
+            color: ['#3696D9', '#D99A36'],
+            title: {
+                show: false,
+                text: '各市各类院校招生对比',
+                x: 'center',
+                y: 'top',
+                textStyle:text_style,
+                borderColor: '#9AF6F9',
+                borderWidth: 1
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '12%',
+                x2: '0%',
+                borderWidth: 0
+            },
+            legend: {
+                data: ['异地社保关系转入总量', '异地社保关系转出总量'],
+                x: 'center',
+                y: 'bottom',
+                itemGap: 40,
+                textStyle: text_style
+            },
+            calculable: false,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['南湖区', '秀洲区', '桐乡市', '海宁市', '平湖市', '嘉善县', '海盐县'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#fff',
+                            width: 1,
+                            type: 'solid'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        textStyle:text_style
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    max: 3000,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#fff',
+                            width: 1,
+                            type: 'solid'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        textStyle: text_style
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '异地社保关系转入总量',
+                    type: 'bar',
+                    data: [1450, 1650, 1800, 1900, 1685, 1765, 1904, 1500]
+                },
+                {
+                    name: '异地社保关系转出总量',
+                    type: 'bar',
+                    data: [1500, 1802, 2320, 1765, 1701, 2011, 1655, 1855]
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    fun();
+
+    // 转入转出年龄结构统计
+    function fun4() {
+        var mycharts = echarts.init(document.getElementById('echarts-2'));
+        option = {
+            color: ['#3696D9', '#D99A36'],
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '12%',
+                x2: '0%',
+                borderWidth: 0
+            },
+            legend: {
+                data: ['异地社保关系转入人数', '异地社保关系转出人数'],
+                x: 'center',
+                y: 'bottom',
+                itemGap: 40,
+                textStyle:text_style
+            },
+            calculable: false,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['18岁以下', '18-30岁', '30-40岁', '40-50岁', '50-60岁', '60岁以上'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#fff',
+                            width: 1,
+                            type: 'solid'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        textStyle:text_style
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    max: 3000,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#fff',
+                            width: 1,
+                            type: 'solid'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        textStyle: text_style
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '异地社保关系转入人数',
+                    type: 'bar',
+                    data: [2600, 1500, 2000, 2600, 1200, 2400]
+                },
+                {
+                    name: '异地社保关系转出人数',
+                    type: 'bar',
+                    data: [1400, 2700, 900, 1600, 2500, 1200]
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    fun4();
+
+
+    //地图
+    function fun6() {
+        var mycharts = echarts.init(document.getElementById('echarts-5'));
+        option = {
+            backgroundColor: '#1b1b1b',
+            color: ['green', 'blue'],
+            title: {
+                x: '26',
+                y: '10',
+                textStyle: {
+                    color: '#fff',
+                    fontFamily: "微软雅黑",
+                    fontWeight: 'normal'
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}'
+            },
+            legend: {
+                orient: 'vertical',
+                x:'left',
+                itemGap:20,
+                padding:60,
+                textStyle:{color: '#fff',fontSize : 18},
+                data:['转入', '转出'],
+                selectedMode: 'single',
+                selected:{
+                    '转出' : false
+                }
+            },
+            dataRange: {
+                show: false,
+                min: 0,
+                max: 100,
+                calculable: true,
+                color: ['#ff3333', 'orange', 'yellow', 'lime', 'aqua'],
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            series: [
+                {
+                    name: '转出',
+                    type: 'map',
+                    roam: true,
+                    hoverable: false,
+                    mapType: 'china',
+                    itemStyle: {
+                        normal: {
+                            borderColor: 'rgba(100,149,237,1)',
+                            borderWidth: 1,
+                            areaStyle: {
+                                color: 'rgba(16,52,128,0.1)'
+                            }
+                        }
+                    },
+                    data: [],
+                    markLine: {
+                        smooth: true,
+                        effect: {
+                            show: true,
+                            scaleSize: 1,
+                            period: 25,
+                            color: '#fff',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#fff',
+                                borderWidth: 1,
+                                borderColor: '#fff',
+                                lineStyle: {
+                                    type: 'solid',
+                                    shadowBlur: 10
+                                }
+                            },
+                            emphasis: {
+                                color: '#fff',
+                                borderWidth: 1,
+                                borderColor: '#fff',
+                                lineStyle: {
+                                    type: 'solid',
+                                    shadowBlur: 10
+                                }
+                            }
+                        },
+                        data: [
+                            [{name: '嘉兴'}, {name: '内蒙古', value: ''}],
+                            [{name: '嘉兴'}, {name: '北京', value: ''}],
+                            [{name: '嘉兴'}, {name: '河北', value: ''}],
+                            [{name: '嘉兴'}, {name: '山西', value: ''}],
+                            [{name: '嘉兴'}, {name: '山东', value: ''}],
+                            [{name: '嘉兴'}, {name: '河南', value: ''}],
+                            [{name: '嘉兴'}, {name: '湖北', value: ''}],
+                            [{name: '嘉兴'}, {name: '安徽', value: ''}],
+                            [{name: '嘉兴'}, {name: '江苏', value: ''}],
+                            [{name: '嘉兴'}, {name: '江西', value: ''}],
+                            [{name: '嘉兴'}, {name: '福建', value: ''}],
+                            [{name: '嘉兴'}, {name: '广西', value: ''}],
+                            [{name: '嘉兴'}, {name: '河南', value: ''}]
+                        ]
+                    },
+                    markPoint: {
+                        clickable: false,
+                        symbol: 'emptyCircle',
+                        symbolSize: function (v) {
+                            return 15
+                        },
+                        effect: {
+                            show: true,
+                            type: 'scale',
+                            loop: true,
+                            period: 25,
+                            scaleSize: 1,
+                            bounceDistance: 10,
+                            color: '#fff',
+                            shadowColor: '#fff',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            normal: {
+                                label: {show: false}
+                            },
+                            emphasis: {
+                                label: {show: false}
+                            }
+                        },
+                        data: [
+                            {name: '内蒙古', value: ''},
+                            {name: '北京', value: ''},
+                            {name: '河北', value: ''},
+                            {name: '山西', value: ''},
+                            {name: '河南', value: ''},
+                            {name: '湖北', value: ''},
+                            {name: '安徽', value: ''},
+                            {name: '江苏', value: ''},
+                            {name: '江西', value: ''},
+                            {name: '福建', value: ''},
+                            {name: '广西', value: ''},
+                            {name: '河南', value: ''},
+                            {name: '山东', value: ''}
+                        ]
+                    },
+                    geoCoord: {
+                        '内蒙古': [111.65, 40.82],
+                        '北京': [116.46, 39.92],
+                        '河北': [114.48, 38.03],
+                        '山西': [112.53, 37.87],
+                        '山东': [117, 36.65],
+                        '河南': [113.65, 34.76],
+                        '湖北': [114.31, 30.52],
+                        '安徽': [117.27, 31.86],
+                        '江苏': [118.78, 32.04],
+                        '江西': [115.89, 28.68],
+                        '福建': [119.3, 26.08],
+                        '广西': [108.33, 22.84],
+                        '嘉兴': [120.76, 30.75]
+                    }
+                },
+                {
+                    name: '转入',
+                    type: 'map',
+                    roam: true,
+                    hoverable: false,
+                    mapType: 'china',
+                    itemStyle: {
+                        normal: {
+                            borderColor: 'rgba(100,149,237,1)',
+                            borderWidth: 1,
+                            areaStyle: {
+                                color: 'rgba(16,52,128,0.1)'
+                            }
+                        }
+                    },
+                    data: [],
+                    markLine: {
+                        smooth: true,
+                        effect: {
+                            show: true,
+                            scaleSize: 1,
+                            period: 25,
+                            color: '#fff',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#fff',
+                                borderWidth: 1,
+                                borderColor: '#fff',
+                                lineStyle: {
+                                    type: 'solid',
+                                    shadowBlur: 10
+                                }
+                            },
+                            emphasis: {
+                                color: '#fff',
+                                borderWidth: 1,
+                                borderColor: '#fff',
+                                lineStyle: {
+                                    type: 'solid',
+                                    shadowBlur: 10
+                                }
+                            }
+                        },
+                        data: [
+                            [{name: '内蒙古'}, {name: '嘉兴', value: ''}],
+                            [{name: '北京'}, {name: '嘉兴', value: ''}],
+                            [{name: '河北'}, {name: '嘉兴', value: ''}],
+                            [{name: '山西'}, {name: '嘉兴', value: ''}],
+                            [{name: '山东'}, {name: '嘉兴', value: ''}],
+                            [{name: '河南'}, {name: '嘉兴', value: ''}],
+                            [{name: '湖北'}, {name: '嘉兴', value: ''}],
+                            [{name: '安徽'}, {name: '嘉兴', value: ''}],
+                            [{name: '江苏'}, {name: '嘉兴', value: ''}],
+                            [{name: '江西'}, {name: '嘉兴', value: ''}],
+                            [{name: '福建'}, {name: '嘉兴', value: ''}],
+                            [{name: '广西'}, {name: '嘉兴', value: ''}],
+                            [{name: '河南'}, {name: '嘉兴', value: ''}]
+                        ]
+                    },
+                    markPoint: {
+                        clickable: false,
+                        symbol: 'emptyCircle',
+                        symbolSize: function (v) {
+                            return 15
+                        },
+                        effect: {
+                            show: true,
+                            type: 'scale',
+                            loop: true,
+                            period: 25,
+                            scaleSize: 1,
+                            bounceDistance: 10,
+                            color: '#fff',
+                            shadowColor: '#fff',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            normal: {
+                                label: {show: false}
+                            },
+                            emphasis: {
+                                label: {show: false}
+                            }
+                        },
+                        data: [
+                            {name: '内蒙古', value: ''},
+                            {name: '北京', value: ''},
+                            {name: '河北', value: ''},
+                            {name: '山西', value: ''},
+                            {name: '河南', value: ''},
+                            {name: '湖北', value: ''},
+                            {name: '安徽', value: ''},
+                            {name: '江苏', value: ''},
+                            {name: '江西', value: ''},
+                            {name: '福建', value: ''},
+                            {name: '广西', value: ''},
+                            {name: '河南', value: ''},
+                            {name: '山东', value: ''}
+                        ]
+                    },
+                    geoCoord: {
+                        '内蒙古': [111.65, 40.82],
+                        '北京': [116.46, 39.92],
+                        '河北': [114.48, 38.03],
+                        '山西': [112.53, 37.87],
+                        '山东': [117, 36.65],
+                        '河南': [113.65, 34.76],
+                        '湖北': [114.31, 30.52],
+                        '安徽': [117.27, 31.86],
+                        '江苏': [118.78, 32.04],
+                        '江西': [115.89, 28.68],
+                        '福建': [119.3, 26.08],
+                        '广西': [108.33, 22.84],
+                        '嘉兴': [120.76, 30.75]
+                    }
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    fun6();
+
+
+    function returnMainPage() {
+        top.location.href = "../../shbz1.html";
+    }
+
+</script>
+
+
+</body>
+</html>

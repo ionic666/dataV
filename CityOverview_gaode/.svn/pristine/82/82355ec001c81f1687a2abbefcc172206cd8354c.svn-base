@@ -1,0 +1,156 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/13
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.remoteService{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 280px;
+        }
+        div#remoteServiceBar{
+            height: 85%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="remoteService">
+    <p class="headerTitle">
+        社保异地业务联网办理情况
+    </p>
+    <%--社保异地业务联网办理情况柱状图--%>
+    <div id="remoteServiceBar">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function CreatSsServiceChart(xAxisYear,relationTransferData,benefitsQaData,medicalSettlementData,piBenefitsComparisonData){
+        var mycharts = echarts.init(document.getElementById('remoteServiceBar'));
+        var option = {
+            color: ['#E88535','#7AC826','#43CED0','#6691FF'],
+            tooltip : {
+                trigger: 'axis',
+                formatter: function (params,ticket,callback) {
+                    var res =params[0].name+'年';
+                    for (var i = 0, l = params.length; i < l; i++) {
+                        var rate = 100*params[i].value;
+                        res += '<br/>' + params[i].seriesName + ' : ' + parseFloat(rate.toFixed(2))+'%';
+                    }
+                    setTimeout(function (){
+                        // 仅为了模拟异步回调
+                        callback(ticket, res);
+                    }, 10)
+                }
+            },
+            grid: {
+                x: '10%',
+                y: '25%',
+                x2: '3%',
+                y2: '16%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data:['异地社保关系转移','异地社保资格待遇认证','','国家异地就医结算','养老保险待遇状态对比'],
+                orient:'horizontal',
+                itemWidth: 10,
+                itemHeight:10,
+               // itemGap:30,
+                x: 'right',
+                y:'5%',
+                textStyle: text_style
+            },
+            calculable : false,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : xAxisYear,
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    splitLine: {show: false},
+                    axisLabel: {show: true, textStyle: text_style,formatter: '{value} 年'}
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#8D8C8C'],
+                            width: 1,
+                            type: 'dashed'}},
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    axisTick: {show: false},
+                    axisLabel: {
+                        show: true,
+                        formatter: function (value){
+                            return value*100+'%';
+                        },
+                        textStyle:text_style
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'异地社保关系转移',
+                    type:'bar',
+                    data:relationTransferData
+                },
+                {
+                    name:'异地社保资格待遇认证',
+                    type:'bar',
+                    data:benefitsQaData
+                },
+                {
+                    name:'国家异地就医结算',
+                    type:'bar',
+                    data:medicalSettlementData
+                },
+                {
+                    name:'养老保险待遇状态对比',
+                    type:'bar',
+                    data:piBenefitsComparisonData
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    //查询社保异地业务联网办理情况近5年的数据
+    $.ajax({
+        type:"POST",
+        url:'../../jxSocialSecurity/getSsRemoteServiceInFiveY.do',
+        dataType:'json',
+        success:function(data){
+            var xAxisYear=data.xAxisYear;
+            var relationTransferData=data.relationTransferData;
+            var benefitsQaData=data.benefitsQaData;
+            var medicalSettlementData=data.medicalSettlementData;
+            var piBenefitsComparisonData=data.piBenefitsComparisonData;
+            CreatSsServiceChart(xAxisYear,relationTransferData,benefitsQaData,medicalSettlementData,piBenefitsComparisonData);
+        }
+    });
+
+</script>
+</body>
+</html>

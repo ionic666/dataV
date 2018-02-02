@@ -1,0 +1,80 @@
+package com.cetc28.PeopleBenefitService.model;
+
+/**
+ * Created by jianglulu on 2017/9/30.
+ */
+public class JxEcoCoreInformation {
+    private String bh;
+    private String businessnumtotal;
+    private String industrytotal;
+    private String industrylasttotal;
+    private String industryspeed;
+    private String profittotal;
+    private String profitlasttotal;
+    private String profitspeed;
+    private String year;
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getBusinessnumtotal() {
+        return businessnumtotal;
+    }
+
+    public void setBusinessnumtotal(String businessnumtotal) {
+        this.businessnumtotal = businessnumtotal;
+    }
+
+    public String getIndustrytotal() {
+        return industrytotal;
+    }
+
+    public void setIndustrytotal(String industrytotal) {
+        this.industrytotal = industrytotal;
+    }
+
+    public String getIndustrylasttotal() {
+        return industrylasttotal;
+    }
+
+    public void setIndustrylasttotal(String industrylasttotal) {
+        this.industrylasttotal = industrylasttotal;
+    }
+
+    public String getIndustryspeed() {
+        return industryspeed;
+    }
+
+    public void setIndustryspeed(String industryspeed) {
+        this.industryspeed = industryspeed;
+    }
+
+    public String getProfittotal() {
+        return profittotal;
+    }
+
+    public void setProfittotal(String profittotal) {
+        this.profittotal = profittotal;
+    }
+
+    public String getProfitlasttotal() {
+        return profitlasttotal;
+    }
+
+    public void setProfitlasttotal(String profitlasttotal) {
+        this.profitlasttotal = profitlasttotal;
+    }
+
+    public String getProfitspeed() {
+        return profitspeed;
+    }
+
+    public void setProfitspeed(String profitspeed) {
+        this.profitspeed = profitspeed;
+    }
+}

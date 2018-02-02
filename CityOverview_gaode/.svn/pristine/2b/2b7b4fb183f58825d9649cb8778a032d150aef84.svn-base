@@ -1,0 +1,116 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.selfService{
+            width: 100%;
+            height: 100%;
+        }
+        div#selfServiceLine{
+            height: 85%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="selfService">
+    <p class="headerTitle">
+        社保自助服务开通率
+    </p>
+    <%--社保自助服务开通率折线图--%>
+    <div id="selfServiceLine">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function CreatSsServiceChart(xAxisYear,selfServiceTakeRate){
+        var mycharts = echarts.init(document.getElementById('selfServiceLine'));
+        var option = {
+            tooltip : {
+                trigger: 'axis',
+                formatter:'{b}<br/>{a}:{c}%'
+            },
+            grid: {
+                x: '5%',
+                y: '10%',
+                x2: '15%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['自助服务开通率'],
+                textStyle: text_style
+            },
+            calculable : false,
+            xAxis : [
+                {
+                    type : 'category',
+                    splitLine:false,
+                    boundaryGap : false,
+                    axisLine: { lineStyle: {
+                        color: '#BFBFBF'
+                    }},
+                    data : xAxisYear,
+                    axisLabel: {show: true, textStyle: text_style}
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    splitLine:false,
+                    show:false,
+                    axisLabel: {show: true, textStyle: text_style}
+                }
+            ],
+            series : [
+                {
+                    name:'自助服务开通率',
+                    type:'line',
+                    symbol:'diamond',
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:true,
+                                position:'right',
+                                formatter:'{c}%',
+                                textStyle: text_style
+                            }
+                        }
+                    },
+                    data:selfServiceTakeRate
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    //查询社保自助服务开通率近5年的数据
+    $.ajax({
+        type:"POST",
+        url:'../../jxSocialSecurity/getSsSelfServiceInFiveY.do',
+        dataType:'json',
+        success:function(data){
+            var xAxisYear=data.xAxisYear;
+            var selfServiceTakeRate=data.selfServiceTakeRate;
+            CreatSsServiceChart(xAxisYear,selfServiceTakeRate);
+        }
+    });
+
+</script>
+</body>
+</html>

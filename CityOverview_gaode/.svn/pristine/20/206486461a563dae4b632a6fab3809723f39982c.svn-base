@@ -1,0 +1,25 @@
+package com.cetc28.idata.dto;
+
+/**
+ * Created by wangxw on 2017/8/18.
+ */
+public class JjHgjjSjzDto {
+    private String bh;
+    private String sj;
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getSj() {
+        return sj;
+    }
+
+    public void setSj(String sj) {
+        this.sj = sj;
+    }
+}

@@ -1,0 +1,155 @@
+package com.cetc28.idata.model;
+
+import java.math.BigDecimal;
+
+public class JxSchoolInfo {
+    private String schoolCode;
+
+    private String qhbh;
+
+    private String name;
+
+    private String jd;
+
+    private String wd;
+
+    private String addr;
+
+    private String type;
+
+    private String tel;
+
+    private String contact;
+
+    private String contactTel;
+
+    private BigDecimal teacherNo;
+
+    private BigDecimal studentNo;
+
+    private BigDecimal roomNumber;
+
+    private String bz;
+
+    private String attri;
+
+    public String getSchoolCode() {
+        return schoolCode;
+    }
+
+    public void setSchoolCode(String schoolCode) {
+        this.schoolCode = schoolCode == null ? null : schoolCode.trim();
+    }
+
+    public String getQhbh() {
+        return qhbh;
+    }
+
+    public void setQhbh(String qhbh) {
+        this.qhbh = qhbh == null ? null : qhbh.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getJd() {
+        return jd;
+    }
+
+    public void setJd(String jd) {
+        this.jd = jd == null ? null : jd.trim();
+    }
+
+    public String getWd() {
+        return wd;
+    }
+
+    public void setWd(String wd) {
+        this.wd = wd == null ? null : wd.trim();
+    }
+
+    public String getAddr() {
+        return addr;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr == null ? null : addr.trim();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel == null ? null : tel.trim();
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact == null ? null : contact.trim();
+    }
+
+    public String getContactTel() {
+        return contactTel;
+    }
+
+    public void setContactTel(String contactTel) {
+        this.contactTel = contactTel == null ? null : contactTel.trim();
+    }
+
+    public BigDecimal getTeacherNo() {
+        return teacherNo;
+    }
+
+    public void setTeacherNo(BigDecimal teacherNo) {
+        this.teacherNo = teacherNo;
+    }
+
+    public BigDecimal getStudentNo() {
+        return studentNo;
+    }
+
+    public void setStudentNo(BigDecimal studentNo) {
+        this.studentNo = studentNo;
+    }
+
+    public BigDecimal getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(BigDecimal roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public String getBz() {
+        return bz;
+    }
+
+    public void setBz(String bz) {
+        this.bz = bz == null ? null : bz.trim();
+    }
+
+    public String getAttri() {
+        return attri;
+    }
+
+    public void setAttri(String attri) {
+        this.attri = attri == null ? null : attri.trim();
+    }
+}

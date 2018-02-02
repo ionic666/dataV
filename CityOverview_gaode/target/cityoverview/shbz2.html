@@ -1,0 +1,1556 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    <title>嘉兴城市运行全景特征图分系统</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="myCss/headTitle.css"/>
+    <link rel="stylesheet" href="myCss/dataStatistics.css"/>
+    <script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+    <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+    <script type="text/javascript" src="myjs/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="myjs/echarts.min.js"></script>
+
+    <style>
+        body{
+            box-sizing: border-box;
+            overflow: hidden !important;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            color: #fff;
+            font-family: "Microsoft YaHei";
+            font-size: 18px;
+            background-size: 100% 100%;
+            position: relative;
+        }
+        a{text-decoration:none}
+        ::-webkit-scrollbar{
+            background-color: #1B1B1D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+        .modelBox{
+            height:90%;
+            width:25%;
+            position: absolute;
+            z-index:101;
+        }
+        .modelBoxL{
+            top:10%;
+            left:0
+        }
+        .modelBoxC{
+            height:10%;
+            width: 50%;
+            bottom:2%;
+            right:25%;
+        }
+        .modelBoxC>div{
+            height:100%;
+            width: 35%;
+        }
+        .modelBoxC-a{
+            float: left;
+        }
+        .modelBoxC-b{
+            float: right;
+        }
+        .modelBoxR{
+            border-top: 2px #0cdaf5 solid;
+            background: rgba(0,0,0,0.5); 
+            height: 95%;
+            width: 73%;
+            top: 10%;
+            right: 1%
+        }
+        .modelBox .model{
+            height:32.8%;
+            width:100%;
+            margin-bottom:1%;
+            border-top: 2px #0cdaf5 solid;
+            position: relative;
+        }
+        .modelBox .model{ /*iframe*/
+            /*width:100%;*/
+            /*height:100%;*/
+            background: rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        .socialSecurityLeft-ssjy>div{
+            margin-top: 1%;
+            margin-left: 8%;
+            height: 50%;
+        }
+        .socialSecurityLeft-ssjy>div>ul>li{
+            display: inline-block;
+            margin: auto;
+            vertical-align: middle;
+        }
+        .socialSecurityLeft-ssjy-a>ul span{
+            vertical-align: middle;
+        }
+        .more{
+            position: absolute;
+            top:2%;
+            right:2%;
+            color: #0DD4EE;
+            cursor: pointer;
+        }
+        #changeImg img{
+            width:120px;
+            height:87px;
+        }
+        #login>button{
+            width: auto;
+            height: auto;
+            font-size: 1.5em;
+            color: #12C6D8;
+            background-color: #1E2222;
+            border: 0;
+            padding:0 0.2em;
+            float: right;
+            margin-right: 0.1em;
+        }
+        #login>button:hover{
+            color: #fff;
+        }
+        #login>h4{
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0.2em 0;
+            text-align: center;
+            color: #0CD9F4;
+
+        }
+        #login>form{
+            width: 100%;
+            height: 80%;
+
+        }
+        #login>form>input{
+            border-size: 0;
+            background-color: #00191C !important;
+        }
+        #login>form>input,#login>form>button{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+            line-height: 10%;
+        }
+        #login>form>button{
+            border-color: #e9ca3d;
+            border-color: #e9ca3d;
+            border-color: #0096AA;
+            background-color: #0096AA;
+        }
+        #login>form>label{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+        }
+
+        #legend div{
+            display: none;
+        }
+        #legend div p{
+            float: left;
+            display:block;
+            padding:10px;
+        }
+        #legend div p span{
+            margin:0px 3px;
+        }
+        #settingModal td{
+            border:0;
+            font-size: 1.3em;
+            color: #0a36e9;
+        }
+        a:hover{
+            /*color: #c74072;*/
+            text-decoration:none;
+        }
+        body{
+            width: 100%;
+        }
+    ul,li{
+        margin: 0;
+        list-style-type:none;
+    }
+    p{
+        margin: 0;
+    }
+        /*头部logo*/
+        .header {
+            width: 60%;
+            height: 7.8%;
+            margin: 0 auto;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: absolute;
+            z-index: 999;
+            top: 2%;
+            margin-left:50%;
+        }
+        .header>div{
+            display: inline-block;
+        }
+
+        #modell{
+            height: 100%;
+            width: 50%;
+            float: left;
+        }
+        #modelr{
+            height: 100%;
+            width: 50%;
+            float: left;
+        }
+        /*高德地图info窗口样式开始*/
+        .amap-toolbar{
+            display:none;
+        }
+        .info {
+            border: solid 1px #7A9095 !important;
+            border-radius: 5px;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 14px;
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        .info span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        /*高德地图info窗口样式开结束*/
+
+        .modelBox>.model>div:first-child{
+            padding-top:10px;
+            height:15%;
+            width:100%;
+        }
+        .modelBox>.model>div:last-child{
+            height:85%;
+            width:100%;
+        }
+        p.headerTitle{
+            padding-left: 3%;
+            font-size: 20px;
+            /*font-weight: bold;*/
+            color:#F2F2F2;
+            width: 100%;
+            font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+            margin:0;
+            float: left;
+            height: 100%;
+            position: relative;
+        }
+        .details{
+            /*margin-left:40%;*/
+        }
+        .details p{
+            font-size: 10px;
+            color:#fff;
+            margin:0px;
+        }
+        .details img{
+            width: 34px;
+        }
+        .details img,.details div,.detail span{
+            float: left;
+            margin-left: 15px;
+            text-align: center;
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 18px;
+            margin:0px;
+        }
+        #wrType{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            margin-left: 15px;
+        }
+
+        /*非公共样式 -* "河长制"--治水*/
+        div.model6{
+            width: 100%;
+            height: 100%;
+        }
+        div#model6{
+            height: 85%;
+            width: 95%;
+        }
+        div#model6 ul{
+            width: 100%;
+            height: 20%;
+            color: #fff;
+        }
+        div#model6 ul li{
+            float: left;
+            width: 49%;
+            height: 100%;
+            /*padding-top: 10px;*/
+            /*padding-left:50px;*/
+        }
+        div#model6 ul li img{
+            float: left;
+        }
+        div#model6 ul .right{
+            float: left;
+            margin-left: 5%;
+        }
+        span.right{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+        }
+        div#ybjjsyl{
+            width: 100%;
+            height: 75%;
+        }
+        div.cardHolder{
+            width: 100%;
+            height: 100%;
+        }
+        div.cardHolderText{
+            height: 23%;
+            font-size: 16px;
+        }
+        div.cardHolderText span{
+            font-size: 1.2em;
+        }
+        div.growPercentText{
+            height: 23%;
+            font-size: 1em;
+        }
+        div.insuredPercentText{
+            height: 23%;
+            font-size: 16px;
+            padding-top: 1%;
+        }
+        div.cardHolder ul{
+            padding-top: 20px;
+            padding-left: 10px;
+            height: 100%;
+        }
+        div.cardHolder ul li{
+            width: 100%;
+            float: left;
+        }
+        /*div#cardHolderBar{*/
+        /*height: 15%;*/
+        /*width: 100%;*/
+        /*}*/
+        #townspeople{
+            width: 400px;
+            height: 15px;
+            margin-left: 5%;
+            margin-top: 2%;
+            background-color: #314B5D;
+            /*border: 1px solid #41719C;*/
+        }
+        .bar_pro{
+            width: 0;
+            height: 100%;
+            background-color: #53A6E2;
+            /*box-shadow: -2px 0 6px 9px #204079;*/
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        #cardHolderSum{
+            padding-left: 15%;
+            font-size: 1.5em;
+        }
+        #growPercent{
+            padding-left: 32%;
+        }
+        #insuredPercent{
+            padding-left: 28%;
+        }
+        #model4{
+            color: #fff;
+        }
+        div.netPointCount{
+            width: 100%;
+            height: 100%;
+        }
+        div#netPointCount{
+            height: 85%;
+            width: 100%;
+        }
+        div#netPointCount span{
+            font-size: 20px;
+        }
+        div#netPointCount>ul#acount{
+            height: 38%;
+            width: 100%;
+            padding-top: 3%;
+        }
+        div#netPointCount span.addBigBlue{
+            font-size: 35px;
+            font-weight: bold;
+            color: #119EE8;
+            width: 140px;
+        }
+        div#netPointCount span.addBigRed{
+            font-size: 26px;
+            font-weight: bold;
+            color: #1297e4;
+        }
+        div#netPointCount>ul#acount li{
+            /*float: left;*/
+            width: 90%;
+            height: 100%;
+            /*padding-top: 5%;*/
+            /*padding-left: 5%;*/
+        }
+        div#netPointCount ul#acount li img{
+            float: left;
+            /*padding-top: 5%;*/
+            margin-left: 10%;
+        }
+        div#netPointCount ul#acount .right{
+            float: left;
+            margin-left: 30%;
+        }
+        ul#top3{
+            float: right;
+            width: 65%;
+            height: 50%;
+            padding: 1px 0 0 1%;
+        }
+        ul#top3 li{
+            width: 33.3%;
+            height: 100%;
+            float: left;
+        }
+        #top3 .blueP{
+            color: #E3CD55;
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 10px 0 0 10px;
+        }
+        .blueP b{
+            color: #E3CD55;
+        }
+        #netPointCount .blueP span{
+            color: #FFC000;
+            vertical-align: top;
+            font-size: 14px;
+        }
+        .centerP span{
+            width:101px;
+            text-align: center;
+            display:inline-block;
+        }
+        .model2{
+            color: #fff;
+        }
+        .socialSecurityLeft-ssjy{
+            width: 100%;
+            height: 76%;
+        }
+        .socialSecurityLeft-ssjy>div{
+            margin-top: 1%;
+            margin-left: 8%;
+            height: 50%;
+        }
+        .socialSecurityLeft-ssjy>div>ul>li{
+            display: inline-block;
+            margin: auto;
+            vertical-align: middle;
+        }
+        .socialSecurityLeft-ssjy-a>ul span{
+            vertical-align: middle;
+        }
+        .dataStatistics,.dataStatistics1{
+            float: left;
+        }
+        .dw{
+            float: left;
+            margin-top: 60px;
+        }
+        .datatd td{background-color:#333;height:37px;padding-left:2px;border:1px solid #fff}
+        #jxMap1,#jxMap2{
+            width: 1100px;
+            height: 800px;
+            display: none;
+        }
+        #legend{
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            bottom: 5%;
+            right: 0;
+            background: url('images/socialSecurity/legend.png') no-repeat;
+        }
+        .cbBtn{
+            position: absolute;
+            right: 7%;
+            top: 3%; 
+        }
+        .cbBtn button{
+            display: inline-block;
+            color: #d6d6d6;
+            background-color: #264d71;
+            text-align: center;
+            padding: 5px 10px;
+            outline: 0;
+            border: 0;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .cbBtn button.active{
+            background-color: #1b69b2;
+            color: #fff;
+        }
+        /*页面导航*/
+        .qu{
+            width: 280px;
+            height: 300px;
+            background: url('images/socialSecurity/cbbg.png') no-repeat;
+            background-size: 100% 100%;
+            display: none;
+            position: absolute;
+            font-size: 15px;
+            padding: 7px 10px;
+            color: #83E9FB;
+            z-index: 9999;
+        }
+        .qu p{
+            width: 100%;
+            margin-top: 4%;
+        }
+        .qu p.cbTitle{
+            box-sizing: border-box;
+            width: 100%;
+            padding: 5px;
+            position: relative;
+            margin: 0;
+            border-bottom: 1px solid #83E9FB;
+        }
+        .qu .cbMs{
+            display: inline-block;
+            width: 60%; 
+            padding-left: 10%;
+            box-sizing: border-box;
+        }
+        .qu .cbNum{
+            display: inline-block;
+            width: 40%;
+            color:#fff;
+        }
+        /*关闭信息框*/
+        .closeBtn{
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            right: 2%;
+            top: 15%;
+            font-style: normal;
+            cursor: pointer;
+        }
+        .blueBig{
+            color: #36acff;
+            font-size: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="tundra">
+<div id="pageNav">
+    <span>当前页面</span>
+    <select id="chooseNav">
+        <option value="001">首页</option>
+        <option value="002">企业参保</option>
+        <option value="003">五险覆盖</option>
+        <option value="004">异地社保</option>
+        <option value="005">阳光医保</option>
+    </select>
+</div>
+<div class="_header">
+    <img src="images/btz.png" alt="" class="outerWidth"/>
+    <h1  class="outerWidth">嘉兴城市综合运营管理中心</h1>
+    <span  class="outerWidth">智慧社保</span>
+    <img src="images/bty.png" alt=""  class="outerWidth"/>
+</div>
+<div id="map">
+
+</div>
+
+<div class="modelBox modelBoxL">
+    <div class="model model1" >
+        <!--<span class="more">更多▶</span>-->
+        <!--<iframe id="iframe1" src="" frameborder="0"></iframe>-->
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">全市参保人员数量：<span class="blueBig">6,198,877</span>人</p>
+        </div>
+        <div id="model">
+            <div id="modell"></div>
+            <div id="modelr"></div>
+        </div>
+    </div>
+
+    <div class="model model3">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">医保卡交易量</p>
+            
+        </div>
+        <div id="model3" class="socialSecurityLeft-ssjy" style="height: 75%">
+                <div class="socialSecurityLeft-ssjy-a">
+                    <p>实时交易笔数</p>
+                    <div>
+                        <div class="dataStatistics" id="jybs">
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set set_last"></div>
+                        </div>
+                        <span class="dw">笔</span>
+                    </div>
+                </div>
+
+                <div class="socialSecurityLeft-ssjy-b">
+                    <p>实时交易金额</p>
+                    <div>
+                        <div class="dataStatistics1" id="jyje">
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set"></div>
+                            <div class="digit_set set_last"></div>
+                        </div>
+                        <span class="dw">元</span>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="model model2">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">社保经办网点服务量实时跟踪</p>
+        </div>
+        <div id="netPointCount">
+            <ul id="acount">
+                <li>
+                    <img src="images/socialSecurity/sy.png" alt=""/>
+                    <div class="right">
+                        <p class="centerP"><span class="addBigBlue counter">&nbsp;&nbsp;65,880 </span>件</p>
+                        <p class="centerP">当日社保业务服务量</p>
+                    </div>
+                </li>
+            </ul>
+            <div style="float: left;padding-left: 5%">
+                <div class="centerP">
+                    <span>
+                     <img src="images/socialSecurity/buest.png" alt=""/>
+                    </span>
+                </div>
+                <p class="centerP"><span>最忙经办点</span></p>
+            </div>
+            <ul id="top3">
+                <li>
+                    <p class="centerP"><span>1.新嘉街道</span></p>
+                    <p class="centerP"><span>社会事业所</span></p>
+                    <p class="blueP"><b class="counter">1,040</b><span>+10</span></p>
+                </li>
+                <li>
+                    <p class="centerP"><span>2.解放街道</span></p>
+                    <p class="centerP"><span>社会事业所</span></p>
+                    <p class="blueP"><b class="counter">832</b><span>+6</span></p>
+                </li>
+                <li>
+                    <p class="centerP"><span>3.建设街道</span></p>
+                    <p class="centerP"><span>社会事业所</span></p>
+                    <p class="blueP"><b class="counter">671</b><span>+3</span></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modelBox modelBoxR">
+    <div class="cbBtn">
+    <button id="cbqk">五险种覆盖率</button>
+    <button id="cover">参保覆盖率</button>
+    </div>
+    <div id="jxMap1"></div>
+    <div id="jxMap2"></div>
+    <!--<div id="legend"></div>-->
+  
+</div>
+<div class="qu">
+    <P class="cbTitle">南湖区参保情况<i class="closeBtn">X</i></P>
+    <p><span class="cbMs">企业参保人数</span><span class="cbNum">312,177人</span></p>
+    <p><span class="cbMs">全区参保率</span><span class="cbNum">91.8%</span></p>
+    <p><span class="cbMs">五类险种参保人数</span><span class="cbNum">283,811人</span></p>
+    <p><span class="cbMs">五类险种参保率</span><span class="cbNum">90.9%</span></p>
+    <p><span class="cbMs">当月社保基金征收额</span><span class="cbNum">5.87亿</span></p>
+    <p><span class="cbMs">当月社保基金支出额</span><span class="cbNum">8,998万</span></p>
+    <p><span class="cbMs">当月医保交易数累计</span><span class="cbNum">138,192笔</span></p>
+</div>
+<div class="qu">
+    <P class="cbTitle">平湖市参保情况<i class="closeBtn">X</i></P>
+    <p><span class="cbMs">企业参保人数</span><span class="cbNum">176,030人</span></p>
+    <p><span class="cbMs">全区参保率</span><span class="cbNum">93.5%</span></p>
+    <p><span class="cbMs">五类险种参保人数</span><span class="cbNum">134,038人</span></p>
+    <p><span class="cbMs">五类险种参保率</span><span class="cbNum">76.1%</span></p>
+    <p><span class="cbMs">当月社保基金征收额</span><span class="cbNum">1.98亿</span></p>
+    <p><span class="cbMs">当月医保交易数累计</span><span class="cbNum">37,960笔</span></p>
+</div>
+<div class="qu">
+    <P class="cbTitle">海宁市参保情况<i class="closeBtn">X</i></P>
+    <p><span class="cbMs">企业参保人数</span><span class="cbNum">223,911人</span></p>
+    <p><span class="cbMs">全区参保率</span><span class="cbNum">89.7%</span></p>
+    <p><span class="cbMs">五类险种参保人数</span><span class="cbNum">187,637人</span></p>
+    <p><span class="cbMs">五类险种参保率</span><span class="cbNum">83.7%</span></p>
+    <p><span class="cbMs">当月社保基金征收额</span><span class="cbNum">2.35亿</span></p>
+    <p><span class="cbMs">当月社保基金支出额</span><span class="cbNum">4,381万</span></p>
+    <p><span class="cbMs">当月医保交易数累计</span><span class="cbNum">40,181笔</span></p>
+</div>
+<div class="qu">
+    <P class="cbTitle">嘉善县参保情况<i class="closeBtn">X</i></P>
+    <p><span class="cbMs">企业参保人数</span><span class="cbNum">389,506人</span></p>
+    <p><span class="cbMs">全区参保率</span><span class="cbNum">91.3%</span></p>
+    <p><span class="cbMs">五类险种参保人数</span><span class="cbNum">309,594人</span></p>
+    <p><span class="cbMs">五类险种参保率</span><span class="cbNum">79.4%</span></p>
+    <p><span class="cbMs">当月社保基金征收额</span><span class="cbNum">4.58亿</span></p>
+    <p><span class="cbMs">当月社保基金支出额</span><span class="cbNum">6,776万</span></p>
+    <p><span class="cbMs">当月医保交易数累计</span><span class="cbNum">78,678笔</span></p>
+</div>
+<div class="qu">
+    <P class="cbTitle">秀洲区参保情况<i class="closeBtn">X</i></P>
+    <p><span class="cbMs">企业参保人数</span><span class="cbNum">522,624人</span></p>
+    <p><span class="cbMs">全区参保率</span><span class="cbNum">92.4%</span></p>
+    <p><span class="cbMs">五类险种参保人数</span><span class="cbNum">446,876人</span></p>
+    <p><span class="cbMs">五类险种参保率</span><span class="cbNum">85.5%</span></p>
+    <p><span class="cbMs">当月社保基金征收额</span><span class="cbNum">6.03亿</span></p>
+    <p><span class="cbMs">当月社保基金支出额</span><span class="cbNum">7,798万</span></p>
+    <p><span class="cbMs">当月医保交易数累计</span><span class="cbNum">171,767笔</span></p>
+</div>
+<div class="qu">
+    <P class="cbTitle">桐乡市参保情况<i class="closeBtn">X</i></P>
+    <p><span class="cbMs">企业参保人数</span><span class="cbNum">160,297人</span></p>
+    <p><span class="cbMs">全区参保率</span><span class="cbNum">89.6%</span></p>
+    <p><span class="cbMs">五类险种参保人数</span><span class="cbNum">100,717人</span></p>
+    <p><span class="cbMs">五类险种参保率</span><span class="cbNum">62.8%</span></p>
+    <p><span class="cbMs">当月社保基金征收额</span><span class="cbNum">1.08亿</span></p>
+    <p><span class="cbMs">当月社保基金支出额</span><span class="cbNum">3,689万</span></p>
+    <p><span class="cbMs">当月医保交易数累计</span><span class="cbNum">36,985笔</span></p>
+</div>
+<div class="qu">
+    <P class="cbTitle">海盐县参保情况<i class="closeBtn">X</i></P>
+    <p><span class="cbMs">企业参保人数</span><span class="cbNum">382,342人</span></p>
+    <p><span class="cbMs">全区参保率</span><span class="cbNum">87.8%</span></p>
+    <p><span class="cbMs">五类险种参保人数</span><span class="cbNum">303,314人</span></p>
+    <p><span class="cbMs">五类险种参保率</span><span class="cbNum">79.3%</span></p>
+    <p><span class="cbMs">当月社保基金征收额</span><span class="cbNum">2.44亿</span></p>
+    <p><span class="cbMs">当月社保基金支出额</span><span class="cbNum">5,337万</span></p>
+    <p><span class="cbMs">当月医保交易数累计</span><span class="cbNum">77,698笔</span></p>
+</div>
+</body>
+<script src="myjs/myEcharts.js"></script>
+<script src="myjs/map/shbz.js"></script>
+<script src="myjs/index.js"></script>
+<script src="map/js/jquery.waypoints.min.js"></script>
+<script src="map/js/jquery.countup.js"></script>
+<script type="text/javascript" src="myjs/jquery.dataStatistics.js"></script>
+<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="myjs/jquery.dataStatistics.js"></script>
+<script src="myjs/map/jxsb.js"></script>
+<script>
+<<<<<<< .mine=======    //地图联动柱形图
+    function mapEchartsBar(valueList,id){
+        //	企业年产值统计
+            var myChart=echarts.init(document.getElementById(id));
+            var option = {
+                color: ['#3696D9'],
+                title : {
+                    text: '全区五类险种参保统计（万人）',
+                    textStyle:{
+                        color:'#fff',
+                        fontSize:20
+                    },
+                    x:'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    formatter:'{a}<br>{b}:{c}'
+                },
+                calculable: false,
+                grid: {
+                    x: '0%',
+                    y: '25%',
+                    x2: '2%',
+                    y2: '10%',
+                    containLabel: true,
+                    borderWidth: 0
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        splitLine: {show: false},
+                        axisLine: {
+                            show: true,
+                            lineStyle: {color: '#8D8C8C'}
+                        },
+                        axisTick: {show: false},
+                        axisLabel: {show: true,interval:0,rotate:0, textStyle: {
+                            color:'#fff',
+                            fontSize:14,
+                            fontFamily:'微软雅黑'
+                        }},
+//          axisLabel: {show: true, textStyle: text_style},
+                        data: ['养老保险','医疗保险','工伤保险','生育保险','失业保险']
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        splitLine: {show: false},
+                        axisLine: {show: false},
+                        axisTick: {show: false},
+                        axisLabel: {show: false}
+                    }
+                ],
+                series: [
+                    {
+                        name: '',
+                        type: 'bar',
+                        barWidth: 25,
+                        barGap: '0',
+                        barCategoryGap:'37%',
+                        itemStyle:{
+                            normal: {
+                                label: {
+                                    show: true,
+                                    formatter: '{c}',
+                                    position:'top',
+                                    textStyle: text_style
+                                }
+                            }
+                        },
+                        data: valueList
+                    }
+                ]
+            };
+            myChart.setOption(option);
+
+    }
+    function mapEchartsPie(data,id){
+        //	各县市区养老保险参保人数对比
+        var myChart=echarts.init(document.getElementById(id));
+        var option = {
+            color:["#3e50db","#2880e5","#4a81ff","#25addf","#1bbf1b","#1bbf68","#00d6ba"],
+            title : {
+                text: '各县市区养老保险参保人数对比',
+                textStyle:{
+                    color:'#fff',
+                    fontSize:20
+                },
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'各县市区养老保险参保人数对比',
+                    type:'pie',
+                    radius : [20, 70],
+                    center : ['50%', 130],
+                    roseType : 'area',
+                    x: '50%',               // for funnel
+                    max: 40,                // for funnel
+                    sort : 'ascending',     // for funnel
+                    data:data
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+
+    }
+    //
+    mapEchartsBar([24.59, 33.29, 20.93, 19.96, 20.54],"nhcbEcharts");
+    mapEchartsBar([29.1, 31.08, 12.6,11.67, 12.88],"xzcbEcharts");
+    mapEchartsBar([22.62, 29.87, 11.49,10.82, 12.88],"hycbEcharts");
+    mapEchartsBar([37.62, 40.76, 25.01,28.73, 27.29],"hncbEcharts");
+    mapEchartsBar([39.4, 39.09, 24.95,29.71, 28.61],"txcbEcharts");
+    mapEchartsBar([33.21, 32.64, 19.1,21.49, 23.48],"phcbEcharts");
+    mapEchartsBar([21.48, 30.87, 14.88,12.09, 11.89],"jscbEcharts");
+    mapEchartsPie([
+        {value:24.59, name:'南湖区'},
+        {value:29.1, name:'秀洲区'},
+        {value:39.4, name:'桐乡市'},
+        {value:37.62, name:'海宁市'},
+        {value:22.62, name:'海盐县'},
+        {value:33.21, name:'平湖市'},
+        {value:21.48, name:'嘉善县'}
+        ],'wx1Echarts');
+    mapEchartsPie([
+        {value:33.28, name:'南湖区'},
+        {value:31.08, name:'秀洲区'},
+        {value:39.09, name:'桐乡市'},
+        {value:40.76, name:'海宁市'},
+        {value:29.87, name:'海盐县'},
+        {value:32.64, name:'平湖市'},
+        {value:30.87, name:'嘉善县'}
+    ],'wx2Echarts');
+    mapEchartsPie([
+        {value:20.93, name:'南湖区'},
+        {value:12.60, name:'秀洲区'},
+        {value:24.95, name:'桐乡市'},
+        {value:25.01, name:'海宁市'},
+        {value:11.49, name:'海盐县'},
+        {value:19.09, name:'平湖市'},
+        {value:14.87, name:'嘉善县'}
+    ],'wx3Echarts');
+    mapEchartsPie([
+        {value:19.96, name:'南湖区'},
+        {value:11.67, name:'秀洲区'},
+        {value:29.71, name:'桐乡市'},
+        {value:28.73, name:'海宁市'},
+        {value:10.82, name:'海盐县'},
+        {value:21.49, name:'平湖市'},
+        {value:12.09, name:'嘉善县'}
+    ],'wx4Echarts');
+    mapEchartsPie([
+        {value:20.54, name:'南湖区'},
+        {value:12.88, name:'秀洲区'},
+        {value:28.61, name:'桐乡市'},
+        {value:27.29, name:'海宁市'},
+        {value:12.88, name:'海盐县'},
+        {value:23.48, name:'平湖市'},
+        {value:11.89, name:'嘉善县'}
+    ],'wx5Echarts');
+    var lunboTimeImg1State=false,//定义开始暂停状态
+            lunboTimeImg2State1=lunboTimeImg2State2=false;//定义开上一步下一步状态
+    var IntervalShbz=null;
+
+    function clearTime(){
+        clearInterval(IntervalShbz);//清除定时器
+        lunboTimeImg1State=false;
+        $("#lunboTimeImg1>img").attr('src',"images/shbz-stop1.png");
+    }
+    function cbqkDiv(myMum){
+        if(myMum==0){
+            $("#wx1").show();
+            $("#wx1").siblings().hide();
+            cover2([
+                {name:'南湖区',value:49.4, x: 0, y:0},
+                {name:'秀洲区', value:75.39, x: 0, y:0},
+                {name:'桐乡市', value:56.9, x: 0, y:0},
+                {name:'海宁市', value:55.18, x: 0, y:0},
+                {name:'海盐县', value:59.48, x: 0, y:0},
+                {name:'平湖市', value:67.29, x: 0, y:0},
+                {name:'嘉善县',value:55.18, x:0,y:0}
+            ]);
+        }else if(myMum==1){
+            $("#wx2").show();
+            $("#wx2").siblings().hide();
+            cover2([
+                {name:'南湖区', value:66.85, x: 0, y:0},
+                {name:'秀洲区', value:80.49, x: 0, y:0},
+                {name:'桐乡市', value:56.41, x: 0, y:0},
+                {name:'海宁市', value:59.79, x: 0, y:0},
+                {name:'海盐县', value:78.54, x: 0, y:0},
+                {name:'平湖市', value:66.12, x: 0, y:0},
+                {name:'嘉善县', value:79.33, x:0,y:0}
+            ]);
+        }else if(myMum==2){
+            $("#wx3").show();
+            $("#wx3").siblings().hide();
+            cover2([
+                {value:42.01, name:'南湖区', x: 0, y:0},
+                {value:32.63, name:'秀洲区', x: 0, y:0},
+                {value:36.01, name:'桐乡市', x: 0, y:0},
+                {value:36.68, name:'海宁市', x: 0, y:0},
+                {value:30.21, name:'海盐县', x: 0, y:0},
+                {value:38.68, name:'平湖市', x: 0, y:0},
+                {value:38.23, name:'嘉善县',x:0,y:0}
+            ]);
+        }else if(myMum==3){
+            $("#wx4").show();
+            $("#wx4").siblings().hide();
+            cover2([
+                {value:40.09, name:'南湖区', x: 0, y:0},
+                {value:30.22, name:'秀洲区', x: 0, y:0},
+                {value:42.89, name:'桐乡市', x: 0, y:0},
+                {value:42.15, name:'海宁市', x: 0, y:0},
+                {value:28.45, name:'海盐县', x: 0, y:0},
+                {value:43.53, name:'平湖市', x: 0, y:0},
+                {value:31.06, name:'嘉善县',x:0,y:0}
+            ]);
+        }else if(myMum==4){
+            $("#wx5").show();
+            $("#wx5").siblings().hide();
+            cover2([
+                {value:41.27, name:'南湖区', x: 0, y:0},
+                {value:33.36, name:'秀洲区', x: 0, y:0},
+                {value:41.30, name:'桐乡市', x: 0, y:0},
+                {value:40.04, name:'海宁市', x: 0, y:0},
+                {value:33.88, name:'海盐县', x: 0, y:0},
+                {value:47.57, name:'平湖市', x: 0, y:0},
+                {value:30.56, name:'嘉善县',x:0,y:0}
+            ]);
+        }
+    }
+    $("#lunboTimeImg1>img").click(function(){//开始暂停
+        var timeNum=parseInt($(".shbzPress-active").attr('data-num'));
+        if(lunboTimeImg1State==false){
+
+            lunboTimeImg1State=true;
+            $("#lunboTimeImg1>img").attr('src',"images/shbz-play1.png");
+            IntervalShbz=setInterval(function(){
+                if(timeNum>=5){
+                    timeNum=0;
+                }
+                $(".shbzPress-circle").eq(timeNum).addClass("shbzPress-active");
+                $(".shbzPress-circle").eq(timeNum).siblings().removeClass("shbzPress-active");
+                cbqkDiv(timeNum);
+                timeNum++;
+            },2000);
+        }else{
+            clearInterval(IntervalShbz);//清除定时器
+//            IntervalShbz=null;
+            timeNum=$(".shbzPress-active").attr('data-num');
+            lunboTimeImg1State=false;
+            $("#lunboTimeImg1>img").attr('src',"images/shbz-stop1.png");
+        }
+    }).mouseover(function(){
+
+        if(lunboTimeImg1State==false){
+            $("#lunboTimeImg1>img").attr('src',"images/shbz-stop2.png");
+
+        }else{
+
+            $("#lunboTimeImg1>img").attr('src',"images/shbz-play2.png");
+
+        }
+    }).mouseout(function (){
+        if(lunboTimeImg1State==false){
+            $("#lunboTimeImg1>img").attr('src',"images/shbz-stop1.png");
+        }else{
+            $("#lunboTimeImg1>img").attr('src',"images/shbz-play1.png");
+        }
+    });
+    $("#lunboTimeImg2>.next").click(function(){//下一步
+        var activeNum;
+        activeNum=parseInt($(".shbzPress-active").attr('data-num'));
+            clearTime();
+
+        if(activeNum>=4){
+            activeNum=-1;
+        }
+        cbqkDiv(activeNum+1);//右侧信息框
+
+        $(".shbzPress-circle").eq(activeNum+1).addClass("shbzPress-active");
+        $(".shbzPress-circle").eq(activeNum).removeClass("shbzPress-active");
+
+        activeNum++;
+
+        $("#lunboTimeImg2>.next").attr('src',"images/shbz-prev1.png");
+    }).mouseover(function(){
+        $("#lunboTimeImg2>.next").attr('src',"images/shbz-prev2.png");
+    }).mouseout(function (){
+        $("#lunboTimeImg2>.next").attr('src',"images/shbz-prev1.png");
+    });
+    $("#lunboTimeImg2>.prev").click(function(){//上一步
+        var activeNum;
+        activeNum=parseInt($(".shbzPress-active").attr('data-num'));
+        clearTime();
+        if(activeNum<=-1){
+            activeNum=4;
+
+        }
+
+        $(".shbzPress-circle").eq(activeNum-1).addClass("shbzPress-active");
+        $(".shbzPress-circle").eq(activeNum).removeClass("shbzPress-active");
+        if(activeNum==0){
+            cbqkDiv(4);//右侧信息框
+        }else{
+            cbqkDiv(activeNum-1);//右侧信息框
+        }
+        activeNum--;
+
+        $("#lunboTimeImg2>.prev").attr('src',"images/shbz-next1.png");
+    }).mouseover(function(){
+        $("#lunboTimeImg2>.prev").attr('src',"images/shbz-next2.png");
+    }).mouseout(function (){
+        $("#lunboTimeImg2>.prev").attr('src',"images/shbz-next1.png");
+    });
+>>>>>>> .theirs    var sumWidth=0;//计算头部div中所有元素的宽度
+    $('.outerWidth').each(function(){
+        var myWidth=$(this).outerWidth(true);//计算头部div中每个元素的宽度
+//        console.log(myWidth)
+        sumWidth+=myWidth;
+    })
+    //    console.log(sum)
+    $("._header").css("left",-sumWidth/2+"px");//让头部标题居中
+//    导航切换
+    $('#chooseNav').change(function(){
+        var navText=$('#chooseNav').val();
+        switch(navText){
+            case '001':shouye();break;
+            case '002':qycb();break;
+            case '003':wxfg();break;
+            case '004':ydcb();break;
+            case '005':ygyb();break;
+            
+        }
+    });
+    function shouye(){
+        top.location.href="shbz1.html";
+    }
+    function qycb(){
+        top.location.href="iframeSecond/secondBox/qycb.jsp";
+    }
+    function wxfg(){
+        top.location.href="iframeSecond/secondBox/wxfgqk.jsp";
+    }
+    function ydcb(){
+        top.location.href="iframeSecond/secondBox/ywbl.jsp";
+    }
+    function ygyb(){
+        top.location.href="iframeSecond/secondBox/sunPublicServe.jsp";
+    }
+//    地图切换
+    $('.cbBtn').delegate('button','click',function(){
+        $(this).siblings().removeClass('active');
+<<<<<<< .mine       $(this).addClass('active');
+       if($(this).html()=='五险种覆盖率'){
+           $('#jxMap1').css('display','block');
+           $('#jxMap2').css('display','none');
+       }
+       else{
+           cover();
+           $('.qu').css('display','none');
+           $('#jxMap2').css('display','block');
+           $('#jxMap1').css('display','none');
+       }
+=======        $(this).addClass('active');
+        if($(this).html()=='五险种覆盖率'){
+            cover2([
+                {name: '秀洲区', value: 75.39, x: 0, y:0},
+                {name: '桐乡市', value: 56.9, x: 0, y:0},
+                {name: '南湖区', value: 49.4, x: 0, y:0},
+                {name: '平湖市', value: 67.29, x: 0, y:0},
+                {name: '海盐县', value: 59.48, x: 0, y:0},
+                {name: '海宁市', value: 55.18, x: 0, y:0},
+                {name: '嘉善县', value: 55.18,x:0,y:0}
+            ]);
+            $("#wx1").show();
+            $("#wx1").siblings().hide();
+            $(".shbzPress-circle").eq(0).addClass("shbzPress-active");
+            $(".shbzPress-circle").eq(0).siblings().removeClass("shbzPress-active");
+            $("#lunboTime").show();
+            $('#jxMap1').show();
+            $('#jxMap2').hide();
+            $('.qu').hide();
+        }else{
+            clearTime();
+            $("#nhcb").show();
+            $("#nhcb").siblings().hide();
+            cover1();
+            $("#lunboTime").hide();
+            $('#jxMap2').show();
+            $('#jxMap1').hide();
+        }
+>>>>>>> .theirs    });
+//    关闭信息框
+    $('.closeBtn').click(function(){
+        $('.qu').css('display','none');
+    });
+    //参保人数量
+    function cbrs(){
+        var myChart1 = echarts.init(document.getElementById("modell"));
+        myChart2 = echarts.init(document.getElementById("modelr"));
+        var option1 = {
+            title: {
+                subtext: '户籍人口',
+                text: '75%',
+                x: 'center',
+                y: '40%',
+                itemGap: 5,
+                textStyle : {
+                    color: '#0BE2FE',
+                    fontSize: 24
+                },
+                subtextStyle:{
+                    color: '#0BE2FE',
+                    fontSize:16
+                }
+            },
+            calculable : false,
+            color:['#36ACFF','#007ACF'],
+            series : [
+                {
+                    name:'户籍人口',
+                    type:'pie',
+                    radius : ['40%', '60%'],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : false
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        },
+                        emphasis : {
+                            label : {
+                                show : true,
+                                position : 'center',
+                                textStyle : text_style
+                            }
+                        }
+                    },
+                    data:[
+                        {value:75},
+                        {value:25}
+                    ]
+                }
+            ]
+        };
+        option2= {
+            title: {
+                subtext: '新居民',
+                text: '65%',
+                x: 'center',
+                y: '40%',
+                itemGap: 5,
+                textStyle : {
+                    color: '#0AF4FF',
+                    fontSize: 24
+                },
+                subtextStyle:{
+                    color: '#0AF4FF',
+                    fontSize:16
+                }
+            },
+            color:['#1DE7E9','#00AAAC'],
+            calculable : false,
+            series : [
+                {
+                    name:'新居民',
+                    type:'pie',
+                    radius : ['40%', '60%'],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : false
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        },
+                        emphasis : {
+                            label : {
+                                show : true,
+                                position : 'center',
+                                textStyle : text_style
+                            }
+                        }
+                    },
+                    data:[
+                        {value:65},
+                        {value:35}
+                    ]
+                }
+            ]
+        };
+        myChart1.setOption(option1);
+        myChart2.setOption(option2);
+    }
+    cbrs();
+    $('.counter').countUp({
+        delay: 2,
+        time: 200
+    });
+    function getServerDate(){
+        var time =  new Date($.ajax({async: false}).getResponseHeader("Date"));
+        var secondNum;
+        //每天8点开始计数,小于8点设为0
+        if(time.getHours() < 8){
+            secondNum=0;
+        }
+        //获取一天中的秒数
+        else{
+            secondNum = (time.getHours() - 8) *3600 + time.getMinutes()*60 + time.getSeconds(); 
+        }
+        //将秒数作为初始值和最终值传入
+        dataStatis(secondNum);
+    }
+    function dataStatis(secondNum) {
+        console.log(secondNum);
+        //如果秒数为0就显示0，静止不动
+        if(secondNum==0){
+            $('#jybs').dataStatistics({min:0,max:0,time:100,len:7});
+            $('#jyje').dataStatistics({min:0,max:0,time:100,len:7});
+        }
+        else{
+            $('#jybs').dataStatistics({min:secondNum,max:999999,time:500000000,len:7});
+            $('#jyje').dataStatistics({min:secondNum*15,max:999999,time:800,len:7});
+        }
+    }
+    $(document).ready(function(){
+        getServerDate();
+        $('.cbBtn button:eq(0)').addClass('active');
+        $('#jxMap1').css('display','block');
+        cbqk();
+        $('.qu:eq(0)').css('display','block');
+        $('.qu:eq(0)').css('top','140px');
+        $('.qu:eq(0)').css('left','1020px');
+    });
+
+    //全局变量，记录鼠标点击的坐标点
+    var _x=0;
+    var _y=0;
+    //事件捕获
+    document.addEventListener('click',function(e){
+        var e = event || window.event;
+        _x=e.pageX;
+        _y=e.pageY;
+    },true)
+    //参保情况
+    function cbqk(){
+        var mycharts=echarts.init(document.getElementById("jxMap1"));
+        mycharts.on('click', function (params) {
+            var city = params.name;
+            switch(city){
+                //把自己对应的div显示，并根据鼠标点击的位置计算位置
+                case '南湖区':
+                    $('.qu').css('display','none');
+                    $('.qu:eq(0)').css('display','block');
+                    $('.qu:eq(0)').css('top',_y-300);
+                    $('.qu:eq(0)').css('left',_x-140);
+                    break;
+                case '平湖市':
+                    $('.qu').css('display','none');
+                    $('.qu:eq(1)').css('display','block');
+                    $('.qu:eq(1)').css('top',_y-300);
+                    $('.qu:eq(1)').css('left',_x-140);
+                    break;
+                case '海宁市':
+                    $('.qu').css('display','none');
+                    $('.qu:eq(2)').css('display','block');
+                    $('.qu:eq(2)').css('top',_y-300);
+                    $('.qu:eq(2)').css('left',_x-140);
+                    break;
+                case '嘉善县':
+                    $('.qu').css('display','none');
+                    $('.qu:eq(3)').css('display','block');
+                    $('.qu:eq(3)').css('top',_y-300);
+                    $('.qu:eq(3)').css('left',_x-140);
+                    break;
+                case '秀洲区':
+                    $('.qu').css('display','none');
+                    $('.qu:eq(4)').css('display','block');
+                    $('.qu:eq(4)').css('top',_y-300);
+                    $('.qu:eq(4)').css('left',_x-140);
+                    break;
+                case '桐乡市':
+                    $('.qu').css('display','none');
+                    $('.qu:eq(5)').css('display','block');
+                    $('.qu:eq(5)').css('top',_y-300);
+                    $('.qu:eq(5)').css('left',_x-140);
+                    break;
+                case '海盐县':
+                    $('.qu').css('display','none');
+                    $('.qu:eq(6)').css('display','block');
+                    $('.qu:eq(6)').css('top',_y-300);
+                    $('.qu:eq(6)').css('left',_x-140);
+                    break;
+                
+            }
+           
+        });
+        // 指定图表的配置项和数据
+        mycharts.showLoading();
+        $.get('jsonData/330400.json', function (geoJson) {
+            mycharts.hideLoading();
+            echarts.registerMap('jiaxing', geoJson);
+            mycharts.setOption(option = {
+                tooltip:{show: false},
+                visualMap:{
+                    show:false,
+                    inRange:{
+                        color:'#3FBCE2'
+                    }
+                },
+                series: [
+                    {
+                        name: '嘉兴',
+                        type: 'map',
+                        mapType: 'jiaxing', // 自定义扩展图表类型
+                        itemStyle:{
+                            normal:{
+                                label:{
+                                    show:true,
+                                    fontSize: 23,
+                                    color: '#030D1B'
+                                }
+                                },
+                            emphasis:{label:{show:true}}
+                        },
+//                        roam:true,   //地图缩放
+                        layoutCenter:['60%','50%'],
+                        layoutSize:'100%',
+                        nameMap: {
+                            'xiuzhou': '秀洲区',
+                            'touxiang': '桐乡市',
+                            'nanhu': '南湖区',
+                            'pinghu': '平湖市',
+                            'haiyan': '海盐县',
+                            'haining': '海宁市',
+                            'jiashan': '嘉善县'
+                        },
+                        data:[
+                            {name: '秀洲区', value: 90.2},
+                            {name: '桐乡市', value: 62.5},
+                            {name: '南湖区', value: 90.2},
+                            {name: '平湖市', value: 78.2},
+                            {name: '海盐县', value: 62.5},
+                            {name: '海宁市', value: 75.2},
+                            {name: '嘉善县', value: 62.5}
+                        ]
+                    }
+                ]
+            });
+        });
+    }
+   function cover(){
+       var mycharts=echarts.init(document.getElementById("jxMap2"));
+       // 指定图表的配置项和数据
+       mycharts.showLoading();
+       $.get('jsonData/330400.json', function (geoJson) {
+           mycharts.hideLoading();
+           echarts.registerMap('jiaxing', geoJson);
+           mycharts.setOption(option = {
+               tooltip:{show: false},
+               visualMap: {
+                   //设置图例范围
+                   itemHeight: '20px',
+                   pieces: [
+                       {gt: 0,lte:70,label: '0-70%'},
+                       {gt: 70, lte: 80,label: '70%-80%'},
+                       {gt: 80, lte: 90,label: '80%-90%'},
+                       {gt: 90, lte: 95,label: '90%-95%'},
+                       {gt: 95, lte: 100,label: '95%-100%'}
+                   ],
+//                   right: 'right',
+//                   bottom: 'bottom',
+                   color: ['#41abf5','#258fda','#1a78ba','#146298','#105381'],
+                   textStyle: {
+                       color: '#fff',
+                       fontSize: 18
+                   }
+               },
+               series: [
+                   {
+                       name: '嘉兴',
+                       type: 'map',
+                       mapType: 'jiaxing', // 自定义扩展图表类型
+                       itemStyle:{
+                           normal:{label:{show:true}},
+                           emphasis:{label:{show:true}}
+                       },
+                       roam:true,
+                       layoutCenter:['60%','50%'],
+                       layoutSize:'100%',
+                       nameMap: {
+                           'xiuzhou': '秀洲区',
+                           'touxiang': '桐乡市',
+                           'nanhu': '南湖区',
+                           'pinghu': '平湖市',
+                           'haiyan': '海盐县',
+                           'haining': '海宁市',
+                           'jiashan': '嘉善县'
+                       },
+                       label:{
+                           normal:{
+                               show:true,
+                               formatter:'{b}\n{c}%',
+                               position: 'bottom',
+                               color: '#001a2c',
+                               fontSize: 24
+
+                           }
+                       },
+                       data:[
+                           {name: '秀洲区', value: 90.2, x: 0, y:0},
+                           {name: '桐乡市', value: 62.5, x: 0, y:0},
+                           {name: '南湖区', value: 90.2, x: 0, y:0},
+                           {name: '平湖市', value: 78.2, x: 0, y:0},
+                           {name: '海盐县', value: 62.5, x: 0, y:0},
+                           {name: '海宁市', value: 75.2, x: 0, y:0},
+                           {name: '嘉善县', value: 62.5,x:0,y:0}
+                       ]
+                   }
+               ]
+           });
+       });
+   }
+</script>
+</html>

@@ -1,0 +1,106 @@
+package com.cetc28.PeopleBenefitService.controller;
+
+import com.cetc28.PeopleBenefitService.service.IJxAddminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 嘉兴行政服务
+ * Created by Jessica on 2017/9/4.
+ */
+@Controller
+@RequestMapping("/jxaddmin")
+public class JxAddminController {
+    @Autowired
+    private IJxAddminService iJxAddminService;
+
+    /**
+     * 查询嘉兴各区市县的一站式办理率和网上统一入口率
+     * @return
+     */
+    @RequestMapping("queryOnestopAndOnline.do")
+    @ResponseBody
+    public List queryOnestopAndOnline() {
+        List list = new ArrayList();
+        list = iJxAddminService.queryOnestopAndOnline();
+        return list;
+    }
+
+    /**
+     * 查询嘉兴各区市县的电子证照使用频次
+     * @return
+     */
+    @RequestMapping("queryCertFreq.do")
+    @ResponseBody
+    public List queryCertFreq() {
+        List list = new ArrayList();
+        list = iJxAddminService.queryCertFreq();
+        return list;
+    }
+
+    /**
+     * 查询嘉兴各区市县的办件事项详情（显示6条记录）
+     * @return
+     */
+    @RequestMapping("queryServIterms.do")
+    @ResponseBody
+    public List queryServIterms() {
+        List list = new ArrayList();
+        list = iJxAddminService.queryServIterms();
+        return list;
+    }
+
+    /**
+     * 查询嘉兴各区市县的办件事项详情（显示全部记录）
+     * @return
+     */
+    @RequestMapping("queryAllIterms.do")
+    @ResponseBody
+    public List queryAllIterms() {
+        List list = new ArrayList();
+        list = iJxAddminService.queryAllIterms();
+        return list;
+    }
+
+    /**
+     * 查询嘉兴各区市县的当月的申请量及办结量
+     * @return
+     */
+    @RequestMapping("queryPictureData.do")
+    @ResponseBody
+    public List queryPictureData() {
+        List list = new ArrayList();
+        list = iJxAddminService.queryPictureData();
+        return list;
+    }
+    /**
+     * 查询嘉兴各区市县当年的累计办件量
+     * @return
+     */
+    @RequestMapping("queryYearAreaItems.do")
+    @ResponseBody
+    public List queryYearAreaItems() {
+        return  iJxAddminService.queryYearAreaItems();
+    }
+    /**
+     * 查询嘉兴市所有区域当年的累计办件量
+     * @return
+     */
+    @RequestMapping("queryYearAllItems.do")
+    @ResponseBody
+    public int queryYearAllItems() {
+        return  iJxAddminService.queryYearAllItems();
+    }
+
+    @RequestMapping("queryConvenientCenter.do")
+    @ResponseBody
+    public List queryConvenientCenter(Integer qylx){
+        return iJxAddminService.queryConvenientCenter(qylx);
+    }
+
+}

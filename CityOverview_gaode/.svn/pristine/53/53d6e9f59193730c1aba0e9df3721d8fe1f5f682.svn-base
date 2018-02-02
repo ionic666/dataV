@@ -1,0 +1,80 @@
+package com.cetc28.idata.model;
+
+import java.math.BigDecimal;
+
+/**
+ * 嘉兴互联网经济实体类
+ */
+public class JxEcoInternet {
+
+    private String time;
+
+    private BigDecimal inforIndex;
+
+    private BigDecimal inforRank;
+
+    private BigDecimal ecoIndex;
+
+    private BigDecimal ecoRank;
+
+    private BigDecimal mixIndex;
+
+    private BigDecimal mixRank;
+
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time == null ? null : time.trim();
+    }
+
+    public BigDecimal getInforIndex() {
+        return inforIndex;
+    }
+
+    public void setInforIndex(BigDecimal inforIndex) {
+        this.inforIndex = inforIndex;
+    }
+
+    public BigDecimal getInforRank() {
+        return inforRank;
+    }
+
+    public void setInforRank(BigDecimal inforRank) {
+        this.inforRank = inforRank;
+    }
+
+    public BigDecimal getEcoIndex() {
+        return ecoIndex;
+    }
+
+    public void setEcoIndex(BigDecimal ecoIndex) {
+        this.ecoIndex = ecoIndex;
+    }
+
+    public BigDecimal getEcoRank() {
+        return ecoRank;
+    }
+
+    public void setEcoRank(BigDecimal ecoRank) {
+        this.ecoRank = ecoRank;
+    }
+
+    public BigDecimal getMixIndex() {
+        return mixIndex;
+    }
+
+    public void setMixIndex(BigDecimal mixIndex) {
+        this.mixIndex = mixIndex;
+    }
+
+    public BigDecimal getMixRank() {
+        return mixRank;
+    }
+
+    public void setMixRank(BigDecimal mixRank) {
+        this.mixRank = mixRank;
+    }
+}

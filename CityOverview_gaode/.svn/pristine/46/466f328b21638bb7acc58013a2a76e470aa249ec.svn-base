@@ -1,0 +1,79 @@
+package com.cetc28.idata.service;
+
+import com.cetc28.idata.model.JxIndicator;
+import com.cetc28.idata.model.JxIndicatorsUser;
+import com.cetc28.idata.model.JxJczb;
+import com.cetc28.idata.model.Xzqh;
+import org.omg.CORBA.PUBLIC_MEMBER;
+
+import java.util.List;
+
+/**
+ * Created by linyu on 2017/8/17.
+ */
+public interface IJxSysService {
+
+    /**
+     * 获取系统一级监测指标（已废弃）
+     * @return
+     */
+    public abstract List<JxIndicator> listIndicators();
+
+    /**
+     * 获取城市运行全景图监测指标
+     * @param bh 上级编号
+     * @return
+     */
+    public abstract List<JxJczb> listSysIndicators(String bh);
+
+    /**
+     * 查询所有监测指标信息
+     * @param bh 上级指标编号
+     * @return
+     */
+    public abstract List<JxJczb> listAllSysIndicators(String bh);
+
+
+    /**
+     * 新增指标信息
+     * @param indicator 指标信息
+     * @return
+     */
+    public abstract String addSysIndicators(JxJczb indicator);
+
+    /**
+     * 更新监测指标信息
+     * @param indicator 指标信息
+     * @return
+     */
+    public abstract String updateSysIndicators(JxJczb indicator);
+
+    /**
+     * 删除监测指标信息
+     * @param indicatorId 指标id号
+     * @return
+     */
+    public abstract String deleteSysIndicators(String indicatorId);
+
+    /**
+     * 获取下级区划信息
+     * @param qhxh 区划序号
+     * @return
+     */
+    public abstract List<Xzqh> listJxXzqh(String qhxh);
+
+    /**
+     * 根据一级指标编号获取二级指标的展示信息
+     * @param bh
+     * @return
+     */
+    public abstract List<JxJczb> listIndicatorsShown(String userId, String bh);
+
+    /**
+     * 更新指定用户的监测指标
+     * @param indicatorsUser
+     * @return
+     */
+    public abstract String updateIndicatorsShown(List<JxIndicatorsUser> indicatorsUser);
+
+}

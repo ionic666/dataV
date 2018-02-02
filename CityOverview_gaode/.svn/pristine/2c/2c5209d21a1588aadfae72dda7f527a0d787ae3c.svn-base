@@ -1,0 +1,58 @@
+var hlwjj = {
+    hlwjjAjax: function () {
+        map.panTo([120.851,30.722]);//默认第一个参数的坐标点居中
+        var marker=[]
+
+        $.ajax({
+            type: 'post',
+            url: "jxeco/netEco/queryIndustrialSite.do",
+            dataType: 'JSON',
+            success: function (data) {
+                $.each(data,function(i,v){
+
+                    if(v.MC.indexOf('集群')!=-1){
+                        marker[i] = new AMap.Marker({ //添加自定义点标记
+                            map: map,
+                            position: [v.JD, v.WD], //基点位置
+                            offset: new AMap.Pixel(-30, -100), //相对于基点的偏移位置
+                            draggable: false,  //是否可拖动
+                            content: '<div class="marker-internet-blue"><div class="jt-point"></div><span>'+v.MC+'</span></div>'   //自定义点标记覆盖物内容
+                        });
+                        new AMap.Marker({
+                            map: map,
+                            position: [v.JD, v.WD],
+                            offset: new AMap.Pixel(-24, -24), //相对于基点的偏移位置
+                            icon: new AMap.Icon({
+                                size: new AMap.Size(48, 48),  //图标大小
+                                image: "images/point1.gif"
+                            })
+                        });
+                    }else{
+                        marker[i] = new AMap.Marker({ //添加自定义点标记
+                            map: map,
+                            position: [v.JD, v.WD], //基点位置
+                            offset: new AMap.Pixel(-30, -100), //相对于基点的偏移位置
+                            draggable: false,  //是否可拖动
+                            content: '<div class="marker-internet-red"><div class="jt-point"></div><span>'+v.MC+'</span></div>'   //自定义点标记覆盖物内容
+                        });
+                        new AMap.Marker({
+                            map: map,
+                            position: [v.JD, v.WD],
+                            offset: new AMap.Pixel(-24, -24), //相对于基点的偏移位置
+                            icon: new AMap.Icon({
+                                size: new AMap.Size(48, 48),  //图标大小
+                                image: "images/point1.gif"
+                            })
+                        });
+                    }
+
+
+
+                })
+
+            }
+        })
+
+
+    }
+}

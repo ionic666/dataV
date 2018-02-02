@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IJxUtilityMainteDao">
+
+    <resultMap id="FaultResultMap" type="com.cetc28.idata.dto.JxUtilityManteFaultDto">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="BH" jdbcType="VARCHAR" property="bH" />
+        <result column="UTILITY_TYPE_DES" jdbcType="VARCHAR" property="utilityType" />
+        <result column="LAT" jdbcType="DECIMAL" property="lat" />
+        <result column="LON" jdbcType="DECIMAL" property="lon" />
+        <result column="DES" jdbcType="VARCHAR" property="des" />
+        <result column="LOCA" jdbcType="VARCHAR" property="loca" />
+        <result column="DATE_YMD" jdbcType="VARCHAR" property="dateYmd" />
+        <result column="FAULT_STATE_DES" jdbcType="VARCHAR" property="state" />
+        <result column="ADMI" jdbcType="VARCHAR" property="admi" />
+        <result column="TEL" jdbcType="VARCHAR" property="tel" />
+        <result column="FAULT_TYPE_DES" jdbcType="VARCHAR" property="faultTypeDes" />
+        <result column="FAULT_DIAG" jdbcType="VARCHAR" property="faultDiag" />
+        <result column="FAULT_FACT_DES" jdbcType="VARCHAR" property="faultFactDes" />
+        <result column="FAULT_RANK_DES" jdbcType="VARCHAR" property="faultRankDes" />
+
+    </resultMap>
+
+    <resultMap id="DeviceBaseResultMap" type="com.cetc28.idata.dto.JxUtilityManteDeviceBaseDto" >
+        <id column="DEVICE_ID" property="deviceId" jdbcType="VARCHAR" />
+        <result column="BH" property="bh" jdbcType="VARCHAR" />
+        <result column="UTILITY_TYPE_DES" property="utilityTypeDes" jdbcType="VARCHAR" />
+        <result column="LAT" property="lat" jdbcType="DECIMAL" />
+        <result column="LON" property="lon" jdbcType="DECIMAL" />
+        <result column="DEVICE_TYPE_DES" property="deviceTypeDes" jdbcType="VARCHAR" />
+        <result column="DEVICE_LOCA" property="deviceLoca" jdbcType="VARCHAR" />
+        <result column="STRUCTURE" property="structure" jdbcType="VARCHAR" />
+        <result column="EMBED_MODE" property="embedMode" jdbcType="VARCHAR" />
+        <result column="DATE_YMD" property="dateYmd" jdbcType="VARCHAR" />
+        <result column="ADMI" property="admi" jdbcType="VARCHAR" />
+        <result column="PROJECT_NAME" property="projectName" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="AlarmPointResultMap" type="com.cetc28.idata.dto.JxUtilityManteAlarmPointDto" >
+        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="DEVICE_NO" property="deviceNo" jdbcType="VARCHAR" />
+        <result column="ALARM_DES" property="alarmDes" jdbcType="VARCHAR" />
+        <result column="ALARM_TYPE_DES" property="alarmTypeDes" jdbcType="VARCHAR" />
+        <result column="DATE_YMDHM" property="dateYmdhm" jdbcType="VARCHAR" />
+        <result column="STATE" property="state" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="DeviceStateResultMap" type="com.cetc28.idata.dto.JxUtilityManteDeviceStateDto" >
+        <id column="DEVICE_ID" property="deviceId" jdbcType="VARCHAR" />
+        <id column="MES_ID" jdbcType="VARCHAR" property="mesId" />
+        <result column="MES_VALUE" property="mesValue" jdbcType="DECIMAL" />
+        <result column="BATT" property="batt" jdbcType="DECIMAL" />
+        <result column="DEVICE_STATE" property="deviceState" jdbcType="VARCHAR" />
+        <result column="MES_TIME" property="mesTime" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!-- 查找本月所有故障点信息，按时间降序 -->
+    <select id="findLatestFaultAll" resultMap="FaultResultMap">
+        <![CDATA[ SELECT ID, BH, UTILITY_TYPE_DES, LAT, LON, DES, LOCA, DATE_YMD, FAULT_STATE_DES, ADMI, TEL, FAULT_TYPE_DES, FAULT_DIAG, FAULT_FACT_DES, FAULT_RANK_DES
+                  FROM JX_MANTE_FAULT_STATE fs LEFT JOIN JX_UTILITY_MANTE_FAULT_RANK fr LEFT JOIN JX_UTILITY_TYPE ut LEFT JOIN JX_UTILITY_MANTE_FAULT_TYPE ft RIGHT JOIN JX_UTILITY_MANTE_FAULT f LEFT JOIN JX_UTILITY_MANTE_FAULT_FACTOR2 ff
+                  ON f.fault_fact_code = ff.fault_fact_code ON ft.fault_type_code = f.fault_type_code ON ut.utility_type_code = f.utility_type ON f.fault_rank_code = fr.fault_rank_code ON fs.fault_state_code=f.fault_state_code
+                  WHERE TO_DATE(date_ymd,'YYYY-MM-DD') >= TRUNC((SELECT MAX(TO_DATE(date_ymd,'YYYY-MM-DD')) FROM JX_UTILITY_MANTE_FAULT),'MM') ORDER BY TO_DATE(DATE_YMD,'YYYY-MM-DD') DESC
+        ]]>
+    </select>
+
+    <select id="findLastMonthDate" resultType="java.util.HashMap">
+        <![CDATA[ SELECT TO_CHAR(TRUNC(MAX(TO_DATE(date_ymd,'YYYY-MM-DD')),'MM'),'YYYY-MM-DD') AS beginDate, MAX(date_ymd) AS endDate  FROM JX_UTILITY_MANTE_FAULT
+         ]]>
+    </select>
+
+    <!-- 按管网类型查找一定时间范围内的故障点信息，按时间降序，输入参数：管网类型（"供水管网"）,开始时间，结束时间,维修状态 -->
+    <select id="findLatestFaultByUtDate" resultMap="FaultResultMap">
+        <![CDATA[ SELECT ID, BH, UTILITY_TYPE_DES, LAT, LON, DES, LOCA, DATE_YMD, FAULT_STATE_DES, ADMI, TEL, FAULT_TYPE_DES, FAULT_DIAG, FAULT_FACT_DES, FAULT_RANK_DES
+                  FROM JX_MANTE_FAULT_STATE fs LEFT JOIN JX_UTILITY_MANTE_FAULT_RANK fr LEFT JOIN JX_UTILITY_TYPE ut RIGHT JOIN JX_UTILITY_MANTE_FAULT_TYPE ft RIGHT JOIN JX_UTILITY_MANTE_FAULT f LEFT JOIN JX_UTILITY_MANTE_FAULT_FACTOR2 ff
+                  ON f.fault_fact_code = ff.fault_fact_code ON ft.fault_type_code = f.fault_type_code ON ut.utility_type_code = f.utility_type ON f.fault_rank_code = fr.fault_rank_code ON fs.fault_state_code=f.fault_state_code
+                  WHERE TO_DATE(date_ymd,'YYYY-MM-DD') >= TO_DATE(#{1},'YYYY-MM-DD') AND TO_DATE(date_ymd,'YYYY-MM-DD') <= TO_DATE(#{2},'YYYY-MM-DD') AND f.fault_state_code=#{3}
+                  AND ut.UTILITY_TYPE_DES = #{0} ORDER BY TO_DATE(DATE_YMD,'YYYY-MM-DD') DESC
+        ]]>
+    </select>
+
+    <select id="findLatestFaultByUtRank" resultMap="FaultResultMap">
+        <![CDATA[ SELECT ID, BH, UTILITY_TYPE_DES, LAT, LON, DES, LOCA, DATE_YMD, FAULT_STATE_DES, ADMI, TEL, FAULT_TYPE_DES, FAULT_DIAG, FAULT_FACT_DES, FAULT_RANK_DES
+                  FROM JX_MANTE_FAULT_STATE fs LEFT JOIN JX_UTILITY_MANTE_FAULT_RANK fr LEFT JOIN JX_UTILITY_TYPE ut RIGHT JOIN JX_UTILITY_MANTE_FAULT_TYPE ft RIGHT JOIN JX_UTILITY_MANTE_FAULT f LEFT JOIN JX_UTILITY_MANTE_FAULT_FACTOR2 ff
+                  ON f.fault_fact_code = ff.fault_fact_code ON ft.fault_type_code = f.fault_type_code ON ut.utility_type_code = f.utility_type ON f.fault_rank_code = fr.fault_rank_code ON fs.fault_state_code=f.fault_state_code
+                  WHERE TO_DATE(date_ymd,'YYYY-MM-DD') >= TO_DATE(#{1},'YYYY-MM-DD') AND TO_DATE(date_ymd,'YYYY-MM-DD') <= TO_DATE(#{2},'YYYY-MM-DD') AND f.fault_state_code=#{3}
+                  AND ut.UTILITY_TYPE_DES = #{0} ORDER BY f.FAULT_RANK_CODE ASC,TO_DATE(DATE_YMD,'YYYY-MM-DD') DESC
+        ]]>
+    </select>
+
+    <!-- 按管网类型查找一定时间范围内所有故障点信息，按故障等级降序，输入参数：管网类型（"供水管网"），开始时间，结束时间,维修状态 -->
+    <select id="findFault" resultMap="FaultResultMap">
+        SELECT ID, BH, UTILITY_TYPE_DES, LAT, LON, DES, LOCA, DATE_YMD, FAULT_STATE_DES, ADMI, TEL, FAULT_TYPE_DES, FAULT_DIAG, FAULT_FACT_DES, FAULT_RANK_DES
+        FROM JX_MANTE_FAULT_STATE fs LEFT JOIN JX_UTILITY_MANTE_FAULT_RANK fr LEFT JOIN JX_UTILITY_TYPE ut RIGHT JOIN JX_UTILITY_MANTE_FAULT_TYPE ft RIGHT JOIN JX_UTILITY_MANTE_FAULT f LEFT JOIN JX_UTILITY_MANTE_FAULT_FACTOR2 ff
+        ON f.fault_fact_code = ff.fault_fact_code ON ft.fault_type_code = f.fault_type_code ON ut.utility_type_code = f.utility_type ON f.fault_rank_code = fr.fault_rank_code ON fs.fault_state_code=f.fault_state_code
+        WHERE
+        <choose>
+            <when test="dateBegin!='' and dateEnd!=''">
+                TO_DATE(date_ymd,'YYYY-MM-DD') &gt;= TO_DATE(#{dateBegin},'YYYY-MM-DD')  AND TO_DATE(date_ymd,'YYYY-MM-DD') &lt;= TO_DATE(#{dateEnd},'YYYY-MM-DD')
+            </when>
+            <otherwise>
+                TO_DATE(date_ymd,'YYYY-MM-DD') &gt;= TRUNC((SELECT MAX(TO_DATE(date_ymd,'YYYY-MM-DD')) FROM JX_UTILITY_MANTE_FAULT),'MM')
+            </otherwise>
+        </choose>
+
+        <if test="utilityTypeDes!=''">
+                AND ut.UTILITY_TYPE_DES = #{utilityTypeDes}
+        </if>
+
+         <if test="faultStateDes!=''">
+                AND fs.fault_state_des=#{faultStateDes}
+         </if>
+
+        <choose>
+            <when test="order=='date'">
+                ORDER BY TO_DATE(DATE_YMD,'YYYY-MM-DD') DESC
+            </when>
+            <when test="order=='rank'">
+                ORDER BY f.FAULT_RANK_CODE ASC, TO_DATE(DATE_YMD,'YYYY-MM-DD') DESC
+            </when>
+            <when test="order=='utilityType'">
+                ORDER BY f.UTILITY_TYPE, TO_DATE(DATE_YMD,'YYYY-MM-DD') DESC
+            </when>
+        </choose>
+
+    </select>
+
+    <!-- 按管网类型查找本月故障点信息，输入参数：管网类型（"供水管网"），状态， -->
+    <select id="findLatestFault" resultMap="FaultResultMap">
+        <![CDATA[ SELECT ID, BH, UTILITY_TYPE_DES, LAT, LON, DES, LOCA, DATE_YMD, STATE, ADMI, TEL, FAULT_TYPE_DES, FAULT_DIAG, FAULT_FACT_DES, FAULT_RANK_DES
+                  FROM JX_UTILITY_MANTE_FAULT_RANK fr LEFT JOIN JX_UTILITY_TYPE ut RIGHT JOIN JX_UTILITY_MANTE_FAULT_TYPE ft RIGHT JOIN JX_UTILITY_MANTE_FAULT f LEFT JOIN JX_UTILITY_MANTE_FAULT_FACTOR2 ff
+                  ON f.fault_fact_code = ff.fault_fact_code ON ft.fault_type_code = f.fault_type_code ON ut.utility_type_code = f.utility_type ON f.fault_rank_code = fr.fault_rank_code
+                  WHERE TO_DATE(date_ymd,'YYYY-MM-DD') >= TRUNC((SELECT MAX(TO_DATE(date_ymd,'YYYY-MM-DD')) FROM JX_UTILITY_MANTE_FAULT),'MM')
+                  AND ut.UTILITY_TYPE_DES = #{0} ORDER BY FAULT_RANK_CODE ASC
+        ]]>
+    </select>
+
+    <!-- 查找本月各类管网故障点数量、百分比信息 -->
+    <select id="findLatestFaultNum" resultType="com.cetc28.idata.dto.JxUtilityManteFaultByMonth">
+        <![CDATA[ SELECT UTILITY_TYPE_DES AS utilityTypeDes, to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM') AS dateYm, count(1) AS noFault,
+                  round(ratio_to_report(count(1)) over(partition by to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM')),4) AS perFault
+                  FROM JX_UTILITY_MANTE_FAULT f LEFT JOIN JX_UTILITY_TYPE t ON f.utility_type=t.utility_type_code
+                  WHERE TO_DATE(date_ymd,'YYYY-MM-DD') >= TRUNC((SELECT MAX(TO_DATE(date_ymd,'YYYY-MM-DD')) FROM JX_UTILITY_MANTE_FAULT),'MM')
+                  GROUP BY UTILITY_TYPE_DES, to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM')
+        ]]>
+    </select>
+
+    <!-- 查找近几个月的某类管网故障点数量、百分比信息 -->
+    <select id="findFaultNumByUtAndMs" resultType="com.cetc28.idata.dto.JxUtilityManteFaultByMonth">
+        <![CDATA[ SELECT * FROM (SELECT UTILITY_TYPE_DES AS utilityTypeDes, to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM') AS dateYm, count(1) AS noFault,
+                  round(ratio_to_report(count(1)) over(partition by to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM')),4) AS perFault
+                  FROM JX_UTILITY_MANTE_FAULT f LEFT JOIN JX_UTILITY_TYPE t ON f.utility_type=t.utility_type_code
+                  WHERE UTILITY_TYPE_DES = #{1}
+                  GROUP BY UTILITY_TYPE_DES, to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM') ORDER BY to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM') ASC) WHERE rownum<=#{0}
+        ]]>
+    </select>
+
+    <!-- 查找所有故障点涉及到的管网类别集合 -->
+    <select id="findUtilityType" resultType="com.cetc28.idata.dto.JxUtilityManteFaultByMonth">
+        <![CDATA[ SELECT UTILITY_TYPE_DES AS utilityTypeDes
+                  FROM JX_UTILITY_MANTE_FAULT f LEFT JOIN JX_UTILITY_TYPE t ON f.utility_type=t.utility_type_code
+                  GROUP BY UTILITY_TYPE_DES
+        ]]>
+    </select>
+
+    <!-- 查找本月按故障原因分布信息，包括数量、百分比 -->
+    <select id="findLatestFaultFactNum" resultType="com.cetc28.idata.dto.JxUtilityManteFaultByMonth">
+        <![CDATA[ SELECT DISTINCT(FAULT_FACT_DES) AS faultFactDes, to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM') AS dateYm, count(1) AS noFaultFact,
+                  round(ratio_to_report(count(1)) over(partition by to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM')),4) AS perFaultFact
+                  FROM JX_UTILITY_MANTE_FAULT f LEFT JOIN JX_UTILITY_MANTE_FAULT_FACTOR2 ff ON f.fault_fact_code=ff.fault_fact_code
+                  WHERE TO_DATE(date_ymd,'YYYY-MM-DD') >= TRUNC((SELECT MAX(TO_DATE(date_ymd,'YYYY-MM-DD')) FROM JX_UTILITY_MANTE_FAULT),'MM')
+                  GROUP BY FAULT_FACT_DES, to_char(TO_DATE(date_ymd,'YYYY-MM-DD'),'YYYY-MM')
+        ]]>
+    </select>
+
+    <!-- 按设备编号查找监测设备信息 -->
+    <select id="findDeviceInfoById" resultMap="DeviceBaseResultMap" >
+        <![CDATA[ SELECT DEVICE_ID, BH, UTILITY_TYPE_DES, LAT, LON, DEVICE_TYPE_DES, DEVICE_LOCA, STRUCTURE, EMBED_MODE, DATE_YMD, ADMI, PROJECT_NAME
+                  FROM JX_UTILITY_MANTE_DEVICE_TYPE dt RIGHT JOIN JX_UTILITY_MANTE_DEVICE_BASE db LEFT JOIN JX_UTILITY_TYPE ut
+                  ON db.utility_type_code = ut.utility_type_code ON dt.device_type_code = db.device_type_code WHERE device_id =#{0}
+        ]]>
+    </select>
+
+
+    <select id="findLatestAlarmPointAll" resultMap="AlarmPointResultMap" >
+        <![CDATA[ SELECT ID, DEVICE_NO, ALARM_DES, ALARM_TYPE_DES, DATE_YMDHM, STATE FROM JX_UTILITY_MANTE_ALARM_POINT ap LEFT JOIN JX_UTILITY_MANTE_ALARM_TYPE a
+                  ON ap.alarm_type_code = a.alarm_type_code
+        ]]>
+    </select>
+
+    <select id="findLatestDeviceStateAll" resultMap="DeviceStateResultMap" >
+        <![CDATA[ SELECT MES_ID, DEVICE_ID, MES_VALUE, BATT, DEVICE_STATE, MES_TIME FROM JX_UTILITY_MANTE_DEVICE_STATE
+        ]]>
+    </select>
+
+
+
+
+
+</mapper>

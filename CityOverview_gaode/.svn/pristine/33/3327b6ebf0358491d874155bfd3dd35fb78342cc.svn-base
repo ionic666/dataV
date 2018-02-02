@@ -1,0 +1,661 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title>经济</title>
+  <style type="text/css">
+    #economic .modal{
+      background-image: url("../../images/index/11.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+    
+    #economic .modal-dialog{
+      width: 320px;
+      margin-right: 10px;
+    }
+    #economic .modal-content{
+      height: 600px;
+    }
+
+    #economic .modal-body{
+      padding: 0px;
+    }
+    #economic .subtitle{
+      font-size: 16px;
+      float: left;
+      width: 25%;
+      text-align: center;
+    }
+    .subtitleChange1{
+      color: #1468a5;
+    }
+    .subtitleChange2{
+      color: #ff7800;
+    }
+    #economic .contentTitle {
+      width: 96%;
+      height: 60px;
+      border-bottom: #Ebeaea solid 3px;
+    }
+    #economic .contentBody{
+      height: 470px;
+      font-size: 16px;
+      padding-left: 18px;
+    }
+    #economic .tablebody{
+      color: #474747 ;
+      height: 100px;
+      width: 70%;
+    }
+    #economic .tablebody tr{
+      height: 33px;
+      line-height: 33px;
+    }
+    #economic .tablebody tr td{
+      text-align: left;
+      font-size: 14px;
+      color: #000000;
+    }
+    .showOn{
+      display: block;
+    }
+    .showOff{
+      display: none;
+    }
+    .progress{
+      margin-bottom: 0px;
+      background-color:rgba(190, 212, 248,9) ;
+    }
+    #companyData td{
+      text-align: right;
+    }
+    #companyData select, #companyData input{
+      margin-top:5px;
+      margin-bottom:5px;
+      width:200px;
+    }
+    #companyList{
+      margin-top:10px;
+    }
+    #detailCompanyTable td,#detailCompanyTable th{
+      text-align: center;
+    }
+    #detailCompanyTable tbody tr{
+      background-color: #EAEFF7;
+      cursor:pointer;
+    }
+    #detailCompanyTable tbody tr:hover{
+      background-color:#E3EAF5;
+    }
+    #detailCompanyTable td{
+      border-bottom:1px solid #fff;
+    }
+    /*运行监测*/
+    .contentBody{
+      padding-right:18px;
+    }
+    #runMonitor{
+      border:1px solid #ddd;
+    }
+    #runMonitor td,#runMonitor th{
+      vertical-align: middle;
+      border:1px solid #ddd;
+    }
+    #runMonitor th{
+      text-align: center;
+    }
+    #runMonitor td{
+      text-align: center;
+    }
+    .conten2 p span{
+      color: #000000;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+<div class="modal fade" style="width: 325px;height: 620px;top: 60px;left:auto;right: 0px;" id="economic" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close" style="">
+          <img src="map/images/economicModel/close.png" onclick="closeInfoWindow(this,1);">
+        </button>
+        <h4 class="modal-title">社会经济</h4>
+      </div>
+      <div class="modal-body">
+        <div style="height: 10px"></div>
+        <div class="contentTitle">
+          <div class="subtitle subtitleChange2" onclick="tochange(this)"><img src="map/images/economicModel/1checked.png"><br/><label>宏观经济</label></div>
+          <div class="subtitle subtitleChange1" onclick="tochange(this)"><img src="map/images/economicModel/2.png"><br/><label>行业经济</label></div>
+          <div class="subtitle subtitleChange1" onclick="tochange(this)"><img src="map/images/economicModel/3.png"><br/><label>企业数据</label></div>
+          <div class="subtitle subtitleChange1" onclick="tochange(this)"><img src="map/images/economicModel/4.png"><br/><label>运行监测</label></div>
+        </div>
+
+        <div id="conten1" class="showOn">
+          <div class="contentBody">
+            <div style="height: 20px"></div>
+            <table class="tablebody">
+              <tr>
+                <td style="font-size: 16px">时间:</td>
+                <td>年度</td>
+                <td>季度</td>
+                <td>月度</td>
+              </tr>
+              <tr>
+                <td  style="font-size: 16px">地区:</td>
+                <td>全市</td>
+                <td>常规分类</td>
+                <td>
+                  <div class="dropdown">
+                    <a data-toggle="dropdown" href="#">更多</a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                      <li>地区分类</li>
+                      <li>总量分类</li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td  style="font-size: 16px">总值:</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </table>
+            <div style="height: 350px;overflow: auto;text-align: left;padding-left: 55px;margin-top: -10px" >
+              <ul id="dataTree" class="easyui-tree" style="height: 90%;width: 90%">
+                <%-- <li>
+                   <span>Folder</span>
+                   <ul>
+                     <li>
+                       <span>Sub Folder 1</span>
+                     </li>
+                   </ul>
+                 </li>
+                 <li>
+                   <span>File21</span>
+                   <ul><li> <span>Sub Folder 1</span></li></ul>
+                   <ul><li> <span>Sub Folder 1</span></li></ul>
+                 </li>--%>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div id="conten2" class="showOff">
+          <div class="contentBody">
+            <div style="height: 20px"></div>
+            <div style="padding-left: 5px">
+            <p><span style="font-size: 16px">类型</span>&nbsp;&nbsp;<span>第一产业</span>&nbsp;&nbsp;<span>第二产业</span>&nbsp;&nbsp;<span style="color: #0070c0">第三产业</span></p>
+            <span style="font-size: 16px">行业:</span>
+            </div>
+            <div style="height: 395px;overflow: auto;text-align: left;padding-left: 55px;margin-top: -10px" >
+              <ul id="workdataTree" class="easyui-tree" style="height: 90%;width: 90%">
+                <%-- <li>
+                   <span>Folder</span>
+                   <ul>
+                     <li>
+                       <span>Sub Folder 1</span>
+                     </li>
+                   </ul>
+                 </li>
+                 <li>
+                   <span>File21</span>
+                   <ul><li> <span>Sub Folder 1</span></li></ul>
+                   <ul><li> <span>Sub Folder 1</span></li></ul>
+                 </li>--%>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="conten3" class="showOff">
+          <div class="contentBody">
+            <div style="height: 20px"></div>
+            <table id="companyData">
+              <tbody>
+              <tr>
+                <td>行业领域：</td>
+                <td>
+                  <select>
+                    <option value="1">-请选择-</option>
+                    <option value="2">农、林、牧、渔业</option>
+                    <option value="3">采矿业</option>
+                    <option value="4">制造业</option>
+                    <option value="5">电力、燃气及水的生产和供应</option>
+                    <option value="6">建筑业</option>
+                    <option value="7">交通运输、仓储和邮政</option>
+                    <option value="8">信息传输、计算机服务和软件业</option>
+                    <option value="9">批发和零售</option>
+                    <option value="10">卫生、社会保障和社会福利</option>
+                    <option value="11">住宿和餐饮业</option>
+                    <option value="12">金融业</option>
+                    <option value="13">房地产业</option>
+                    <option value="14">租赁和商务服务</option>
+                    <option value="15">科学研究、技术服务和地质勘查</option>
+                    <option value="16">水利、环境和公共设施管理</option>
+                    <option value="17">居民服务和其他服务</option>
+                    <option value="18">教育</option>
+                    <option value="19">公共管理和社会组织</option>
+                    <option value="20">国际组织</option>
+                    <option value="21">农副食品加工业</option>
+                    <option value="22">焙烧食品制造</option>
+                    <option value="23">纺织业</option>
+                    <option value="24">木材加工及木、竹、藤、棕、草制品</option>
+                    <option value="25">家具制品</option>
+                    <option value="26">石油加工、炼焦及核燃料加工</option>
+                    <option value="27">化学原料及化学制品</option>
+                    <option value="28">医药制造</option>
+                    <option value="29">塑料制品</option>
+                    <option value="30">黑色金属冶炼及压延加工</option>
+                    <option value="31">有色金属冶炼及压延加工</option>
+                    <option value="32">交通运输设备制造</option>
+                    <option value="33">电气机械及器材制造</option>
+                    <option value="34">工艺品及其他</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>企业性质：</td>
+                <td>
+                  <select>
+                    <option value="1">-请选择-</option>
+                    <option value="2">外商独资</option>
+                    <option value="3">合资</option>
+                    <option value="4">上市公司</option>
+                    <option value="5">国企</option>
+                    <option value="6">国家机关</option>
+                    <option value="7">事业单位</option>
+                    <option value="8">民营/私企</option>
+                    <option value="9">股份制</option>
+                    <option value="10">非盈利组织</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>名 称：</td>
+                <td>
+                  <input type="text" placeholder="请输入关键字"/>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2"  style="text-align:center;">
+                  <button <%--id="search"--%> onclick="searchCompany()" style="margin-top:5px;width: 50px;height: 28px;float:none">查询</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div id="companyList" style="height:250px;width:290px;overflow-y: auto;margin-top: 10px;border: 1px solid #ddd;display: none;">
+              <table id="detailCompanyTable" class="table table-striped table-bordered table-hover" >
+                <thead>
+                <th>企业编码</th>
+                <th>企业名称</th>
+                </thead>
+                <tbody>
+                <tr onclick="showCompany()">
+                  <td>L-1832212-3</td>
+                  <td>苏宁控股集团</td>
+                </tr>
+                <tr onclick="showCompany()">
+                  <td>06721066-X</td>
+                  <td>南京钢铁集团</td>
+                </tr>
+                <tr onclick="showCompany()">
+                  <td>4955751-9</td>
+                  <td>恒力集团</td>
+                </tr>
+                <tr onclick="showCompany()">
+                  <td>66821370-2</td>
+                  <td>中天钢铁集团</td>
+                </tr>
+                <tr onclick="showCompany()">
+                  <td>09060524-9</td>
+                  <td>苏宁环球集团</td>
+                </tr>
+                <tr onclick="showCompany()">
+                  <td>13240045-9</td>
+                  <td>三胞集团</td>
+                </tr>
+                <tr onclick="showCompany()">
+                  <td>98762156-9</td>
+                  <td>南京钢铁集团</td>
+                </tr>
+                <tr onclick="showCompany()">
+                  <td>56741589-8</td>
+                  <td>海润集团</td>
+                </tr>
+                <tr onclick="showCompany()">
+                  <td>69564789-X</td>
+                  <td>盛虹集团</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="conten4" class="showOff">
+          <div class="contentBody">
+            <div style="height: 20px"></div>
+            <%--<div class="title">经济综合实力</div>--%>
+            <div>
+              <table class="table" id="runMonitor">
+                <tr bgcolor="#eee">
+                  <th width="65%">指标</th>
+                  <th width="12%">目标</th>
+                  <%--<td width="12%">当前</td>--%>
+                  <th width="22%">进度</th>
+                </tr>
+                <tr onclick="">
+                  <td>地区生产总值增长率</td>
+                  <td><span>8%</span></td>
+                  <%--<td><label>3%</label></td>--%>
+                  <td>
+                    <div class="progress" style="width: 100%">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 37%;">
+                      </div>
+                    </div></td>
+                </tr>
+                <tr>
+                  <td>人均地区生产总值增长率</td>
+                  <td><span>8%</span></td>
+                  <%--<td><label>4%</label></td>--%>
+                  <td>
+                    <div class="progress" style="width: 100%">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
+                      </div>
+                    </div></td>
+                </tr>
+                <tr>
+                  <td>规模以上工业增加值增长率</td>
+                  <td><span>8.1%</span></td>
+                  <%--<td><label>4.1%</label></td>--%>
+                  <td>
+                    <div class="progress" style="width: 100%">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 51%;">
+                      </div>
+                    </div></td>
+                </tr>
+                <tr>
+                  <td>一般公共预算收入增长率</td>
+                  <td><span>8.5%</span></td>
+                  <%--<td><label>4.2%</label></td>--%>
+                  <td>
+                    <div class="progress" style="width: 100%">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 48%;">
+                      </div>
+                    </div></td>
+                </tr>
+                <tr>
+                  <td>固定资产投资增长率</td>
+                  <td><span>7%</span></td>
+                  <%--<td><label>2%</label></td>--%>
+                  <td>
+                    <div class="progress" style="width: 100%">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 28%;">
+                      </div>
+                    </div></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
+<script>
+  function initeconomic(url){
+    $('#dataTree').tree({
+      url: url,
+      checkbox:true,
+      onlyLeafCheck:true,
+      loadFilter: function(data){
+        if(data!=null||data!="") {
+          return data;
+        }
+      },
+      onBeforeCheck:function(node){
+        if($('#dataTree').tree('isLeaf',node.target)){
+            if(node.checked==false){
+              var nodes = $('#dataTree').tree('getChecked');
+              for(var i=0;i<nodes.length;i++){
+                if(node.id!=nodes[i].id){
+                  $('#dataTree').tree('uncheck',nodes[i].target);
+                }
+              }
+            }
+        }
+      },
+      onCheck:function(node){
+        if(node.checked==false) {
+          $("#economicWindow").modal('show').draggable({cursor:'auto'});
+          initeconomicWindow(node.id,node.text,"2015年");
+          searchid=node.id;
+          searchText=node.text;
+          var url="icom/JjHgjjFl_listJjHgjjSjz.action?bh="+node.id;
+          showYears(url,1);
+          getMapPointshow(node.id);
+        }else{
+//          $("#economicWindow").modal('hide')
+          $("#economicPointMap").css("display","none");
+          $("#hdt_box").css("display","none");
+          removeClick();
+          map.infoWindow.hide();
+        }
+      }
+  });
+    initworkTree();
+  }
+  function initworkTree(){
+    var datas=[{
+      "id": 1,
+      "text": "交通运输仓储和邮政",
+      "state": "closed",
+      "children": [{
+        "id": 11,
+        "text": "铁路运输"
+      },{
+        "id": 12,
+        "text": "道路运输"
+      },{
+        "id": 13,
+        "text": "城市公共交通"
+      },{
+        "id": 14,
+        "text": "水上运输"
+      },{
+        "id": 15,
+        "text": "仓储业"
+      },{
+        "id": 16,
+        "text": "邮政业"
+      }]
+    },{
+      "id": 2,
+      "text": "信息传输、计算机服务和软件业",
+      "state": "open",
+      "children": [{
+        "id": 21,
+        "text": "电信和其他信息传输服务"
+      },{
+        "id": 22,
+        "text": "软件业"
+      }]
+    },{
+      "id": 3,
+      "text": "批发和零售",
+      "state": "closed",
+      "children": [{
+        "id": 31,
+        "text": "批发"
+      },{
+        "id": 32,
+        "text": "零售"
+      }]
+    },{
+      "id": 4,
+      "text": "住宿餐饮业",
+      "state": "closed",
+      "children": [{
+        "id": 41,
+        "text": "住宿"
+      },{
+        "id": 42,
+        "text": "餐饮"
+      }]
+    },{
+      "id": 5,
+      "text": "金融业",
+      "state": "closed",
+      "children": [{
+        "id": 51,
+        "text": "银行业"
+      },{
+        "id": 52,
+        "text": "证券"
+      },{
+        "id": 53,
+        "text": "保险"
+      }]
+    },{
+      "id": 6,
+      "text": "房地产业",
+      "state": "closed",
+      "children": [{
+        "id": 61,
+        "text": "房地产开发经营"
+      },{
+        "id": 62,
+        "text": "物业管理"
+      },{
+        "id": 63,
+        "text": "房地产中介服务"
+      }]
+    },{
+      "id": 7,
+      "text": "租赁和商务服务",
+      "state": "closed",
+      "children": [{
+        "id": 71,
+        "text": "租赁"
+      }]
+    }]
+    $('#workdataTree').tree({
+      checkbox:true,
+      onlyLeafCheck:true,
+      data:datas,
+      onCheck:function(node){
+        if(node.checked==false) {
+          if(node.text=="软件业"){  //对应实时路况
+            setchart2();
+            setchart5();
+            setchart4();
+            setchart7();
+            $("#softWindow").modal('show').draggable({cursor:'auto'});
+          }
+          if(node.text==""){  //对应实时路况
+          }
+          if(node.text==""){  //对应飞机
+
+          }
+          if(node.text==""){  //对应实时路况
+
+          }
+        }else{
+          map.infoWindow.hide();
+          if(node.text=="软件业"){  //对应实时路况
+            $("#softWindow").modal('hide');
+            chartSotfLayer.clear();
+          }
+        }
+      }
+    });
+  }
+  function tochange(evt){
+    var ele=$(evt);
+    var flag=ele.hasClass('subtitleChange1');
+    var src="";
+    src=ele.children("img").attr("src");
+    src=src.substring(0,src.indexOf("."));
+    var index=src.substring(src.lastIndexOf("/")+1);
+    if(flag){
+      ele.removeClass('subtitleChange1').addClass('subtitleChange2');
+      ele.children("img").attr("src",src+"checked.png");
+      for(var i=1;i<=4;i++){
+        if(i==index){
+          if($("#conten"+i).hasClass("showOff")) {
+            $("#conten" + i).addClass("showOn").removeClass("showOff");
+          }
+        }else{
+          $("#conten"+i).removeClass("showOn").addClass("showOff");
+        }
+      }
+      var eles = ele.siblings();
+      eles.addClass('subtitleChange1').removeClass('subtitleChange2');
+      for(var j=0;j<eles.length;j++){
+        var childsrc  = $(eles[j]).children("img").attr("src");
+        childsrc=childsrc.substring(0,childsrc.lastIndexOf("/")+2)+".png";
+        $(eles[j]).children("img").attr("src",childsrc);
+      }
+    }else{
+      ele.removeClass('subtitleChange2').addClass('subtitleChange1');
+      src=src.replace("checked",".png");
+      ele.children("img").attr("src",src);
+    }
+  }
+
+  function getMapPointshow(bh){
+    var str="";
+    $.ajax({
+      type:'post',
+      url:"icom/JjHgjjFl_listJjHgjjTl.action?bh=" + bh,
+      dataType:'JSON',
+      success:function(data){
+        if(data){
+          str="<div style='border: 1px solid #808080;padding: 10px'><div>单位："+data[0].dw+"</div>"
+          if(data[0].jsz>=99999999){
+            str=str+"<div style='margin-bottom: 5px;height: 30px;line-height: 30px'><div style='float: left;width:30px;height:30px;background-color: "+data[0].color+"'></div><div style='float: left;margin-left: 5px'>"+">="+data[0].ksz+"</div></div>"
+          }else{
+            str=str+"<div style='margin-bottom: 5px;height: 30px;line-height: 30px'><div style='float: left;width:30px;height:30px;background-color: "+data[0].color+"'></div><div style='float: left;margin-left: 5px'>"+data[0].ksz+"<="+data[0].jsz+"</div></div>"
+          }
+          for(var i=1;i<data.length-1;i++){
+            str=str+"<div style='margin-bottom: 5px;height: 30px;line-height: 30px'><div style='float: left;width:30px;height:30px;background-color: "+data[i].color+"'></div><div style='float: left;margin-left: 5px'>"+data[i].ksz+"<="+data[i].jsz+"</div></div>"
+          }
+          if(data[data.length-1].ksz<=0){
+            str=str+"<div style='margin-bottom: 5px;height: 30px;line-height: 30px'><div style='float: left;width:30px;height:30px;background-color: "+data[data.length-1].color+"'></div><div style='float: left;margin-left: 5px'>"+"无数据"+"</div></div>"
+          }else{
+            str=str+"<div style='margin-bottom: 5px;height: 30px;line-height: 30px'><div style='float: left;width:30px;height:30px;background-color: "+data[data.length-1].color+"'></div><div style='float: left;margin-left: 5px'>"+data[data.length-1].ksz+"<="+data[data.length-1].jsz+"</div></div>"
+          }
+          str= str+"</div>"
+        }
+        $("#economicPointMap").html(str);
+        $("#economicPointMap").css("display","block");
+      }
+    });
+  }
+
+  function searchCompany(){
+    $("#companyList").css('display',"block");
+    viewCompanyInfo();
+  }
+
+  function showCompany(){
+
+  }
+</script>
+</body>
+</html>

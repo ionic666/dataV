@@ -1,0 +1,70 @@
+package com.cetc28.PeopleBenefitService.model;
+
+/**
+ * Created by FangYan on 2017/9/28.
+ */
+public class JxEcoLhrhValue {
+        private  int id;
+        private String bh;
+        private String year;
+        private String value;
+        private String rank;
+        private String qhbh;
+        private String mc;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String getQhbh() {
+        return qhbh;
+    }
+
+    public void setQhbh(String qhbh) {
+        this.qhbh = qhbh;
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+}

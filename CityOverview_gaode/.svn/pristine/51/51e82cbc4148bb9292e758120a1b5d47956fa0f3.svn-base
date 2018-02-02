@@ -1,0 +1,168 @@
+::-webkit-scrollbar,.calBox,.holyH{
+    background-color: rgba(0,0,0,.3);
+}
+::-webkit-scrollbar-thumb{
+    background-color: rgba(255,255,255,1);
+}
+::-webkit-scrollbar-corner{
+    background-color: rgba(0,0,0,.3);
+}
+
+/*模态框去背景和关闭按钮*/
+.modal-dialog{
+    margin: 0;
+}
+.modal-backdrop{
+    display: none;
+}
+.modal-header .close{
+    opacity: 1;
+}
+.modal-title{
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+}
+.modal-header{
+    background-color: #2d8Ed4;
+    background-repeat: repeat-x;
+    border-bottom: 0px;
+    font-size: 16px;
+    padding: 10px 15px;height: 40px;
+    line-height: 40px;
+}
+#economicWindow .modal-header,
+#trafficSaftyWindow .modal-header,
+#environmentWindow2 .modal-header,
+#greenbeltWindow .modal-header,
+#headwaterWindow  .modal-header,
+#softWindow  .modal-header,
+#virescenceWindow .modal-header,
+#landuseWindow .modal-header,
+#environmentWindow .modal-header,
+#trafficWindow .modal-header,
+#saftyInfoWindow .modal-header,
+#safetyWindow .modal-header,
+#pollutionSourceWindow .modal-header,
+#pollutionUnitWindow .modal-header,
+#yltsWindow .modal-header,
+#dbsWindow .modal-header,
+#companyWindow .modal-header,
+#cityLayoutWindow .modal-header
+{
+    background-image: linear-gradient(to top, rgba(106, 164, 205, 1) 0%, rgba(181, 214, 238, 1) 100%);
+}
+/*uiTree设置样式*/
+.tree-collapsed{
+    background: url("../../images/economicModel/expand.png") no-repeat;
+    width: 20px;
+    height: 20px;
+}
+.tree-expanded, .tree-expanded-hover{
+    background: url("../../images/economicModel/shrink.png") no-repeat;
+    width: 20px;
+    height: 20px;
+}
+.tree-folder, .tree-folder-open,.tree-file{
+    background: none;
+}
+.tree-icon{
+    width: 0px;
+}
+.easyui-tree li {
+    margin-top: 22px;
+}
+.tree-node,.tree-node span{
+    height: 20px;
+    line-height: 20px;
+    color: #000000;
+    font-size: 14px;
+}
+.table thead tr {
+
+    background-image: linear-gradient(to bottom, #a0c6e1 0, #a0c6e1 100%);
+}
+#safetydata1 thead td{
+    color: #fff;
+    font-weight: bold;
+}
+.table-striped > tbody > tr:nth-child(odd) {
+    background-color: #e1edf6;
+}
+.esriPopup .titlePane{
+    background-image: linear-gradient(to bottom, #54a8e6 0, #167ec9 100%);
+    padding: 5px;
+    font-weight: 800;
+    font-size: 14px;
+}
+.esriPopup .contentPane>div{
+    color: #474747;
+    font-size: 14px;
+    font-family: "微软雅黑";
+    line-height: 1.6;
+}
+#softWindow .nav .list-unstyled {
+    width: 100px;
+}
+.stext{
+    text-align: center;
+    font-size:14px;
+    color:white;
+    height:32px;
+    line-height:32px;
+    padding-left:25px;
+}
+.li_1{
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    background-image: url("../../images/tab/tab1.png");
+}
+.li_2{
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    background-image: url("../../images/tab/tab2.png");
+}
+.li_3{
+     -webkit-background-size: 100% 100%;
+     background-size: 100% 100%;
+     background-image: url("../../images/tab/tab3.png");
+ }
+.li_4{
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    background-image: url("../../images/tab/tab4.png");;
+}
+.li_5{
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    background-image: url("../../images/tab/tab5.png");
+}
+
+.act_1{
+    background-image: url("../../images/tab/tab1_checked.png");
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+.act_2{
+    background-image: url("../../images/tab/tab2_checked.png");
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+.act_3{
+    background-image: url("../../images/tab/tab3_checked.png");
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+.act_4{
+    background-image: url("../../images/tab/tab4_checked.png");
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+.act_5{
+    background-image: url("../../images/tab/tab5_checked.png");
+     -webkit-background-size: 100% 100%;
+     background-size: 100% 100%;
+ }
+.tab-content {
+    padding: 16px 10px !important;
+}

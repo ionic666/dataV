@@ -1,0 +1,224 @@
+var hlwjj = {
+    once: null,
+    hlwjjTime:null,
+    hlwjjAjax: function () {
+
+       /* $.ajax({
+            type: 'post',
+            url: "jsonData/region.json",
+            dataType: 'JSON',
+            success: function (data) {
+                var XYarr=data.features;
+                var len=XYarr.length;
+                for(var i=0;i<len;i++){
+                    polygon(XYarr[i].geometry.rings[0])
+                }
+            }
+        })
+
+        function polygon(Data){
+            var len=Data.length;
+            var newData=[];
+            for(var i=0;i<len;i++){
+                newData.push(wgs84togcj02(Data[i][0],Data[i][1]));//绘制学区经纬度纠偏
+            }
+            var strokeColor="#1f9265", //设置多边形线颜色
+                strokeOpacity=.6, //设置多边形线透明度
+                strokeWeight=3,    //设置多边形线宽
+                fillColor="rgb(41,229,156)", //设置多边形填充色
+                fillOpacity=0.15;//设置多边形填充透明度
+            var polygon = new AMap.Polygon({
+                path: newData,//设置多边形边界路径
+                strokeColor: strokeColor, //线颜色
+                strokeOpacity: strokeOpacity, //线透明度
+                strokeWeight: strokeWeight,    //线宽
+                fillColor: fillColor, //填充色
+                fillOpacity: fillOpacity//填充透明度
+            });
+            polygon.setMap(map);//绘制多边形
+        }*/
+
+        var sum=1;//移动到哪点
+        var len=0;//点长度
+
+
+        $('#hlwjjTopMessage').css('display', 'block');
+        map.setZoom(11);
+        var marker = [];
+        var infoWindow = '';//定义信息窗体
+        var jumpUrl = 'iframeSecond/secondBox/hlwjjqsThird.jsp?type=';
+
+
+        var width = parseFloat($('#hlwjjTopMessage>div>span:nth-child(1)').css('width'));
+
+        function pmd() {
+            var left = parseFloat($('#hlwjjTopMessage>div').css('left')) - 1;
+            $('#hlwjjTopMessage>div').css('left', left + 'px');
+            if (Math.abs(left) >= width + 10) {
+                $('#hlwjjTopMessage>div').css({'left': 0});
+            }
+        }
+
+        hlwjj.once = setInterval(pmd, 24)
+
+
+        //设置infoWin
+        function setInfoWin(CLUSTER_NAME, CLUSTER_TYPE, CLUSTER_LOCATION, URL) {
+            //实例化信息窗体
+            var title = '<span style="font-size:18px;font-weight:bolder;color:#85ECFF;">' + CLUSTER_NAME + '</span>',
+                content = [];
+            content.push("<div id='hlwjjContent'>" +
+                "<span class='left-content'>产业集群类型</span>" +
+                "<span class='right-content'>" + CLUSTER_TYPE + "</span>" +
+                "<span class='left-content'>所属区域</span>" +
+                "<span class='right-content'>" + CLUSTER_LOCATION + "</span>" +
+                "</div>" +
+                "<div class='hlw-xq'><a href='" + URL + "'>详情</a></div>");
+
+            infoWindow = new AMap.InfoWindow({
+                isCustom: true,  //使用自定义窗体
+                content: createInfoWindow(title, content.join("<br/>")),
+                offset: new AMap.Pixel(10, -30)
+            });
+        }
+
+
+        //关闭信息窗体
+        function closeInfoWindow() {
+            map.clearInfoWindow();
+        }
+
+        //构建自定义信息窗体
+        function createInfoWindow(title, content) {
+            var info = document.createElement("div");
+            info.className = "hlw-info";
+            info.style.width = "345px";
+            // 定义顶部标题
+            var top = document.createElement("div");
+            var titleD = document.createElement("div");
+            var closeX = document.createElement("img");
+            top.className = "hlw-info-top";
+            titleD.innerHTML = title;
+            closeX.src = "images/hlw-x.png";
+            closeX.onclick = closeInfoWindow;
+
+            top.appendChild(titleD);
+            top.appendChild(closeX);
+            info.appendChild(top);
+
+            // 定义中部内容
+            var middle = document.createElement("div");
+            middle.className = "hlw-info-middle";
+            middle.innerHTML = content;
+            info.appendChild(middle);
+
+            // 定义底部内容
+            var bottom = document.createElement("div");
+            bottom.className = "hlw-info-bottom";
+            bottom.style.position = 'relative';
+            bottom.style.top = '0px';
+            bottom.style.margin = '0 auto';
+            var sharp = document.createElement("img");
+            sharp.src = "images/hlw-sj.png";
+            bottom.appendChild(sharp);
+            info.appendChild(bottom);
+            return info;
+        }
+        //刷新地图图标
+        function clearMapIcon() {
+            $.each(marker, function (i, v) {
+                v.setIcon(new AMap.Icon({
+                    size: new AMap.Size(35, 35),
+                    image: "images/tubiao.png"
+                }));
+            })
+        }
+
+        $.ajax({
+            type: 'post',
+            url: "jxecokey/findClusterNameAndJwd.do",
+            dataType: 'JSON',
+            success: function (data) {
+             /*   console.log(data)*/
+                map.panTo([120.737313, 30.777843]);//默认移到南湖区
+                $.each(data, function (i, v) {
+                    var realPos = wgs84togcj02(Number(v.JD), Number(v.WD));
+                    var div = document.createElement('div');
+                    div.className = 'icon22';
+                    div.innerHTML = v.COMPANY_NUM;
+                    marker[i] = new AMap.Marker({
+                        map: map,
+                        contents: v,
+                        content:div,
+                        position: realPos,
+                        offset: new AMap.Pixel(-14, -14), //相对于基点的偏移位置
+                        // icon: new AMap.Icon({
+                        //     size: new AMap.Size(35, 35),  //图标大小
+                        //     image: "images/tubiao.png"
+                        // })
+                    });
+                })
+                $.each(marker, function (i, pos) {
+                    //鼠标点击marker弹出自定义的信息窗体
+                    AMap.event.addListener(pos, 'click', function (e) {
+
+                        var CLUSTER_LOCATION = e.target.F.contents.CLUSTER_LOCATION;
+                        var CLUSTER_NAME = e.target.F.contents.CLUSTER_NAME;
+                        var CLUSTER_TYPE = e.target.F.contents.CLUSTER_TYPE;
+                        var URL = jumpUrl + CLUSTER_TYPE;
+                        // console.log(CLUSTER_LOCATION);
+                        // console.log(CLUSTER_NAME);
+                        // console.log(CLUSTER_TYPE);
+                        // console.log(URL);
+                        // console.log(e.target.Pg);
+                        //当前点亮
+                        $('.icon22').removeClass("light");
+                        $(this.Pg.content).addClass('light')
+                        // e.target.Pg.opacity=0;
+                        setInfoWin(CLUSTER_NAME, CLUSTER_TYPE, CLUSTER_LOCATION, URL);
+                        clearMapIcon();
+                        // e.target.setIcon(new AMap.Icon({
+                        //     size: new AMap.Size(35, 35),
+                        //     image: "images/tubiao_selected.png"
+                        // }));
+                        infoWindow.open(map, e.target.getPosition());
+                        map.setCenter(e.target.getPosition());
+                    });
+                });
+                marker[0].emit('click', {target: marker[0]});
+
+                len=marker.length;
+
+                //设置定时器轮播
+                hlwjj.hlwjjTime=setInterval(function(){
+                    if(sum>=len){
+                        sum=0;
+                    }
+                    marker[sum].emit('click', {target: marker[sum]});
+                    $('#map .icon22:eq(sum)').click();
+                    sum++;
+                },5000);
+
+                //按钮移入事件
+                $('#map').on('mouseenter','.hlw-xq a',function(){
+                    clearInterval(hlwjj.hlwjjTime);
+                });
+
+                //按钮移出事件
+                $('#map').on('mouseleave','.hlw-xq a',function(){
+                    hlwjj.hlwjjTime=setInterval(function(){
+                        if(sum>=len){
+                            sum=0;
+                        }
+                        marker[sum].emit('click', {target: marker[sum]});
+                        $('#map .icon22:eq(sum)').click();
+                        sum++;
+                    },5000);
+                })
+            }
+        })
+
+
+    }
+
+}

@@ -1,0 +1,473 @@
+package com.cetc28.idata.model;
+
+public class JxSsCardStatistics {
+    private Short id;
+
+    private Short year;
+
+    private Double cardHolderSum;
+
+    private Double insuredSum;
+
+    private Double nativeInsuredSum;
+
+    private Double ruralInsuredSum;
+
+    private Double chMaleSum;
+
+    private Double chFemaleSum;
+
+    private Double chAge018SumM;
+
+    private Double chAge1830SumM;
+
+    private Double chAge3050SumM;
+
+    private Double chAge5065SumM;
+
+    private Double chAge65UpSumM;
+
+    private Double chDoctorSum;
+
+    private Double chMasterSum;
+
+    private Double chBachelorSum;
+
+    private Double chTechnicalSum;
+
+    private Double chSeniorSum;
+
+    private Double chJuniorSum;
+
+    private Double chElementarySum;
+
+    private Double chOtherSum;
+
+    private Double chNationalityRank1;
+
+    private Double chNationalityRank2;
+
+    private Double chNationalityRank3;
+
+    private Double chNationalityRank4;
+
+    private Double chNationalityRank5;
+
+    private Double chNationalityRank6;
+
+    private Double chNationalityRank7;
+
+    private Double chNationalityRank8;
+
+    private Double chNationalityRank9;
+
+    private Double chNationalityRank10;
+
+    private String chNationalityRank1Name;
+
+    private String chNationalityRank2Name;
+
+    private String chNationalityRank3Name;
+
+    private String chNationalityRank4Name;
+
+    private String chNationalityRank5Name;
+
+    private String chNationalityRank6Name;
+
+    private String chNationalityRank7Name;
+
+    private String chNationalityRank8Name;
+
+    private String chNationalityRank9Name;
+
+    private String chNationalityRank10Name;
+
+    private String regionCode;
+
+    private Double chAge018SumF;
+
+    private Double chAge1830SumF;
+
+    private Double chAge3050SumF;
+
+    private Double chAge5065SumF;
+
+    private Double chAge65UpSumF;
+
+    public Short getId() {
+        return id;
+    }
+
+    public void setId(Short id) {
+        this.id = id;
+    }
+
+    public Short getYear() {
+        return year;
+    }
+
+    public void setYear(Short year) {
+        this.year = year;
+    }
+
+    public Double getCardHolderSum() {
+        return cardHolderSum;
+    }
+
+    public void setCardHolderSum(Double cardHolderSum) {
+        this.cardHolderSum = cardHolderSum;
+    }
+
+    public Double getInsuredSum() {
+        return insuredSum;
+    }
+
+    public void setInsuredSum(Double insuredSum) {
+        this.insuredSum = insuredSum;
+    }
+
+    public Double getNativeInsuredSum() {
+        return nativeInsuredSum;
+    }
+
+    public void setNativeInsuredSum(Double nativeInsuredSum) {
+        this.nativeInsuredSum = nativeInsuredSum;
+    }
+
+    public Double getRuralInsuredSum() {
+        return ruralInsuredSum;
+    }
+
+    public void setRuralInsuredSum(Double ruralInsuredSum) {
+        this.ruralInsuredSum = ruralInsuredSum;
+    }
+
+    public Double getChMaleSum() {
+        return chMaleSum;
+    }
+
+    public void setChMaleSum(Double chMaleSum) {
+        this.chMaleSum = chMaleSum;
+    }
+
+    public Double getChFemaleSum() {
+        return chFemaleSum;
+    }
+
+    public void setChFemaleSum(Double chFemaleSum) {
+        this.chFemaleSum = chFemaleSum;
+    }
+
+    public Double getChAge018SumM() {
+        return chAge018SumM;
+    }
+
+    public void setChAge018SumM(Double chAge018SumM) {
+        this.chAge018SumM = chAge018SumM;
+    }
+
+    public Double getChAge1830SumM() {
+        return chAge1830SumM;
+    }
+
+    public void setChAge1830SumM(Double chAge1830SumM) {
+        this.chAge1830SumM = chAge1830SumM;
+    }
+
+    public Double getChAge3050SumM() {
+        return chAge3050SumM;
+    }
+
+    public void setChAge3050SumM(Double chAge3050SumM) {
+        this.chAge3050SumM = chAge3050SumM;
+    }
+
+    public Double getChAge5065SumM() {
+        return chAge5065SumM;
+    }
+
+    public void setChAge5065SumM(Double chAge5065SumM) {
+        this.chAge5065SumM = chAge5065SumM;
+    }
+
+    public Double getChAge65UpSumM() {
+        return chAge65UpSumM;
+    }
+
+    public void setChAge65UpSumM(Double chAge65UpSumM) {
+        this.chAge65UpSumM = chAge65UpSumM;
+    }
+
+    public Double getChDoctorSum() {
+        return chDoctorSum;
+    }
+
+    public void setChDoctorSum(Double chDoctorSum) {
+        this.chDoctorSum = chDoctorSum;
+    }
+
+    public Double getChMasterSum() {
+        return chMasterSum;
+    }
+
+    public void setChMasterSum(Double chMasterSum) {
+        this.chMasterSum = chMasterSum;
+    }
+
+    public Double getChBachelorSum() {
+        return chBachelorSum;
+    }
+
+    public void setChBachelorSum(Double chBachelorSum) {
+        this.chBachelorSum = chBachelorSum;
+    }
+
+    public Double getChTechnicalSum() {
+        return chTechnicalSum;
+    }
+
+    public void setChTechnicalSum(Double chTechnicalSum) {
+        this.chTechnicalSum = chTechnicalSum;
+    }
+
+    public Double getChSeniorSum() {
+        return chSeniorSum;
+    }
+
+    public void setChSeniorSum(Double chSeniorSum) {
+        this.chSeniorSum = chSeniorSum;
+    }
+
+    public Double getChJuniorSum() {
+        return chJuniorSum;
+    }
+
+    public void setChJuniorSum(Double chJuniorSum) {
+        this.chJuniorSum = chJuniorSum;
+    }
+
+    public Double getChElementarySum() {
+        return chElementarySum;
+    }
+
+    public void setChElementarySum(Double chElementarySum) {
+        this.chElementarySum = chElementarySum;
+    }
+
+    public Double getChOtherSum() {
+        return chOtherSum;
+    }
+
+    public void setChOtherSum(Double chOtherSum) {
+        this.chOtherSum = chOtherSum;
+    }
+
+    public Double getChNationalityRank1() {
+        return chNationalityRank1;
+    }
+
+    public void setChNationalityRank1(Double chNationalityRank1) {
+        this.chNationalityRank1 = chNationalityRank1;
+    }
+
+    public Double getChNationalityRank2() {
+        return chNationalityRank2;
+    }
+
+    public void setChNationalityRank2(Double chNationalityRank2) {
+        this.chNationalityRank2 = chNationalityRank2;
+    }
+
+    public Double getChNationalityRank3() {
+        return chNationalityRank3;
+    }
+
+    public void setChNationalityRank3(Double chNationalityRank3) {
+        this.chNationalityRank3 = chNationalityRank3;
+    }
+
+    public Double getChNationalityRank4() {
+        return chNationalityRank4;
+    }
+
+    public void setChNationalityRank4(Double chNationalityRank4) {
+        this.chNationalityRank4 = chNationalityRank4;
+    }
+
+    public Double getChNationalityRank5() {
+        return chNationalityRank5;
+    }
+
+    public void setChNationalityRank5(Double chNationalityRank5) {
+        this.chNationalityRank5 = chNationalityRank5;
+    }
+
+    public Double getChNationalityRank6() {
+        return chNationalityRank6;
+    }
+
+    public void setChNationalityRank6(Double chNationalityRank6) {
+        this.chNationalityRank6 = chNationalityRank6;
+    }
+
+    public Double getChNationalityRank7() {
+        return chNationalityRank7;
+    }
+
+    public void setChNationalityRank7(Double chNationalityRank7) {
+        this.chNationalityRank7 = chNationalityRank7;
+    }
+
+    public Double getChNationalityRank8() {
+        return chNationalityRank8;
+    }
+
+    public void setChNationalityRank8(Double chNationalityRank8) {
+        this.chNationalityRank8 = chNationalityRank8;
+    }
+
+    public Double getChNationalityRank9() {
+        return chNationalityRank9;
+    }
+
+    public void setChNationalityRank9(Double chNationalityRank9) {
+        this.chNationalityRank9 = chNationalityRank9;
+    }
+
+    public Double getChNationalityRank10() {
+        return chNationalityRank10;
+    }
+
+    public void setChNationalityRank10(Double chNationalityRank10) {
+        this.chNationalityRank10 = chNationalityRank10;
+    }
+
+    public String getChNationalityRank1Name() {
+        return chNationalityRank1Name;
+    }
+
+    public void setChNationalityRank1Name(String chNationalityRank1Name) {
+        this.chNationalityRank1Name = chNationalityRank1Name == null ? null : chNationalityRank1Name.trim();
+    }
+
+    public String getChNationalityRank2Name() {
+        return chNationalityRank2Name;
+    }
+
+    public void setChNationalityRank2Name(String chNationalityRank2Name) {
+        this.chNationalityRank2Name = chNationalityRank2Name == null ? null : chNationalityRank2Name.trim();
+    }
+
+    public String getChNationalityRank3Name() {
+        return chNationalityRank3Name;
+    }
+
+    public void setChNationalityRank3Name(String chNationalityRank3Name) {
+        this.chNationalityRank3Name = chNationalityRank3Name == null ? null : chNationalityRank3Name.trim();
+    }
+
+    public String getChNationalityRank4Name() {
+        return chNationalityRank4Name;
+    }
+
+    public void setChNationalityRank4Name(String chNationalityRank4Name) {
+        this.chNationalityRank4Name = chNationalityRank4Name == null ? null : chNationalityRank4Name.trim();
+    }
+
+    public String getChNationalityRank5Name() {
+        return chNationalityRank5Name;
+    }
+
+    public void setChNationalityRank5Name(String chNationalityRank5Name) {
+        this.chNationalityRank5Name = chNationalityRank5Name == null ? null : chNationalityRank5Name.trim();
+    }
+
+    public String getChNationalityRank6Name() {
+        return chNationalityRank6Name;
+    }
+
+    public void setChNationalityRank6Name(String chNationalityRank6Name) {
+        this.chNationalityRank6Name = chNationalityRank6Name == null ? null : chNationalityRank6Name.trim();
+    }
+
+    public String getChNationalityRank7Name() {
+        return chNationalityRank7Name;
+    }
+
+    public void setChNationalityRank7Name(String chNationalityRank7Name) {
+        this.chNationalityRank7Name = chNationalityRank7Name == null ? null : chNationalityRank7Name.trim();
+    }
+
+    public String getChNationalityRank8Name() {
+        return chNationalityRank8Name;
+    }
+
+    public void setChNationalityRank8Name(String chNationalityRank8Name) {
+        this.chNationalityRank8Name = chNationalityRank8Name == null ? null : chNationalityRank8Name.trim();
+    }
+
+    public String getChNationalityRank9Name() {
+        return chNationalityRank9Name;
+    }
+
+    public void setChNationalityRank9Name(String chNationalityRank9Name) {
+        this.chNationalityRank9Name = chNationalityRank9Name == null ? null : chNationalityRank9Name.trim();
+    }
+
+    public String getChNationalityRank10Name() {
+        return chNationalityRank10Name;
+    }
+
+    public void setChNationalityRank10Name(String chNationalityRank10Name) {
+        this.chNationalityRank10Name = chNationalityRank10Name == null ? null : chNationalityRank10Name.trim();
+    }
+
+    public String getRegionCode() {
+        return regionCode;
+    }
+
+    public void setRegionCode(String regionCode) {
+        this.regionCode = regionCode == null ? null : regionCode.trim();
+    }
+
+    public Double getChAge018SumF() {
+        return chAge018SumF;
+    }
+
+    public void setChAge018SumF(Double chAge018SumF) {
+        this.chAge018SumF = chAge018SumF;
+    }
+
+    public Double getChAge1830SumF() {
+        return chAge1830SumF;
+    }
+
+    public void setChAge1830SumF(Double chAge1830SumF) {
+        this.chAge1830SumF = chAge1830SumF;
+    }
+
+    public Double getChAge3050SumF() {
+        return chAge3050SumF;
+    }
+
+    public void setChAge3050SumF(Double chAge3050SumF) {
+        this.chAge3050SumF = chAge3050SumF;
+    }
+
+    public Double getChAge5065SumF() {
+        return chAge5065SumF;
+    }
+
+    public void setChAge5065SumF(Double chAge5065SumF) {
+        this.chAge5065SumF = chAge5065SumF;
+    }
+
+    public Double getChAge65UpSumF() {
+        return chAge65UpSumF;
+    }
+
+    public void setChAge65UpSumF(Double chAge65UpSumF) {
+        this.chAge65UpSumF = chAge65UpSumF;
+    }
+}

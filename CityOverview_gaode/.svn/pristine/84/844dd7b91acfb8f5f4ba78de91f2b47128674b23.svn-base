@@ -1,0 +1,1142 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/6
+  Time: 10:15
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="../map/css/bootstrap.css"/>
+	<link rel="stylesheet" href="../myCss/manager.css"/>
+	<style type="text/css">
+		body{
+			position: relative;
+			font-family: "microsoft yahei";
+		}
+		a:hover{
+			text-decoration: none;
+		}
+		/*手风琴导航*/
+		div#choose{
+			width: 15%;
+			height: 100%;
+			background-color: #21292B;
+			float: left;
+			position: relative;
+			padding-top: 40px;
+		}
+		div#choose #accordion{
+			height: 90%;
+			width: 100%;
+			overflow-y: auto;
+		}
+		div#choose #manager{
+			height: 7%;
+			width: 100%;
+		}
+		.first{
+			display: inline-block;
+			width: 100%;
+			height: 35px;
+			line-height: 35px;
+			color: #3FE5FB;
+			padding-left: 30px;
+			font-weight: bold;
+			text-decoration: none;
+		}
+		div#choose .first:hover{
+			background-color: #2A3433;
+			cursor: pointer;
+		}
+		/*二级指标*/
+		ul.second{
+			background-color: #222A2B;
+			margin: 0;
+			padding: 0;
+			color: #fff;
+			border-top: 0;
+			min-height: 50px;
+		}
+		.panel-body ul{
+			width: 100%;
+		}
+		ul.second li{
+			padding-left: 20%;
+			min-height: 35px;
+			line-height: 35px;
+			width: 100%;
+			position: relative;
+			cursor: pointer;
+		}
+		ul.second li span.txt{
+			display: inline-block;
+			width: 75%;
+		}
+		ul.second li:hover{
+			background-color: #19565F;
+			cursor: pointer;
+		}
+		ul.second img{
+			position: absolute;
+			right: 10%;
+			top: 20%;
+			cursor: pointer;
+		}
+		/*目录管理*/
+		#listManager{
+			position: absolute;
+			left: 30%;
+			outline: none;
+			border: 0;
+			padding: 5px 15px;
+			font-size: 14px;
+			background-color: #10CFE8;
+			color: #fff;
+		}
+		div#pics{
+			width: 85%;
+			height: 100%;
+			background-color: #2E3D40;
+			float: left;
+			position: relative;
+			overflow: hidden;
+		}
+		#div1,#div2,#div3,#div4,#div5,#div6{
+			width: 30%;
+			height: 31%;
+			background-color: #222A2B;
+			background-size: 100% 100%;
+		}
+		div#pics div img{
+			width: 100%;
+			height: 100%;
+		}
+		div#div1{
+			position: absolute;
+			left: 2%;
+			top: 0;
+		}
+		div#div2{
+			position: absolute;
+			left: 2%;
+			top: 34%;
+		}
+		div#div3{
+			position: absolute;
+			left: 2%;
+			top: 66%;
+		}
+		div#div4{
+			position: absolute;
+			left: 68%;
+			top: 0;
+		}
+		div#div5{
+			position: absolute;
+			left: 68%;
+			top: 34%;
+		}
+		div#div6{
+			position: absolute;
+			left: 68%;
+			top: 66%;
+		}
+		div#pics div#environment{
+			width: 200px;
+			height: 200px;
+			line-height: 200px;
+			text-align: center;
+			border-radius: 200px;
+			color:#0DD4EE;
+			font-size: 20pt;
+			font-weight: bold;
+			position: absolute;
+			left: calc(50% - 100px);
+			top: calc(51% - 100px);
+			background-color: #222A2B;
+			z-index: 50;
+		}
+		div#pics div#bg{
+			width: 36%;
+			height: 100%;
+			position: absolute;
+			left: 32%;
+			background-image: url('../images/manager/bg.png');
+			background-size: 100% 100%;
+			overflow: hidden;
+		}
+		#saveBtn{
+			outline: none;
+			border: 0;
+			padding: 5px 20px;
+			font-size: 16px;
+			background-color: #10CFE8;
+			color: #fff;
+			font-weight: bold;
+			position: absolute;
+			bottom:5%;
+			left:48%;
+		}
+		#addList .modal-dialog{
+			width: 60%;
+		}
+		#addList .modal-content{
+			border:1px solid #00bbd4;
+			height: 630px;
+			border-radius: 0;
+			background-color: #02191C;
+			padding: 5px 15px;
+		}
+		#addList .modal-header{
+			height: 17%;
+			border: 0;
+			color:#39D1E5;
+			padding: 0 0 10% 0;
+		}
+		#addList .modal-body{
+			color:#39D1E5;
+			width: 100%;
+			height: 81%;
+			position: relative;
+			padding: 0;
+		}
+		.tableHead{
+			position: absolute;
+			top:0;
+			left:0;
+		}
+		.tableHead table{
+			background-color: #02191C;
+		}
+		.tableBody{
+			width:100%;
+			height:100%;
+			overflow: auto;
+		}
+		.tableBody table{
+			width:100%;
+		}
+		.tableHead table,.tableBody table{
+			border-collapse:collapse;
+		}
+		.modal-title{
+			font-weight: bold;
+		}
+		.modal button.close{
+			width: 15px;
+			height: 15px;
+			color:#39D1E5;
+		}
+		/*目录管理*/
+		.header{
+			width: 100%;
+			height: 87%;
+			padding-top: 3%;
+			position: relative;
+		}
+        select#startList{
+			width: 20%;
+			color: #39D1E5;
+			border:1px solid #39D1E5;
+			background-color: #02545D;
+			padding: 5px;
+			font-size: 14px;
+			float: left;
+		}
+		div.right{
+			position: absolute;
+			right: 0;
+			height: 30px;
+		}
+		div.right button#addNew{
+			min-width: 100px;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			color: #39D1E5;
+			border:1px solid #39D1E5;
+			background-color: #02545D;
+			outline: none;
+		}
+		/*表格*/
+		table.table-manager{
+			min-height:200px;
+			border: 1px solid #00bbd4;
+			font-weight: normal;
+			color: #0CDAF4;
+			table-layout: fixed;
+		}
+		table.table-manager tbody tr td{
+			vertical-align: middle;
+			font-size:14px;
+			padding:0;
+			border:1px solid #00bbd4;
+		}
+		table.table-manager tbody tr td img{
+			width: 80%;
+		}
+		table.table-manager .list th{
+			border:1px solid #00bbd4;
+		}
+		/*编辑，删除*/
+		.editList,.deleteList{
+			border: none;
+			outline: none;
+			background-color: #02191C;
+		}
+		.editList{
+			color: #3CACF2;
+		}
+		.deleteList{
+			color: #FC3F3F;
+		}
+		/*新增，修改弹框*/
+		.addInfo{
+			display:none;
+			position:absolute;
+			z-index:2000;
+			top:15%;
+			left:35%;
+			width:500px;
+			border:1px solid #00bbd4;
+			background-color: #02191C;
+			border-radius: 0;
+		}
+		.addInfo .panel-heading{
+			background-color: #02191C;
+			border-bottom: none;
+		}
+		.addInfo .panel-title {
+			font-weight: bold;
+			color: #0CDAF4;
+		}
+		.addInfo .panel-body{
+			padding-left: 18%;
+		}
+		.addInfo .panel-body table td{
+			color: #0CDAF4;
+			text-align: left;
+		}
+		.addInfo .panel-body table input{
+			border:1px solid #00bbd4;
+			background-color: #02191C;
+			color: #0CDAF4;
+		}
+		.addInfo .panel-body table button{
+			width: 112px;
+			height: 38px;
+			text-align: center;
+			color: #39D1E5;
+			outline: none;
+			border: 0;
+			margin-left: 40px;
+			background-color: transparent;
+			background-image: url("../images/manager/btn.png");
+			background-size: 100%;
+		}
+		.addInfo .panel-body table button:hover{
+			background-image: url("../images/manager/btn-hover.png");
+		}
+		.addInfoClose{
+			position:relative;
+			top:-20px;
+		}
+		/*提示框*/
+		.addSure{
+			display:none;
+			position:absolute;
+			z-index:2100;
+			border-radius: 0;
+			top:28%;
+			left:41%;
+			width:360px;
+			border:1px solid #39D1E5;
+			background-color: #02191C;
+		}
+		.addSure .panel-heading{
+			background-color: #02191C;
+			border-bottom: none;
+		}
+		.addSure .panel-title {
+			font-weight: bold;
+			color: #0CDAF4;
+		}
+		.SuerContent{
+			color: #0CDAF4;
+		}
+		.SuerContent .sure,.SuerContent .cls{
+			width: 80px;
+			height: 27px;
+			text-align: center;
+			color: #39D1E5;
+			outline: none;
+			border: 0;
+			margin-left: 60px;
+			background-color: transparent;
+			background-image: url("../images/manager/btn.png");
+			background-size: 100%;
+			margin-bottom: 10px;
+		}
+		.SuerContent .sure:hover,.SuerContent .cls:hover{
+			background-image: url("../images/manager/btn-hover.png");
+		}
+		/*成功提示框*/
+		#bccgSure{
+			display:none;
+			position:absolute;
+			z-index:2100;
+			top:28%;
+			left:41%;
+			width:360px;
+			border:1px solid #39D1E5;
+			background-color: #02191C;
+			border-radius: 0;
+		}
+		#bccgSure .panel-heading{
+			background-color: #02191C;
+			border-bottom: none;
+		}
+		#bccgSure .panel-title {
+			font-weight: bold;
+			color: #0CDAF4;
+		}
+		#bccgSure .SuerContent{
+			height: 100px;
+		}
+		*{
+			box-sizing: border-box;
+		}
+		/*保存成功提示消息*/
+		#warnning{
+			width: 200px;
+			height: 100px;
+			color: #0CDAF4;
+			font-weight: bold;
+			background-color: #2A383B;
+			border: 1px solid #3A858F;
+			line-height: 100px;
+			text-align: center;
+			position: fixed;
+			right:0;
+			bottom: 0;
+			display: none;
+		}
+		/*关闭按钮*/
+		#warnning span{
+			width: 10px;
+			height: 10px;
+			position: absolute;
+			right: 5px;
+			top: -41px;
+			cursor: pointer;
+		}
+		::-webkit-scrollbar{
+			background-color: #1B1B1D;
+		}
+		::-webkit-scrollbar-thumb {
+			background-color: #303030;
+		}
+
+	</style>
+</head>
+<body>
+<%--拖拽选项--%>
+<div id="choose">
+	<div class="panel-group" id="accordion">
+	</div>
+<shiro:hasPermission name="mlgl">
+	<div id="manager">
+	    <button id="listManager" data-toggle="modal" >目录管理</button>
+	</div>
+</shiro:hasPermission>
+</div>
+
+<%--右侧图表--%>
+<div id="pics">
+	<div class="frm" id="div1" pxxh="1" ondrop="drop(event)"
+		 ondragover="allowDrop(event)"></div>
+	<div class="frm" id="div2" pxxh="2" ondrop="drop(event)"
+		 ondragover="allowDrop(event)"></div>
+	<div class="frm" id="div3" pxxh="3" ondrop="drop(event)"
+		 ondragover="allowDrop(event)"></div>
+	<div class="frm" id="div4" pxxh="4" ondrop="drop(event)"
+		 ondragover="allowDrop(event)"></div>
+	<div class="frm" id="div5" pxxh="5" ondrop="drop(event)"
+		 ondragover="allowDrop(event)"></div>
+	<div class="frm" id="div6" pxxh="6" ondrop="drop(event)"
+		 ondragover="allowDrop(event)"></div>
+	<div id="environment"></div>
+	<div id="bg"></div>
+	<button id="saveBtn">保&nbsp;&nbsp;存</button>
+</div>
+
+<div class="modal fade" id="addList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">X<span aria-hidden="true"></span><span class="sr-only"></span></button>
+				<h3 class="modal-title" style="margin-top: 10px">自定义目录管理</h3>
+				<div class="header">
+						<select id="startList" name="startList">
+						</select>
+					<div class="right">
+						<button type="button" id="addNew" onclick="addNew()">新增</button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="tableHead">
+					<table class="table table-manager table-bordered table-responsive">
+						</thead>
+					</table>
+				</div>
+				<div class="tableBody">
+					<table class="table table-manager table-bordered table-responsive">
+						<thead>
+						<tr class="list">
+							<th style="width:15%">目录名称</th>
+							<th style="width:15%">目录图片</th>
+							<th style="width:38%">目录页面</th>
+							<th style="width:12%">目录状态</th>
+							<th style="width:20%">操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<div class="panel panel-default addInfo">
+	<div class="panel-heading">
+		<h3 class="panel-title">新增</h3>
+		<button type="button" class="close addInfoClose"><span aria-hidden="true">&times;</span></button>
+	</div>
+	<div class="panel-body">
+		<table class="table col-xs-12">
+			<tr>
+				<td>目录名称</td>
+				<td><input id="mlmc" style="width: 100%" type="text"/>
+					<span class="hint"></span>
+					<input id="mlid" type="hidden"/>
+				</td>
+			</tr>
+			<tr>
+				<td>目录图片路径</td>
+				<td>
+					<input id="mltp" style="width: 100%" type="text"/>
+					<span class="hint"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>目录页面路径</td>
+				<td>
+					<input id="mldz" style="width: 100%" type="text"/>
+					<span class="hint"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>目录状态</td>
+				<td>
+					<label>
+						<input id="radio1" value="1" name="state" type="radio" checked /> 启用
+						<input id="radio2" value="0" name="state" type="radio"/> 禁用
+					</label>
+				</td>
+			</tr>
+			</tr>
+			<tr>
+
+				<td colspan="2"><button class="save" state="修改" bh="">保存</button> <button onclick="closeaddInfo()">取消</button></td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="panel panel-default addSure">
+	<div class="panel-heading">
+		<h3 class="panel-title">提示</h3>
+		<button type="button" class="close addInfoClose"><span onclick="closeSure()">&times;</span></button>
+	</div>
+	<div class="SuerContent">
+		<div class="text-center sureAlert">是否确认保存</div>
+		<div style="margin-top:30px;">
+			<button type="button" class="btn btn-default sure" id="sureBtn">确定</button>
+			<button type="button" class="btn btn-default cls" onclick="closeSure()">取消</button>
+		</div>
+	</div>
+</div>
+<div class="panel panel-default " id="bccgSure">
+	<div class="panel-heading">
+		<h3 class="panel-title">提示</h3>
+		<button type="button" class="close addInfoClose"><span onclick="sureHide()">&times;</span></button>
+	</div>
+	<div class="SuerContent">
+		<div class="text-center" id="AddDeleteSure">保存成功</div>
+		<div style="margin-top:20px;">
+			<span class=" btn btn-default sure" style=" margin-left:124px;" onclick="sureHide()">确定</span>
+		</div>
+	</div>
+</div>
+<%--保存成功提示--%>
+<div id="warnning">
+	保存成功！
+	<span>x</span>
+</div>
+
+<script src="../map/js/jquery-1.11.3.js"></script>
+<script src="../map/js/bootstrap.js"></script>
+<script>
+	//保存按钮隐藏
+	$("#warnning span").click(function(){
+		$("#warnning").hide();
+	});
+	//定义全局变量
+	var x, y,Drawimg,imgSrc,bh,sjbh;
+//    鼠标按下生成拖拽图片
+	$('#accordion').mousedown(function(e){
+		$(Drawimg).remove()
+		var e=e||event;
+		x=e.clientX;
+		y=e.clientY;
+		if($(e.toElement).prop("class")=="draw"){
+			//生成图片
+			Drawimg=document.createElement('img');
+			imgSrc=$(e.toElement).eq(0).attr("imgsrc");
+			bh=$(e.toElement).eq(0).attr("bh");
+			sjbh=$(e.toElement).eq(0).attr("sjbh");
+			$(Drawimg).prop("src","../"+imgSrc);
+			$(Drawimg).addClass("drawImg");
+			$(Drawimg).css({
+				position:"absolute",
+				zIndex:99,
+				left:(x-55)+"px",
+				top:(y-55)+"px",
+				width:"200px",
+				height:"200px"
+			});
+			$("body").append(Drawimg);
+		}
+	});
+
+	$(document).mouseup(function(e){
+		$(Drawimg).remove()
+		$("img.drawImg").remove()
+	});
+	//隐藏移动图片
+	$(document).mouseover(function(e){
+		$(Drawimg).css("opacity","0")
+		$("img.drawImg").remove()//todo 需要看见图片删除这句话
+	});
+    //拖拽事件
+	function allowDrop(ev)
+	{
+		ev.preventDefault();
+	}
+	function drag(ev)
+	{
+		ev.dataTransfer.setData("Text",ev.target.id);
+	}
+    //拖拽完成事件
+	function drop(ev) {
+		ev.preventDefault();
+		$(Drawimg).css({
+			position:"relative",
+			top:0,
+			left:0,
+			opacity:0
+		});
+		$(ev.target).css("backgroundImage","url(.."+imgSrc+")")
+		$(ev.target).attr("bh",bh);
+		$(ev.target).attr("sjbh",sjbh);
+		$(".drawImg").remove();
+	}
+	//1级标题编号
+	var firstZbBh="";
+	//用户id
+	var userId="${sessionScope._CURRENT_USER.username}";
+//	一级指标
+	$.ajax({
+		type:"POST",
+		url:'../jxsys/listSysIndicators.do?bh=',
+		dataType:'json',
+		success:function(data){
+			var len=data.length;
+			var navBar="";       //panel
+			var bharr=[];        //编号数组
+			var o=0;
+			for(var i=0;i<len;i++){
+				o++;
+				bharr.push(data[i].bh);
+				navBar+=
+					'<div class="box">' +
+						'<ul>' +
+							'<li class="first">'+data[i].mc+'</li>'+
+							'<ul style="display:none" bh="'+data[i].bh+'" class="second">'+
+							'</ul>'+
+						'</ul>'+
+					'</div>'
+				$('#accordion').html(navBar);
+			}
+			//展开第一个ul
+			$('#accordion').find(".box:first>ul>li").addClass("active");
+			firstZbBh=$('#accordion').find(".box:first>ul>li~").attr("bh");
+			showSecond($('#accordion').find(".box:first>ul>li"),firstZbBh);
+			$('#accordion').find(".box:first>ul>li~").css("display","block");
+			//初始化圆形框中文字
+			$("#environment").html($('#accordion').find(".box:first>ul>li").html());
+			//展示6+n排序图
+			six(firstZbBh);
+
+		}
+	})
+	//展示6+n排序图
+	function six(firstZbBh){
+		$.ajax({
+			type:"POST",
+			url:'../jxsys/listIndicatorsShown.do',
+			dataType:'json',
+			data:{
+					bh:firstZbBh,
+					userId:userId
+				},
+			success:function(data){
+				var len=data.length;
+				//清空背景图
+				$(".frm").css("backgroundImage","none");
+				for(var i=0;i<len;i++){
+					if(data[i].mldz==""&&data[i].mldz=="null"){
+						var str="none";
+					}else{
+						var str=data[i].mltp;
+					}
+					var pxxh=data[i].pxxh;
+					$("#div"+pxxh).css("backgroundImage","")
+					$("#div"+pxxh).css("backgroundImage","none");
+					$("#div"+pxxh).attr("bh",data[i].bh);
+					$("#div"+pxxh).attr("sjbh",data[i].sjbh);
+					$("#div"+pxxh).css("backgroundImage","url(.."+str+")");
+
+				}
+			}
+		})
+	}
+	//点击展开二级指标
+	$("#accordion").delegate(".first","click",function(){
+		$("#environment").html($(this).html());
+		var bh=$(this).next().attr("bh");
+		firstZbBh=bh;
+		var me=$(this);
+		$(this).parent().parent().siblings().find("li").removeClass("active");
+		$(this).parent().parent().siblings().find("ul>ul").fadeOut(0);
+		$(this).addClass("active");
+		$(this).next().fadeIn(1000);
+		if($(this).hasClass("active")){
+			showSecond(me,bh);
+			six(firstZbBh,userId);
+		}else{
+			return;
+		}
+	});
+	//获取二级指标
+	function showSecond(dom,bh){
+		$.ajax({
+			type:"POST",
+			url:'../jxsys/listSysIndicators.do',
+			dataType:'json',
+			data:{bh:bh},
+			success:function(data){
+				var str="";
+				for(var i=0;i<data.length;i++){
+					str+='<li><span class="txt">'+data[i].mc+
+					'</span><img bh='+data[i].bh+' sjbh='+data[i].sjbh+' imgSrc='+data[i].mltp+' class="draw" src="../images/manager/tuodong.png" alt="" draggable="true" ondragstart="drag(event)"/></li>';
+				}
+				$(dom).next("ul").html(str);
+			}}
+		);
+	}
+	//保存
+	$("#pics").delegate("#saveBtn","click",function(){
+		var len=$(".frm").length;
+		var indicatorsUser=[];
+		for(var i=0;i<len;i++){
+			var obj={};
+			obj.bh=$(".frm").eq(i).attr("bh");
+			obj.sjbh=$(".frm").eq(i).attr("sjbh");
+			obj.pxxh=$(".frm").eq(i).attr("pxxh");
+			obj.userid=userId;
+			indicatorsUser.push(obj)
+		}
+		//转成json格式
+		indicatorsUser=JSON.stringify(indicatorsUser);
+		$.ajax({
+			type:"POST",
+			url:'../jxsys/updateIndicatorsShown.do',
+			dataType:'json',
+			data:{indicatorsUser:indicatorsUser},
+			success:function(data){
+				console.log(data)
+				if(data=="success") {
+					$("#warnning").slideDown(1000,function(){
+						setTimeout("$('#warnning').slideUp(1000);",500);
+					})
+
+				}
+			}
+		})
+	})
+	//表头固定
+	function fun(){
+		//克隆表头
+		var theadFixed=$(".tableBody thead").clone();
+		//复制给第一个表格
+		$(".tableHead table").html(theadFixed);
+		var len=$(".tableBody table thead th");
+		//0.2s后自动刷新
+		setTimeout(function(){
+			//设置两个表头一样高
+			$(".tableHead").height($(".tableBody table thead").height());
+			//如果内容高于表头，就出现滚动条
+			if($(".tableBody table").height()+10>=$(".tableBody").height()){
+				$(".tableHead table").css("width","calc(100% - 17px)")
+				for(var i=0;i<len.length;i++){
+					$(".tableHead table thead th").eq(i).css("width",'$(len).eq(i).width()+"%"')
+				}
+			}else{
+				$(".tableHead table").css("width","100%")
+				for(var i=0;i<len.length;i++){
+					$(".tableHead table thead th").eq(i).css("width",'$(len).eq(i).width()+"%"')
+				}
+			}
+		},200);
+		$("#addList").modal("show");
+		}
+
+    //目录管理
+	function startListAjax(bh){
+		$.ajax({
+			type: "POST",
+			url: '../jxsys/listAllSysIndicators.do',
+			dataType: 'json',
+			data:{bh:bh},
+			success: function (data) {
+				console.log(data)
+				var len = data.length;
+				var list = "";
+				for (var i = 0; i < len; i++) {
+					list += '<tr bh="'+data[i].bh+'">' +
+					'<td>' + data[i].mc + '</td>' +
+					'' + '<td><img src="..'+data[i].mltp+'"></td>'+
+					'<td>' + data[i].mldz + '</td>' +
+					'<td>' + getState(data[i].state) + '</td>' +
+					'<td><button class="editList">编辑</button><button class="deleteList">删除</button></td>' +
+					'</tr>';
+				}
+				$('.table-manager tbody').html(list);
+				fun()
+			}
+		})
+	}
+	//获取一级指标
+	$("#choose").delegate("#listManager","click",function(){
+		//初始化
+		$.ajax({
+			type:'post',
+			url:'../jxsys/listSysIndicators.do?bh=',
+			dataType:'json',
+			success:function(data){
+				var str="";
+				var len=data.length;
+				for(var i=0;i<len;i++){
+					str+='<option value="'+data[i].bh+'" sjbh="'+data[i].bh+'">'+data[i].mc+'</option>';
+				}
+				$('#startList').html(str);
+				startListAjax($('#startList').val());
+			}
+		});
+        //根据一级指标切换
+		$("#startList").change(function(){
+			var bh=$(this).val();
+			startListAjax(bh);
+		})
+	});
+	//启用与禁用状态
+	function getState(type){
+		if(type==1){
+			return '启用';
+		}else{
+			return '禁用';
+		}
+	}
+	var sureID=0;
+	var sureValue=false;
+	function sureHide(){
+		$("#bccgSure").css("display","none");
+	}
+	//关闭面板
+	function closeSure(){
+		$(".addSure").css("display","none");
+		sureValue=false;
+	}
+	$(".SuerContent").delegate("#sureBtn","click",function(){
+		var bh=$(".table-manager tbody tr").attr("bh");
+		sureAlertnn(bh);
+	});
+	//操作完成确认按钮
+	function sureAlertnn(){
+		//获取二级指标发生改变所在的一级指标
+		var text=$('#startList').find("option:selected").text();
+		sureValue=true;
+		var bh=$(".save").attr("bh");
+		if(sureValue&&($(".sureAlert").html()=="是否确认删除？")){
+			del(sureID);
+			$(".addSure").css("display","none");
+			$("#AddDeleteSure").html("删除成功！");
+			$("#bccgSure").css("display","block");
+			//模拟点击
+			$("#accordion li:contains("+text+")").click();
+		}
+		if(sureValue&&($(".sureAlert").html()=="是否确认添加？")){
+			$(".addSure").css("display","none");
+			saveList();
+			$("#AddDeleteSure").html("添加成功！");
+			$(".addInfo").css("display","none");
+			$("#accordion li:contains("+text+")").click();
+		}
+		if(sureValue&&($(".sureAlert").html()=="是否确认修改？")){
+			$(".addSure").css("display","none");
+			update(bh);
+			$("#AddDeleteSure").html("修改成功！");
+			$(".addInfo").css("display","none");
+			$("#accordion li:contains("+text+")").click();
+		}
+		sureValue=false;
+	}
+	//判断保存按钮
+	$(".addInfo").delegate('.save','click',function(){
+		var bh=$(".save").attr("bh");
+		if($(".save").attr("state")=="新增"){
+			saveList();
+		}
+		if($(".save").attr("state")=="修改"){
+			update(bh);
+		}
+	});
+    //根据编号删除
+	$(".table-manager tbody").delegate("button.deleteList","click",function() {
+		var me=$(this);
+		$(".sureAlert").html("是否确认删除？")
+		$(".addSure").css("display","block");  //是否保存
+		var bh=$(this).parent().parent().attr("bh");
+		del(bh);
+	});
+	function del(bh){
+		sureID=bh;
+		var sjbh=$("#startList").val();
+		if(sureValue){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				url: '../jxsys/deleteSysIndicators.do',
+				data:{indicatorId:bh},
+				success: function (data) {
+					if(data=="success"){
+						$('.addInfo').css('display','none');
+						$(this).parent().parent().remove();
+						startListAjax(sjbh);
+					}
+					else{
+						$("#AddDeleteSure").html("删除失败！");
+					}
+				}
+			})
+		}
+	}
+	//验证字符串长度
+	function strlen(td){
+		var str=td.val();
+		var len = 0;
+		for (var i=0; i<str.length; i++) {
+			var c = str.charCodeAt(i);
+			//单字节加1
+			if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+				len++;
+			}
+			else {
+				len+=2;
+			}
+		}
+		var tdHtml=td.parent().prev().html();
+		if(tdHtml=="目录名称"){
+			if(len>=50){
+				td.next().show();
+				td.next().html("目录名称不能超过50个字符")
+				return false
+			}else {
+				td.next().hide();
+				return true;
+			}
+		}
+		if(tdHtml=="目录图片路径"){
+			if(len>=100){
+				td.next().show();
+				td.next().html("目录图片路径不能超过100个字符")
+				return false
+			}else {
+				td.next().hide();
+				return true;
+			}
+		}
+		if(tdHtml=="目录页面路径"){
+			if(len>=100){
+				td.next().show();
+				td.next().html("目录页面路径不能超过100个字符")
+				return false
+			}else {
+				td.next().hide();
+				return true;
+			}
+		}
+	}
+	//判断是否为空
+	function Null(str){
+		var tdVal=str.eq(0).val();
+		tdHtml=str.parent().prev().html();
+		if(tdVal==""){
+			str.next().show();
+			str.next().html(tdHtml+"不能为空");
+			return false;
+		}else{
+			str.next().hide();
+			return true;
+		}
+	}
+	//新增
+	function addNew(){
+		$(".save").attr("state","新增");
+		$(".modal-backdrop").addClass("mydamo");
+		$("#mlid").val("");
+		$("#mlmc").val("");
+		$("#mltp").val("");
+		$("#mldz").val("");
+		$('div[tabIndex]').removeAttr('tabIndex');
+		$('.addInfo').css('display','block');
+	}
+	function saveList(){
+		$(".save").attr("state","新增");
+		var list={};
+		list.sjbh=$("#startList").val();
+		list.mc= $("#mlmc").val();
+		list.mltp=$("#mltp").val();
+		list.mldz=$("#mldz").val();
+		list.state= $("input[type='radio']:checked").val();
+		if(sureValue&&Null($("#mlmc"))&&Null($("#mldz"))&&strlen($("#mlmc"))&&strlen($("#mltp"))&&strlen($("#mldz"))){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				url: '../jxsys/addSysIndicators.do',
+                data:{
+                    indicator: JSON.stringify(list)
+                },
+
+				url: '../jxsys/addSysIndicators.do',
+				data:{
+					indicator:JSON.stringify(list)
+				},
+				success: function (data) {
+					if(data=="success"){
+						$("#bccgSure").css("display","block");
+						startListAjax(list.sjbh);
+						sureValue=false;
+					}
+					else{
+						$("#AddDeleteSure").html("添加失败！");
+					}
+				}
+			})
+			return
+		}
+		if(Null($("#mlmc"))&&Null($("#mldz"))&&strlen($("#mlmc"))&&strlen($("#mltp"))&&strlen($("#mldz"))){
+			$(".sureAlert").html("是否确认添加？");
+			$(".addSure").css("display","block");  //是否保存
+		}
+		sureValue=false;
+	}
+	//修改,获取该编号的名称，页面路径，图片路径，状态，上级编号
+	$(".table-manager tbody").delegate("button.editList","click",function(){
+		$(".save").attr("state","修改");
+		var chil=$(this).parent().parent().children();
+		var bh=$(this).parent().parent().attr("bh");
+		$(".save").attr("bh",bh);
+		$("#mlmc").val($(chil[0]).text());
+		$("#mltp").val($(chil[1]).find("img").attr("src").replace("..",""));
+		$("#mldz").val($(chil[2]).text());
+		if($(chil[3]).text()=="启用"){
+			$("#radio2").removeProp('checked',"checked")
+			$("#radio1").prop('checked',"checked");
+		}else{
+			$("#radio1").removeProp('checked',"checked")
+			$("#radio2").prop('checked',"checked");
+		}
+		$('div[tabIndex]').removeAttr('tabIndex');
+		$('.addInfo').css('display','block');
+		$('.addInfo .panel-title').html("修改");
+	});
+	//更新
+	function update(bh){
+		var list={};
+		list.bh=bh;
+		list.sjbh=$("#startList").val();
+		list.mc= $("#mlmc").val();
+		list.mltp=$("#mltp").val();
+		list.mldz=$("#mldz").val();
+		list.state= $("input[type='radio']:checked").val();
+		if(sureValue&&Null($("#mlmc"))&&Null($("#mldz"))&&strlen($("#mlmc"))&&strlen($("#mltp"))&&strlen($("#mldz"))){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				url: '../jxsys/updateSysIndicators.do',
+				data:{indicator:JSON.stringify(list)},
+				success: function (data) {
+					if(data=="success"){
+						$("#bccgSure").css("display","block");
+						$(".modal-backdrop").removeClass("mydamo");
+						startListAjax(list.sjbh);
+						sureValue=false;
+					}
+					else{
+						$("#AddDeleteSure").html("修改失败！");
+					}
+				}
+			})
+			return
+		}
+		if(Null($("#mlmc"))&&Null($("#mldz"))&&strlen($("#mlmc"))&&strlen($("#mltp"))&&strlen($("#mldz"))){
+			$(".sureAlert").html("是否确认修改？");
+			$(".addSure").css("display","block");  //是否保存
+		}
+		sureValue=false;
+	}
+	//关闭窗口
+	function closeaddInfo(){
+		$('.addInfo').css('display','none');
+		$(".modal-backdrop").removeClass("mydamo");
+	}
+	$(function(){
+		$('#addedInformation').click(function(){
+			$('div[tabIndex]').removeAttr('tabIndex');
+			$('.addInfo').css('display','block');
+		});
+		$('.addInfoClose').click(function(){
+			closeaddInfo();
+		});
+	});
+</script>
+</body>
+</html>

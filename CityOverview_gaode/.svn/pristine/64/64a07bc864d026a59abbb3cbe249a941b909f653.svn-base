@@ -1,0 +1,288 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #trafficSaftyWindow .modal-dialog{
+      margin-right: 10px;
+      width:660px;
+    }
+    #trafficSaftyWindow .modal-content{
+      height: 430px;
+      /*background: url("map/images/economicModel/bgw(1).png") no-repeat;
+      background-position: -7px 0;
+      background-size: 102% 101%;*/
+    }
+    #trafficSaftyWindow .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #trafficSaftyWindow .modal-title{
+      margin-top: -5px;
+    }
+    #trafficSaftyWindow .modal-body{
+      padding: 0px;
+    }
+    #trafficSaftyWindow .modal-header .nav li{
+      width: 117px;
+      height: 32px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .li1{
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      background-image: url("map/images/economicModel/bgw(1).png");
+    }
+    .li2{
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      background-image: url("map/images/economicModel/bgw(3).png");
+    }
+    .li3{
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      background-image: url("map/images/economicModel/bgw(5).png");
+    }
+
+    .act1{
+      background-image: url("map/images/economicModel/bgw(2).png");
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+   .act2{
+      background-image: url("map/images/economicModel/bgw(4).png");
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+    .act3{
+      background-image: url("map/images/economicModel/bgw(6).png");
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+
+    #trafficSaftyWindow .modal-header .nav{
+      height:32px;
+      margin-top: -5px;
+    }
+    #trafficSaftyWindow .modal-header .nav li a:hover{
+      color: #000;
+      text-decoration: none;
+    }
+    #TrafficSaftywindow3{
+      max-height:354px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    #warningTable thead tr th{
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+<div class="modal fade" style="width: 700px;height: 450px;top: 10px;left: 70px;" id="trafficSaftyWindow" tabindex="-1" role="dialog" aria-hidden="true" style=""
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #d6d6d6">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+          <img src="map/images/economicModel/close.png">
+        </button>
+        <div class="nav" style="margin-top: -11px;">
+          <ul class="list-group " >
+            <li onclick="toUrl(this,'#TrafficSaftywindow1')"  class="list-unstyled act_4" value="4"><div class="stext">数据统计</div></li>
+            <li onclick="toUrl(this,'#TrafficSaftywindow2')"  class="list-unstyled li_2" value="2"><div class="stext">关联分析</div></li>
+            <li onclick="toUrl(this,'#TrafficSaftywindow3')"  class="list-unstyled li_5" value="5"><div class="stext">智能预警</div></li>
+          </ul>
+        </div>
+        <%--<h4 class="modal-title ecoWindowTitle" id="infoModalLabel">社会经济</h4>--%>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <div id="TrafficSaftywindow1" class="tab-pane active"><!--第一页产品规模这个图表-->
+            <div class="tabbable">
+              <!-- Nav tabs -->
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#TrafficSaftyTab1_1" role="tab" data-toggle="tab">年份统计</a></li>
+                <li><a href="#TrafficSaftyTab1_2" role="tab" data-toggle="tab">月分布</a></li>
+                <li><a href="#TrafficSaftyTab1_3" role="tab" data-toggle="tab">周分布</a></li>
+                <li><a href="#TrafficSaftyTab1_4" role="tab" data-toggle="tab">时刻分布</a></li>
+                <li><a href="#TrafficSaftyTab1_5" role="tab" data-toggle="tab">起因分布</a></li>
+                <li><a href="#TrafficSaftyTab1_6" role="tab" data-toggle="tab">驾龄分布</a></li>
+              </ul>
+
+              <!-- Tab panes -->
+              <div class="tab-content" style="">
+                <div class="tab-pane active " id="TrafficSaftyTab1_1" style="width: 650px;height: 260px">
+
+                </div>
+                <div class="tab-pane" id="TrafficSaftyTab1_2" style="width: 660px;height: 260px">
+
+                </div>
+                <div class="tab-pane" id="TrafficSaftyTab1_3" style="width: 660px;height: 260px">
+
+                </div>
+                <div class="tab-pane" id="TrafficSaftyTab1_4" style="width: 660px;height: 260px">
+
+                </div>
+                <div class="tab-pane" id="TrafficSaftyTab1_5" style="width: 660px;height: 260px">
+
+                </div>
+                <div class="tab-pane" id="TrafficSaftyTab1_6" style="width: 660px;height: 260px">
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="TrafficSaftywindow2" class="tab-pane " ><!--z这是第二页的饼图-->
+            <div class="tabbable">
+              <!-- Nav tabs -->
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#TrafficSaftyTab2_1" role="tab" data-toggle="tab">天气-事故</a></li>
+                <li><a href="#TrafficSaftyTab2_2" role="tab" data-toggle="tab">经济人口-事故</a></li>
+                <li><a href="#TrafficSaftyTab2_3" role="tab" data-toggle="tab">机动车拥有量-事故</a></li>
+              </ul>
+
+              <!-- Tab panes -->
+              <div class="tab-content" style="">
+                <div class="tab-pane active " id="TrafficSaftyTab2_1" style="width: 650px;height: 260px">
+                2.1
+                </div>
+                <div class="tab-pane" id="TrafficSaftyTab2_2" style="width: 660px;height: 260px">
+                2.2
+                </div>
+                <div class="tab-pane" id="TrafficSaftyTab2_3" style="width: 660px;height: 260px">
+                  2.3
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="TrafficSaftywindow3" class="tab-pane "><!--z这是第三页的条形图-->
+            <div class="tabbable" >
+              <table id="warningTable" class="table table-striped table-bordered table-hover" >
+                <thead>
+                  <tr>
+                    <th rowspan="2">事故多发路段</th>
+                    <th rowspan="2" style="width:80px;">事故次数总计</th>
+                    <th rowspan="2" style="width:80px;">受伤人数合计</th>
+                    <th rowspan="2" style="width:80px;">死亡人数合计</th>
+                    <th colspan="3">事故等级统计</th>
+                  </tr>
+                  <tr>
+                    <th>一般</th>
+                    <th>重大</th>
+                    <th>特大</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+              <%--<!-- Nav tabs -->--%>
+              <%--<ul class="nav nav-tabs" role="tablist">--%>
+                <%--<li class="active"><a href="#TrafficSaftyTab3_1" role="tab" data-toggle="tab">案件统计</a></li>--%>
+                <%--<li><a href="#TrafficSaftyTab3_2" role="tab" data-toggle="tab">近五年统计</a></li>--%>
+              <%--</ul>--%>
+
+              <%--<!-- Tab panes -->--%>
+              <%--<div class="tab-content" style="">--%>
+                <%--<div class="tab-pane active " id="TrafficSaftyTab3_1" style="width: 650px;height: 260px">--%>
+                <%--3.1--%>
+                <%--</div>--%>
+                <%--<div class="tab-pane" id="TrafficSaftyTab3_2" style="width: 660px;height: 260px">--%>
+                <%--3.2--%>
+                <%--</div>--%>
+              <%--</div>--%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+  function initTrafficSaftyWindow(url,layers,imgSource,text){
+    $.ajax({
+      type:'post',
+      url:url,
+      dataType:'JSON',
+      success:function(data){
+        if(data){
+          layers.clear();
+//          console.log(data);
+          showLayers(data,layers,imgSource);
+        }
+      }
+    })
+  }
+  var TrafficSaftyArray;
+  function initTrafficSaftyWindowTable(url){
+    $.ajax({
+      type:'post',
+      url:url,
+      dataType:'JSON',
+      success:function(data){
+        if(data){
+          TrafficSaftyArray= new Array();
+          $("#warningTable tbody").empty();
+          for(var i=0;i<data.length;i++){
+            TrafficSaftyArray.push(data[i]);
+             var str='<tr><td>'+data[i].mc+'</td>'+'<td>'+data[i].sgcs+'</td>'+'<td>'+data[i].ssrs+'</td>'+'<td>'+data[i].swrs+'</td>'+'<td>'+data[i].sgdj1+'</td>'+'<td>'+data[i].sgdj2+'</td>'+'<td>'+data[i].sgdj3+'</td></tr>';
+            $("#warningTable tbody").append(str);
+          }
+          $("#warningTable tbody tr").click(function(){
+            var index=$(this).index();
+            var datas=TrafficSaftyArray[index];
+            var pointSymobol=new Array();
+            var pointGraphic=new Array();
+            var redColor = new esri.Color([255,10,11]);
+            console.log(data);
+          $(datas).each(function(index, item){
+            var zbs = item.zb.split(";");
+            var zbArray = [];
+            var len = zbs.length;
+            for(var j=0; j<len; j++)
+            {
+              var temp = zbs[j].substring(1, zbs[j].length-1);
+              var ptarray = temp.split(",");
+              zbArray.push(ptarray);
+            }
+            var planePoint =new esri.geometry.Polyline(zbArray);
+            //var planePoint =new esri.geometry.Polyline(zbs1,map.spatialReference);
+            /*pointSymobol[index] = new esri.symbol.CartographicLineSymbol(
+             esri.symbol.CartographicLineSymbol.STYLE_SOLID,
+             new esri.Color([255,0,0]), 6,
+             esri.symbol.CartographicLineSymbol.CAP_ROUND,
+             esri.symbol.CartographicLineSymbol.JOIN_MITER, 5
+             );*/
+            pointSymobol[index] = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                    redColor, 3);
+
+            pointGraphic[index]=new esri.Graphic(planePoint,pointSymobol[index]);
+            pointGraphic[index].attributes=item;
+            graphictrafficshiguLayer.add(pointGraphic[index]) ;
+            graphictrafficshiguLayer.refresh();
+          })
+          });
+        }
+      }
+    })
+  }
+</script>
+<script src="map/modalPages/safety/myjs/trafficSaftyWindow.js"></script>
+</body>
+</html>

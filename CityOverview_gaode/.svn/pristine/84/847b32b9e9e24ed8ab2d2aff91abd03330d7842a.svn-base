@@ -1,0 +1,101 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Jessica
+  Date: 2017/9/18
+  Time: 14:45
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <link rel="stylesheet" href="../../myCss/odometer-theme-car.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.itemstatis{
+            width: 100%;
+            height: 100%;
+        }
+        div#itemstatis{
+            height: 85%;
+            width: 95%;
+        }
+        div#itemstatis p{
+            height: 15%;
+            width: 100%;
+            text-align: center;
+            padding-top: 3%;
+        }
+        span.yellow{
+            color: #FFD951;
+            font-size: 22px;
+        }
+        div#itemstatis ul{
+            width: 50%;
+            height: 5%;
+            float: left;
+            padding: 5% 0 0 10%;
+        }
+        div#itemstatis ul li{
+            margin-top: 5%;
+        }
+    </style>
+</head>
+<body>
+<div class="itemstatis">
+    <p class="headerTitle">
+           办件统计
+    </p>
+    <%--办件统计--%>
+    <div id="itemstatis">
+        <p>今日办结事项</p>
+        <%--<p><span class="yellow counter">1500</span>件</p>--%>
+        <p><span class="yellow odometer odometer-p1">1500</span>件</p>
+        <ul>
+            <li>截止到昨晚</li>
+            <li>共申请<span class="yellow counter">1703476</span>件</li>
+            <li>已办结<span class="yellow counter">1698486</span>件</li>
+            <li>尚余<span class="yellow counter">4990</span>件</li>
+        </ul>
+        <ul>
+            <li>前一工作日</li>
+            <li>共申请<span class="yellow counter">1875</span>件</li>
+            <li>已办结<span class="yellow counter">1880</span>件</li>
+        </ul>
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script src="../../myjs/odometer.js"></script>
+<script>
+    $('.counter').countUp({
+        delay: 2,
+        time: 200
+    });
+    var sec = getServerDate();
+    var n = Math.round(sec/5);
+    $('.odometer').html(n);
+    setInterval(function(){
+        $('.odometer').html('');
+        $('.odometer').html(n++);
+    },5000);
+
+    //    获取服务器时间，林宇添加
+    function getServerDate(){
+        var time =  new Date($.ajax({async: false}).getResponseHeader("Date"));
+        //每天8点开始计数
+        if(time.getHours() < 8){
+            return 0;
+        }
+        //获取一天中的秒数
+        var secondNum = (time.getHours() - 8) *3600 + time.getMinutes()*60 + time.getSeconds();
+        return secondNum;
+    }
+</script>
+</body>
+</html>

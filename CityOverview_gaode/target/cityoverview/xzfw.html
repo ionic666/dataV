@@ -1,0 +1,1305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+    <title>行政服务</title>
+    <link rel="stylesheet" type="text/css" href="map/css/mycss/hdt.css"/>
+    <link rel="stylesheet" type="text/css" href="myCss/toolsInclude.css"/>
+    <link rel="stylesheet" type="text/css" href="myCss/indexAndMain.css"/>
+    <link rel="stylesheet" type="text/css" href="myCss/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="myCss/main_modal.css">
+    <link rel="stylesheet" type="text/css" href="myCss/toastr.css">
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="myCss/iframe.css"/>
+    <link rel="stylesheet" href="myCss/odometer-theme-car.css"/>
+    <script type="text/javascript"
+            src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+    <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+
+    <script type="text/javascript" src="myjs/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="myjs/toastr.min.js"></script>
+    <script type="text/javascript" src="myjs/jquery.cookie.js"></script>
+    <script type="text/javascript" src="map/js/bootstrap.js"></script>
+    <script type="text/javascript" src="map/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="map/js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="map/js/jquery-ui.js"></script>
+    <script type="text/javascript" src="map/js/echarts-all.js"></script>
+    <script src="myjs/index.js"></script>
+    <script src="myjs/main_modal.js"></script>
+
+    <style>
+        body {
+            box-sizing: border-box;
+            overflow: hidden !important;
+
+        }
+
+        ::-webkit-scrollbar {
+            background-color: #1B1B1D;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+
+        .modelBox {
+            height: 90%;
+            width: 25%;
+            /*border:1px solid red;*/
+            position: absolute;
+            z-index: 101;
+        }
+
+        .modelBoxL {
+            top: 10%;
+            left: 0
+        }
+
+        .modelBoxC {
+            height: 10%;
+            width: 50%;
+            bottom: 2%;
+            right: 25%;
+            /*background-color: #fff;*/
+        }
+
+        .modelBoxC > div {
+            height: 100%;
+            width: 35%;
+            /*background-color: #fff;*/
+        }
+
+        .modelBoxC-a {
+            float: left;
+        }
+
+        .modelBoxC-b {
+            float: right;
+        }
+
+        .modelBoxR {
+            top: 10%;
+            right: 0
+        }
+
+        .modelBox .model {
+            height: 32.8%;
+            width: 100%;
+            margin-bottom: 1%;
+            border-top: 2px #0cdaf5 solid;
+            position: relative;
+        }
+
+        .modelBox .model iframe {
+            width: 100%;
+            height: 100%;
+            /*background: rgba(0,0,0,0.5);*/
+            cursor: pointer;
+        }
+
+        .modelBoxL .model iframe {
+            background: -moz-linear-gradient(left, #000000 70%, transparent 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #000000), color-stop(100%, #ffffff));
+            background: -webkit-linear-gradient(left, #000000 70%, transparent 100%);
+            background: -o-linear-gradient(left, #000000 70%, transparent 100%);
+            background: -ms-linear-gradient(left, #000000 70%, transparent 100%);
+            background: linear-gradient(to right, #000000 70%, transparent 100%);
+        }
+
+        .modelBoxR .model iframe {
+            background: transparent;
+        }
+
+        /*#toolsGather ul li {*/
+        /*margin: -12px 0px;*/
+        /*padding: 5px 20px;*/
+        /*background-image: url("images/listTitle.png");*/
+        /*background-size: 100% 100%;*/
+        /*color: rgb(21,203,227);*/
+        /*cursor: pointer;*/
+        /*}*/
+        /*#toolsGather ul li.active {*/
+        /*background-image: url("images/listTitleActive.png");*/
+        /*background-size: 100% 100%;*/
+        /*font-size: 20px;*/
+        /*color: rgb(2, 14, 16);*/
+        /*}*/
+        #toolsGather select {
+            font-family: "microsoft yahei";
+            background-color: #1E2222;
+            opacity: 0;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: block;
+        }
+
+        #toolsGather select:hover {
+            opacity: 1;
+        }
+
+        #toolsGather select option {
+            color: #fff;
+        }
+
+        .more {
+            position: absolute;
+            top: 2%;
+            right: 2%;
+            color: #0DD4EE;
+            cursor: pointer;
+        }
+
+        #setting {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            /*background-image: url("images/setting.png");*/
+            position: absolute;
+            right: 15px;
+            top: 17px;
+        }
+
+        #changeImg {
+            position: absolute;
+            right: 26%;
+            bottom: 2%;
+            z-index: 200;
+            /*border:1px solid red;*/
+            width: 120px;
+            height: 87px;
+        }
+
+        #changeImg img {
+            width: 120px;
+            height: 87px;
+        }
+
+        #changeImgFirst {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            z-index: 100
+        }
+
+        #changeImgseSecond {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            z-index: 200
+        }
+
+        #changeImgseThirdly {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            z-index: 300
+        }
+
+        /*body{*/
+        /*position: relative;*/
+        /*}*/
+        #login {
+            width: 26%;
+            height: 30%;
+            border: 1px solid #0CD9F4;
+            position: absolute;
+            left: 37%;
+            top: 30% !important;
+            /*top:0;*/
+            z-index: 999;
+            background-color: #1E2222;
+        }
+
+        #login > button {
+            width: auto;
+            height: auto;
+            font-size: 1.5em;
+            color: #12C6D8;
+            background-color: #1E2222;
+            border: 0;
+            padding: 0 0.2em;
+            float: right;
+            margin-right: 0.1em;
+        }
+
+        #login > button:hover {
+            color: #fff;
+        }
+
+        #login > h4 {
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0.2em 0;
+            text-align: center;
+            color: #0CD9F4;
+
+        }
+
+        #login > form {
+            width: 100%;
+            height: 80%;
+
+        }
+
+        #login > form > input {
+            border-size: 0;
+            background-color: #00191C !important;
+        }
+
+        #login > form > input, #login > form > button {
+            width: 70%;
+            height: 15%;
+            margin: 5% 0 0 15%;
+            line-height: 10%;
+        }
+
+        #login > form > button {
+            border-color: #e9ca3d;
+            border-color: #e9ca3d;
+            border-color: #0096AA;
+            background-color: #0096AA;
+        }
+
+        #login > form > label {
+            width: 70%;
+            height: 15%;
+            margin: 5% 0 0 15%;
+        }
+
+        #remember_me, .remember {
+            float: left;
+
+        }
+
+        .remember {
+            font-size: 1em;
+        }
+
+        #legend {
+            position: absolute;
+            left: 26%;
+            bottom: 2%;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        #legend div {
+            display: none;
+        }
+
+        #legend div p {
+            float: left;
+            display: block;
+            padding: 10px;
+        }
+
+        #legend div p span {
+            margin: 0px 3px;
+        }
+
+        /*地图infowindow样式表*/
+        #map_zoom_slider {
+            display: none;
+        }
+
+        .modal-backdrop.in {
+            display: none;
+        }
+
+        .esriPopupWrapper {
+            border-radius: 0;
+            border: 2px solid #4C96C5;
+            background-color: #244C66;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .esriPopup .titlePane {
+            background-color: #245273;
+            padding-left: 10px;
+            border-radius: 0;
+        }
+
+        .esriPopup .title {
+            color: #3EA7F8;
+        }
+
+        .esriPopup .contentPane {
+            background-color: #244C66;
+            margin: 0;
+            padding: 10px 5px 0 10px;
+        }
+
+        .esriPopup .actionsPane {
+            padding: 0;
+        }
+
+        .mapDetails {
+            color: #fff;
+            background-color: #244C66;
+        }
+
+        .mapDetails p {
+            margin: 0;
+            padding: 0;
+            padding-bottom: 5px;
+            border-bottom: 1px dotted #3A79A5;
+        }
+
+        .mapDetails p:last-child {
+            border-bottom: 0;
+        }
+
+        .mapDetails p span {
+            color: red;
+            margin-left: 5px;
+        }
+
+        .esriPopup .titleButton.maximize {
+            display: none;
+        }
+
+        .esriPopup .outerPointer.left {
+            background-color: #244C66;
+            border: 2px solid #4C96C5;
+            left: 9px;
+        }
+
+        .tundra {
+            position: relative;
+        }
+
+        #settingModal {
+            position: absolute;
+            margin-top: 2%;
+            margin-left: 88%;
+            width: 10%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        #settingModal td {
+            border: 0;
+            font-size: 1.3em;
+            color: #0a36e9;
+        }
+
+        #settingModal .modal-dialog {
+            width: 190px;
+        }
+
+        a:hover {
+            color: #c74072;
+            text-decoration: none;
+        }
+
+        body {
+            width: 100%;
+        }
+
+        #legend2 {
+            position: absolute;
+            left: 26%;
+            bottom: 2%;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            width: 34%;
+        }
+
+        #legend2 ul {
+            /*float: left;*/
+            display: block;
+            padding: 10px;
+        }
+
+        #legend2 .manufactor li {
+            float: left;
+            min-width: 140px;
+            margin-left: 15px;
+            cursor: pointer;
+            font-family: 微软雅黑;
+            /*content: "";*/
+            /*clear: both;*/
+        }
+
+        #legend2 .manufactor li.active:before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+            display: inline-block;
+            background: url(images/xz.png);
+            position: relative;
+            top: 2px;
+        }
+
+        #legend2 .manufactor li:before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+            display: inline-block;
+            background: url(images/wxz.png);
+            position: relative;
+            top: 2px;
+        }
+
+        .map_hlwjjTitlel {
+            border-radius: 5px;
+            height: 38px;
+            line-height: 46px;
+            padding-right: 33px;
+            padding-left: 10px;
+            background-image: url(images/title_l2.png);
+            background-size: 100% 100%;
+        }
+
+        .map_eviTitlel {
+            border-radius: 5px;
+            height: 120px;
+            width: 150px;
+            line-height: 25px;
+            padding: 20px 20px 0 10px;
+            background-image: url(images/title_l.png);
+            background-size: 100% 100%;
+        }
+
+        .map_eviTitler {
+            border-radius: 5px;
+            min-height: 130px;
+            width: 170px;
+            line-height: 25px;
+            padding: 10px 10px 10px 40px;
+            background-image: url(images/evir.png);
+            background-size: 100% 100%;
+        }
+
+        .map_hlwjjTitler {
+            border-radius: 5px;
+            height: 45px;
+            line-height: 30px;
+            padding-left: 30px;
+            padding-right: 10px;
+            background-image: url(images/title_r2.png);
+            background-size: 100% 100%;
+        }
+
+        /*.map_hlwjjTitler.active{*/
+        /*display: block;*/
+        /*}*/
+        .envirAll {
+            display: none;
+        }
+
+        .envirAll.active {
+            display: block;
+        }
+
+        /*系统设置弹出框*/
+        .window-xt {
+            background-color: #001010;
+            border: 1px solid #12C6D8;
+        }
+
+        .window-xt > div {
+            padding: 0 !important;
+        }
+
+        .window-xt tr {
+            margin-top: 1em;
+        }
+
+        #xtsz > li {
+            padding: 1em 0.3em;
+        }
+
+        #xtsz > li > img {
+            width: 1.2em;
+            height: 1.2em;
+            margin: 0 1em;
+        }
+
+        .xtsz-user {
+            border: 1px solid #12C6D8;
+        }
+
+        .xtsz-user > img {
+            width: 2em !important;
+            height: 2em !important;
+        }
+
+        .xtsz-li-hover:hover {
+            color: #fff !important;
+            background-color: rgba(1, 97, 109, 0.7);
+        }
+
+        #xtsz > li > a:hover {
+            color: #fff !important;
+        }
+
+        /*头部logo*/
+        .header {
+            width: 60%;
+            height: 7.8%;
+            margin: 0 auto;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: absolute;
+            z-index: 999;
+            top: 2%;
+            margin-left: 50%;
+        }
+
+        .header > div {
+            display: inline-block;
+        }
+
+        .header > div.headL {
+            background: url(images/headL.png) no-repeat;
+            width: 20%;
+            height: 5%;
+            position: relative;
+            background-size: 94%;
+        }
+
+        .header > div.headerLogo {
+            background: url(images/headlogo3.png) top center no-repeat;
+            width: 43%;
+            height: 100%;
+            margin-left: 1%;
+            background-size: cover;
+        }
+
+        .header > div.headM {
+            /*width:15%;*/
+            /*height:100%;*/
+            margin: 1%;
+            color: #fff;
+            position: relative;
+            font-size: 20px;
+            background-color: #096a71;
+            color: #67def4;
+            text-align: center;
+            top: -57% !important;
+            min-width: 13%;
+            padding: 6px;
+            /*background-color:#CDDDC8;
+            color:#4BD1D4;*/
+        }
+
+        .header > div.headR {
+            background: url(images/headR.png) no-repeat 100% 100%;
+            width: 20%;
+            height: 5%;
+            position: relative;
+        }
+
+        /*3D旋转*/
+        #lunbo {
+            margin: 20px auto;
+            width: 900px;
+            height: 400px;
+            display: none;
+        }
+
+        #show {
+            position: relative;
+        }
+
+        .pic {
+            position: absolute;
+            height: 120px;
+            width: 160px;
+            /*background:#999999;*/
+            /*border:1px solid #eeeeee;*/
+            cursor: pointer;
+            transition: transform linear 1s;
+        }
+
+        .pic img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*城市生命线图例*/
+        #lifeLine {
+            position: absolute;
+            left: 26%;
+            bottom: 2%;
+            width: 155px;
+            /*height: 150px;*/
+            height: 120px;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        #lifeLine ul {
+            width: 100%;
+            height: 100%;
+        }
+
+        #lifeLine ul li {
+            width: 100%;
+            /*height: 25%;*/
+            height: 33.3%;
+            padding: 5px 10px;
+        }
+
+        #lifeLine ul li img {
+            width: 30px;
+            height: 35px;
+            float: left;
+        }
+
+        #lifeLine ul li img#greenLine {
+            height: 25px;
+            width: 18px;
+            margin-left: 6px;
+            margin-right: 4px;
+        }
+
+        #lifeLine ul li img#bjd {
+            height: 30px;
+            width: 28px;
+            margin-right: 2px;
+        }
+
+        #lifeLine #sg {
+            height: 5px;
+            margin-top: 15px;
+        }
+
+        #lifeLine ul li span {
+            float: left;
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+            margin-left: 20px;
+        }
+
+        #setting {
+            opacity: 0;
+            position: absolute;
+            top: 1%;
+            right: 1%
+
+        }
+
+        #setting:hover {
+            opacity: 1;
+        }
+
+        #regionLayer2Box {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            /*background-color: black;*/
+            margin-left: 50%;
+            opacity: 0;
+            top: 150px; /*这边的150需要和动画里面的值对应*/
+            background-image: url(images/regionLayer2BoxBG.png);
+            background-size: cover;
+        }
+
+        /*高德地图样式表*/
+        .amap-toolbar {
+            display: none;
+        }
+
+        .info {
+            border: solid 1px #7A9095 !important;
+            border-radius: 5px;
+        }
+
+        div.info-top {
+            position: relative;
+            background-color: rgba(0, 29, 36, 0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+
+        div.info-middle {
+            font-size: 14px;
+            padding: 6px;
+            line-height: 20px;
+            background-color: rgba(0, 29, 36, 0.8) !important;
+        }
+
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+
+        .info span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+
+        .amap-icon img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*高德地图info窗口样式开始*/
+
+        /*高德地图info窗口样式开结束*/
+    </style>
+
+    <style>
+        /*一站式*/
+        div.onestop{
+            padding:10px 0 0 10px;
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 250px;
+        }
+        div#onestop{
+            height: 85%;
+            width: 95%;
+        }
+
+
+        /*网上统一入口*/
+        div.online{
+            width: 100%;
+            height: 100%;
+            padding: 10px 0 15px 0;
+        }
+        p.headerTitle{
+            width: 250px;
+        }
+        div#online{
+            height: 85%;
+            width: 100%;
+            padding: 10px 0 15px 0;
+        }
+
+        /*办件统计*/
+        div.itemstatis{
+            padding:10px 0 0 10px;
+            width: 100%;
+            height: 100%;
+        }
+        div#itemstatis{
+            height: 85%;
+            width: 95%;
+        }
+        div#itemstatis p{
+            height: 15%;
+            width: 100%;
+            font-size: 1.2em;
+            text-align: center;
+            margin:2px 0;
+        }
+        span.yellow{
+            color: #FFD951;
+            font-size: 22px;
+        }
+        div#itemstatis ul{
+            width: 50%;
+            height: 5%;
+            float: left;
+            padding: 0 0 0 10%;
+        }
+        div#itemstatis ul li{
+            margin-top: 5%;
+            font-size: 1em;
+        }
+
+        /*行政服务满意度*/
+        div.satisfaction{
+            padding:10px 0 0 10px;
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 250px;
+        }
+        div#satisfaction{
+            height: 83%;
+            width: 95%;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="myCss/map/xzfw.css">
+</head>
+<body class="tundra">
+<div id="map" style="width:100%; height:100%;background-color: black">
+    <div id="bigLogo">
+        <div id="right">
+            <img src="images/logo.png" alt="" id="logo"/>
+            <div class="timer"></div>
+        </div>
+    </div>
+    <div id="legend2">
+        <ul class="manufactor">
+        </ul>
+    </div>
+    <div id="changeImg" style="display: none">
+        <img id="changeImgseSecond" src="images/plane.png"/><img id="changeImgseThirdly" src="images/tools/7.png"/>
+    </div>
+</div>
+
+<div class="header"></div>
+
+<div class="signin" id="login" style="display:none">
+    <button onclick="loginClose()">x</button>
+    <h4>用户登录</h4>
+    <form class="form-signin" role="form" id="formlogin">
+        <input type="text" id="username" name="username" class="form-control" placeholder="用户名" required autofocus/>
+        <input type="password" id="password" name="password" class="form-control" placeholder="密码" required/>
+        <button class="btn btn-lg btn-info btn-block" type="button" id="loginsubmit">登录</button>
+        <label class="checkbox">
+            <input type="checkbox" id="remember_me" value="" onclick="saveuserinfo()"><span class="remember">记住我</span>
+        </label>
+    </form>
+</div>
+
+<div class="modelBox modelBoxL">
+    <div class="model model1">
+        <div class="onestop">
+            <p class="headerTitle">
+                一站式办理率
+            </p>
+            <div id="onestop"></div>
+        </div>
+    </div>
+    <div class="model model2">
+        <div class="online">
+            <p class="headerTitle">
+                网上统一入口率
+            </p>
+            <div id="online"></div>
+        </div>
+    </div>
+    <div class="model model3">
+        <div class="itemstatis">
+            <p class="headerTitle">
+                办件统计
+            </p>
+            <div id="itemstatis">
+                <p>今日办结事项</p>
+                <p><span class="yellow odometer odometer-p1">1500</span>件</p>
+                <ul>
+                    <li>截止到昨晚</li>
+                    <li>共申请<span class="yellow counter">1703476</span>件</li>
+                    <li>已办结<span class="yellow counter">1698486</span>件</li>
+                    <li>尚余<span class="yellow counter">4990</span>件</li>
+                </ul>
+                <ul>
+                    <li>前一工作日</li>
+                    <li>共申请<span class="yellow counter">1875</span>件</li>
+                    <li>已办结<span class="yellow counter">1880</span>件</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modelBox modelBoxR">
+    <div class="model model4">
+        <iframe id="iframe5" src="iframeSecond/addminService/certificate.jsp" frameborder="0"></iframe>
+    </div>
+    <div class="model model5">
+        <div class="satisfaction">
+            <p class="headerTitle">
+                行政服务满意度
+            </p>
+            <div id="satisfaction"></div>
+        </div>
+    </div>
+    <div class="model model6">
+        <iframe id="iframe6" src="iframeSecond/addminService/announcement.jsp" frameborder="0"></iframe>
+    </div>
+</div>
+
+<!--提示信息模态框-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="padding:5px;margin:0px;background-color: #005160"></h2>
+                <button id="ss" type="button" class="close" data-dismiss="modal"><span aria-hidden="true"></span><span
+                        class="sr-only">Close</span></button>
+                <%--<h4 class="modal-title">模态框模态框</h4>--%>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 系统设置弹窗 -->
+<div class="modal fade" id="settingModal">
+    <div class="modal-dialog">
+        <div class="modal-content window-xt">
+            <div class="modal-body">
+                <ul id="xtsz">
+                    <li class="xtsz-user">
+                        <img src="freeImages/administration/icon.png" alt=""><span id="user_name"></span>
+                    </li>
+                    <li class="xtsz-li-hover">
+                        <img src="freeImages/administration/manageSetting2.png" alt="" onclick="toManageSetting()">
+                        <a style="cursor: pointer;color: #7F8993" onclick="toManageSetting()">系统设置</a>
+                    </li>
+                    <li class="xtsz-li-hover">
+                        <img src="freeImages/administration/logout2.png" alt="" onclick="logout()">
+                        <a style="cursor: pointer;color: #7F8993" onclick="logout()">退出登录</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="lunbo">
+    <input id="l" type="button" value="left" style="display: none"/>
+    <div id="show">
+        <div class="pic"><img src="images/pic1.png" alt=""/></div>
+        <div class="pic"><img src="images/pic2.png" alt=""/></div>
+        <div class="pic"><img src="images/pic3.png" alt=""/></div>
+        <div class="pic"><img src="images/pic4.png" alt=""/></div>
+        <div class="pic"><img src="images/pic5.png" alt=""/></div>
+        <div class="pic"><img src="images/pic6.png" alt=""/></div>
+    </div>
+</div>
+
+<!--行政服务点击地图区域弹出的动画框-->
+<div id="regionLayer2Box">
+    <div style="color:#0AEDFB;height:10%;border:none;font-size: 20px">
+        <button id="regionLayer2BoxX"
+                style=" position:relative;border:none;float:right;right:15px;height:100%;background-color: transparent;"
+                type="button">x
+        </button>
+    </div>
+    <div style="height:90%;">
+        <div style="width:40%;float:left;height:100%">
+            <div class="regionLayer2BoxText"
+                 style=" margin:0 auto;box-shadow:0px 0px 25px 7px #264352;;width:75%;height:55%;position: relative;top:11%;border-radius: 50%;background-color: rgba(18,18,18,0.6);color: #0AEDFB;text-align: center;">
+                秀洲区
+            </div>
+        </div>
+        <div style="margin-left:40%;height:100%;">
+            <p class="details"
+               style="color:#0AEDFB;margin:10% 10px 10% 0px; padding:0;height:20%;border:1px solid #2F5367;box-shadow:0px 0px 25px 7px #264352;background-color: rgba(18,18,18,0.6);text-align: center;white-space: nowrap">
+                当月业务申请量：<span class="applynum"></span></p>
+            <p class="details"
+               style="color:#0AEDFB;margin:10% 10px 10% 0px; padding:0;height:20%;border:1px solid #2F5367;box-shadow:0px 0px 25px 7px #264352;background-color: rgba(18,18,18,0.6);text-align: center;white-space: nowrap">
+                当月业务办结量：<span class="finishnum"></span></p>
+            <p class="details"
+               style="color:#0AEDFB;margin:10% 10px 10% 0px; padding:0;height:20%;border:1px solid #2F5367;box-shadow:0px 0px 25px 7px #264352;background-color: rgba(18,18,18,0.6);text-align: center;white-space: nowrap">
+                当月业务办结率：<span class="bjl"></span></p>
+        </div>
+    </div>
+</div>
+
+<script src="map/js/jquery.waypoints.min.js"></script>
+<script src="map/js/jquery.countup.js"></script>
+<script src="myjs/myEcharts.js"></script>
+<script src="myjs/odometer.js"></script>
+<script src="myjs/map/administration.js"></script>
+<script>
+    var headerWidth = $(".header").width();	//获取头部标题的宽度
+    $(".header").css("left", -headerWidth / 2 - 6 + "px");//让头部标题居中
+
+    var map;
+
+    //页面加载完成后 开始执行
+    window.onload = function () {
+        //加载地图的方法
+        map = new AMap.Map('map', {
+            mapStyle: 'amap://styles/e08db8ed18c196aa387f5352644fe504'//样式URL
+        });
+        administration.adminAjax();
+        $(".header").css("background-image", "url(images/xzfw_title.png)");
+
+//一站式
+        function onestop(xArea, yRate) {
+            var myChart = echarts.init(document.getElementById("onestop"));
+            var option = {
+                color: ['#3B64AD'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    formatter: '{a}<br>{b}:{c}%'
+                },
+                calculable: false,
+                legend: {
+                    data: ['一站式办理率'],
+                    x: 'right',
+                    y: 'top',
+                    textStyle: text_style
+                },
+                grid: {
+                    x: '5%',
+                    y: '20%',
+                    x2: '5%',
+                    y2: '15%',
+                    containLabel: true,
+                    borderWidth: 0
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        splitLine: {show: false},
+                        axisLine: {show: false},
+                        axisTick: {show: false},
+                        axisLabel: {show: true, textStyle: text_style},
+                        data: xArea
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        splitLine: {show: false},
+                        axisLine: {show: false},
+                        axisTick: {show: false},
+                        axisLabel: {show: false}
+                    }
+                ],
+                series: [
+                    {
+                        name: '一站式办理率',
+                        type: 'bar',
+                        barWidth: 25,
+                        barGap: '0',
+                        barCategoryGap: '37%',
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    formatter: '{c}%',
+                                    textStyle: text_style
+                                }
+                            }
+                        },
+                        data: yRate
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: 'jxaddmin/queryOnestopAndOnline.do',
+            dataType: 'json',
+            success: function (data) {
+                var len = data.length;
+                var xArea = [];
+                var yRate = [];
+                for (var i = 0; i < len; i++) {
+                    xArea.push(data[i].mc);
+                    yRate.push(data[i].onestoprate);
+                }
+                onestop(xArea, yRate);
+            }
+        });
+//网上统一入口
+        function online(xArea, yRate) {
+            var myChart = echarts.init(document.getElementById("online"));
+            var option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} %"
+                },
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    textStyle: text_style,
+                    data: xArea
+                },
+//            grid: {
+//                /*x: '20%',
+//                y: '20%',
+//                x2: '3%',
+//                y2: '15%',*/
+//                containLabel: true,
+//                borderWidth: 0
+//            },
+                calculable: false,
+                series: [
+                    {
+                        name: '网上统一入口率',
+                        type: 'pie',
+                        center: ['60%,50%'],
+                        radius: ['50%', '70%'],
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    formatter: "{b}:{c}%",
+                                    textStyle: text_style
+                                },
+                                labelLine: {
+                                    show: true
+                                }
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    position: 'center',
+                                    textStyle: text_style
+                                }
+                            }
+                        },
+                        data: [
+                            {value: yRate[0], name: xArea[0]},
+                            {value: yRate[1], name: xArea[1]},
+                            {value: yRate[2], name: xArea[2]},
+                            {value: yRate[3], name: xArea[3]},
+                            {value: yRate[4], name: xArea[4]},
+                            {value: yRate[5], name: xArea[5]},
+                            {value: yRate[6], name: xArea[6]}
+                        ]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: 'jxaddmin/queryOnestopAndOnline.do',
+            dataType: 'json',
+            success: function (data) {
+                var len = data.length;
+                var xArea = [];
+                var yRate = [];
+                for (var i = 0; i < len; i++) {
+                    xArea.push(data[i].mc);
+                    yRate.push(data[i].onlinerate);
+                }
+                online(xArea, yRate);
+            }
+        });
+//办件统计
+        $('.counter').countUp({
+            delay: 2,
+            time: 200
+        });
+        var sec = getServerDate();
+        var n = Math.round(sec / 5);
+        $('.odometer').html(n);
+        setInterval(function () {
+            $('.odometer').html(n++);
+        }, 5000);
+        //获取服务器时间，林宇添加
+        function getServerDate() {
+            var time = new Date($.ajax({async: false}).getResponseHeader("Date"));
+            //每天8点开始计数
+            if (time.getHours() < 8) {
+                return 0;
+            }
+            //获取一天中的秒数
+            var secondNum = (time.getHours() - 8) * 3600 + time.getMinutes() * 60 + time.getSeconds();
+            return secondNum;
+        }
+
+//行政服务满意度
+        function satisfaction() {
+            var myChart = echarts.init(document.getElementById("satisfaction"));
+            var option = {
+                color: ['#5B9BD5'],
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{d}:{c}%'
+                },
+                legend: {
+                    data: ['行政服务满意度'],
+                    show: false
+                },
+                calculable: false,
+                polar: [
+                    {
+                        indicator: [
+                            {text: '服务满意度', max: 110},
+                            {text: '处理满意度', max: 100},
+                            {text: '反馈满意度', max: 100},
+                            {text: '跟踪满意度', max: 100},
+                            {text: '咨询满意度', max: 100}
+                        ],
+                        radius: 90,
+                        name: {
+                            textStyle: text_style
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '满意度',
+                        type: 'radar',
+                        itemStyle: {
+                            normal: {
+                                areaStyle: {
+                                    type: 'default'
+                                },
+                                label: {
+                                    show: true,
+                                    textStyle: text_style,
+                                    formatter: '{c}%',
+                                    position: 'inside'
+                                }
+                            }
+                        },
+                        data: [
+                            {
+                                value: [97, 50, 88, 94, 80, 60],
+                                name: '行政服务满意度'
+                            }
+                        ]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+
+        satisfaction();
+    }
+
+</script>
+
+</body>
+</html>

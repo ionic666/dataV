@@ -1,0 +1,79 @@
+package com.cetc28.idata.dto;
+
+/**
+ * Created by jianglulu on 2017/9/21.
+ */
+public class JxEcoManufactureCpDto {
+    private double mtv;     //工业总产值(MANUFACTURE_TOTAL_VALUE)
+    private String mtvpencent;     //同比去年
+    private double edv;     //出口交货值(EXIT_DELIVERY_VALUE)
+    private String edvpencent;
+    private double mav;     //工业增加值(MANUFACTURE_ADD_VALUE)
+    private String mavpencent;     //同比去年
+    private double pty;     //利润总额(PROFIT_TOTAL_VALUE)
+    private String ptypencent;     //
+
+    public double getMtv() {
+        return mtv;
+    }
+
+    public void setMtv(double mtv) {
+        this.mtv = mtv;
+    }
+
+    public String getMtvpencent() {
+        return mtvpencent;
+    }
+
+    public void setMtvpencent(String mtvpencent) {
+        this.mtvpencent = mtvpencent;
+    }
+
+    public double getEdv() {
+        return edv;
+    }
+
+    public void setEdv(double edv) {
+        this.edv = edv;
+    }
+
+    public String getEdvpencent() {
+        return edvpencent;
+    }
+
+    public void setEdvpencent(String edvpencent) {
+        this.edvpencent = edvpencent;
+    }
+
+    public double getMav() {
+        return mav;
+    }
+
+    public void setMav(double mav) {
+        this.mav = mav;
+    }
+
+    public String getMavpencent() {
+        return mavpencent;
+    }
+
+    public void setMavpencent(String mavpencent) {
+        this.mavpencent = mavpencent;
+    }
+
+    public double getPty() {
+        return pty;
+    }
+
+    public void setPty(double pty) {
+        this.pty = pty;
+    }
+
+    public String getPtypencent() {
+        return ptypencent;
+    }
+
+    public void setPtypencent(String ptypencent) {
+        this.ptypencent = ptypencent;
+    }
+}

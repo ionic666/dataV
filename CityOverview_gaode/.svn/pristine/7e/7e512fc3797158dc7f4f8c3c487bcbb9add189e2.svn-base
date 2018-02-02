@@ -1,0 +1,80 @@
+package com.cetc28.IntelligentInfrastructure.service;
+
+import com.cetc28.IntelligentInfrastructure.dto.JxUtilityManteAlarmPointDto;
+import com.cetc28.IntelligentInfrastructure.dto.JxUtilityManteDeviceBaseDto;
+import com.cetc28.IntelligentInfrastructure.dto.JxUtilityManteFaultByMonth;
+import com.cetc28.IntelligentInfrastructure.dto.JxUtilityManteFaultDto;
+
+import java.util.List;
+import java.util.Map;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/22 19:49
+ * 描述信息：
+ *****************************************************************/
+public interface IJxUtilityMainteService {
+    /**
+     * 查找最新月份各类管网的故障点信息
+     * @return JxUtilityManteFaultDto故障点信息实体类
+     */
+    public List<JxUtilityManteFaultDto> findLatestFaultAll();
+
+    public Map findLastMonthDate();
+
+    /**
+     * 按管网类别查找最新月份的故障点信息
+     * @param utilityTypeDes 管网类别（"供水管网"）
+     * @return JxUtilityManteFaultDto故障点信息实体类
+     */
+   /* public List<JxUtilityManteFaultDto> findLatestFaultByUt(String utilityTypeDes, String dateBegin, String dateEnd, String faultState);*/
+
+   /* public List<JxUtilityManteFaultDto> findLatestFaultListByUt(String utilityTypeDes,String orderDes, String dateBegin, String dateEnd, String faultState);*/
+
+
+    /**
+     * 按多组条件查找故障点信息，提供给二级页面的故障列表和GIS图
+     * @param utilityTypeDes 管网类别描述
+     * @param dateBegin 开始时间
+     * @param dateEnd 截止时间
+     * @param faultStateDes 故障处理状态描述
+     * @param order 排序方式
+     * @return
+     */
+    public List<List> findFault( String utilityTypeDes, String dateBegin,
+                                                    String dateEnd, String faultStateDes,
+                                                    String order);
+
+    /**
+     * 查找最新月份各类管网的故障点数量、百分比信息
+     * @return JxUtilityManteFaultDto 故障点数量统计实体类，只填充故管网类别，故障数量，时间
+     */
+    public List<JxUtilityManteFaultByMonth> findLatestFaultNum();
+
+    /**
+     * 查找近几个月的各类管网故障点数量趋势
+     * @param monthSize 倒数月数
+     * @return List<List> 返回的List中元素为List，每个List包含某类管网近几个月的故障点数量信息
+     */
+    public List<List> findFaultTendency(Integer monthSize);
+
+    /**
+     * 查找最新月份按故障原因分布信息，包括数量、百分比
+     * @return JxUtilityManteFaultDto 故障点数量统计实体类，只填充故障原因类别，各原因类别的故障数量，时间
+     */
+    public List<JxUtilityManteFaultByMonth> findLatestFaultFactNum();
+
+    /**
+     * 按设备编号查找监测设备信息
+     * @param DeviceId 设备编号
+     * @return JxUtilityManteDeviceBaseDto 监测设备信息实体类
+     */
+    public JxUtilityManteDeviceBaseDto findDeviceInfoById(String DeviceId);
+
+    public List<JxUtilityManteAlarmPointDto> findLatestAlarmPointAll();
+
+    public List<Map> findLatestDeviceStateAll();
+
+}

@@ -1,0 +1,109 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/15
+  Time: 15:00
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.insuredCover{
+            width: 100%;
+            height: 100%;
+        }
+        div#insuredCoverRadar{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="insuredCover">
+    <p class="headerTitle">
+        社保覆盖情况
+    </p>
+    <%--社保覆盖情况雷达图--%>
+    <div id="insuredCoverRadar">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function CreatSsServiceChart(xAxisYear,coverRateData){
+        var mycharts = echarts.init(document.getElementById('insuredCoverRadar'));
+        var option = {
+                    tooltip : {
+                        trigger: 'axis',
+                        formatter:'{b}<br/>{d}:{c}%'
+                    },
+                    grid: {
+                        x: '5%',
+                        y: '15%',
+                        x2: '5%',
+                        y2: '15%',
+                        containLabel: true,
+                        borderWidth: 0
+                    },
+                    legend: {
+                        orient : 'vertical',
+                        x : 'left',
+                        y : 'top',
+                        data:[xAxisYear],
+                        textStyle: text_style
+                    },
+                    polar : [
+                        {
+                            indicator : [
+                                { text: '养老保险保障率', max: 100},
+                                { text: '医疗保险保障率', max: 100},
+                                { text: '工伤保险保障率', max: 100},
+                                { text: '生育保险保障率', max: 100},
+                                { text: '失业保险保障率', max: 100}
+                            ],
+                            name:{
+                                textStyle: text_style
+                            }
+                        }
+                    ],
+                    calculable : false,
+                    series : [
+                        {
+                            name: '社保覆盖情况',
+                            type: 'radar',
+                            data : [
+                                {
+                                    value : coverRateData,
+                                    name : xAxisYear
+                                }
+                            ]
+                        }
+                    ]
+                };
+        mycharts.setOption(option);
+    }
+
+    //查询社保覆盖情况最近一年的统计数据
+    $.ajax({
+        type:"POST",
+        url:'../../jxSocialSecurity/getSsSafeguardRateLatestY.do',
+        dataType:'json',
+        success:function(data){
+            console.log(123123123);
+            console.log(data)
+            var xAxisYear=data.xAxisYear+'年社保覆盖情况';
+            var coverRateData = data.coverRateData;
+            CreatSsServiceChart(xAxisYear,coverRateData);
+        }
+    });
+
+</script>
+</body>
+</html>

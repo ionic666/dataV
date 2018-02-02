@@ -1,0 +1,85 @@
+package com.cetc28.PeopleBenefitService.model;
+
+import java.math.BigDecimal;
+
+public class JxAddminPicture {
+    private BigDecimal id;
+
+    private String bh;
+
+    private String month;
+
+    private BigDecimal finishnum;
+
+    private BigDecimal applynum;
+
+    private String JD;
+
+    private String WD;
+
+    private String mc;
+
+    public BigDecimal getId() {
+        return id;
+    }
+
+    public void setId(BigDecimal id) {
+        this.id = id;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh == null ? null : bh.trim();
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month == null ? null : month.trim();
+    }
+
+    public BigDecimal getFinishnum() {
+        return finishnum;
+    }
+
+    public void setFinishnum(BigDecimal finishnum) {
+        this.finishnum = finishnum;
+    }
+
+    public BigDecimal getApplynum() {
+        return applynum;
+    }
+
+    public void setApplynum(BigDecimal applynum) {
+        this.applynum = applynum;
+    }
+
+    public String getJD() {
+        return JD;
+    }
+
+    public void setJD(String JD) {
+        this.JD = JD;
+    }
+
+    public String getWD() {
+        return WD;
+    }
+
+    public void setWD(String WD) {
+        this.WD = WD;
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+}

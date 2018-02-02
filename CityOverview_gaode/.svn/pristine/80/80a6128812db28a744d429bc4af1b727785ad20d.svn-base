@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.ConfigurationManagement.dao.IJxSysDao">
+
+    <select id="listIndicators" resultType="com.cetc28.ConfigurationManagement.model.JxIndicator">
+        select * from JX_SYS_CATALOG where state = '1' order by pxxh
+    </select>
+
+    <select id="listSysIndicators" resultType="com.cetc28.ConfigurationManagement.model.JxJczb"  parameterType="java.lang.String">
+        select * from JX_SYS_INDICATORS where state = '1'
+        <choose>
+            <when test="_parameter != null and _parameter != ''">
+                and sjbh = #{bh}
+            </when>
+            <otherwise>
+                and sjbh is null
+            </otherwise>
+        </choose>
+        order by bh
+    </select>
+
+    <select id="listAllSysIndicators" resultType="com.cetc28.ConfigurationManagement.model.JxJczb"  parameterType="java.lang.String">
+        select * from JX_SYS_INDICATORS where
+        <choose>
+            <when test="_parameter != null and _parameter != ''">
+                sjbh = #{bh}
+            </when>
+            <otherwise>
+                sjbh is null
+            </otherwise>
+        </choose>
+        order by bh
+    </select>
+
+    <insert id="addSysIndicators" parameterType="com.cetc28.ConfigurationManagement.model.JxJczb">
+        insert into JX_SYS_INDICATORS
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="bh != null" >
+                bh,
+            </if>
+            <if test="sjbh != null" >
+                sjbh,
+            </if>
+            <if test="mc != null" >
+                mc,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+            <if test="mltp != null" >
+                mltp,
+            </if>
+            <if test="mldz != null" >
+                mldz,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="bh != null" >
+                #{bh},
+            </if>
+            <if test="sjbh != null" >
+                #{sjbh},
+            </if>
+            <if test="mc != null" >
+                #{mc},
+            </if>
+            <if test="state != null" >
+                #{state},
+            </if>
+            <if test="mltp != null" >
+                #{mltp},
+            </if>
+            <if test="mldz != null" >
+                #{mldz},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSysIndicators" parameterType="com.cetc28.ConfigurationManagement.model.JxJczb">
+        update JX_SYS_INDICATORS
+        <set >
+            <if test="sjbh != null" >
+                sjbh = #{sjbh,jdbcType=VARCHAR},
+            </if>
+            <if test="mc != null" >
+                mc = #{mc,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="mltp != null" >
+                mltp = #{mltp,jdbcType=VARCHAR},
+            </if>
+            <if test="mldz != null" >
+                mldz = #{mldz,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where bh = #{bh,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteSysIndicators" parameterType="java.lang.String">
+        DELETE from JX_SYS_INDICATORS where bh = #{indicatorId}
+    </delete>
+
+    <select id="listJxXzqh" resultType="com.cetc28.ConfigurationManagement.model.Xzqh" parameterType="java.lang.String">
+        select * from xxzygl.XZQH where sjbh = #{qhxh}
+    </select>
+
+    <select id="findXzqhByBh" resultType="com.cetc28.ConfigurationManagement.model.Xzqh" parameterType="java.lang.String">
+        select * from xxzygl.XZQH where bh = #{0}
+    </select>
+
+
+    <select id="listIndicatorsShown" resultType="com.cetc28.ConfigurationManagement.model.JxJczb"  parameterType="java.lang.String">
+        select a.pxxh , b.* from JX_SYS_INDICATORS_USER a join JX_SYS_INDICATORS b on a.bh = b.bh where a.sjbh = #{bh} and state = 1
+        <choose>
+            <when test="userId != null and userId != ''">
+                and a.userid = #{userId}
+            </when>
+            <otherwise>
+                and a.userid is null
+            </otherwise>
+        </choose>
+       order by a.pxxh
+    </select>
+
+    <insert id="saveIndicatorsShown" parameterType="com.cetc28.ConfigurationManagement.model.JxIndicatorsUser">
+        insert into JX_SYS_INDICATORS_USER (userid, bh, sjbh, pxxh) values
+        <choose>
+            <when test="userid != null and userid != ''">
+                (#{userid}, #{bh}, #{sjbh}, #{pxxh})
+            </when>
+            <otherwise>
+                ('', #{bh}, #{sjbh}, #{pxxh})
+            </otherwise>
+        </choose>
+    </insert>
+
+    <delete id="deleteIndicatorByUseridAndBh" parameterType="java.lang.String">
+        delete from JX_SYS_INDICATORS_USER where sjbh = #{sjbh}
+        <choose>
+            <when test="userId != null and userId != ''">
+                and userid = #{userId}
+            </when>
+            <otherwise>
+                and userid is null
+            </otherwise>
+        </choose>
+    </delete>
+
+    <select id="getMaxIndicatorNo" parameterType="java.lang.String" resultType="java.lang.String">
+        select max(bh) from JX_SYS_INDICATORS where LENGTH(bh) = 6 and sjbh = #{bh}
+    </select>
+
+</mapper>

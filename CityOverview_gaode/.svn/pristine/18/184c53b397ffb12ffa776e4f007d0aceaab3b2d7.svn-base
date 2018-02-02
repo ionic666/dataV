@@ -1,0 +1,1340 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/19
+  Time: 15:21
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<%--<link rel="stylesheet" type="text/css" href="map/css/bootstrap.css"/>--%>
+	<%--<link rel="stylesheet" href="myCss/entironment.css"/>--%>
+	<style>
+		*{
+			font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+			font-size: 16px;
+		}
+		.modal-dialog,.modal-content{
+			width:100%;
+		}
+		.waterChange{
+			float: right;
+		}
+		.waterType{
+			display: inline-block;
+			background-image:url("images/listTitle.png") ;
+			color: #fff;
+			background-size: 100% 100%;
+			cursor: pointer;
+			padding-left: 15px;
+			width:60px;
+			height: 26px;
+			line-height: 26px;
+			margin-left:20px;
+		}
+		.modal-dialog{
+			margin: 0;
+		}
+		.modal-content{
+			padding: 10px;
+		}
+		#waterTitle{
+			font-size: 32px;
+			width: 100%;
+			height: 8%;
+			line-height: 50px;
+			color: #FEFEFE;
+			background-color: #494949;
+			padding-left: 10px;
+		}
+		.waterType.active{
+			background-image:url("images/listTitleActive.png") ;
+			background-size: 100% 100%;
+		}
+		.waterTestProgressBox .scBox{
+			cursor: pointer;
+			margin-bottom: 20px;
+		}
+		.waterTestProgressBox .scBox p{
+			font-size: 18px;
+			color: #FEFEFE;
+		}
+		.waterTestProgressBox .progress{
+			border: 2px solid #049CD4;
+			background-color: #2D2D2C;
+			margin-top: 10px;
+		}
+		.areaChange{
+			float: right;
+		}
+		.dmWaterTestZBchange ul li{
+			cursor: pointer;
+			line-height: 32px;
+		}
+		.dmWaterTestZBchange ul li.active{
+			cursor: pointer;
+			color:#FFC000;
+			font-size: 20px;
+		}
+		.dmzb {
+			background-image: url("images/listTitle.png");
+			background-size: 100% 100%;
+			cursor:pointer;
+			padding:5px 10px;
+			color:#fff;
+			display: inline-block;
+			width:90px;
+			text-align: center;
+			margin-left: 10px;
+		}
+		.dmzb.active{
+			background-image: url('images/listTitleActive.png');
+			background-size: 100% 100%;
+		}
+		.drinkWaterTestZBchange ul li{
+			cursor: pointer;
+			line-height: 32px;
+		}
+		.drinkWaterTestZBchange ul li.active{
+			cursor: pointer;
+			color:#FFC000;
+			font-size: 20px;
+		}
+		.drinkzb {
+			background-image: url("images/listTitle.png");
+			background-size: 100% 100%;
+			cursor:pointer;
+			padding:5px 10px;
+			color:#fff;
+			display: inline-block;
+			width:90px;
+			text-align: center;
+			margin-left: 10px;
+		}
+		.drinkzb.active{
+			background-image: url('images/listTitleActive.png');
+			background-size: 100% 100%;
+		}
+		.areaChange{
+			float: right;
+		}
+		.kqzljcZBchange ul li{
+			cursor: pointer;
+			line-height: 32px;
+		}
+		.kqzljcZBchange ul li.active{
+			cursor: pointer;
+			color:#FFC000;
+			font-size: 20px;
+		}
+		.hjzb {
+			background-image: url("images/listTitle.png");
+			background-size: 100% 100%;
+			cursor:pointer;
+			padding:5px 10px;
+			color:#fff;
+			display: inline-block;
+			width:90px;
+			text-align: center;
+			margin-left: 10px;
+		}
+		.hjzb.active{
+			background-image: url('images/listTitleActive.png');
+			background-size: 100% 100%;
+		}
+		.waterTestRltqh{
+			padding:5px 10px;
+			cursor: pointer;
+		}
+		.waterTestRltqh .point{
+			display: inline-block;
+			width:15px;
+			height:15px;
+			border:1px solid #fff;
+			border-radius: 7px;
+			vertical-align:middle;
+			margin-right: 10px;
+		}
+		.waterTestRltqh.active .point{
+			border:1px solid red;
+		}
+		.waterTestRltqh.active span{
+			color:red;
+		}
+		#waterType.modal{
+			background-color: transparent;
+		}
+		.amap-marker-label{
+			background-color: transparent;
+			color: #fff;
+			border:0;
+			font-size: 1em;
+		}
+	</style>
+</head>
+<body>
+<div class="modal fade"
+     style="height:89%;width: 20%;top:10%;left: 10px;display:none;position: absolute"
+     id="waterTest" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<p id="waterTitle">水质量检测</p>
+			<div class="modal-body">
+				<p class="waterChange" clearfix ><span class="waterType active">饮用水</span><span class="waterType">断面水</span></p>
+				<br/>
+				<div class="waterTestProgressBox"></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="modal fade"
+	 style="height:33%; width:calc(100% - 23%);top:66%; left:21%;display:none;position: absolute"
+	 id="sectionWaterTestEcharts" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content" style="position: relative;margin:0;" >
+			<p style="padding-left: 6%">
+
+				<span  class="dmzb active">每日</span>
+				<span  class="dmzb">每月</span>
+			</p>
+
+			<div id="dmWaterTestEcharts0001" style="width:90%;height:263px;"></div>
+			<div class="dmWaterTestZBchange" style="position: absolute;left:88%;top:40px;">
+				<ul>
+					<li dw="ug/m³" class="">高锰酸盐</li>
+					<li dw="ug/m³">氨氮</li>
+					<li dw="ug/m³">总磷</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade"
+	 style="height:33%; width:calc(100% - 23%);top:66%; left:21%;display:none;position: absolute"
+	 id="drinkWaterTestEcharts" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content" style="position: relative;margin:0;" >
+			<p style="padding-left: 6%">
+				<span  class="drinkzb active">每小时</span>
+				<span  class="drinkzb">每日</span>
+
+			</p>
+
+			<div id="drinkWaterTestEcharts0001" style="width:90%;height:263px;"></div>
+			<div class="drinkWaterTestZBchange" style="position: absolute;left:88%;top:40px;">
+				<ul>
+					<li dw="" class="">PH值</li>
+					<li dw="ug/m³">溶解氧</li>
+					<li dw="mg/m³">浊度</li>
+					<li dw="ug/m³">电导率</li>
+					<li dw="ug/m³">总磷</li>
+					<li dw="ug/m³">总氮</li>
+					<li dw="mg/m³">氨氮</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade"
+	 style="height:33%; width:calc(100% - 23%);top:66%; left:21%;display:none;position: absolute"
+	 id="kqzljcEcharts" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content" style="position: relative;margin:0;" >
+			<p style="padding-left: 6%">
+				<span  class="hjzb">每小时</span>
+				<span  class="hjzb active">每日</span>
+			</p>
+
+			<div id="waterEcharts0001" style="width:90%;height:263px;"></div>
+			<div class="kqzljcZBchange" style="position: absolute;left:88%;top:40px;">
+				<ul>
+					<li dw="" class="">AQI指数</li>
+					<li dw="ug/m3">SO2</li>
+					<li dw="mg/m3">NO2</li>
+					<li dw="ug/m3">O3</li>
+					<li dw="ug/m3">PM10</li>
+					<li dw="ug/m3">PM2.5</li>
+					<li dw="mg/m3">CO</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade"
+	 style="height:60px; width:120px;top:calc(100% - 400px); left:85%;display:none;position: absolute"
+	 id="waterTestChange" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="jr">
+		<p class="waterTestRltqh" ><span  class="point"></span><span  style="font-size: 14px">监测站点</span></p>
+		<p class="waterTestRltqh" ><span  class="point"></span><span  style="font-size: 14px">热力图</span></p>
+	</div>
+
+</div>
+
+<div class="modal fade"
+	 style="height:50px; width:450px;top:61%; left:21%;display:none;position: absolute"
+	 id="waterType" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<p style="padding:0px">
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">I类</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">II类</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">III类</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">IV类</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">V类</span>
+		<span style="color:#fff; display: inline-block;width:60px;text-align: center">劣V类</span>
+	</p>
+	<div >
+		<div style="display: inline-block; width:60px; height:10px; background-color:#00ff00" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#ffff00" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#ff7e00" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#ff0000" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#99004c" ></div>
+		<div style="display: inline-block; width:60px; height:10px; background-color:#7e0023" ></div>
+	</div>
+
+</div>
+<%--<script src="myjs/echarts3.4.0.min.js"></script>--%>
+<%--<script type="text/javascript" src="map/js/jquery-1.11.3.js"></script>--%>
+<%--<script type="text/javascript" src="map/js/bootstrap.js"></script>--%>
+<script>
+	var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+	//饮用水和断面水切换事件
+	$(".waterType").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+        //清空热力图
+        if(waterHeatMap){
+            waterHeatMap.hide();
+        }
+        $('.waterTestRltqh:first').addClass("active");
+        $(".waterTestRltqh:last").removeClass("active");
+//        if(waterHeatLayer != null){
+//            map.removeLayer(waterHeatLayer);
+//        }
+		if($(this).text()=="饮用水"){
+//         如果是监测站点，就调用上点
+			if($('.jr').children('.active').find("span:last").text()=="监测站点"){
+                waterTestAjax(qhbh);
+			}
+//			如果是热力图，就清空地图点并调用热力图方法
+            else{
+			    map.clearMap();
+                waterHeatMapData();
+			}
+			$("#sectionWaterTestEcharts").hide();
+			$("#drinkWaterTestEcharts").show();
+		}
+
+		if($(this).text()=="断面水"){
+            if($('.jr').children('.active').find("span:last").text()=="监测站点"){
+                waterTestAjaxdm(qhbh);
+            }
+			else{
+//                waterTestAjaxdm(qhbh);
+                map.clearMap();
+                waterHeatMapData();
+			}
+			$("#drinkWaterTestEcharts").hide();
+			$("#sectionWaterTestEcharts").show();
+		}
+	})
+
+	//初始化页面调用指数(饮用水)
+	var waterPre30Day={};
+	var waterPre24Hour={};
+	function waterTestAjax(qhbh){
+		$("#waterTestChange").modal("show");
+		$.ajax({
+			type: 'post',
+			url: "jxenvir/MapWaterMonitorJcd.do",
+			dataType: 'JSON',
+			data: {qhbh: qhbh},
+			success: function (data) {
+				drinkWaterShowdata(data)
+				drawMapPointDrink(data);
+				//初始化页面下方图表(日)
+				$.ajax({
+					type: 'post',
+					url: "jxenvir/WaterMonitorDay.do?bh="+data[0].bh,
+					dataType: 'JSON',
+					success: function (data) {
+					    //预计值
+						$.ajax({
+							type: 'post',
+							url: "jxenvir/WaterPre30Day.do",
+							data:{
+								gap:20,
+								preNum:2,
+								bh:data[0].bh
+							},
+							dataType: 'JSON',
+							success: function (data1) {
+								waterPre30Day = data1;
+								waterTestEchartsData30DayDispose(data,waterPre30Day);//处理30日数据方法
+							}
+						})
+					}
+				})
+				//请求24小时数据
+				$.ajax({
+					type: 'post',
+					url: "jxenvir/WaterMonitorHour.do?bh="+data[0].bh,
+					dataType: 'JSON',
+					success: function (data) {
+						$.ajax({
+							type: 'post',
+							url: "jxenvir/WaterPre24Hour.do",
+							data:{
+								gap:20,
+								preNum:2,
+								bh:data[0].bh
+							},
+							dataType: 'JSON',
+							success: function (data1) {
+								waterPre24Hour = data1;
+								waterTestEchartsData24HourDispose(data,waterPre24Hour);//处理24小时数据方法
+							}
+						})
+					}
+				})
+				//默认30日图表数据显示
+				$("#waterType").modal("show");
+			}
+		})
+	}
+	//饮用水数据
+	function waterTestAjaxyy(qhbh){
+		$.ajax({
+			type: 'post',
+			url: "jxenvir/MapWaterMonitorJcd.do?qhbh="+qhbh,
+			dataType: 'JSON',
+			success: function (data) {
+				drinkWaterShowdata(data);
+			}
+		})
+	}
+	//饮用水判断分类
+	function drinkWaterShowdata(data){
+		var len=data.length;
+		var str="" ;
+		for(var i=0;i<len;i++){
+			if(data[i].zldj=="I类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+'class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#00ff00; width:13.3%;">'+
+				'</div></div> </div>'
+			}//progress-bar-warning
+			if(data[i].zldj=="II类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar " role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#ffff00; width:26.6%;">'+
+				'</div></div> </div>'
+			}
+			if(data[i].zldj=="III类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#ff7e00;width:50%;">'+
+				'</div></div> </div>'
+			}
+			if(data[i].zldj=="IV类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#ff0000;width:66.7%;">'+
+				'</div></div> </div>'
+			}
+			if(data[i].zldj=="V类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#99004c;width:83.3%;">'+
+				'</div></div> </div>'
+			}
+			if(data[i].zldj=="劣V类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#7e0023;width:100%;">'+
+				'</div></div> </div>'
+			}
+		}
+		$(".waterTestProgressBox").html(str);
+	}
+	//断面水数据
+	var dmsPre30Day={};
+	var dmsPre12Month={};
+	function waterTestAjaxdm(qhbh){
+		$.ajax({
+			type: 'post',
+			url: "jxenvir/MapWaterDmsJcd.do?qhbh="+qhbh,
+			dataType: 'JSON',
+			success: function (data) {
+				dmWaterShowdata(data);
+//                if($('.jr').children('.active').find("span:last").text()=="监测站点") {
+                    drawMapPointSection(data);
+//                }
+				//初始化页面下方图表
+				$.ajax({
+					//实际值
+					type: 'post',
+					url: "jxenvir/MapWaterDmsDay.do?bh="+data[0].bh,
+					dataType: 'JSON',
+					success: function (data) {
+						$.ajax({
+							//预测值
+							type: 'post',
+							url: "jxenvir/queryDmsPre30Day.do",
+							data:{
+								gap:20,
+								preNum:2,
+								bh:data[0].bh
+							},
+							dataType: 'JSON',
+							success: function (data1) {
+								dmsPre30Day = data1;
+								dmWaterTestEchartsData30DayDispose(data,dmsPre30Day);
+							}
+						})
+					}
+				})
+				//请求月数据
+				$.ajax({
+					type: 'post',
+					url: "jxenvir/MapWaterDmsMonth.do?bh="+data[0].bh,
+					dataType: 'JSON',
+					success: function (data) {
+						$.ajax({
+							type: 'post',
+							url: "jxenvir/queryDmsPre12Month.do",
+							data:{
+								gap:20,
+								preNum:2,
+								bh:data[0].bh
+							},
+							dataType: 'JSON',
+							success: function (data1) {
+								dmsPre12Month = data1;
+								dmWaterTestEchartsDataMonthDispose(data,dmsPre12Month);
+							}
+						})
+					}
+				})
+			}
+		})
+	}
+	//断面水判断等级
+	function dmWaterShowdata(data){
+		var len=data.length;
+		var str="" ;
+		for(var i=0;i<len;i++){
+			if(data[i].zldj=="I类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+'class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#00ff00; width:13.3%;">'+
+				'</div></div> </div>'
+			}//progress-bar-warning
+			if(data[i].zldj=="II类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar " role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#ffff00; width:26.6%;">'+
+				'</div></div> </div>'
+			}
+			if(data[i].zldj=="III类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#ff7e00;width:50%;">'+
+				'</div></div> </div>'
+			}
+			if(data[i].zldj=="IV类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#ff0000;width:66.7%;">'+
+				'</div></div> </div>'
+			}
+			if(data[i].zldj=="V类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#99004c;width:83.3%;">'+
+				'</div></div> </div>'
+			}
+			if(data[i].zldj=="劣V类"){
+				str+='<div jd="'+data[i].jd+'"wd="'+data[i].wd+'" '+' class="scBox"><p>'+
+				data[i].mc+'</p><div class="progress">'+
+				'<div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="300" style="background-color:#7e0023;width:100%;">'+
+				'</div></div> </div>'
+			}
+		}
+		$(".waterTestProgressBox").html(str);
+	}
+
+
+
+	//根据初始化数据，绘制地图上的点（饮用水）
+	function drawMapPointDrink(data){
+            var len=data.length;
+            //清空地图点
+            map.clearMap();
+            var pointArr=[];
+            for(var i=0;i<len;i++){
+                //经纬度纠偏方法
+                var XY=wgs84togcj02(parseFloat(data[i].jd),parseFloat(data[i].wd))
+                var jd=XY[0];
+                var wd=XY[1];
+                pointArr.push({jd:jd,wd:wd,details:data[i]});
+            }
+            drinkWatershowLayers(pointArr);
+	}
+	//根据初始化数据，绘制地图上的点（断面水）
+	function drawMapPointSection(data){
+            var len=data.length;
+            map.clearMap();
+            var pointArr=[];
+            for(var i=0;i<len;i++){
+                //经纬度纠偏方法
+                var XY=wgs84togcj02(parseFloat(data[i].jd),parseFloat(data[i].wd))
+                var jd=XY[0];
+                var wd=XY[1];
+                pointArr.push({jd:jd,wd:wd,details:data[i]});
+            }
+            drinkWatershowLayers(pointArr);
+	}
+	//数据 图层 图片
+	function drinkWatershowLayers(data) {
+	    var img="";
+		var greenImage = "images/greenImage.png";
+		var yellowImage="images/yellowImage.png";
+		var orangeImage = "images/orangeImage.png";
+		var redImage="images/redImage.png";
+		var bigredImage="images/bigredImage.png";
+		var darkredImage="images/darkredImage.png";
+		for (var j = 0; j < data.length; j++) {
+			var x = data[j].jd, y = data[j].wd;
+			var prr=[x,y];
+			//这边做判断 选择放在地图上的点是什么颜色的
+			//六类对应六个颜色，
+			//imageSoure 为默认传入的图片
+			if(data[j].details.zldj=="I类"){
+			    img=greenImage;
+			}
+			if(data[j].details.zldj=="II类"){
+				img=yellowImage;
+			}
+			if(data[j].details.zldj=="III类"){
+				img=orangeImage;
+			}
+			if(data[j].details.zldj=="IV类"){
+				img=redImage;
+			}
+			if(data[j].details.zldj=="V类"){
+				img=bigredImage;
+			}
+			if(data[j].details.zldj=="劣V类"){
+				img=darkredImage;
+			}
+			addWaterPoint(prr,34,34,img,data[j].details);
+		}
+	}
+    function addWaterPoint(arr,h,w,img,details) {//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+        var _marker = new AMap.Marker({
+            map: map,
+            position: arr,        //经纬度
+            icon: new AMap.Icon({
+                size: new AMap.Size(h, w),  //图标大小
+                image: img       //自定义图片
+            })
+
+        });
+//        _marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+//            offset: new AMap.Pixel(20, 20),//修改label相对于maker的位置
+//            content: details.mc
+//        });
+        //设置当前点为中心
+        map.setCenter(arr);
+        //地图显示地名设置居中
+        var __content= "<p style='min-width: 150px;text-align: center;color: #ffffff' class = 'water'>"+details.mc+"</p>";
+        var __name = new AMap.Marker({
+            content: __content,
+            position: arr,
+            offset: new AMap.Pixel(-68,0),
+            map: map
+        });
+        map.setCenter(__name.getPosition());
+        //点击坐标点弹出信息窗口
+        AMap.event.addListener(_marker, 'click', function (e) {
+            //饮用水
+            if($(".waterChange").children(".active").text() == "饮用水"){
+                //30日数据
+                $.ajax({
+                    type: 'post',
+                    url: "jxenvir/WaterMonitorDay.do?bh="+details.bh,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $.ajax({
+                            type: 'post',
+                            url: "jxenvir/WaterPre30Day.do",
+                            data:{
+                                gap:20,
+                                preNum:2,
+                                bh:details.bh
+                            },
+                            dataType: 'JSON',
+                            success: function (data1) {
+                                waterPre30Day = data1;
+                                waterTestEchartsData30DayDispose(data,waterPre30Day);//处理30日数据方法
+                            }
+                        })
+                    }
+                })
+                //请求24小时数据
+                $.ajax({
+                    type: 'post',
+                    url: "jxenvir/WaterMonitorHour.do?bh="+details.bh,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $.ajax({
+                            type: 'post',
+                            url: "jxenvir/WaterPre24Hour.do",
+                            data:{
+                                gap:20,
+                                preNum:2,
+                                bh:details.bh
+                            },
+                            dataType: 'JSON',
+                            success: function (data1) {
+                                waterPre24Hour = data1;
+                                waterTestEchartsData24HourDispose(data,waterPre24Hour);//处理24小时数据方法
+                            }
+                        })
+                    }
+                })
+			}
+          else{
+                //断面水
+                $.ajax({
+					//30日数据
+                    type: 'post',
+                    url: "jxenvir/MapWaterDmsDay.do?bh="+details.bh,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $.ajax({
+                            type: 'post',
+                            url: "jxenvir/queryDmsPre30Day.do",
+                            data:{
+                                gap:20,
+                                preNum:2,
+                                bh:details.bh
+                            },
+                            dataType: 'JSON',
+                            success: function (data1) {
+                                dmsPre30Day = data1;
+                                dmWaterTestEchartsData30DayDispose(data,dmsPre30Day);
+                            }
+                        })
+                    }
+                })
+                //请求月数据
+                $.ajax({
+                    type: 'post',
+                    url: "jxenvir/MapWaterDmsMonth.do?bh="+details.bh,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $.ajax({
+                            type: 'post',
+                            url: "jxenvir/queryDmsPre12Month.do",
+                            data:{
+                                gap:20,
+                                preNum:2,
+                                bh:details.bh
+                            },
+                            dataType: 'JSON',
+                            success: function (data1) {
+                                dmsPre12Month = data1;
+                                dmWaterTestEchartsDataMonthDispose(data,dmsPre12Month);
+                            }
+                        })
+                    }
+                })
+			}
+            showWaterInfoWindow(details);
+        });
+    }
+    var waterInfoWindow={
+        ////关闭信息窗体
+        closeInfoWindow:function (){
+        map.clearInfoWindow();
+    },
+    //实例化信息窗体
+    //构建自定义信息窗体
+    createInfoWindow:function (title, content) {
+        var info = document.createElement("div");
+        info.className = "info";
+
+        //可以通过下面的方式修改自定义窗体的宽高
+        info.style.width = "180px";
+        // 定义顶部标题
+        var top = document.createElement("div");
+        var titleD = document.createElement("div");
+        var closeX = document.createElement("img");
+        top.className = "info-top";
+        titleD.innerHTML = title;
+        closeX.src = "images/gaode-close.png";
+        closeX.onclick = closeInfoWindow;
+
+        top.appendChild(titleD);
+        top.appendChild(closeX);
+        info.appendChild(top);
+
+        // 定义中部内容
+        var middle = document.createElement("div");
+        middle.className = "info-middle";
+//        middle.style.backgroundColor = 'white';
+        middle.innerHTML = content;
+        info.appendChild(middle);
+
+        // 定义底部内容   //下方的小箭头
+        var bottom = document.createElement("div");
+        bottom.className = "info-bottom";
+        bottom.style.position = 'relative';
+        bottom.style.top = '0px';
+        bottom.style.margin = '0 auto';
+        var sharp = document.createElement("img");
+        sharp.src = "images/gaode-sharp.png";
+        bottom.appendChild(sharp);
+        info.appendChild(bottom);
+        return info;
+    }
+	}
+
+    function showWaterInfoWindow(details) {
+        var title = '<span style="font-size:11px;color:#0CDAF5;">' + details.mc + '</span>';
+        content = [];
+        //饮用水信息
+        var msgDrink='<p>'+'PH值：'+'<span>'+details.ph+'</span></p>'+
+            '<p>'+'溶解氧：'+'<span>'+details.rjy+'ug/m³</span></p>'+
+            '<p>'+'浊度：'+'<span>'+details.zd+'mg/m³</span></p>'+
+            '<p>'+'电导率：'+'<span>'+details.ddl+'ug/m³</span></p>'+
+            '<p>'+'总磷：'+'<span>'+details.zl+'ug/m³</span></p>'+
+            '<p>'+'总氮：'+'<span>'+details.zd+'ug/m³</span></p>'+
+            '<p>'+'氨氮：'+'<span>'+details.ad+'mg/m³</span></p>'+
+            '<p>'+'首要污染物：'+'<span>'+details.sywrw+'</span></p>'+
+            '<p>'+'质量等级：'+'<span>'+details.zldj+'</span></p>';
+        //断面水信息
+        var msgSection='<p>'+'高锰酸盐：'+'<span>'+details.gmsy+'ug/m³</span></p>'+
+            '<p>'+'氨氮：'+'<span>'+details.ad+'ug/m³</span></p>'+
+            '<p>'+'总磷：'+'<span>'+details.zl+'ug/m³</span></p>'+
+            '<p>'+'质量等级：'+'<span>'+details.zldj+'</span></p>';
+        //如果是饮用水，就显示自己的弹窗
+        if($(".waterChange").children(".active").text() == "饮用水"){
+            content.push(msgDrink);
+		}
+	    else{
+            content.push(msgSection);
+		}
+        var infoWindow = new AMap.InfoWindow({
+            isCustom: true,  //使用自定义窗体
+            content: waterInfoWindow.createInfoWindow(title, content.join("")),
+            offset: new AMap.Pixel(20,-35)
+        });
+        var jw =wgs84togcj02(parseFloat(details.jd),parseFloat(details.wd));
+        infoWindow.open(map, jw);
+        setTimeout(function(){
+            map.setCenter(jw);
+        },500)
+    }
+// 设置左侧控制地图,点击左侧条状，定位到地图点
+	$(".waterTestProgressBox").delegate(".scBox","click",function(){
+		var XY=wgs84togcj02(parseFloat($(this).attr("jd")),parseFloat($(this).attr("wd")));
+		var point=[XY[0],XY[1]];
+		map.setCenter(point);
+	})
+</script>
+
+<script>
+	//每日每月切换
+	$(".dmzb").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		dmWaterTestEchartsShow();
+
+	})
+	//创建全局变量分别存储每日和每月数据
+	var sectionWaterEchartsObj30Day={};
+	var dmsEchartPre30Day={};
+	var sectionWaterEchartsObj12Month={};
+	var dmsEchartPre12Month={};
+	function dmWaterTestEchartsData30DayDispose(data,dmsPre30Day){
+		//数据处理，sectionWaterEchartsObj30Day，
+		sectionWaterEchartsObj30Day["高锰酸盐"]=[];
+		sectionWaterEchartsObj30Day["氨氮"]=[];
+		sectionWaterEchartsObj30Day["总磷"]=[];
+		sectionWaterEchartsObj30Day.jcsj=[];
+		var len=data.length;
+		for(var i=0;i<len;i++){
+			sectionWaterEchartsObj30Day["高锰酸盐"].push(data[i].gmsy);
+			sectionWaterEchartsObj30Day["氨氮"].push(data[i].ad);
+			sectionWaterEchartsObj30Day["总磷"].push(data[i].zl);
+			sectionWaterEchartsObj30Day.jcsj.push(data[i].jcsj);//检测时间
+		}
+		var preLen3=dmsPre30Day.length;
+		for(var j=0;j<preLen3;j++){
+			var dmsIndexName30Day=dmsPre30Day[j].mc;
+			dmsEchartPre30Day[dmsIndexName30Day]=[];
+			dmsEchartPre30Day.jcsj=[];
+			var dataLen3=dmsPre30Day[j].prevalue.length;
+			for(var k=0;k<dataLen3;k++){
+				dmsEchartPre30Day[dmsIndexName30Day].push(dmsPre30Day[j].prevalue[k][1]);
+				dmsEchartPre30Day.jcsj.push(dmsPre30Day[j].prevalue[k][0]);
+			}
+
+		}
+
+		//图表初始化展示；
+		dmWaterTestEchartsShow("高锰酸盐");
+		$(".dmWaterTestZBchange ul li:first").click();
+		//显示下方echarts图表
+		$("#sectionWaterTestEcharts").modal("show");
+
+	}
+	function dmWaterTestEchartsDataMonthDispose(data,dmsPre12Month){
+		sectionWaterEchartsObj12Month["高锰酸盐"]=[];
+		sectionWaterEchartsObj12Month["氨氮"]=[];
+		sectionWaterEchartsObj12Month["总磷"]=[];
+		sectionWaterEchartsObj12Month.jcsj=[];
+		var len=data.length;
+		for(var i=0;i<len;i++){
+			sectionWaterEchartsObj12Month["高锰酸盐"].push(data[i].gmsy);
+			sectionWaterEchartsObj12Month["氨氮"].push(data[i].ad);
+			sectionWaterEchartsObj12Month["总磷"].push(data[i].zl);
+			sectionWaterEchartsObj12Month.jcsj.push(data[i].jcsj);//检测时间
+		}
+		var preLen4=dmsPre12Month.length;
+		for(var j=0;j<preLen4;j++){
+			var dmsIndexName12Month=dmsPre12Month[j].mc;
+			dmsEchartPre12Month[dmsIndexName12Month]=[];
+			dmsEchartPre12Month.jcsj=[];
+			var dataLen4=dmsPre12Month[j].prevalue.length;
+			for(var k=0;k<dataLen4;k++){
+				dmsEchartPre12Month[dmsIndexName12Month].push(dmsPre12Month[j].prevalue[k][1]);
+				dmsEchartPre12Month.jcsj.push(dmsPre12Month[j].prevalue[k][0]);
+			}
+		}
+        dmWaterTestEchartsShow();
+	}
+
+   //断面水echarts
+	function dmWaterTestEchartsShow(){
+		var zb=$(".dmWaterTestZBchange ul li.active").html();
+		var sectionWaterEchartsObjData="";
+		var dmsEchartPre="";
+		if($(".dmzb.active").html()=="每日"){
+			sectionWaterEchartsObjData=sectionWaterEchartsObj30Day;
+			dmsEchartPre=dmsEchartPre30Day;
+		}
+		if($(".dmzb.active").html()=="每月"){
+			sectionWaterEchartsObjData=sectionWaterEchartsObj12Month;
+			dmsEchartPre=dmsEchartPre12Month;
+		};
+
+
+		$("#dmWaterTestEcharts0001").width($("#sectionWaterTestEcharts").width()-150);
+		var mycharts=echarts.init(document.getElementById('dmWaterTestEcharts0001'));
+		var option = {
+			tooltip: {
+				trigger: "axis",
+				formatter: "{b} <br/>{a0} : {c0}<br/>{a1} : {c1}"
+			},
+			grid: {
+				x: '7%',
+				y: '10%',
+				x2: '5%',
+				y2: '25%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			legend: {
+				textStyle:text_style,
+				data:['实际值','预测值']
+			},
+			xAxis: [
+				{
+					type: "category",
+//					name: $(".dmzb.active").html(),
+					splitLine: {show: false},
+					data: dmsEchartPre.jcsj,
+					interval: 0,
+					axisLabel:{
+						textStyle:{
+							color: '#fff',
+							fontSize: 12
+						},
+						interval: 0,
+						rotate: 30
+					}
+				}
+			],
+			yAxis: [
+				{
+					type: "value",
+					name: $(".dmWaterTestZBchange li.active").attr("dw"),
+                    splitLine: {show: true, lineStyle: {type: 'dashed',color: '#383838'}},
+					axisLabel:{
+						textStyle:{
+							color: '#fff'
+						}
+					},
+					nameTextStyle:{
+						color:'red',
+						fontSize : 20
+					}
+				}
+			],
+			calculable: false,
+			series: [
+				{
+					name: "实际值",
+					type: "line",
+//                    markLine:{
+//                        data:[
+//                            [
+//								{name:'asd',
+//								value:5,
+//								x:0,
+//								y:5},
+//								{
+//								    x:100,
+//									y:5
+//								}
+//							]
+//						]
+//                    },
+					data: sectionWaterEchartsObjData[zb],
+				},
+				{
+					name: "预测值",
+					type: "line",
+					data: dmsEchartPre[zb]
+
+				}
+			]
+		};
+		mycharts.setOption(option);
+	}
+
+	//各项指标值切换
+	$(".dmWaterTestZBchange ul li").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		dmWaterTestEchartsShow()
+	})
+
+</script>
+
+<script>
+	//指标切换
+	$(".drinkzb").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		waterTestEchartsShow();
+
+	})
+	var drinkWaterEchartsObj30Day={};
+	var drinkWaterPre30Day={};
+	var drinkWaterEchartsObj24hour={};
+	var drinkWaterPre24Hour={};
+	function waterTestEchartsData30DayDispose(data,waterPre30Day){
+		//数据处理，建立全局drinkWaterEchartsObj30Day对象，用于保存ph指数数据，用于 指数切换控制图标
+		drinkWaterEchartsObj30Day["PH值"]=[];
+		drinkWaterEchartsObj30Day['溶解氧']=[];
+		drinkWaterEchartsObj30Day['浊度']=[];
+		drinkWaterEchartsObj30Day['电导率']=[];
+		drinkWaterEchartsObj30Day["总磷"]=[];
+		drinkWaterEchartsObj30Day["总氮"]=[];
+		drinkWaterEchartsObj30Day["氨氮"]=[];
+		drinkWaterEchartsObj30Day.jcsj=[];
+		var len=data.length;
+		for(var i=0;i<len;i++){
+			drinkWaterEchartsObj30Day["PH值"].push(data[i].ph);
+			drinkWaterEchartsObj30Day['溶解氧'].push(data[i].rjy);
+			drinkWaterEchartsObj30Day['浊度'].push(data[i].zd);
+			drinkWaterEchartsObj30Day['电导率'].push(data[i].ddl);
+			drinkWaterEchartsObj30Day["总磷"].push(data[i].zl);
+			drinkWaterEchartsObj30Day["总氮"].push(data[i].zd1);
+			drinkWaterEchartsObj30Day["氨氮"].push(data[i].ad);
+			drinkWaterEchartsObj30Day.jcsj.push(data[i].jcsj);//检测时间
+		}
+		var preLen1=waterPre30Day.length;
+		for(var j=0;j<preLen1;j++){
+			var waterIndexName30Day=waterPre30Day[j].mc;
+			drinkWaterPre30Day[waterIndexName30Day]=[];
+			drinkWaterPre30Day.jcsj=[];
+			var dataLen1=waterPre30Day[j].prevalue.length;
+			for(var k=0;k<dataLen1;k++){
+				drinkWaterPre30Day[waterIndexName30Day].push(waterPre30Day[j].prevalue[k][1]);
+				drinkWaterPre30Day.jcsj.push(waterPre30Day[j].prevalue[k][0]);
+			}
+
+		}
+
+		//图表初始化展示，默认显示ph的数据
+		waterTestEchartsShow("PH值");
+		$(".drinkWaterTestZBchange ul li:first").click();
+		//显示下方echarts图表
+		$("#drinkWaterTestEcharts").modal("show");
+
+	}
+	//每小时数据
+	function waterTestEchartsData24HourDispose(data,waterPre24Hour){
+		drinkWaterEchartsObj24hour["PH值"]=[];
+		drinkWaterEchartsObj24hour['溶解氧']=[];
+		drinkWaterEchartsObj24hour['浊度']=[];
+		drinkWaterEchartsObj24hour['电导率']=[];
+		drinkWaterEchartsObj24hour["总磷"]=[];
+		drinkWaterEchartsObj24hour["总氮"]=[];
+		drinkWaterEchartsObj24hour["氨氮"]=[];
+		drinkWaterEchartsObj24hour.jcsj=[];
+		var len=data.length;
+		for(var i=0;i<len;i++){
+			drinkWaterEchartsObj24hour["PH值"].push(data[i].ph);
+			drinkWaterEchartsObj24hour['溶解氧'].push(data[i].rjy);
+			drinkWaterEchartsObj24hour['浊度'].push(data[i].zd);
+			drinkWaterEchartsObj24hour['电导率'].push(data[i].ddl);
+			drinkWaterEchartsObj24hour["总磷"].push(data[i].zl);
+			drinkWaterEchartsObj24hour["总氮"].push(data[i].zd1);
+			drinkWaterEchartsObj24hour["氨氮"].push(data[i].ad);
+			drinkWaterEchartsObj24hour.jcsj.push(data[i].jcsj);//检测时间
+		}
+		var preLen2=waterPre24Hour.length;
+		for(var j=0;j<preLen2;j++){
+			var waterIndexName24Hour=waterPre24Hour[j].mc;
+			drinkWaterPre24Hour[waterIndexName24Hour]=[];
+			drinkWaterPre24Hour.jcsj=[];
+			var dataLen2=waterPre24Hour[j].prevalue.length;
+			for(var k=0;k<dataLen2;k++){
+				drinkWaterPre24Hour[waterIndexName24Hour].push(waterPre24Hour[j].prevalue[k][1]);
+				drinkWaterPre24Hour.jcsj.push(waterPre24Hour[j].prevalue[k][0]);
+			}
+		}
+        waterTestEchartsShow()
+	}
+
+	//根据标签分别调用
+	function waterTestEchartsShow(){
+		var zb=$(".drinkWaterTestZBchange ul li.active").html();
+		var drinkWaterEchartsObjData="";
+		var drinkWaterEchartPre="";
+		if($(".drinkzb.active").html()=="每日"){
+			drinkWaterEchartsObjData=drinkWaterEchartsObj30Day;
+			drinkWaterEchartPre=drinkWaterPre30Day;
+		}
+		if($(".drinkzb.active").html()=="每小时"){
+			drinkWaterEchartsObjData=drinkWaterEchartsObj24hour;
+			drinkWaterEchartPre=drinkWaterPre24Hour;
+		};
+		$("#drinkWaterTestEcharts0001").width($("#drinkWaterTestEcharts").width()-150);
+		//绘图
+		var mycharts=echarts.init(document.getElementById('drinkWaterTestEcharts0001'));
+		var option = {
+			tooltip: {
+				trigger: "axis",
+				formatter: "{b} <br/>{a0} : {c0}<br/>{a1} : {c1}"
+			},
+			grid: {
+				x: '7%',
+				y: '10%',
+				x2: '5%',
+				y2: '25%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			legend: {
+				textStyle:text_style,
+				data:['实际值','预测值']
+			},
+			xAxis: [
+				{
+					type: "category",
+//					name: $(".drinkzb.active").html(),
+					splitLine: {show: false},
+					data: drinkWaterEchartPre.jcsj,
+					interval: 0,
+					rotate: 60,
+					axisLabel:{
+						textStyle:{
+							color: '#fff',
+							fontSize: 12
+						},
+						interval: 0,
+						rotate: 30
+					}
+				}
+			],
+			yAxis: [
+				{
+					type: "value",
+					name: $(".drinkWaterTestZBchange li.active").attr("dw"),
+                    splitLine: {show: true, lineStyle: {type: 'dashed',color: '#383838'}},
+					axisLabel:{
+						textStyle:{
+							color: '#fff'
+						}
+					},
+					nameTextStyle:{
+						color:'red',
+						fontSize : 20
+					}
+				}
+			],
+			calculable: false,
+			series: [
+				{
+					name: "实际值",
+					type: "line",
+//                    markLine:{
+//                        data:[{
+//                            type:'average'
+//                        }]
+//                    },
+					data: drinkWaterEchartsObjData[zb]
+				},
+				{
+					name: "预测值",
+					type: "line",
+					data: drinkWaterEchartPre[zb]
+
+				}
+			]
+		};
+		mycharts.setOption(option);
+	}
+
+	//各项指标值切换
+	$(".drinkWaterTestZBchange ul li").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		waterTestEchartsShow()
+	})
+
+</script>
+
+
+<script>
+	var waterHeatMap;  //水质热力图
+	$(".waterTestRltqh").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+        //热力图与监测站点切换
+		if($(this).find("span:last").text()=="热力图"){
+			map.clearMap();
+//            if(waterHeatMap){
+//                waterHeatMap.hide();
+//            }
+//            if($(".waterChange").children(".active").text() == "饮用水"){
+//                waterHeatMapData();
+//                $(".waterChange span:first").click();
+//			}
+//			else{
+//                waterHeatMapData();
+//                $(".waterChange span:last").click();
+//			}
+			//上热力图
+            waterHeatMapData();
+		}
+		if($(this).find("span:last").text()=="监测站点"){
+            if(waterHeatMap){
+                waterHeatMap.hide();
+			}
+			if($(".waterChange").children(".active").text() == "饮用水"){
+				/* eval(model+"Ajax('"+qhbh+"')");
+				 $("#"+model).modal("show");*/
+				//点击饮用水
+				$(".waterChange span:first").click();
+			}else {
+			    //点击断面水
+				$(".waterChange span:last").click();
+			}
+		}
+	})
+
+	//获取热力图数据
+	function waterHeatMapData(){
+		//水质监测热力图
+		var heatmapData=[];
+		var url = "";
+		//根据不同水质，调用不同接口
+		if ($(".waterChange").children(".active").text() == "饮用水") {
+			url = "jxenvir/MapWaterMonitorJcd.do";
+		} else {
+			url = "jxenvir/MapWaterDmsJcd.do";
+		}
+		$.ajax({
+			type: 'post',
+			url: url,
+			dataType: 'JSON',
+			data: {qhbh: qhbh},
+			success: function (data) {
+				$.each(data, function (i) {
+				    var obj={};
+				    var num=0;
+					if (data[i].zldj == "I类") {
+						num = 50;
+					} else if (data[i].zldj == "II类") {
+						num = 100;
+					} else if (data[i].zldj == "III类") {
+						num = 150;
+					} else if (data[i].zldj == "IV类") {
+						num = 200;
+					} else if (data[i].zldj == "V类") {
+						num = 250;
+					} else {
+						num = 300;
+					}
+                    var XY=wgs84togcj02(parseFloat(data[i].jd), parseFloat(data[i].wd));
+                    obj.count=num;
+                    obj.lng=XY[0];
+                    obj.lat=XY[1];
+                    heatmapData.push(obj)
+				})
+//				显示热力图
+                waterHeatMap.show();
+			}
+		})
+        if (!isSupportCanvas()) {
+            alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
+        }
+        map.plugin(["AMap.Heatmap"], function() {
+            //初始化heatmap对象
+            waterHeatMap = new AMap.Heatmap(map, {
+                radius: 60, //给定半径
+                opacity: [0, 0.8],
+                visible:true
+            });
+            //设置数据集
+            waterHeatMap.setDataSet({
+                data: heatmapData,
+                max: 100
+            });
+        });
+
+	}
+
+
+
+</script>
+</body>
+</html>

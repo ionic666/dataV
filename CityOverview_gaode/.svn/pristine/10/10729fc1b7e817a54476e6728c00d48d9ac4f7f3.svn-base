@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.JxServiceRateCaseDao">
+    <select id="queryQuanshiRate" resultType="java.lang.String">
+        select quanshi from JX_SERVICE_RATECASEBH t where category='1' order by sort
+    </select>
+
+    <select id="queryQuanshiTongbiRate" resultType="java.lang.String">
+        select quanshi from JX_SERVICE_RATECASEBH t where category='3' order by sort
+    </select>
+
+    <select id="queryMcByBh" resultType="java.lang.String" parameterType="java.lang.String">
+        select mc from XXZYGL.XZQH where bh=#{bhValue}
+    </select>
+
+    <select id="queryBhRange" resultType="java.lang.String">
+        SELECT distinct bh from JX_SERVICE_SUGGEST order by bh
+    </select>
+
+    <select id="querySuggestandPercentbyBh" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT suggest,percent from JX_SERVICE_SUGGEST
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="bhValue!=null and bhValue!=''">
+                and bh=#{bhValue}
+            </if>
+            <if test="sort!=null and sort!=''">
+                and sort=#{sort}
+            </if>
+        </trim>
+        and time=(select max(m.time) from JX_SERVICE_SUGGEST m)
+    </select>
+
+    <select id="queryRateCaseBh" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select * from JX_SERVICE_RATECASEBH t
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="category!=null and category!=''">
+                and category=#{category}
+            </if>
+            <if test="sort!=null and sort!=''">
+                and sort=#{sort}
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryRateCaseItem" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select * from JX_SERVICE_RATECASEITEM t
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="category!=null and category!=''">
+                and category=#{category}
+            </if>
+            <if test="sort!=null and sort!=''">
+                and sort=#{sort}
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryEstateNum" resultType="java.util.HashMap">
+        <![CDATA[select registertime,finishnum from (select * from JX_SERVICE_TSGZ_BDC1 t order by t.registertime desc) where rownum<12]]>
+    </select>
+
+    <select id="queryHotItem" resultType="java.util.HashMap">
+        <![CDATA[select m.itemname,m.itemnum from JX_SERVICE_TSGZ_RDSX m where m.ranktime = (select max(ranktime) from JX_SERVICE_TSGZ_RDSX) order by m.itemnum desc]]>
+    </select>
+
+    <select id="queryRunOnceItemNum" resultType="java.util.HashMap">
+        <![CDATA[select nvl(m.mc,'市本级') as mc,t.itemtype,trunc(t.totalnum/10000,1) as totalnum from JX_SERVICE_ZDPYC_ITEMANDNUM t left join XXZYGL.XZQH m on t.qhbh=m.bh where t.uploadtime=(select max(uploadtime) from JX_SERVICE_ZDPYC_ITEMANDNUM)]]>
+    </select>
+
+    <select id="queryQuanshiRateMap" resultType="java.util.HashMap">
+        select t.quanshi,t.sort from JX_SERVICE_RATECASEBH t where t.category='1' order by t.sort
+    </select>
+</mapper>

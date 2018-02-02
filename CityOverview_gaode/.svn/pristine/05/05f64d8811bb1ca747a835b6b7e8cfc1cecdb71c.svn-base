@@ -1,0 +1,53 @@
+package com.cetc28.idata.model;
+
+public class JxSsMiDHospital {
+    private Short hospitalCode;
+
+    private String hospitalName;
+
+    private String longitude;
+
+    private String latitude;
+
+    private Byte available;
+
+    public Short getHospitalCode() {
+        return hospitalCode;
+    }
+
+    public void setHospitalCode(Short hospitalCode) {
+        this.hospitalCode = hospitalCode;
+    }
+
+    public String getHospitalName() {
+        return hospitalName;
+    }
+
+    public void setHospitalName(String hospitalName) {
+        this.hospitalName = hospitalName == null ? null : hospitalName.trim();
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude == null ? null : longitude.trim();
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude == null ? null : latitude.trim();
+    }
+
+    public Byte getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Byte available) {
+        this.available = available;
+    }
+}

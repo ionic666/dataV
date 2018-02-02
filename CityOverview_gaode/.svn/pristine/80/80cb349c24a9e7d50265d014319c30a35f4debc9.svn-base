@@ -1,0 +1,206 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: NJ
+  Date: 2016/4/22
+  Time: 10:38
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="map/css/style.css"/>
+</head>
+<body>
+<div class="modal fade" id="planWatch" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static" style="left: auto;width: 325px;top: 50px;height: 620px;overflow-y: hidden">
+  <div class="modal-dialog" style="z-index: 9000;width: 98%">
+    <input id="datalength" type="hidden" value="111"/>
+    <div class="modal-content" style="overflow: hidden;height: 600px">
+      <div class="modal-header" style="padding: 10px 15px;height: auto">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close" style="margin-top: 3px">
+          <img src="map/images/economicModel/close.png" alt="" onclick="closeInfoWindow(this)"/>
+        </button>
+        <h4 class="modal-title " id="infoModalLabel">规划检测</h4>
+      </div>
+      <div class="modal-body" style="overflow: hidden;padding: 0">
+        <div class="col-xs-12" style="margin-bottom: 15px;padding: 0" id="selectMode">
+          <a class="GMC GMCselected">控制线检测</a>
+          <a class="GMC">两规冲突检测</a>
+        </div>
+        <div class="row" style="padding: 15px" id="row1">
+          <div class="col-xs-12">
+            <div class="col-xs-4 projectName">项目名称：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <input type="text" placeholder="请输入...." style="width: 100%"/>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">项目性质：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <select name="" id="option" style="width: 100%">
+                <option value="">- 请选择 -</option>
+                <option value="select1">选项一</option>
+                <option value="select2">选项二</option>
+                <option value="select3">选项三</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">建设单位：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <input type="text" placeholder="请输入...." style="width: 100%"/>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">立案类别：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <input type="text" placeholder="请输入...." style="width: 100%"/>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">检测范围：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <div class="col-xs-6" style="padding: 0">
+                <input type="radio" value="" id="Mpaint" checked name="check1"  onclick="changeHandler()"/>
+                <label for="Mpaint">手动绘制</label>
+              </div>
+              <div class="col-xs-6" style="padding: 0">
+                <input type="radio" value="" id="outSource" name="check1"/>
+                <label for="outSource">文件导入</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">DXF图层：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <select name="" id="option1" style="width: 100%">
+                <option value="">- 请选择 -</option>
+                <option value="select1">选项一</option>
+                <option value="select2">选项二</option>
+                <option value="select3">选项三</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="display: none;padding: 15px" id="row2">
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">检测范围：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <div class="col-xs-6" style="padding: 0">
+                <input type="radio" value="" id="Mpaint1" checked name="shou"/>
+                <label for="Mpaint1">手动绘制</label>
+              </div>
+              <div class="col-xs-6" style="padding: 0">
+                <input type="radio" value="" id="outSource1" name="shou"/>
+                <label for="outSource1">文件导入</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">DXF图层：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <select name="" id="option2" style="width: 100%">
+                <option value="">- 请选择 -</option>
+                <option value="select1">选项一</option>
+                <option value="select2">选项二</option>
+                <option value="select3">选项三</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">城规图层：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <select name="" id="option3" style="width: 100%">
+                <option value="">- 请选择 -</option>
+                <option value="select1">选项一</option>
+                <option value="select2">选项二</option>
+                <option value="select3">选项三</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">土规图层：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <select name="" id="option4" style="width: 100%">
+                <option value="">- 请选择 -</option>
+                <option value="select1">选项一</option>
+                <option value="select2">选项二</option>
+                <option value="select3">选项三</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-top: 10px">
+            <div class="col-xs-4 projectName">检测地类：</div>
+            <div class="col-xs-8" style="padding: 0">
+              <select name="" id="option5" style="width: 100%">
+                <option value="">- 请选择 -</option>
+                <option value="select1">选项一</option>
+                <option value="select2">选项二</option>
+                <option value="select3">选项三</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12" style="position: fixed;bottom: 20px">
+          <div class="col-xs-6">
+            <button class="btn btn-info btn-block" id="startAnalyze" onclick="start()">开始分析</button>
+          </div>
+          <div class="col-xs-6">
+            <button class="btn btn-info btn-block" onclick="clearResult()">清除结果</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  
+  var flag = "row1"; //标记，指示是显示row1还是row2 div
+  
+  $("#selectMode>a").click(function(){
+    $(this).addClass("GMCselected").siblings().removeClass("GMCselected");
+    if($(this).index()==0){
+      $("#row1").slideDown(200);
+      $("#row2").slideUp(200);
+      flag = "row1";
+    }else{
+      $("#row2").slideDown(200);
+      $("#row1").slideUp(200);
+      flag = "row2";
+    }
+  })
+  
+  
+  function start()
+  {
+    switch (flag)
+    {
+      case "row1":
+      {
+        break;
+      }
+      case "row2":
+      {
+        drawFourColor();
+      }
+      default:
+      {
+        break;
+      }
+    }
+  }
+  
+  function changeHandler()
+  {
+    initToolbar();
+  }
+  
+  function clearResult()
+  {
+    clearLayer();
+  }
+  
+</script>
+</body>
+</html>

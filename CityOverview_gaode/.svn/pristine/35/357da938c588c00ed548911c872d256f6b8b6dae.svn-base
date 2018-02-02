@@ -1,0 +1,131 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Jessica
+  Date: 2017/9/16
+  Time: 13:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html lang="en">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <title>一站式办理</title>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.onestop{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 250px;
+        }
+        div#onestop{
+            height: 85%;
+            width: 95%;
+        }
+  </style>
+</head>
+<body>
+<div class="onestop">
+    <p class="headerTitle">
+        一站式办理率
+    </p>
+    <%--一站式办理率柱状图--%>
+    <div id="onestop"></div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function onestop(xArea,yRate){
+        var myChart = echarts.init(document.getElementById("onestop"));
+        var option = {
+            color: ['#3B64AD'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                formatter:'{a}<br>{b}:{c}%'
+            },
+            calculable: false,
+            legend: {
+                data: ['一站式办理率'],
+                x: 'right',
+                y: 'top',
+                textStyle: text_style
+            },
+            grid: {
+                x: '5%',
+                y: '20%',
+                x2: '5%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    splitLine: {show: false},
+                    axisLine: {
+                        show: true,
+                        lineStyle: {color: '#8D8C8C'}
+                    },
+                    axisTick: {show: false},
+                    axisLabel: {show: true, textStyle: text_style},
+                    data: xArea
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    splitLine: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    axisLabel: {show: false}
+                }
+            ],
+            series: [
+                {
+                    name: '一站式办理率',
+                    type: 'bar',
+                    barWidth: 25,
+                    barGap: '0',
+                    barCategoryGap:'37%',
+                    itemStyle:{
+                        normal: {
+                            label: {
+                                show: true,
+                                formatter: '{c}%',
+                                textStyle: text_style
+                            }
+                        }
+                    },
+                    data: yRate
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    $.ajax({
+        type:"POST",
+        url:'../../jxaddmin/queryOnestopAndOnline.do',
+        dataType:'json',
+        success:function(data){
+            var len=data.length;
+            var xArea=[];
+            var yRate=[];
+            for(var i=0;i<len;i++){
+                xArea.push(data[i].mc);
+                yRate.push(data[i].onestoprate);
+            }
+            onestop(xArea,yRate);
+        }
+    });
+</script>
+</body>
+</html>

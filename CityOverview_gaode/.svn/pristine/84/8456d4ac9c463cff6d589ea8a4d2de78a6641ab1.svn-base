@@ -1,0 +1,171 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/4
+  Time: 13:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.zdwry{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 250px;
+        }
+        div#zdwry{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="zdwry">
+    <p class="headerTitle">
+        重点污染源在线监测情况
+    </p>
+    <%--重点污染源柱状图--%>
+    <div id="zdwry">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function zdwry(xAxisData,gk,sk,shik) {
+        var myChart = echarts.init(document.getElementById("zdwry"));
+        var option = {
+            color: ['#4785BC', '#F57C2C', '#A6A6A6'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['国控', '省控', '市控'],
+                x: 'center',
+                y: 'top',
+                textStyle: text_style
+            },
+            grid: {
+                x: '12%',
+                y: '12%',
+                x2: '2%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: {
+                type: 'category',
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: true},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                axisLabel: {show: false}
+            },
+            series: [
+                {
+                    name: '国控',
+                    type: 'bar',
+                    barWidth: 20,
+                    barGap: '10%',
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                formatter: '{c}%',
+                                position:'inside',
+                                textStyle: {
+                                    color: '#fff'
+                                }
+                            }
+//                            shadowBlur:20,
+//                            shadowColor:'blue'
+                        }
+                    },
+                    data: gk
+                },
+                {
+                    name: '省控',
+                    type: 'bar',
+                    barWidth: 20,
+                    barGap: '10%',
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                formatter: '{c}%',
+                                position:'inside',
+                                textStyle: {
+                                    color: '#fff'
+                                }
+                            },
+                            shadowBlur:20,
+                            shadowColor:'#F57C2C'
+                        }
+                    },
+                    data: sk
+                },
+                {
+                    name: '市控',
+                    type: 'bar',
+                    barWidth: 20,
+                    barGap: '10%',
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                formatter: '{c}%',
+                                position:'inside',
+                                textStyle: {
+                                    color: '#fff'
+                                }
+                            }
+//                            shadowBlur:20,
+//                            shadowColor:'#A6A6A6'
+                        }
+                    },
+                    data: shik
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    $.ajax({
+        type:"POST",
+        url:'../../jxenvir/PolluteMonitor.do',
+        dataType:'json',
+        success:function(data){
+            var len=data.length;
+            var xAxisData=[];
+            var gk=[];
+            var sk=[];
+            var shik=[];
+            for(var i=0;i<len;i++){
+                xAxisData.push(data[i].year+"年");
+                gk.push(data[i].pollute_MONITOR_GK_LV);
+                sk.push(data[i].pollute_MONITOR_SK_LV);
+                shik.push(data[i].pollute_MONITOR_CK_LV);
+            }
+            zdwry(xAxisData,gk,sk,shik);
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IJxEcoClusterDao" >
+    <select id="findClusterType" resultType="map">
+        select cluster_name,jd,wd,cluster_type,cluster_location from JX_ECO_INTERNET_CLUSTER
+    </select>
+
+    <select id="findCompanyInfo" resultType="map" parameterType="String">
+        select a.cluster_name,a.district,a.company_location,a.company_contact,a.company_scale,a.occupied_area,
+         a.output_value,a.business_scope,a.company_type,a.company_age,a.company_name,a.jd,a.wd from JX_ECO_INTERNET_COMPANY a
+         LEFT JOIN JX_ECO_INTERNET_CLUSTER  b  on a.cluster_name=b.cluster_name
+         WHERE b.cluster_type=#{clusterType}
+    </select>
+
+    <select id="findClusterInfo" parameterType="String" resultType="map">
+        select company_num,cluster_area,cluster_location,cluster_description,cluster_type
+        FROM  JX_ECO_INTERNET_CLUSTER WHERE cluster_name=#{clusterName}
+    </select>
+
+    <select id="findClusterInfoByType" resultType="map">
+          select company_num,cluster_area,cluster_location,cluster_description,cluster_name
+        FROM  JX_ECO_INTERNET_CLUSTER WHERE cluster_type=#{clusterType}
+    </select>
+
+    <select id="findClusterTypes" resultType="String">
+        select cluster_type from JX_ECO_INTERNET_CLUSTER
+    </select>
+</mapper>

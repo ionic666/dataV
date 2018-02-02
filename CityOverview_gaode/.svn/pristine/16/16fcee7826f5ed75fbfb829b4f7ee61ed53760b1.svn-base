@@ -1,0 +1,14 @@
+package com.cetc28.system.Constant;
+
+
+/**
+ * 系统全局常量配置类
+ * Created by FangYan on 2017/9/19.
+ */
+
+public class SysConstant {
+	public static String CURRENT_USER_INFO = "_CURRENT_USER";	     //当前用户session name
+    public static String USER_DISABLED = "该用户已被禁用";
+    public static String USER_NOT_EXIST = "用户名不存在";
+    public static String USER_PASSWD_ERROR = "用户密码错误";
+}

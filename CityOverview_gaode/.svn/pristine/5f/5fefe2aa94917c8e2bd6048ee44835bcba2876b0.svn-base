@@ -1,0 +1,73 @@
+package com.cetc28.PeopleBenefitService.model;
+
+/**
+ * Created by LYLYC on 2017/9/30.
+ */
+public class JxEduMediaEdu {
+    private int year;
+    private String SCHOOLTYPE;
+    private double MEDIAROOM;
+    private double NETWORKLEARN;
+    private double WIRELESS;
+    private String SCHOOLNAME;
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public String getSCHOOLTYPE() {
+        return SCHOOLTYPE;
+    }
+
+    public void setSCHOOLTYPE(String SCHOOLTYPE) {
+        this.SCHOOLTYPE = SCHOOLTYPE;
+    }
+
+    public double getMEDIAROOM() {
+        return MEDIAROOM;
+    }
+
+    public void setMEDIAROOM(double MEDIAROOM) {
+        this.MEDIAROOM = MEDIAROOM;
+    }
+
+    public double getNETWORKLEARN() {
+        return NETWORKLEARN;
+    }
+
+    public void setNETWORKLEARN(double NETWORKLEARN) {
+        this.NETWORKLEARN = NETWORKLEARN;
+    }
+
+    public double getWIRELESS() {
+        return WIRELESS;
+    }
+
+    public void setWIRELESS(double WIRELESS) {
+        this.WIRELESS = WIRELESS;
+    }
+
+    public String getSCHOOLNAME() {
+        return SCHOOLNAME;
+    }
+
+    public void setSCHOOLNAME(String SCHOOLNAME) {
+        this.SCHOOLNAME = SCHOOLNAME;
+    }
+
+    @Override
+    public String toString() {
+        return "JxEduMediaEdu{" +
+                "year=" + year +
+                ", SCHOOLTYPE='" + SCHOOLTYPE + '\'' +
+                ", MEDIAROOM=" + MEDIAROOM +
+                ", NETWORKLEARN=" + NETWORKLEARN +
+                ", WIRELESS=" + WIRELESS +
+                ", SCHOOLNAME='" + SCHOOLNAME + '\'' +
+                '}';
+    }
+}

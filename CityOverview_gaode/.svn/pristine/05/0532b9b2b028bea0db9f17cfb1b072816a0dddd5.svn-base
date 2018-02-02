@@ -1,0 +1,31 @@
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：wangxw
+ * 创建日期：2017/9/19 15:10
+ * 描述信息：
+ * ***************************************************************
+ */
+package com.cetc28.PeopleBenefitService.dto;
+
+public class CorpPenaltyCountDto {
+    String illegalDetail; //违规信息
+    Short counts; //统计次数
+
+    public String getIllegalDetail() {
+        return illegalDetail;
+    }
+
+    public void setIllegalDetail(String illegalDetail) {
+        this.illegalDetail = illegalDetail;
+    }
+
+    public Short getCounts() {
+        return counts;
+    }
+
+    public void setCounts(Short counts) {
+        this.counts = counts;
+    }
+}

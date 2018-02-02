@@ -1,0 +1,83 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.IJxAddminServDao;
+import com.cetc28.idata.model.JxAddminCert;
+import com.cetc28.idata.model.JxAddminItems;
+import com.cetc28.idata.model.JxAddminPicture;
+import com.cetc28.idata.model.JxAddminServ;
+import com.cetc28.idata.service.IJxAddminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by Jessica on 2017/9/13.
+ */
+@Service
+public class IJxAddminServiceImpl implements IJxAddminService {
+    @Autowired
+    private IJxAddminServDao iJxAddminServDao;
+
+    @Override
+    public List<JxAddminServ> queryOnestopAndOnline() {
+        return iJxAddminServDao.selectOnestopAndOnline();
+    }
+
+    @Override
+    public List<JxAddminCert> queryCertFreq() {
+        return iJxAddminServDao.selectCertFrequency();
+    }
+
+    @Override
+    public List<JxAddminItems> queryServIterms() {
+        return iJxAddminServDao.selectItems();
+    }
+
+    @Override
+    public List<JxAddminItems> queryAllIterms() {
+        return iJxAddminServDao.selectAllItems();
+    }
+
+    @Override
+    public List<JxAddminPicture> queryPictureData() {
+        return iJxAddminServDao.selectPictureData();
+    }
+
+    @Override
+    public List queryYearAreaItems() {
+        List result = new ArrayList<Map>();
+        List<Map> originData = iJxAddminServDao.selectYearAreaItems();
+        for (int j = 0; j < originData.size(); j++){
+            Map map = originData.get(j);
+            Map<String, Object> info = new HashMap<String,Object>();
+            info.put("qhmc", map.get("QHMC"));
+            info.put("sumnum", map.get("SUMNUM"));
+            result.add(info);
+        }
+        return result;
+    }
+
+    @Override
+    public int queryYearAllItems() {
+        return iJxAddminServDao.selectYearAllItems();
+    }
+
+    @Override
+    public List queryConvenientCenter(Integer qyNum) {
+        if(qyNum==1){
+            return iJxAddminServDao.queryConvenientCenter("县（市、区）级");
+        }
+        if(qyNum==2){
+            return iJxAddminServDao.queryConvenientCenter("镇（街道）级");
+        }
+        if(qyNum==3){
+            return iJxAddminServDao.queryConvenientCenter("村（社区）级");
+        }else {
+            return null;
+        }
+    }
+}

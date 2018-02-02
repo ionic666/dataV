@@ -1,0 +1,96 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+
+  </style>
+</head>
+<body>
+<div class="modal fade" style="width: 300px;top: 50px;left:auto;right: 110px;" id="searchPosition" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 280px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close" style="margin-top: -2px">
+          <img src="map/images/economicModel/close.png">
+        </button>
+        <h4 class="modal-title" style="font-size:14px;">查询定位</h4>
+      </div>
+      <div class="modal-body" style="width: 280px">
+        <div class="ui-jqgrid-view" id="gview_grid-table" style="width: 100%;">
+          <div>
+            <input type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="查询">
+          </div>
+          <div id="content1"  style="width: 100%;margin-top: 10px">
+            <div style="position:relative;">
+              <div>
+                <table id="checkContent1" class="table-bordered" style="width: 100%;">
+                  <tr>
+                  <td style="width: 8%;text-align: center;height: 30px; line-height: 30px;"><input type="checkbox" id="allSelect"></td>
+                  <td style="width: 22%;text-align: center;"></td>
+                  <td style="width: 25%;text-align: center"></td>
+                  <td style="width: 30%;text-align: center;"></td>
+                  <td style="width: 15%;text-align: center;"></td>
+                  </tr>
+                  <tr style="text-align: center;height: 25px; line-height: 25px;"><td><input type="checkbox"></td><td></td><td></td><td></td><td></td></tr>
+                  <tr style="text-align: center;height: 25px; line-height: 25px;"><td><input type="checkbox"></td><td></td><td></td><td></td><td></td></tr>
+                  <tr style="text-align: center;height: 25px; line-height: 25px;"><td><input type="checkbox"></td><td></td><td></td><td></td><td></td></tr>
+                  <tr style="text-align: center;height: 25px; line-height: 25px;"><td><input type="checkbox"></td><td></td><td></td><td></td><td></td></tr>
+                  <tr style="text-align: center;height: 25px; line-height: 25px;"><td><input type="checkbox"></td><td></td><td></td><td></td><td></td></tr>
+                  <tr style="text-align: center;height: 25px; line-height: 25px;"><td><input type="checkbox"></td><td></td><td></td><td></td><td></td></tr>
+                  <tr style="text-align: center;height: 25px; line-height: 25px;"><td><input type="checkbox"></td><td></td><td></td><td></td><td></td></tr>
+                  <tr style="text-align: center;height: 25px; line-height: 25px;"><td><input type="checkbox"></td><td></td><td></td><td></td><td></td></tr>
+                  <tr style="text-align: center;height: 25px; line-height: 25px;"><td><input type="checkbox"></td><td></td><td></td><td></td><td></td></tr>
+                </table>
+              </div>
+              <div style="margin-top: 15px; padding-left: 10px">
+                <a href="" type="button" >上一页</a>
+                <a href="" type="button" >下一页</a>
+                <a href="javascript:void(0)" type="button">跳转
+                  <select style="padding: 2px 3px;display: inline-block;width: 50px;height:25px" class="form-control input-sm">
+                    <option value="1">1</option>
+                  </select>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+
+    </div>
+</div>
+  </div>
+<script>
+  function measureSquare(){
+    $("#measureSelect").html("")
+    var str='<option value="select1">平方米</option><option value="select2">平方千米</option>';
+    $("#measureSelect").html(str);
+
+
+
+    $("#measureResult").html("100平方米")
+  }
+  function measureDistanse(){
+    $("#measureSelect").html("")
+    var str='<option value="select1">米</option><option value="select2">千米</option>';
+    $("#measureSelect").html(str);
+
+
+    $("#measureResult").html("100米")
+  }
+</script>
+</body>
+</html>

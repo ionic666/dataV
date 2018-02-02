@@ -1,0 +1,180 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/4
+  Time: 13:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.kqzl{
+            width: 100%;
+            height: 100%;
+        }
+        div#kqzl{
+            clear: both;
+            height: 83%;
+            width: 95%;
+        }
+        .headerTitle{
+            float: left;
+        }
+        .details{
+            float: left;
+        }
+        .details p{
+            font-size: 1em;
+        }
+        .details img{
+            width: 34px;
+        }
+        .details img,.details div,.detail span{
+            float: left;
+            margin-left: 15px;
+            text-align: center;
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 18px;
+         }
+        #wrType{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="kqzl">
+    <p class="headerTitle">
+        空气质量
+        <%--<img src="../../images/environment/air.png" alt=""/>--%>
+    </p>
+    <div class="details">
+        <img src="../../images/environment/aqi.png" alt=""/>
+        <div>
+            <h2 id="wrzs" class="BlueFont"></h2>
+            <p>嘉兴市区</p>
+        </div>
+        <span class="BlueFont" id="wrType">良</span>
+    </div>
+    <div id="kqzl">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+    function kqzl(xAxisData,seriesData,max) {
+        var myChart = echarts.init(document.getElementById("kqzl"));
+        var option = {
+            color: ['#FD9902','#EFF515','#01B052'],
+            tooltip: {
+                trigger: 'item',
+                formatter: "AQI <br> {b}:{c}"
+            },
+            grid: {
+                x: '5%',
+                y: '10%',
+                x2: '5%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    splitLine: {show: false},
+                    axisLine: {show: true, lineStyle: {color:'#B6B6B6'}},
+                    axisTick: {show: false},
+                    axisLabel: {show: true, textStyle: text_style},
+                    data: xAxisData
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    min:0,
+                    max:max+30,
+                    splitLine: {show: true, lineStyle: {type: 'dashed',color: '#383838'}},
+                    axisLine: {show:false},
+                    axisTick: {show: false},
+                    axisLabel: {show: false}
+                }
+            ],
+            series: [
+                {
+                    name: 'aqi',
+                    type: 'bar',
+                    barWidth: 22,
+                    itemStyle: {
+                        normal: {
+                            color: function(params) {
+                               var choose_color=params['data'];
+                               if(0<=choose_color&&choose_color<=50){
+                                   return '#00FF00';
+                               }
+                                if(51<=choose_color&&choose_color<=100){
+                                    return '#FFFF00';
+                                }
+                                if(101<=choose_color&&choose_color<=150){
+                                    return '#FF7E00';
+                                }
+                                if(151<=choose_color&&choose_color<=200){
+                                    return '#FF0000';
+                                }
+                                if(201<=choose_color&&choose_color<=300){
+                                    return '#99004C';
+                                }
+                                if(301<=choose_color){
+                                    return '#7E0023';
+                                }
+
+                            },
+                            label: {
+                                show: true,
+                                position: 'top',
+                                textStyle:text_style,
+                                formatter: '{c}'
+                            }
+                        }
+                    },
+                    data: seriesData
+                }
+            ]
+
+        };
+        myChart.setOption(option);
+    }
+    $.ajax({
+        type:"POST",
+        url:'../../jxenvir/AirQXMonitor.do?qhbh='+qhbh,
+        dataType:'json',
+        success:function(data){
+            var len=data.length;
+            var xAxisData=[];
+            var seriesData=[];
+            var wrzs="";
+            for(var i=0;i<len;i++){
+                xAxisData.push(data[i].mc);
+                seriesData.push([data[i].aqi]);
+                wrzs=data[0].aqi;
+            }
+            $("#wrzs").html(wrzs);
+            var max=Math.max.apply([],seriesData);
+            kqzl(xAxisData,seriesData,max);
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.ConfigurationManagement.dao.IResManageDao">
+
+    <select id="listIndicatorIndex" resultType="java.util.HashMap">
+        SELECT  distinct(b.mc) as INDICATORNAME, substr(a.id,1,3) AS INDICATORNUM from JX_SYS_TABLE_INDEX a left join JX_SYS_INDICATORS b on substr(a.id,1,3) = b.bh WHERE substr(a.id,1,3) != '000' ORDER BY substr(a.id,1,3)
+    </select>
+
+    <select id="queryResByIndicator" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT *
+        from JX_SYS_TABLE_INDEX
+        where id like #{0}||'%'
+    </select>
+
+
+    <select id="queryFieldName" resultType="com.cetc28.ConfigurationManagement.model.JxSysFieldIndex" parameterType="java.lang.String">
+        SELECT * from JX_SYS_FIELD_INDEX where table_name=#{tableName}
+    </select>
+
+    <select id="queryBhRange" resultType="java.lang.String" parameterType="java.util.HashMap">
+        SELECT distinct ${bh} from ${tableName} order by ${bh}
+    </select>
+
+    <select id="queryMcByName" resultType="java.lang.String" parameterType="java.lang.String">
+        select mc from XXZYGL.XZQH where bh=#{bhValue}
+    </select>
+    <select id="queryFieldTimeName" resultType="java.lang.String" parameterType="java.util.HashMap">
+        SELECT name from JX_SYS_FIELD_INDEX where table_name=#{tableName} and meaning='时间'
+    </select>
+
+    <select id="queryFieldBHName" resultType="java.lang.String" parameterType="java.util.HashMap">
+        SELECT name from JX_SYS_FIELD_INDEX where table_name=#{tableName} and meaning='区划编号'
+    </select>
+
+    <select id="queryPKName" resultType="java.lang.String" parameterType="java.util.HashMap">
+        SELECT name from JX_SYS_FIELD_INDEX where table_name=#{tableName} and meaning='主键'
+    </select>
+
+    <select id="getTimeType" resultType="java.lang.String" parameterType="java.util.HashMap">
+        SELECT TIME_TYPE from JX_SYS_TABLE_INDEX where table_name=#{tableName}
+    </select>
+
+
+    <select id="queryTimeRange" resultType="java.lang.String" parameterType="java.util.HashMap">
+        SELECT distinct ${time} from ${tableName} order by TO_DATE(${time},#{formart}) desc
+    </select>
+
+    <select id="queryTimeRangeBybhValue" resultType="java.lang.String" parameterType="java.util.HashMap">
+        SELECT distinct ${time} from ${tableName}
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="bh!=null and bh!=''">
+                and ${bh}=#{bhValue}
+            </if>
+        </trim>
+        order by TO_DATE(${time},#{formart}) desc
+    </select>
+
+    <select id="getCurrentValue" resultType="java.lang.String" parameterType="java.util.HashMap">
+        SELECT ${fieldName} from ${tableName}
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="bh!=null and bh!=''">
+                and ${bh}=#{bhValue}
+            </if>
+            <if test="time!=null and time!=''">
+                and ${time}=#{timeValue}
+            </if>
+        </trim>
+    </select>
+
+    <select id="updateCurrentValue"  parameterType="java.util.HashMap">
+        UPDATE ${tableName} SET ${fieldName}=#{fieldValue}
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="bh!=null and bh!=''">
+                and ${bh}=#{bhValue}
+            </if>
+            <if test="time!=null and time!=''">
+                and ${time}=#{timeValue}
+            </if>
+        </trim>
+    </select>
+</mapper>

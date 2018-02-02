@@ -1,0 +1,82 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: NJ
+  Date: 2016/4/22
+  Time: 10:38
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <style>
+    *{
+      font-family: 微软雅黑;
+    }
+  </style>
+</head>
+<body>
+<div class="modal fade" id="GHFZ" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static" style="width: 325px;height: 620px;overflow-y: hidden;top: 50px;left: auto">
+  <div class="modal-dialog" style="z-index: 9000;width: 98%">
+    <input id="datalength" type="hidden" value="111"/>
+    <div class="modal-content" style="overflow: hidden;height: 600px">
+      <div class="modal-header" style="padding: 10px 15px;height: auto;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close" style="margin-top: 3px">
+          <img src="map/images/economicModel/close.png" alt="" onclick="closeInfoWindow(this)"/>
+        </button>
+        <h4 class="modal-title " id="infoModalLabel" style="font-family: 'Microsoft YaHei';text-align: left;color: #fff">规划仿真</h4>
+      </div>
+      <div class="modal-body" style="overflow: hidden;padding: 0;">
+          <div class="tabHead">
+              <div class="JJMF">
+                <img src="map/images/economicModel/1.png" alt=""/>
+                <span>经济仿真</span>
+              </div>
+            <div class="JJMF" style="margin-top: 10px">
+              <img src="map/icons/交通仿真icon.png" alt="" style="margin-left: 28px;margin-top: 6px"/>
+              <span style="color: #E96F05">交通仿真</span>
+            </div>
+          </div>
+          <div class="tabBody" id="tabBody">
+              <span>选择任务类型：</span>
+              <div class="col-xs-12" style="padding: 0;margin-top: 15px">
+                <input type="radio" value="0" id="JSXM" name="check5" checked/>
+                <label for="JSXM">建设项目交通影响仿真</label>
+              </div>
+              <div class="col-xs-12" style="padding: 0;margin-top: 15px">
+                <input type="radio" value="0" id="QYJT" name="check5"/>
+                <label for="QYJT">区域交通组织优化仿真</label>
+              </div>
+              <div class="col-xs-12" style="padding: 0;margin-top: 15px">
+                <input type="radio" value="0" id="LWYY" name="check5"/>
+                <label for="LWYY">路网运营状态实时监控</label>
+              </div>
+              <div class="col-xs-12" style="padding: 0;margin-top: 15px">
+                <input type="radio" value="0" id="DLTQ" name="check5"/>
+                <label for="DLTQ">道路特勤疏解方案评价</label>
+              </div>
+              <div class="col-xs-12" style="padding: 0;margin-top: 15px">
+                <input type="radio" value="0" id="ELTQ" name="check5"/>
+                <label for="ELTQ">恶劣天气应急预案评价</label>
+              </div>
+              <div class="col-xs-12" style="position: fixed;bottom: 20px">
+                  <div class="col-xs-6" style="float: right;margin-right: 30px">
+                      <button class="btn btn-info btn-block" onclick="clearResult()">清除结果</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script>
+        function clearResult()
+        {
+            clearLayer();
+        }
+
+    </script>
+</body>
+</html>

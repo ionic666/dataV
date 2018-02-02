@@ -1,0 +1,50 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.JxEcoIndustrialPlatform;
+import com.cetc28.idata.service.IJxEcoIndPlatService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/20.
+ */
+@Service
+public class JxEcoIndusPlatServiceImpl implements IJxEcoIndPlatService {
+
+    @Autowired
+    private JxEcoIndustrialPlatform jxEcoIndustrialPlatform;
+    @Override
+    public Map queryIndustrialPlatform() {
+        Map result=new HashMap();
+        List<HashMap<String,String>> first=jxEcoIndustrialPlatform.queryindustrialplatform();
+        String id=first.get(0).get("ID");
+        List sec=jxEcoIndustrialPlatform.queryindustrialplatformsec(id);
+        result.put("first",first);
+        result.put("second",sec);
+        return result;
+    }
+
+    @Override
+    public Map queryEcoPlatbyid(String id) {
+        Map result=new HashMap();
+        List<HashMap<String,String>> first=jxEcoIndustrialPlatform.queryindustrialplatformbyid(id);
+        List sec=jxEcoIndustrialPlatform.queryindustrialplatformsec(id);
+        result.put("first",first);
+        result.put("second",sec);
+        return result;
+    }
+
+    @Override
+    public Map queryEcoPlatbyName(String name) {
+        Map result=new HashMap();
+        List<HashMap<String,String>> first=jxEcoIndustrialPlatform.queryindustrialplatformbyname(name);
+        List<HashMap<String,String>> sec=jxEcoIndustrialPlatform.queryindustrialplatformsec(first.get(0).get("ID"));
+        result.put("first",first);
+        result.put("second",sec);
+        return result;
+    }
+}

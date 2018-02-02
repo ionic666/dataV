@@ -1,0 +1,347 @@
+package com.cetc28.ConfigurationManagement.service.impl;
+
+import com.cetc28.ConfigurationManagement.dao.IResManageDao;
+import com.cetc28.ConfigurationManagement.model.JxSysFieldIndex;
+import com.cetc28.ConfigurationManagement.service.IResManageService;
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所十三部
+ * 项目名称：CityOverview
+ * 设计人员：linyu
+ * 创建日期：2017/9/26 8:35
+ * 描述信息：
+ * ***************************************************************
+ */
+@Service
+public class ResManagerServiceImpl implements IResManageService {
+
+    @Autowired
+    private IResManageDao jxSysDao;
+
+    @Override
+    public List listResourceTable() {
+        List result = new ArrayList();
+        List<HashMap> indicators = jxSysDao.listIndicatorIndex();
+        for (HashMap zb : indicators) {
+            Map mapInfo = new HashedMap();
+            if(zb.containsKey("INDICATORNAME")){
+                mapInfo.put("indicatorName", zb.get("INDICATORNAME"));
+            }
+            if(zb.containsKey("INDICATORNUM")){
+                mapInfo.put("mapInfos", jxSysDao.queryResByIndicator(zb.get("INDICATORNUM").toString()));
+            }
+            result.add(mapInfo);
+        }
+        return result;
+    }
+
+    /**
+     * 查询表的数据(字段信息，时间范围，区划范围)
+     *
+     * @param tableName
+     * @return
+     */
+    @Override
+    public Map queryFieldData(String tableName) {
+        Map param = new HashMap();
+        Map resultMap = new HashMap();
+        //组装参数
+        param.put("tableName", tableName);
+
+        List timeTypeList=jxSysDao.getTimeType(param);
+        String timeType= (String) timeTypeList.get(0);
+        if(timeType.equals("0")){
+            param.put("formart","YYYY");
+        }else {
+            param.put("formart","YYYY-MM");
+        }
+
+        //查询该表表示区划分的字段名
+        List bhlist = jxSysDao.queryFieldBHName(param);
+        //判断是否存在区划分的字段。
+        if (bhlist == null || bhlist.size() == 0) {
+            //当表中没有区划分时
+            //不存在,则设为嘉兴市
+            List bhrange=new ArrayList();
+            Map<String,String> bhMc=new HashMap();
+            bhMc.put("bhValue","003001");
+            bhMc.put("mc", "嘉兴市");
+            bhrange.add(bhMc);
+            resultMap.put("bhrange", bhrange);
+            param.put("bh", null);
+            param.put("bhValue",null);
+        } else {
+            //获取区划范围
+            String bh = (String) bhlist.get(0);
+            param.put("bh", bh);
+            List bhMcRangeList=new ArrayList();
+            List<String> bhRange = jxSysDao.queryBhRange(param);
+            for(String bhValue:bhRange){
+                Map<String,String> bhMc=new HashMap();
+                List mc=jxSysDao.queryMcByName(bhValue);
+                bhMc.put("bhValue",bhValue);
+                bhMc.put("mc", (String) mc.get(0));
+                bhMcRangeList.add(bhMc);
+            }
+            resultMap.put("bhrange", bhMcRangeList);
+            String bhValue= (String) bhRange.get(0);
+            param.put("bhValue",bhValue);
+        }
+
+        //获取时间的范围
+        List timeList=jxSysDao.queryFieldTimeName(param);
+        if(timeList==null||timeList.size()==0){
+            resultMap.put("timerange", null);
+        }else{
+            String time = (String) jxSysDao.queryFieldTimeName(param).get(0);
+            param.put("time", time);
+            resultMap.put("timerange", jxSysDao.queryTimeRangeBybhValue(param));
+        }
+
+        //获取字段信息
+        List<JxSysFieldIndex> listField = jxSysDao.queryFieldName(tableName);
+        //去除主键字段、时间、区划
+        List<JxSysFieldIndex> listFieldNew = new ArrayList<JxSysFieldIndex>();
+        for (JxSysFieldIndex jx : listField) {
+            if (jx.getType().equals("1")) {
+                listFieldNew.add(jx);
+            }
+        }
+        resultMap.put("field", listFieldNew);
+
+
+        return resultMap;
+    }
+
+    /**
+     * 查询数据的当前值
+     *
+     * @param tableName
+     * @param fieldNames(该表需要查询的字段)
+     * @param timeValue
+     * @param bhValue
+     * @return
+     */
+    @Override
+    public List queryData(String tableName, String fieldNames, String timeValue, String bhValue) {
+        Map param = new HashMap();
+        List result = new ArrayList();
+        //组装参数
+        param.put("tableName", tableName);
+        param.put("timeValue", timeValue);
+        param.put("bhValue", bhValue);
+        //获取时间字段名
+        /*String time = (String) jxSysDao.queryFieldTimeName(param).get(0);
+        param.put("time", time);*/
+
+        List timeList=jxSysDao.queryFieldTimeName(param);
+        if(timeList==null||timeList.size()==0){
+            param.put("time", null);
+        }else{
+            String time = (String) jxSysDao.queryFieldTimeName(param).get(0);
+            param.put("time", time);
+        }
+        //查询该表表示区划分的字段名
+        List bhlist = jxSysDao.queryFieldBHName(param);
+
+        //判断是否存在区划分的字段。
+        if (bhlist == null || bhlist.size() == 0) {
+            //当表中没有区划分时
+            //不存在设为空
+            param.put("bh", null);
+        } else {
+            //获取区划字段名
+            String bh = (String) bhlist.get(0);
+            param.put("bh", bh);
+        }
+        String[] fieldNameList = fieldNames.split(",");
+        for (int i = 0; i < fieldNameList.length; i++) {
+            param.put("fieldName", fieldNameList[i]);
+            List currentValueList = jxSysDao.getCurrentValue(param);
+            if (currentValueList != null && currentValueList.size() != 0) {
+                String currentValue = (String) currentValueList.get(0);
+                if(currentValue!=null){
+                    if(currentValue.indexOf(".")==0){
+                        currentValue="0"+currentValue;
+                        result.add(currentValue);
+                    }else{
+                        result.add(currentValue);
+                    }
+                }else{
+                    result.add("-");
+                }
+            } else {
+                result.add("-");
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 更新当前值
+     *
+     * @param tableName
+     * @param fieldNames
+     * @param fieldValues
+     * @param timeValue
+     * @param bhValue
+     */
+    @Override
+    public String updateData(String tableName, String fieldNames, String fieldValues, String timeValue, String bhValue) {
+        Map param = new HashMap();
+        //组装参数
+        param.put("tableName", tableName);
+        param.put("timeValue", timeValue);
+        param.put("bhValue", bhValue);
+        //获取时间字段名
+//        String time = (String) jxSysDao.queryFieldTimeName(param).get(0);
+//        param.put("time", time);
+        List timeList=jxSysDao.queryFieldTimeName(param);
+        if(timeList==null||timeList.size()==0){
+            param.put("time", null);
+        }else{
+            String time = (String) jxSysDao.queryFieldTimeName(param).get(0);
+            param.put("time", time);
+        }
+
+        //查询该表表示区划分的字段名
+        List bhlist = jxSysDao.queryFieldBHName(param);
+        //判断是否存在区划分的字段。
+        if (bhlist == null || bhlist.size() == 0) {
+            //当表中没有区划分时
+            //不存在设为空
+            param.put("bh", null);
+        } else {
+            //获取区划字段名
+            String bh = (String) bhlist.get(0);
+            param.put("bh", bh);
+        }
+
+        String[] fieldNameList = fieldNames.split(",");
+        String[] fieldValueList = fieldValues.split(",");
+        for (int i = 0; i < fieldNameList.length; i++) {
+            String fvalue=fieldValueList[i];
+            if(fvalue.equals("-")){
+                fvalue="";
+            }
+            param.put("fieldName", fieldNameList[i]);
+            param.put("fieldValue", fvalue);
+            jxSysDao.updateCurrentValue(param);
+        }
+        return "success";
+    }
+
+    @Override
+    public List queryTimeRangeBybhValue(String bhValue,String tableName) {
+        Map param = new HashMap();
+        param.put("bhValue",bhValue);
+        param.put("tableName",tableName);
+
+        List timeTypeList=jxSysDao.getTimeType(param);
+        String timeType= (String) timeTypeList.get(0);
+        if(timeType.equals("0")){
+            param.put("formart","YYYY");
+        }else {
+            param.put("formart","YYYY-MM");
+        }
+
+        //查询该表表示区划分的字段名
+        List bhlist = jxSysDao.queryFieldBHName(param);
+        //判断是否存在区划分的字段。
+        if (bhlist == null || bhlist.size() == 0) {
+            //不存在设为空
+            param.put("bh", null);
+        } else {
+            String bh = (String) bhlist.get(0);
+            param.put("bh", bh);
+        }
+        List timeList=jxSysDao.queryFieldTimeName(param);
+        if(timeList==null||timeList.size()==0){
+            return null;
+        }else{
+            String time = (String) jxSysDao.queryFieldTimeName(param).get(0);
+            param.put("time", time);
+        }
+
+        return jxSysDao.queryTimeRangeBybhValue(param);
+    }
+
+    /**
+     * 根据区划值，表名，字段名获得时间范围和数据
+     * @param bhValue
+     * @param tableName
+     * @param fieldNames
+     * @return
+     */
+    @Override
+    public Map getTimeRangeAndData(String bhValue, String tableName, String fieldNames) {
+        Map map=new HashMap();
+        Map param = new HashMap();
+        param.put("bhValue",bhValue);
+        param.put("tableName",tableName);
+
+        List timeTypeList=jxSysDao.getTimeType(param);
+        String timeType= (String) timeTypeList.get(0);
+        if(timeType.equals("0")){
+            param.put("formart","YYYY");
+        }else {
+            param.put("formart","YYYY-MM");
+        }
+        //查询该表表示区划分的字段名
+        List bhlist = jxSysDao.queryFieldBHName(param);
+        //判断是否存在区划分的字段。
+        if (bhlist == null || bhlist.size() == 0) {
+            //不存在设为空
+            param.put("bh", null);
+        } else {
+            String bh = (String) bhlist.get(0);
+            param.put("bh", bh);
+        }
+        List timeList=jxSysDao.queryFieldTimeName(param);
+        List timeRange=new ArrayList();
+        String timeValue="";
+        if(timeList==null||timeList.size()==0){
+            param.put("time", null);
+        }else{
+            String time = (String) jxSysDao.queryFieldTimeName(param).get(0);
+            param.put("time", time);
+            timeRange=jxSysDao.queryTimeRangeBybhValue(param);
+            timeValue= (String) timeRange.get(0);
+        }
+        param.put("timeValue", timeValue);
+        map.put("timeRange",timeRange);
+
+        List result = new ArrayList();
+        String[] fieldNameList = fieldNames.split(",");
+        for (int i = 0; i < fieldNameList.length; i++) {
+            param.put("fieldName", fieldNameList[i]);
+            List currentValueList = jxSysDao.getCurrentValue(param);
+            if (currentValueList != null && currentValueList.size() != 0) {
+                String currentValue = (String) currentValueList.get(0);
+                if(currentValue!=null){
+                    if(currentValue.indexOf(".")==0){
+                        currentValue="0"+currentValue;
+                        result.add(currentValue);
+                    }else{
+                        result.add(currentValue);
+                    }
+                }else{
+                    result.add("-");
+                }
+            } else {
+                result.add("-");
+            }
+        }
+        map.put("value",result);
+        return map;
+    }
+
+
+}

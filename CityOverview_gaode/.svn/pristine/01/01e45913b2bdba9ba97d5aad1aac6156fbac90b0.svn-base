@@ -1,0 +1,21 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxSsMiNoticeInfo;
+
+import java.util.List;
+
+public interface JxSsMiNoticeInfoMapper {
+    int deleteByPrimaryKey(Short id);
+
+    int insert(JxSsMiNoticeInfo record);
+
+    int insertSelective(JxSsMiNoticeInfo record);
+
+    JxSsMiNoticeInfo selectByPrimaryKey(Short id);
+
+    int updateByPrimaryKeySelective(JxSsMiNoticeInfo record);
+
+    int updateByPrimaryKey(JxSsMiNoticeInfo record);
+
+    List<JxSsMiNoticeInfo> selectSsMiNoticeInfoLatestDay();
+}

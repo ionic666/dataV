@@ -1,0 +1,60 @@
+package com.cetc28.PeopleBenefitService.service.impl;
+
+import com.cetc28.ConfigurationManagement.model.PageResult;
+import com.cetc28.ConfigurationManagement.model.UserLoginList;
+import com.cetc28.PeopleBenefitService.dao.IJxEcoComPicDao;
+import com.cetc28.PeopleBenefitService.service.IJxEcoComPicService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 企业画像Service层实现
+ * created by linyu in 2017/12/28
+ */
+@Service
+public class JxEcoComPicServiceImpl implements IJxEcoComPicService{
+    @Autowired
+    private IJxEcoComPicDao iJxEcoComPicDao;
+
+    @Override
+    public Map queryPicStatistic(String companyId) {
+        Map result = new HashMap();
+        Integer ownerNum = iJxEcoComPicDao.getOwnerNum(companyId);
+        result.put("ownerNum", ownerNum);
+        Integer lawsuitNum = iJxEcoComPicDao.getLawsuitNum(companyId);
+        result.put("lawsuitNum", lawsuitNum);
+        Integer recruitNum = iJxEcoComPicDao.getRecruitNum(companyId);
+        result.put("recruitNum", recruitNum);
+        Integer bidNum = iJxEcoComPicDao.getBidNum(companyId);
+        result.put("bidNum", bidNum);
+        Integer certificateNum = iJxEcoComPicDao.getCertificateNum(companyId);
+        result.put("certificateNum", certificateNum);
+        Integer patentNum = iJxEcoComPicDao.getPatentNum(companyId);
+        result.put("patentNum", patentNum);
+        Integer copyRightNum= iJxEcoComPicDao.getCopyRightNum(companyId);
+        result.put("copyRightNum", copyRightNum);
+        return result;
+    }
+
+    @Override
+    public PageResult queryComPicInfo(String companyId, String picId, Integer pageNumber, Integer pageSize) {
+        PageHelper.startPage(pageNumber,pageSize);
+        List list = iJxEcoComPicDao.queryComPicInfo(companyId,picId);
+        PageInfo pageInfo = new PageInfo(list);
+        PageResult result = new PageResult();
+        result.setRows(list);
+        result.setTotal(pageInfo.getTotal());
+        return result;
+    }
+
+    @Override
+    public List queryOwnership(String companyId) {
+        return iJxEcoComPicDao.queryOwnership(companyId);
+    }
+}

@@ -1,0 +1,1294 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tonghao
+  Date: 2017/11/18
+  Time: 14:56
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../myCss/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="../../myCss/headTitle.css"/>
+    <link rel="stylesheet" href="../../myCss/titleImg.css"/>
+
+    <style>
+        *{
+            color:#fff;
+            /*font-size: 24px;*/
+            font-family: "Microsoft YaHei", "宋体", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
+            box-sizing: border-box;
+        }
+        ul,li,h1,h2,h3,h4,h5,h6,p,ol{
+            padding:0;
+            margin:0;
+        }
+        li{
+            list-style: none;
+        }
+        .header {
+            width: 60%;
+            height: 7.8%;
+            margin: 0 auto;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: absolute;
+            z-index: 999;
+            top: 2%;
+            margin-left: 50%;
+        }
+        #marquee {
+            position: absolute;
+            top: 12%;
+            left: 28%;
+            text-align: center;
+            line-height: 28px;
+            /* display: none; */
+            width: 68%;
+            height: 30px;
+            overflow: hidden;
+        }
+        #marquee>div{
+            height:100%;
+            position: absolute;
+            top:0;
+        }
+        #marquee>div>span{
+            color:#fff;
+            font-size:28px;
+            line-height: 28px;
+            white-space: nowrap;
+        }
+
+        .marker-xxqy-name{
+            min-width: 120px;
+        }
+
+
+        /*地图样式表*/
+        .amap-toolbar{
+            display:none;
+        }
+        .info {
+            border: solid 1px #889DA2;
+            border-radius: 2px;
+            box-shadow: 0px 0px 8px #60d8ef;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top>div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+            width:100%;
+        }
+        div.info-top>div>span.ts{
+            display: inline-block;
+            width:49%;
+            height:100%;
+            float: left;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-middle p{
+            font-size: 18px;
+            display: inline-block;
+            width: 220px;
+        }
+        .info-middle .infoName{
+            display: inline-block;
+            width:125px;
+            font-size: 24px;
+            color:#32DDE7;
+            vertical-align: top;
+        }
+
+        .info-middle .infoTS{
+            text-align: center;
+            width:50%;
+            float: left;
+            height:250px;
+            background-color: rgba(0,0,0,.5);
+        }
+        .infoContentDiv>.infoTS1{
+            border-right:1px solid  #889DA2;
+            /*box-shadow: 0px 0px 8px #60d8ef;*/
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        .info span{
+            margin-left: 5px;
+            line-height: 30px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        .infoContentDiv{
+            /*padding:8px 0px;*/
+        }
+        ._more{
+            transition: all 0.5s;
+            color: #00BAE8;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            width: 100px;
+            border-radius: 12px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            background: #002C36;
+            text-decoration:none;
+            margin-left: calc(50% - 180px);
+        }
+        ._more:hover{
+            color:#fff;
+            background: #001D24;
+            box-shadow: 0px 0px 5px #60d8ef;
+            text-decoration:none;
+        }
+        .amap-marker-label{
+            color:#fff;
+            background-color: transparent;
+            border:none;
+            font-size:18px;
+        }
+        /*._details{*/
+        /*overflow: hidden;*/
+        /*}*/
+        /*服务中心*/
+        #serverCenter{
+            width: 300px;
+            height: 160px;
+            color: #fff;
+            position: absolute;
+            left:27%;
+            bottom:20px;
+            font-size: 16px;
+        }
+        #serverCenter li{
+            height: 40px;
+            line-height: 40px;
+        }
+        .serverTitle{
+            height: 10%;
+            width: 100%;
+            padding: 1% 0 0 3%;
+            font-size: 24px;
+        }
+        .serverCenter{
+            width: 100%;
+            height: 90%;
+            box-sizing: border-box;
+            padding: 5% 0 0 10%;
+        }
+        .map_deatils1,.map_deatils2,.map_deatils3{
+            display: none;
+            position: absolute;
+            top: 10%;
+            left: 1%;
+            width: 450px;
+            height:89%;
+            /*border: solid 1px #889DA2;*/
+            /*border-radius: 2px;*/
+            /*box-shadow: 0px 0px 8px #60d8ef;*/
+            background-color: rgba(17,23,27,0.8);
+        }
+        .map_deatils1{
+            display: block;
+        }
+        .map_deatils1>div,.map_deatils2>div,.map_deatils3>div{
+            width: 100%;
+            height: 33.3%;
+            border-top: 2px solid #0CDAF5;
+        }
+        .map_top_details{
+            width: 100%;
+            height: 100%;
+        }
+        .map_top_details>li{
+            float: left;
+            width: 50%;
+            height: 50%;
+            padding: 5% 0 5% 0;
+        }
+        .map_top_details>li img{
+            float: left;
+            width: 20%;
+            height: 58%;
+            margin-top: 5%;
+        }
+        div.top_right{
+            float: left;
+            width: 65%;
+            height: 100%;
+        }
+        .top_right p{
+            width: 100%;
+            /*height: 50%;*/
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .top_right span{
+            font-size: 25px;
+            font-weight: bold;
+            color: #28DDE4;
+        }
+        .jjcenter{
+            width: 100%;
+            height: 15%;
+            line-height: 30px;
+            font-size: 16px;
+        }
+        .jjcenter span{
+            color: #24C0C6;
+        }
+        .jjcenter p{
+            display: inline-block;
+        }
+        .jjPic{
+            width: 100%;
+            height: 65%;
+            padding-top: 12%;
+        }
+        .jjPic1{
+            width: 100%;
+            height: 65%;
+            padding-top: 16%;
+        }
+        .jjPic>div,.jjPic1>div{
+            float: left;
+            width: 50%;
+            /*height: 100%;*/
+        }
+        .jjPic img,.jjPic1 img{
+            float: left;
+            margin-top: 10%;
+        }
+        .pIn{
+            margin-left: 15%;
+        }
+        #serverCenter li{
+            background-image: url('../../images/adminService/grey.png') ;
+            background-repeat: no-repeat;
+            background-position: 10px 15px;
+            padding-left: 35px;
+        }
+        #serverCenter li.active{
+            background-image: url('../../images/adminService/green.png') ;
+        }
+    </style>
+</head>
+<body>
+<div id="pageNav">
+    <span>当前页面</span>
+    <select id="chooseNav">
+        <option value="001" selected="selected">最多跑一次</option>
+        <option value="002">三率一感</option>
+        <option value="003">特色工作</option>
+        <option value="004">全国首创</option>
+    </select>
+</div>
+<div id="map" style="width:100%; height:100%;"></div>
+<div class="_headerImg">
+    <img src="../../images/adminService/zdpyc.png" alt="">
+</div>
+<div id="marquee">
+    <div>
+        <span>嘉兴市本级已公布“最多跑一次”事项1029项，县（市、区）平均818项，全市91.6%的审批服务事项实现了“最多跑一次”，2017年已实现“最多跑一次”累计办件46037790件。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>嘉兴市本级已公布“最多跑一次”事项1029项，县（市、区）平均818项，全市91.6%的审批服务事项实现了“最多跑一次”，2017年已实现“最多跑一次”累计办件46037790件。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
+</div>
+<%--全市--%>
+<div class="map_deatils1">
+    <%--行政审批中心数量总览--%>
+    <div class="map_top">
+        <p  class="serverTitle"><span class="map_name">全市</span>行政审批中心数量总览</p>
+        <div class="serverCenter">
+             <ul class="map_top_details">
+                 <li>
+                     <img src="../../images/adminService/shi.png" alt="">
+                     <div class="top_right">
+                         <p>
+                             <span class="top_shi">2</span>个
+                         </p>
+                         <p>
+                             市级
+                         </p>
+                     </div>
+                 </li>
+                 <li>
+                     <img src="../../images/adminService/zheng.png" alt="">
+                     <div class="top_right">
+                         <p>
+                             <span class="top_zheng">77</span>个
+                         </p>
+                         <p>
+                             镇（街道）级
+                         </p>
+                     </div>
+                 </li>
+                 <li>
+                     <img src="../../images/adminService/xian.png" alt="">
+                     <div class="top_right">
+                         <p>
+                             <span class="top_xian">24</span>个
+                         </p>
+                         <p>
+                             县（市、区）级
+                         </p>
+                     </div>
+                 </li>
+                 <li>
+                     <img src="../../images/adminService/cun.png" alt="">
+                     <div class="top_right">
+                         <p>
+                             <span class="top_zheng">1113</span>个
+                         </p>
+                         <p>
+                             村（社区）级
+                         </p>
+                     </div>
+                 </li>
+             </ul>
+        </div>
+    </div>
+    <%--行政审批中心简介--%>
+    <div class="map_middle">
+        <p  class="serverTitle"><span class="map_name">市级</span>行政审批中心简介</p>
+        <div class="serverCenter">
+            <div class="jjcenter"><span>主中心：</span><p>嘉兴市行政审批服务中心</p></div>
+            <div class="jjcenter"><span>分中心：</span><p>嘉兴市行政审批服务中心公安分中心</p></div>
+            <div class="jjPic">
+                 <div>
+                     <img src="../../images/adminService/sx.png" alt="">
+                     <div class="top_right">
+                         <p>
+                             <span class="top_zheng sbj-sx"></span>项
+                         </p>
+                         <p>
+                             实现“最多跑一次”事项
+                         </p>
+                     </div>
+                 </div>
+                 <div>
+                     <img src="../../images/adminService/bj.png" alt="">
+                     <div class="top_right">
+                         <p>
+                             <span class="top_zheng sbj-bj"></span>万项
+                         </p>
+                         <p>
+                             办结“最多跑一次”事项
+                         </p>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <%--行政审批中心办件概况--%>
+    <div class="map_bottom">
+        <p  class="serverTitle"><span class="map_name">全市</span>行政审批中心办件概况</p>
+        <div class="serverCenter jjPic1">
+                <div>
+                    <img src="../../images/adminService/sx.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng qs-sx"></span>项
+                        </p>
+                        <p>
+                            实现“最多跑一次”事项
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <img src="../../images/adminService/bj.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng qs-bj"></span>万项
+                        </p>
+                        <p>
+                            办结“最多跑一次”事项
+                        </p>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<%--南湖区--%>
+<div class="map_deatils2">
+    <%--行政审批中心数量总览--%>
+    <div class="map_top">
+        <p  class="serverTitle"><span class="map_name">南湖区</span>行政审批中心数量总览</p>
+        <div class="serverCenter">
+            <ul class="map_top_details">
+                <li>
+                    <img src="../../images/adminService/total.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_shi">118</span>个
+                        </p>
+                        <p>
+                            便民服务中心
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <img src="../../images/adminService/zheng.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng">11</span>个
+                        </p>
+                        <p>
+                            镇（街道）级
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <img src="../../images/adminService/xian.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_xian">1</span>个
+                        </p>
+                        <p>
+                            县（市、区）级
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <img src="../../images/adminService/cun.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng">106</span>个
+                        </p>
+                        <p>
+                            村（社区）级
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <%--行政审批中心简介--%>
+    <div class="map_middle">
+        <p  class="serverTitle"><span class="map_name">南湖区</span>行政审批中心简介</p>
+        <div class="serverCenter">
+            <div class="jjcenter"><span>主中心：</span><p>嘉兴市南湖区行政审批局</p></div>
+            <%--<div class="jjcenter"><span>分中心：</span><p>嘉兴市行政审批服务中心公安分中心</p></div>--%>
+            <div class="jjPic">
+                <div>
+                    <img src="../../images/adminService/sx.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng nh-sx">679</span>项
+                        </p>
+                        <p>
+                            实现“最多跑一次”事项
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <img src="../../images/adminService/bj.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng nh-bj">304.8</span>万项
+                        </p>
+                        <p>
+                            办结“最多跑一次”事项
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%--行政审批中心办件概况--%>
+        <div class="map_bottom">
+            <p  class="serverTitle"><span class="map_name">全市</span>行政审批中心办件概况</p>
+            <div class="serverCenter jjPic1">
+                <div>
+                    <img src="../../images/adminService/sx.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng qs-sx"></span>项
+                        </p>
+                        <p>
+                            实现“最多跑一次”事项
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <img src="../../images/adminService/bj.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng qs-bj"></span>万项
+                        </p>
+                        <p>
+                            办结“最多跑一次”事项
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<div class="map_deatils3">
+    <%--行政审批中心数量总览--%>
+    <div class="map_top">
+        <p  class="serverTitle"><span class="map_name">秀洲区</span>行政审批中心数量总览</p>
+        <div class="serverCenter">
+            <ul class="map_top_details">
+                <li>
+                    <img src="../../images/adminService/total.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_shi">149</span>个
+                        </p>
+                        <p>
+                            便民服务中心
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <img src="../../images/adminService/zheng.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng">7</span>个
+                        </p>
+                        <p>
+                            镇（街道）级
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <img src="../../images/adminService/xian.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_xian">4</span>个
+                        </p>
+                        <p>
+                            县（市、区）级
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <img src="../../images/adminService/cun.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng">138</span>个
+                        </p>
+                        <p>
+                            村（社区）级
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <%--行政审批中心简介--%>
+    <div class="map_middle">
+        <p  class="serverTitle"><span class="map_name">秀洲区</span>行政审批中心简介</p>
+        <div class="serverCenter">
+            <div class="jjcenter"><span>主中心：</span><p>秀洲区行政审批服务中心</p></div>
+            <div class="jjcenter"><span>分中心：</span><p>秀洲区行政审批服务中心交通分中心</p>
+                <p class="pIn">秀洲区行政审批服务中心农机、渔政分中心</p>
+                <p class="pIn">秀洲区行政审批服务中心出入境分中心</p></div>
+            <div class="jjPic">
+                <div>
+                    <img src="../../images/adminService/sx.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng xz-sx">780</span>项
+                        </p>
+                        <p>
+                            实现“最多跑一次”事项
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <img src="../../images/adminService/bj.png" alt="">
+                    <div class="top_right">
+                        <p>
+                            <span class="top_zheng xz-bj">67.9</span>万项
+                        </p>
+                        <p>
+                            办结“最多跑一次”事项
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%--行政审批中心办件概况--%>
+    <div class="map_bottom">
+        <p  class="serverTitle"><span class="map_name">全市</span>行政审批中心办件概况</p>
+        <div class="serverCenter jjPic1">
+            <div>
+                <img src="../../images/adminService/sx.png" alt="">
+                <div class="top_right">
+                    <p>
+                        <span class="top_zheng qs-bj"></span>项
+                    </p>
+                    <p>
+                        实现“最多跑一次”事项
+                    </p>
+                </div>
+            </div>
+            <div>
+                <img src="../../images/adminService/bj.png" alt="">
+                <div class="top_right">
+                    <p>
+                        <span class="top_zheng qs-bj"></span>万项
+                    </p>
+                    <p>
+                        办结“最多跑一次”事项
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ul id="serverCenter">
+    <li data-server="1">
+        市级便民服务中心
+    </li>
+    <li data-server="2">
+        县（市、区）便民服务中心
+    </li>
+    <li data-server="3">
+        镇（街道）级便民服务中心
+    </li>
+    <li id="cunServer" data-server="4">
+
+        村(社区)级便民服务中心
+    </li>
+</ul>
+<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<script type="text/javascript" src="../../map/js/echarts-all.js"></script>
+<script type="text/javascript" src="../../myjs/index.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    var NO;
+    var num;
+    var nanhuSpecial='<%=Web_srcUtil.getString("nanhuSpecial")%>';
+    var allPoint=[];//定义新数组存放所有的数据，最终用于info窗口轮播
+    var imgpt="../../images/_biu.png";
+    var imggl="../../images/star.gif";
+    var lun=0;
+    //    实现“最多跑一次”事项--开始
+    //办结“最多跑一次”事项--开始
+    $.ajax({
+        url: '../../jxecokey/queryRunOnceItemNum.do',
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+
+            var len = data.length;
+            for(var i=0;i<len;i++){
+
+                if(data[i].qhmc=="嘉兴市"){
+                    $(".qs-sx").html(data[i].itemtype);
+                    $(".qs-bj").html(data[i].yeartotalnum);
+                }else if(data[i].qhmc=="南湖区"){
+                    $(".nh-sx").html(data[i].itemtype);
+                    $(".nh-bj").html(data[i].yeartotalnum);
+                }else if(data[i].qhmc=="秀洲区"){
+                    $(".xz-sx").html(data[i].itemtype);
+                    $(".xz-bj").html(data[i].yeartotalnum);
+                }else if(data[i].qhmc=="市本级"){
+                    $(".sbj-sx").html(data[i].itemtype);
+                    $(".sbj-bj").html(data[i].yeartotalnum);
+                }
+            }
+        }
+    });
+
+    //    实现“最多跑一次”事项--结束
+    //办结“最多跑一次”事项--结束
+    //    导航切换
+    $('#chooseNav').change(function(){
+        var navText=$('#chooseNav').val();
+//    console.log(navText)
+        switch(navText){
+            case '001':zdpyc();break;
+            case '002':slyg();break;
+            case '003':tsgz();break;
+            case '004':nhsc();break;
+
+        }
+    });
+    function zdpyc(){
+        location.href="zdpyc.jsp";
+    }
+    function slyg(){
+        location.href="slyg.jsp";
+    }
+    function tsgz(){
+        location.href="tsgz.jsp";
+    }
+    function nhsc(){
+        location.href=nanhuSpecial;
+//    top.location.href="sunPublicServe.jsp";
+    }
+
+    //轮播
+       function lunbo(){
+
+           if(NO<3){
+               if(lun<2){
+                   $("#serverCenter li").eq(lun).click();
+                   lun++;
+               }
+               else{
+                   $("#serverCenter li").eq(lun).click();
+                   lun=0;
+               }
+           }
+           else{
+               if(lun<3){
+                   $("#serverCenter li").eq(lun).click();
+                   ++lun;
+               }
+               else{
+                   $("#serverCenter li").eq(lun).click();
+                   lun=0;
+               }
+           }
+       }
+
+
+    //轮播函数
+    $('#serverCenter').delegate("li","click",function() {
+        $(this).siblings().removeClass("active");
+        $(this).addClass("active");
+//        clearInterval(num)
+        map.clearMap();
+        if ($(this).attr("data-server") == "1") {
+           fun(imgpt,imggl,imgpt,imgpt,imgpt)
+        }
+        if ($(this).attr("data-server") == "2") {
+//                    map.clearMap();
+            fun(imggl,imgpt,imggl,imgpt,imgpt)
+        }
+        if($(this).attr("data-server")=="3"){
+//            map.clearMap();
+            fun(imgpt,imgpt,imgpt,imggl,imgpt)
+        }
+        if($(this).attr("data-server")=="4"){
+//            map.clearMap();
+            fun(imgpt,imgpt,imgpt,imgpt,imggl)
+        }
+    })
+
+    var sumWidth=0;//计算头部div中所有元素的宽度
+    $('.outerWidth').each(function(){
+        var myWidth=$(this).outerWidth(true);//计算头部div中每个元素的宽度
+        sumWidth+=myWidth;
+    })
+    $("._header").css("left",-sumWidth/2+"px");//让头部标题居中
+
+    var pmd_width = parseFloat($('#marquee>div>span:nth-child(1)').css('width'));
+    function pmd() {
+        var left = parseFloat($('#marquee>div').css('left')) - 1;
+        $('#marquee>div').css('left', left + 'px');
+        if (Math.abs(left) >= pmd_width + 10) {
+            $('#marquee>div').css({'left': 0});
+        }
+    }
+    setInterval(pmd, 24)
+
+
+    function fun(img1,img2,img3,img4,img5){
+//        map.clearMap();
+        if(map.getZoom()<=9){
+            NO=1
+        }
+        if(map.getZoom()>=10&&map.getZoom()<=11){
+            NO=2
+        }if(map.getZoom()>=12){
+            NO=3
+        }
+        if(NO>=3){
+            $("#cunServer").css("display","block");
+        }
+        else{
+            $("#cunServer").css("display","none");
+        }
+        $.ajax({
+            type:'post',
+            dataType:'JSON',
+            url:'../../jxaddmin/queryConvenientCenter.do',
+            data:{qylx:NO},
+            success:function(data){
+//                console.log("1111");
+//                console.log(data)
+                var len=data.length;
+                for(var i=0;i<len;i++){
+                    if(data[i].NAME=="嘉兴市行政审批服务中心"){
+                        drawMap.addPoint([parseFloat(data[i].JD),parseFloat( data[i].WD)],80,80,'../../images/wjx.png',data[i],001)
+                    }else{
+                        if(data[i].QYLX=='市级'){
+                            drawMap.addPoint([parseFloat(data[i].JD),parseFloat( data[i].WD)],55,55,img2,data[i],001)
+                        }
+                        else if(data[i].QYLX=='县（市、区）级'){
+                            drawMap.addPoint([parseFloat(data[i].JD),parseFloat( data[i].WD)],35,35,img3,data[i],001)
+                        }else if(data[i].QYLX=='镇（街道）级'){
+                            drawMap.addPoint([parseFloat(data[i].JD),parseFloat( data[i].WD)],25,25,img4,data[i],002)
+                        }else if(data[i].QYLX=='村（社区）级'){
+                            drawMap.addPoint([parseFloat(data[i].JD),parseFloat( data[i].WD)],15,15,img5,data[i],002)
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    drawMap= {
+        addPoint: function addPoint(arr, h, w, img,details,zoomNum) {//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+            var _marker;
+            _marker= new AMap.Marker({
+                map: map,
+                position: arr,        //经纬度
+                icon: new AMap.Icon({
+                    size: new AMap.Size(h, w),  //图标大小
+                    image: img       //自定义图片
+                })
+            });
+            _marker.setExtData(details);
+//            map.setCenter(arr);
+            if(details.QYLX=='县（市、区）级'){
+                /*if(details.NAME=="南湖区行政审批局"){
+                    _marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+                        offset: new AMap.Pixel(40,10),//修改label相对于maker的位置
+                        content: details.NAME,
+                    });
+//                    _marker.setlabelzIndex({index:130})
+                }else{
+                    _marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+                        offset: new AMap.Pixel(30,5),//修改label相对于maker的位置
+                        content: details.NAME
+                    });
+                }*/
+            }
+            if(details.QYLX=='市级'){
+                _marker.setzIndex(140);
+                if(details.NAME=="嘉兴市行政审批服务中心") {
+                    _marker = new AMap.Marker({
+                        map: map,
+                        position: arr,        //经纬度
+                        icon: new AMap.Icon({
+                            size: new AMap.Size(h, w),  //图标大小
+                            image: img       //自定义图片
+                        }),
+                        zIndex:150
+                    });
+                    _marker.setExtData(details);
+
+                    _marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+                        offset: new AMap.Pixel(-60, 70),//修改label相对于maker的位置
+                        content: details.NAME
+                    });
+                }
+//                var __content= "<p style='min-width: 150px;text-align: center;color: #ffffff' class = 'kqzl'>"+details.NAME+"</p>";
+//                var __name = new AMap.Marker({
+//                    content: __content,
+//                    position: arr,
+//                    offset: new AMap.Pixel(-68,0),
+//                    map: map
+//                });
+               /* _marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+                    offset: new AMap.Pixel(30,20),//修改label相对于maker的位置
+                    content: details.NAME
+                });  周俊*/
+            }else if(details.QYLX=='县（市、区）级'){
+                _marker.setzIndex(130);
+            }else if(details.QYLX=='镇（街道）级'){
+                _marker.setzIndex(120);
+            }
+            AMap.event.addListener(_marker,'click',function(e){
+                drawMap.infoWindow(details,h,w);
+                //点击信息框，清空定时器
+//                clearInterval(num);
+//                num=null;
+//                map.setCenter([parseFloat(details.JD),parseFloat(details.WD)]);
+            });
+        },
+        createInfoWindow: function (title, content) {
+            var info = document.createElement("div");
+            info.className = "info";
+
+            //可以通过下面的方式修改自定义窗体的宽高
+            if(arguments.length==3){
+                info.style.width = "800px";
+                info.style.backgroundColor = "rgba(0,0,0,.5)";
+            }else{
+                info.style.width = "400px";
+
+            }
+            // 定义顶部标题
+            var top = document.createElement("div");
+            var titleD = document.createElement("div");
+            var closeX = document.createElement("img");
+            top.className = "info-top";
+            titleD.innerHTML = title;
+            closeX.src = "../../images/gaode-close.png";
+            closeX.onclick = drawMap.closeInfoWindow;
+
+            top.appendChild(titleD);
+            top.appendChild(closeX);
+            info.appendChild(top);
+
+            // 定义中部内容
+            var middle = document.createElement("div");
+            middle.className = "info-middle";
+            middle.style.backgroundColor = 'white';
+            middle.innerHTML = content;
+            info.appendChild(middle);
+
+            // 定义底部内容   //下方的小箭头
+            var bottom = document.createElement("div");
+            bottom.className = "info-bottom";
+            bottom.style.position = 'relative';
+            bottom.style.top = '0px';
+            bottom.style.margin = '0 auto';
+            var sharp = document.createElement("img");
+            sharp.src = "../../images/hlw-sj.png";
+            bottom.appendChild(sharp);
+            info.appendChild(bottom);
+            return info;
+        },
+        infoWindow:function(details,h,w){
+            var title;
+            title = '<span style="font-size:20px;color:#0CDAF5;">'+details.NAME+'</span>';
+            var content = [];
+            if(details.NAME=='嘉兴市行政审批服务中心'){
+                title = '<span class="ts" style="font-size:20px;color:#0CDAF5;">'+details.NAME+'</span>'+'<span class="ts" style="font-size:20px;color:#0CDAF5;">'+'南湖区行政审批局'+'</span>';
+                content.push("<div class=infoContentDiv><div class='infoTS infoTS1'>" +
+                    "<span class='infoName'>公开电话</span><p><span>"+details.LXDH+"</span></p>" +
+                    "<span class='infoName'>开放时间</span><p><span>"+details.GZSJ.split(',')[0]+"</span></p>"+
+                    "<span class='infoName'></span><p><span>"+details.GZSJ.split(',')[1]+"</span></p>"+
+//                    "<a class='_more' href='"+nanhuSpecial+"'>查看更多</a>"+
+                    "</div></div>");
+                content.push("<div class=infoContentDiv><div class=infoTS>" +
+                    "<span class='infoName'>公开电话</span><p><span>"+'89992210；89992215；82872595；82512157；89992211'+"</span></p>" +
+                    "<span class='infoName'>开放时间</span><p><span>"+'冬令时间：08:30-11:30 13:30-17:00'+"</span></p>"+
+                    "<span class='infoName'></span><p><span>"+'夏令时间：08:30-11:30 14:00-17:00'+"</span></p>"+
+                    "<a class='_more' href='"+nanhuSpecial+"'>查看更多</a>"+
+                    "</div></div>");
+            }else{
+                content.push("<div class=infoContentDiv><span class='infoName'>公开电话</span><p><span>"+details.LXDH+"</span></p></div>");
+                content.push("<div class=infoContentDiv><span class='infoName'>开放时间</span><p><span>"+details.GZSJ.split(',')[0]+"</span></p></div>");
+                content.push("<div class=infoContentDiv><span class='infoName'></span><p><span>"+details.GZSJ.split(',')[1]+"</span></p></div>");
+            }
+            if(w==55){
+                infoWindow = new AMap.InfoWindow({
+                    isCustom: true,  //使用自定义窗体
+                    content: drawMap.createInfoWindow(title, content.join("")),
+                    offset: new AMap.Pixel(w/4+4,-45)
+                });
+            }else if(w==80){
+                infoWindow = new AMap.InfoWindow({
+                    isCustom: true,  //使用自定义窗体
+                    content: drawMap.createInfoWindow(title, content.join(""),"ts"),
+                    offset: new AMap.Pixel(w/4+4,-45)
+                });
+            } else if(w==45){
+               infoWindow = new AMap.InfoWindow({
+                   isCustom: true,  //使用自定义窗体
+                   content: drawMap.createInfoWindow(title, content.join("")),
+                   offset: new AMap.Pixel(w/4+4,-45)
+               });
+           }else if(w==35){
+               infoWindow = new AMap.InfoWindow({
+                   isCustom: true,  //使用自定义窗体
+                   content: drawMap.createInfoWindow(title, content.join("")),
+                   offset: new AMap.Pixel(w/4,-45)
+               });
+           }else if(w==25){
+               infoWindow = new AMap.InfoWindow({
+                   isCustom: true,  //使用自定义窗体
+                   content: drawMap.createInfoWindow(title, content.join("")),
+                   offset: new AMap.Pixel(w/4-2,-45)
+               });
+           }
+           else if(w==15){
+               infoWindow = new AMap.InfoWindow({
+                   isCustom: true,  //使用自定义窗体
+                   content: drawMap.createInfoWindow(title, content.join("")),
+                   offset: new AMap.Pixel(w/4-5,-45)
+               });
+           }
+            map.setCenter([parseFloat(details.JD),parseFloat(details.WD)]);
+            infoWindow.open(map,[parseFloat(details.JD),parseFloat(details.WD)]);
+        },
+        closeInfoWindow:function () {
+            //关闭信息框，恢复定时器
+            map.clearInfoWindow();
+//            num=setInterval(
+//                lunbo,2000);
+        }
+    }
+    /*var i=0;
+    var timer=setInterval(function(){
+
+        if(i>15){
+            i=0;
+        }
+        i++;
+        console.log(i)
+        $(".info").eq(0).css("display","block");
+    },1000);
+    function lunbo(){//info窗口轮播
+        var num=0;//定义num计数，当num==allPoint.length时循环调用 lunbo()
+        $.each(allPoint,function(i){
+            sthj.timer[i]=setTimeout(function(){
+                //console.log(data.corpAnalysisTooltipDtoList)
+                if(allPoint[i].dataClass=="001"){
+                    num++;
+                    sthj.infoWindow(allPoint[i],001)
+
+                }else if(allPoint[i].dataClass=="002"){
+                    num++;
+                    sthj.infoWindow(allPoint[i],002)
+                }else{
+                    //debugger
+                    num++;
+                    //console.log(num)
+                    sthj.infoWindow(allPoint[i],003)
+                    if(num==allPoint.length){
+                        //n=0;
+                        //i=0
+                        lunbo();//num==allPoint.length时循环调用 lunbo()
+                    }
+                }
+            },i*4000);
+            //}
+        })
+    }*/
+    var map,infoWindow,isHover,qh,_qh,loadMap
+    window.onload=function(){
+        $('#serverCenter li:eq(0)').addClass("active");
+        //加载地图的方法
+        map = new AMap.Map('map', {
+            mapStyle: 'amap://styles/16e4e3ccd1f66f229a6276fe149db8df',//样式URL
+            zooms:[10,17]
+        });
+        map.setCenter([120.689953, 30.734652]);
+        map.setZoom(12);
+        /*fun(imgpt,imgpt,imgpt,imgpt,imgpt)*/
+//        map.clearMap();
+//        $.ajax({
+//            type: 'post',
+//            dataType: 'JSON',
+//            url: '../../jxaddmin/queryConvenientCenter.do',
+//            data: {qylx: 2},
+//            success: function (data) {
+//                console.log(data)
+//                var len = data.length;
+//                for (var i = 0; i < len; i++) {
+//                    if (data[i].QYLX == '市级') {
+//                        drawMap.addPoint([parseFloat(data[i].JD), parseFloat(data[i].WD)], 55, 55, '../../images/_biu.png', data[i], 001)
+//                    }
+//                }
+//            }
+//        })
+        AMap.event.addListener(map,'zoomchange',function(e){    //地图缩放级别更改后触发
+            if(isHover){
+                map.clearMap();
+                loadMap(_qh,qh);
+            }
+            fun(imgpt,imgpt,imgpt,imgpt,imgpt)
+        });
+        AMap.event.addListener(map,'click',function(e){    //地图点击事件
+            map.clearInfoWindow();
+//            num=null;
+        });
+
+        //初始化调用定时器实现轮播
+        num=setInterval(function(){
+           /* console.log("#####")*/
+            lunbo();
+        },3000);
+
+        var colors = [
+            'transparent'
+        ];
+        var point = [
+            {name: '平湖市', po: '121.114666, 30.698921'},
+            {name: '海盐县', po: '120.942017, 30.522223'},
+            {name: '南湖区', po: '120.829953, 30.734652'},
+            {name: '嘉善县', po: '120.921871, 30.891352'},
+            {name: '秀洲区', po: '120.680431, 30.763323'},
+            {name: '海宁市', po: '120.688821, 30.475544'},
+            {name: '桐乡市', po: '120.521085, 30.629065'}
+        ];
+        var features = [];
+        var adcodes = [330400];
+        AMapUI.loadUI(['geo/DistrictExplorer'], function (DistrictExplorer) {
+            //创建一个实例
+            districtExplorer = new DistrictExplorer({
+                eventSupport: true, //打开事件支持
+                map: map
+            });
+
+            function renderAreaNode(areaNode) {
+                features = [];
+                //绘制子区域
+                districtExplorer.renderSubFeatures(areaNode, function (feature, i) {
+                    var fillColor = colors[i % colors.length];
+                    var strokeColor = colors[colors.length - 1 - i % colors.length];
+                    features.push(feature);
+                    return {
+                        cursor: 'default',
+                        bubble: true,
+                        strokeColor: strokeColor, //线颜色
+                        strokeOpacity: 1, //线透明度
+                        strokeWeight: 1, //线宽
+                        fillColor: fillColor, //填充色
+                        fillOpacity: 1 //填充透明度
+                    };
+                });
+
+                //绘制父区域
+                districtExplorer.renderParentFeature(areaNode, {
+                    cursor: 'default',
+                    bubble: true,
+                    strokeColor: 'black', //线颜色
+                    strokeOpacity: 1, //线透明度
+                    strokeWeight: 1, //线宽
+                    fillColor: null, //填充色
+                    fillOpacity: 1//填充透明度
+                });
+            }
+
+            function renderClickFeatures(feature) {
+                //绘制点击区域
+                districtExplorer.renderFeature(feature, {
+                    cursor: 'default',
+                    bubble: true,
+                    strokeColor: '#000', //线颜色
+                    strokeOpacity: 1, //线透明度
+                    strokeWeight: 1, //线宽
+                    fillColor: '#16a1bb', //填充色
+                    fillOpacity: 1 //填充透明度
+                });
+            }
+
+            loadMap=function(adcodes, clickFeature) {
+                districtExplorer.loadMultiAreaNodes(adcodes, function (error, areaNodes) {
+                    //清除已有的绘制内容
+                    districtExplorer.clearFeaturePolygons();
+                    for (var i = 0, len = areaNodes.length; i < len; i++) {
+                        renderAreaNode(areaNodes[i]);
+                    }
+                    //更新地图视野
+                    //map.setFitView(districtExplorer.getAllFeaturePolygons());
+                    if (clickFeature) {
+                        renderClickFeatures(clickFeature)
+                    }
+                });
+            }
+            loadMap(adcodes);
+            //feature被点击
+            districtExplorer.on('featureClick', function (e, feature) {
+                //
+            });
+            //监听feature的hover事件
+            districtExplorer.on('featureMouseout featureMouseover', function(e, feature) {
+                isHover = e.type === 'featureMouseover';
+                if (isHover) {
+                    clearInterval(num);
+                    num=null;
+                    //                    console.log(feature.properties.name)
+                    if(feature.properties.name=="南湖区"){
+                        qh=feature
+                        _qh=adcodes
+                        loadMap(adcodes, feature);
+                        var marker = new AMap.Marker({ //添加自定义点标记
+                            map: map,
+                            position: [120.829953, 30.734652], //基点位置
+                            offset: new AMap.Pixel(-36, -15), //相对于基点的偏移位置
+                            draggable: false,  //是否可拖动
+                            content: '<div class="marker-xxqy-name">南湖区</div>'   //自定义点标记覆盖物内容
+                        });
+                       $(".map_deatils1").css("display","none");
+                       $(".map_deatils3").css("display","none");
+                       $(".map_deatils2").css("display","block");
+                    }else if(feature.properties.name=="秀洲区"){
+                        qh=feature
+                        _qh=adcodes
+                        loadMap(adcodes, feature);
+                        var marker = new AMap.Marker({ //添加自定义点标记
+                            map: map,
+                            position: [120.680431, 30.763323], //基点位置
+                            offset: new AMap.Pixel(-36, -15), //相对于基点的偏移位置
+                            draggable: false,  //是否可拖动
+                            content: '<div class="marker-xxqy-name">秀洲区</div>'   //自定义点标记覆盖物内容
+                        });
+                        $(".map_deatils1").css("display","none");
+                        $(".map_deatil2").css("display","none");
+                        $(".map_deatils3").css("display","block");
+                    }else{
+//                        map.clearMap();
+                        num=setInterval(lunbo,3000);
+                    }
+                }else{
+                    qh='';
+                    _qh='';
+                    isHover='';
+                    $(".map_deatils2").css("display","none");
+                    $(".map_deatils3").css("display","none");
+                    $(".map_deatils1").css("display","block");
+                    //离开悬浮区，恢复定时器
+//                    if(infoWindow){
+//                        console.log(infoWindow.getIsOpen())
+//                    }else{
+////                        map.clearMap();
+////                        lunbo();
+//                    }
+                }
+            });
+        });
+    }
+
+
+
+
+</script>
+</body>
+</html>

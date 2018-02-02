@@ -1,0 +1,85 @@
+package com.cetc28.idata.dto;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/27 16:31
+ * 描述信息：
+ *****************************************************************/
+public class JxUtilityManteFaultByMonth {
+    private String utilityTypeDes;
+    private int noFault;
+    private double perFault;
+
+    private String faultFactDes;
+    private int noFaultFact;
+    private double perFaultFact;
+    private int noFaultAll;
+
+    private String dateYm;
+
+    public int getNoFault() {
+        return noFault;
+    }
+
+    public void setNoFault(int noFault) {
+        this.noFault = noFault;
+    }
+
+    public double getPerFault() {
+        return perFault;
+    }
+
+    public void setPerFault(double perFault) {
+        this.perFault = perFault;
+    }
+
+    public int getNoFaultFact() {
+        return noFaultFact;
+    }
+
+    public void setNoFaultFact(int noFaultFact) {
+        this.noFaultFact = noFaultFact;
+    }
+
+    public double getPerFaultFact() {
+        return perFaultFact;
+    }
+
+    public void setPerFaultFact(double perFaultFact) {
+        this.perFaultFact = perFaultFact;
+    }
+
+    public int getNoFaultAll() {
+        return noFaultAll;
+    }
+
+    public void setNoFaultAll(int noFaultAll) {
+        this.noFaultAll = noFaultAll;
+    }
+
+    public String getDateYm() {
+        return dateYm;
+    }
+
+    public void setDateYm(String dateYm) {
+        this.dateYm = dateYm;
+    }
+
+    public String getUtilityTypeDes() {
+        return utilityTypeDes;
+    }
+
+    public void setUtilityTypeDes(String utilityTypeDes) {
+        this.utilityTypeDes = utilityTypeDes;
+    }
+
+    public String getFaultFactDes() {
+        return faultFactDes;
+    }
+
+    public void setFaultFactDes(String faultFactDes) {
+        this.faultFactDes = faultFactDes;
+    }
+}

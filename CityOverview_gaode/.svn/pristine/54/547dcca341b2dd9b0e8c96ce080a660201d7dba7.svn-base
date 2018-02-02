@@ -1,0 +1,118 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    div.wlbzLine{
+      width: 100%;
+      height: 100%;
+    }
+    div#wlbzLine{
+      height: 85%;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+<div class="wlbzLine">
+  <p class="headerTitle">
+    网络保障
+  </p>
+  <%--社保自助服务开通率折线图--%>
+  <div id="wlbzLine">
+  </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+  var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+  var myChart=echarts.init(document.getElementById("wlbzLine"));
+  function wlbz(myData){
+    var option = {
+      tooltip : {
+        trigger: 'axis',
+        formatter: "{b}:{c}%"
+      },
+      legend: {
+        orient : 'vertical',
+        x : 'right',
+        y : 'bottom',
+        data:['2016年','2017年'],
+        textStyle:text_style
+      },
+      polar : [
+        {
+          indicator : [
+            { text: '固定宽带普及率', min: 83,max: 95},
+            { text: '移动宽带普及率', min: 86,max: 96},
+            { text: '光纤到户渗透率', min: 75,max: 88},
+            { text: '公共场所WIFI覆盖率', min: 75,max: 88}
+          ],
+          name:{
+            textStyle:text_style
+          }
+        }
+      ],
+      calculable : false,
+      series : [
+        {
+          name: '网络保障',
+          type: 'radar',
+          itemStyle: {normal: {borderWidth: 0,label:{show:true,textStyle:{fontSize:14,color:'#fff'}, formatter: '{c}%'}}},
+          data : myData
+        }
+      ]
+    };
+
+    myChart.setOption(option);
+  }
+//  查询近三年网络保障数据
+  $.ajax({
+    type:"POST",
+    url:'../../jxutility/internet/internetCoverRate.do?bH='+qhbh+'&yearSize=3',
+    dataType:'json',
+    success:function(data){
+      console.log("2222");
+      console.log(data)
+      var myData=[];
+
+//      $.each(data,function(i){
+        var dataValue1=[];
+        var date2=data[1].dateY+'年',
+                data1=data[1].fixedBbRate*100,
+                data2=data[1].mobileBbRate*100,
+                data3=data[1].fiberToHomeRate*100,
+                data4=data[1].publicWifiRate*100;
+        dataValue1.push(data1,data2,data3,data4);
+        myData.push({"value":dataValue1,"name":date2});
+      var dataValue2=[];
+      var date=data[0].dateY+'年',
+              data1=data[0].fixedBbRate*100,
+              data2=data[0].mobileBbRate*100,
+              data3=data[0].fiberToHomeRate*100,
+              data4=data[0].publicWifiRate*100;
+      dataValue2.push(data1,data2,data3,data4);
+      myData.push({"value":dataValue2,"name":date});
+//        data.push(data[i].elecPowerLoadingRate*100);
+//      });
+      wlbz(myData);
+    }
+  });
+</script>
+</body>
+</html>

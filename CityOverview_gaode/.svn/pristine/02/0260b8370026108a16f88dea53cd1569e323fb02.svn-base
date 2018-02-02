@@ -1,0 +1,94 @@
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.dto.JxUtilityManteAlarmPointDto;
+import com.cetc28.idata.dto.JxUtilityManteFaultByMonth;
+import com.cetc28.idata.dto.JxUtilityManteFaultDto;
+import com.cetc28.idata.service.IJxUtilityMainteService;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+import java.util.Map;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/22 19:55
+ * 描述信息：
+ *****************************************************************/
+@Controller
+@RequestMapping("/jxutility")
+public class JxUtilityMainteController {
+    @Autowired
+    private IJxUtilityMainteService iJxUtilityMainteService;
+
+    @RequestMapping("/fault/faultPointAll.do")
+    @ResponseBody
+    public List<JxUtilityManteFaultDto> findFaultAll() {
+        return iJxUtilityMainteService.findLatestFaultAll();
+    }
+
+    @RequestMapping("/fault/faultLastMonthDate.do")
+    @ResponseBody
+    public Map findLastMonthDate() {
+        return  iJxUtilityMainteService.findLastMonthDate();
+    }
+
+   /* @RequestMapping("/fault/faultPointByUtility.do")
+    @ResponseBody
+    public List<JxUtilityManteFaultDto> findFaultByUt(String utilityTypeDes, String dateBegin, String dateEnd, String faultState) {
+        return iJxUtilityMainteService.findLatestFaultByUt(utilityTypeDes, dateBegin, dateEnd,faultState);
+    }*/
+
+    /*@RequestMapping("/fault/faultListByUtility.do")
+    @ResponseBody
+    public List<JxUtilityManteFaultDto> findLatestFaultListByUt(String utilityTypeDes,String orderDes, String dateBegin, String dateEnd, String faultState) {
+        return iJxUtilityMainteService.findLatestFaultListByUt(utilityTypeDes, orderDes, dateBegin, dateEnd,faultState);
+    }*/
+
+    @RequestMapping("/fault/findFault.do")
+    @ResponseBody
+    public List<List> findFault(String utilityTypeDes, String dateBegin,
+                                                   String dateEnd, String faultStateDes,
+                                                   String order) {
+        return iJxUtilityMainteService.findFault(utilityTypeDes.trim(), dateBegin.trim(), dateEnd.trim(), faultStateDes.trim(),order.trim());
+    }
+
+    @RequestMapping("/fault/faultNoByUtility.do")
+    @ResponseBody
+    public List<JxUtilityManteFaultByMonth> findLatestFaultNum() {
+        return iJxUtilityMainteService.findLatestFaultNum();
+    }
+
+    @RequestMapping("/fault/faultNoByFact.do")
+    @ResponseBody
+    public List<JxUtilityManteFaultByMonth> findLatestFaultFactNum() {
+        return iJxUtilityMainteService.findLatestFaultFactNum();
+    }
+
+
+    @RequestMapping("/fault/faultTendency.do")
+    @ResponseBody
+    public List<List> findFaultTendency(Integer monthSize) {
+        return iJxUtilityMainteService.findFaultTendency(monthSize);
+    }
+
+    @RequestMapping("/alarm/alarmPointAll.do")
+    @ResponseBody
+    public List<JxUtilityManteAlarmPointDto> findAlarmPointAll() {
+        return iJxUtilityMainteService.findLatestAlarmPointAll();
+    }
+
+    @RequestMapping("/device/deviceState.do")
+    @ResponseBody
+    public List<Map> findDeviceStateAll() {
+        return iJxUtilityMainteService.findLatestDeviceStateAll();
+    }
+}

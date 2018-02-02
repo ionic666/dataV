@@ -1,0 +1,523 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: jianglulu
+  Date: 2017/9/26
+  Time: 17:00
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="toastr.jsp" %>
+<html>
+<head>
+    <title>测试页面</title>
+    <link rel="stylesheet" type="text/css" href="../myCss/bootstrap.min.css">
+    <style type="text/css">
+        body {
+            background-color: #34403E;
+            margin: 0;
+            padding: 0;
+            font-family: "microsoft yahei";
+        }
+        a:hover{
+            text-decoration: none;
+        }
+
+        #left {
+            width: 20%;
+            height: 100%;
+            float: left;
+        }
+
+        #left #leftlist {
+            color: #0CDAF5;
+            width: 100%;
+            height: 98%;
+            padding: 0;
+            padding-top: 10%;
+        }
+
+        #left #leftlist > li {
+            list-style-type: none;
+            min-height: 60px;
+            padding-left: 20%;
+            line-height: 40px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #left #leftlist .second {
+            padding: 0;
+            display: none;
+        }
+
+        #left #leftlist .second li {
+            list-style-type: none;
+            height: 35px;
+            width: 100%;
+            font-size: 15px;
+            padding-left: 20%;
+            position: relative;
+        }
+
+        #leftlist .second li.active {
+            background-color: #313C3E;
+        }
+
+        #left #leftlist .second li i.iactive {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            position: absolute;
+            right: 5%;
+            top: 40%;
+            background-image: url("../images/sanjiao.png");
+
+        }
+
+        div {
+            background-color: #222A2B;
+        }
+
+        #bh, #time {
+            width: 200px;
+            height: 35px;
+            border: 1px solid #3E757D;
+            background-color: #222A2C;
+            padding-left: 10px;
+            outline: none;
+            color: #0CDAF5;
+            margin-left: 3%;
+        }
+
+        #center {
+            margin-left: 2%;
+            width: 73%;
+            height: 100%;
+            float: left;
+            overflow: auto;
+            padding-top: 1%;
+            position: relative;
+        }
+
+        #divCenterTable {
+            width: 100%;
+            height: 90%;
+            padding-top: 1%;
+        }
+
+        #centerTable {
+            color: #0CDAF5;
+            width: 100%;
+            text-align: center;
+        }
+        #centerTable > thead{
+            display: table;
+            width: calc(100% - 1.2em);
+        }
+        #centerTable > tbody{
+            display: block;
+            width: 100%;
+            height: 600px;
+            overflow-y: scroll;
+        }
+        #centerTable > tbody>tr>td{
+            width: 17.5%;
+            padding: 0.5em 1em;
+            text-align: center;
+        }
+        #centerTable thead th{
+            text-align: center;
+            height: 30px;
+        }
+        .table>thead>tr>th{
+            border-bottom: 0;
+        }
+        .table-striped > tbody > tr:nth-of-type(even), .table-striped > thead > tr > th {
+            background-color: #2A3335;
+        }
+
+        #centerTable td {
+            border: 0;
+            vertical-align: middle;
+        }
+
+        input {
+            background-color: transparent;
+            text-align: center;
+            border: 0px;
+        }
+        #centerTable input{
+            border: 1px solid transparent;
+        }
+        #centerTable input.active{
+            border-color: #19DAF5;
+        }
+        .zbsj-change-btn {
+            position: absolute;
+            bottom: 3%;
+            right: 49%;
+        }
+
+        .zbsj-change-btn > button {
+            outline: none;
+            border: 0;
+            padding: 5px 20px;
+            font-size: 16px;
+            background-color: #10CFE8;
+            color: #fff;
+            font-weight: bold;
+
+        }
+
+        /*保存成功提示消息*/
+        #warnning {
+            width: 200px;
+            height: 100px;
+            color: #0CDAF4;
+            font-weight: bold;
+            background-color: #2A383B;
+            border: 1px solid #3A858F;
+            line-height: 100px;
+            text-align: center;
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            display: none;
+        }
+
+        /*关闭按钮*/
+        #warnning span {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            right: 5px;
+            top: -41px;
+            cursor: pointer;
+        }
+
+       /*滚动条样式*/
+        ::-webkit-scrollbar {
+            background-color: #1B1B1D;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+    </style>
+</head>
+<body>
+<div id="left">
+    <ul id="leftlist">
+
+    </ul>
+</div>
+
+<div id="center">
+    <div id="choose">
+        <select id="bh"></select>&nbsp;&nbsp;&nbsp;&nbsp;<select id="time"></select>
+    </div>
+    <div id="divCenterTable">
+        <table id="centerTable" class="table table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th style="width: 33.3%">名称</th>
+                    <th style="width: 33.3%">当前值</th>
+                    <th style="width: 33.3%">单位</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    <%--按钮当点击的时候对当前值进行保存--%>
+    <div id="savediv" class="zbsj-change-btn">
+        <button id="save">保存</button>
+    </div>
+    <div id="updatediv" class="zbsj-change-btn">
+        <button id="update">修改</button>
+    </div>
+    <%--保存成功提示--%>
+    <div id="warnning">
+        保存成功！
+        <span>x</span>
+    </div>
+</div>
+
+
+<script src="../map/js/jquery-1.11.3.js"></script>
+<script type="text/javascript">
+    //保存按钮隐藏
+    $("#warnning span").click(function () {
+        $("#warnning").hide();
+    });
+    <%--点击样式--%>
+    $("#leftlist").delegate(".second li", "click", function () {
+        //移除同级悬浮背景样式
+        $(this).siblings().removeClass("active");
+//        移除不同级悬浮背景样式
+        $(this).parent().parent().siblings().children().children().removeClass("active");
+        //移除同级三角样式
+        $(this).siblings().children().removeClass("iactive");
+//        移除不同级三角样式
+        $(this).parent().parent().siblings().children().children().children().removeClass("iactive");
+//        添加悬浮背景样式
+        $(this).addClass("active");
+//        添加右侧三角
+        $(this).children().addClass("iactive");
+    });
+    $("#leftlist").delegate(".first", "click", function () {
+        $(this).siblings().children().css("display", "none");
+        $(this).children().css("display", "block");
+    }),
+            $(function () {
+                $("#updatediv").show();
+                $("#savediv").hide();
+                // 默认发送ajax请求列表
+                function ajaxEcommerce1() {
+                    $.ajax({
+                        type: 'post',
+                        url: "../res/listResourceTable.do",
+                        dataType: 'JSON',
+                        success: function (data) {
+                            dataAssignment(data);
+                            //初始化默认选中第一个
+                            $("#leftlist .first:eq(0)").children().css("display", "block");
+                            $("#leftlist .first:eq(0) .second li:eq(0)").addClass("active");
+                            $("#leftlist .first:eq(0) .second li:eq(0)").children().addClass("iactive");
+                        }
+                    });
+                }
+
+                //初始化左边的列表
+                function dataAssignment(data) {
+                    var nav = "";
+                    for (var i = 0; i < data.length; i++) {
+                        var list = data[i].mapInfos;
+                        var secondNav = "";
+                        nav += "<li class='first'>" + data[i].indicatorName + "<ul class='second'>";
+                        for (var j = 0; j < list.length; j++) {
+                            var listdata = list[j];
+                            secondNav += "<li tableName='" + listdata.TABLE_NAME + "'>" + listdata.NAME + "<i></i></li>";
+                        }
+                        nav += secondNav + "</ul></li>";
+                        $("#leftlist").html(nav)
+                    }
+
+                    addOnclick();
+                    var tableName = data[0].mapInfos[0].TABLE_NAME;
+                    getData(tableName);
+                }
+
+
+                function addOnclick() {
+                    $("#leftlist .second").children().on("click", function () {
+                        $("#updatediv").show();
+                        $("#savediv").hide();
+                        var tableName = $(this).attr("tableName");
+                        getData(tableName);
+                    });
+                }
+
+                //获取中间表格数据
+                function getData(tableName) {
+                    var tableName = tableName;
+                    var bhValue;
+                    var fieldNameList = "";
+                    var timeValue;
+                    $.ajax({
+                        type: 'post',
+                        url: "${pageContext.request.contextPath}/res/queryFieldData.do",
+                        dataType: 'JSON',
+                        data: {
+                            tableName: tableName
+                        },
+                        success: function (data) {
+
+                            //初始化中间表格
+                            $("#bh").empty();
+                            var bh = [];
+                            bh = data.bhrange;
+                            if (bh == null) {
+                                bhValue = null;
+                            } else {
+                                for (var i = 0; i < bh.length; i++) {
+                                    $("#bh").append("<option value='"+bh[i].bhValue+"'>" + bh[i].mc + "</option>");
+                                }
+                                bhValue = bh[0].bhValue;
+                            }
+
+
+                            $("#time").empty();
+                            var time = data.timerange;
+                            timeValue = time[0];
+                            for (var i = 0; i < time.length; i++) {
+                                $("#time").append("<option>" + time[i] + "</option>");
+                            }
+
+
+                            var fieldList = data.field;
+
+
+                            var str="";
+                            for (var i = 0; i < fieldList.length; i++) {
+                                var field = fieldList[i];
+                                str+="<tr fieldName='" + field.name + "' tableName='" + field.table_name + "'><td >" + field.meaning + "</td><td>/</td><td >" + field.unit + "</td></tr>";
+                                if (i == fieldList.length - 1) {
+                                    fieldNameList = fieldNameList + field.name;
+                                } else {
+                                    fieldNameList = fieldNameList + field.name + ",";
+                                }
+                            }
+                            $("#centerTable tbody").html(str);
+                            //组装参数用于修改
+                            var obj = {};
+                            obj.tableName = tableName;
+                            obj.fieldNames = fieldNameList;
+                            $("#time").data("data", obj);
+                            $("#bh").data("data", obj);
+                            //给当前值赋值
+                            $.ajax({
+                                type: 'post',
+                                url: "${pageContext.request.contextPath}/res/queryData.do",
+                                dataType: 'JSON',
+                                data: {
+                                    tableName: tableName,
+                                    timeValue: timeValue,
+                                    bhValue: bhValue,
+                                    fieldNames: fieldNameList
+                                },
+                                success: function (data2) {
+                                    for (var i = 0; i < data2.length; i++) {
+//                                $("#centerTable tr").eq(i+1).children().eq(2).html(data2[i]);
+                                        $("#centerTable tr").eq(i + 1).children().eq(1).html("<input type='text' readOnly='true' value='" + data2[i] + "'>");
+                                    }
+                                    $("#save").data("data", obj);
+                                }
+                            });
+
+                        }
+                    });
+
+                }
+
+                //时间下拉框的change事件
+                $("#time").change(function () {
+                    $("#updatediv").show();
+                    $("#savediv").hide();
+                    var bhValue = $(bh).children('option:selected').val();
+                    var timeValue = $(time).children('option:selected').val();
+                    var data = $(this).data("data");
+                    $.ajax({
+                        type: 'post',
+                        url: "${pageContext.request.contextPath}/res/queryData.do",
+                        dataType: 'JSON',
+                        data: {
+                            tableName: data.tableName,
+                            timeValue: timeValue,
+                            bhValue: bhValue,
+                            fieldNames: data.fieldNames
+                        },
+                        success: function (data2) {
+
+                            for (var i = 0; i < data2.length; i++) {
+                                $("#centerTable tr").eq(i + 1).children().eq(1).html("<input type='text' readOnly='true' value='" + data2[i] + "'>");
+                            }
+                            //为保存时获得数据
+                            $("#save").data("data", data);
+                        }
+                    });
+                });
+
+                //区划下拉框change事件
+                $("#bh").change(function () {
+                    var bhValue = $(bh).children('option:selected').val();
+                    var datat = $(this).data("data");
+                    $.ajax({
+                        type: 'post',
+                        url: "${pageContext.request.contextPath}/res/getTimeRangeAndData.do",
+                        dataType: 'JSON',
+                        data: {
+                            tableName: datat.tableName,
+                            bhValue: bhValue,
+                            fieldNames: datat.fieldNames
+                        },
+                        success: function (data) {
+                            $("#time").empty();
+                            var time = data.timeRange;
+                           /* $("#time").append("<option value='1'>===请选择===</option>")*/
+                            for (var i = 0; i < time.length; i++) {
+                                $("#time").append("<option>" + time[i] + "</option>");
+                            }
+
+                            var data2=data.value;
+                            for (var i = 0; i < data2.length; i++) {
+                                $("#centerTable tr").eq(i + 1).children().eq(1).html("<input type='text' readOnly='true' value='" + data2[i] + "'>");
+                            }
+                            //为保存时获得数据
+                            $("#save").data("data", datat);
+                        }
+                    });
+
+                });
+
+                //更新按钮的点击事件
+                $("#update").click(function () {
+                    $("#centerTable input").attr("readOnly", false);
+                    $("#centerTable input").addClass("active");
+                    $("#savediv").show();
+                    $("#updatediv").hide();
+                });
+
+                //保存按钮点击事件
+                $("#save").click(function () {
+//                    $("#warnning").show();
+                    var bhValue = $(bh).children('option:selected').val();
+                    var timeValue = $(time).children('option:selected').val();
+                    var data = $(this).data("data");
+                    var inputList = $("#centerTable input");
+                    var fieldvalues = '';
+                    for (var i = 0; i < inputList.length; i++) {
+                        var value = inputList.eq(i).val();
+                        if (i == inputList.length - 1) {
+                            fieldvalues = fieldvalues + value
+
+                        } else {
+                            fieldvalues = fieldvalues + value + ",";
+                        }
+                    }
+                    $.ajax({
+                        type: 'post',
+                        url: "${pageContext.request.contextPath}/res/updateData.do",
+                        dataType: 'JSON',
+                        data: {
+                            tableName: data.tableName,
+                            timeValue: timeValue,
+                            bhValue: bhValue,
+                            fieldNames: data.fieldNames,
+                            fieldValues: fieldvalues
+                        },
+                        success: function (data) {
+//                            toastr["success"]("修改成功");
+                            if (data == "success") {
+                                $("#centerTable input").removeClass("active");
+                                $("#warnning").show().slideDown(1000, function () {
+                                    setTimeout("$('#warnning').slideUp(1000);", 1000);
+                                });
+                            }
+                        }
+                    });
+                    $("#centerTable input").attr("readOnly", "true");
+                    $("#updatediv").show();
+                    $("#savediv").hide();
+                });
+
+
+                ajaxEcommerce1();
+
+            });
+
+
+</script>
+</body>
+</html>

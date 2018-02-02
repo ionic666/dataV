@@ -1,0 +1,204 @@
+package com.cetc28.idata.dto;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/13 19:52
+ * 描述信息：数据类，按年统计的城市生命线宏观数据
+ *****************************************************************/
+public class JxUtilityStatisByYear {
+    private String Bh;                            //区划编号
+    private String DateY;                            //统计日期（YYYY）
+
+    private double pipeDrainageLength;              //排水管道长度
+    private double heatingArea;              //供热面积
+
+    private double pipeWaterLenth;              //供水管道长度
+    private double pipeWaterSurveil;              //智能化供水管道长度
+    private double pipeElecLength;              //供电管网长度
+    private double pipeElecSurveil;              //智能化供电管网长度
+    private double pipeGasLength;              //供气管道长度
+    private double pipeGasSurveil;              //智能化供气管道长度
+    private double pipeDrainageSurveil;              //智能化供气管道长度
+    private double pipeHeatingLength;              //供热管道长度
+    private double pipeHeatingSurveil;              //智能化供热管道长度
+    private double pipeCoverRate; //综合管廊覆盖率
+
+    private double tunnelForNewroadLength;              //新建道路地下管廊长度
+    private double newRoadLenth;              //新建道路长度
+    private double newRoadPipeCoverRate;//智能化监测管理率
+
+    private double fixedBbRate;          //固定宽带普及率
+    private double mobileBbRate;          //移动宽带普及率
+    private double fiberToHomeRate;          //光纤到户渗透率
+    private double publicWifiRate;          //公共WIFI覆盖率
+
+
+    public String getBh() {
+        return Bh;
+    }
+    public void setBh(String bh) {
+        Bh = bh;
+    }
+
+    public String getDateY() {
+        return DateY;
+    }
+
+    public void setDateY(String dateY) {
+        DateY = dateY;
+    }
+
+    public double getPipeWaterLenth() {
+        return pipeWaterLenth;
+    }
+
+    public void setPipeWaterLenth(double pipeWaterLenth) {
+        this.pipeWaterLenth = pipeWaterLenth;
+    }
+
+    public double getPipeWaterSurveil() {
+        return pipeWaterSurveil;
+    }
+
+    public void setPipeWaterSurveil(double pipeWaterSurveil) {
+        this.pipeWaterSurveil = pipeWaterSurveil;
+    }
+
+    public double getPipeElecLength() {
+        return pipeElecLength;
+    }
+
+    public void setPipeElecLength(double pipeElecLength) {
+        this.pipeElecLength = pipeElecLength;
+    }
+
+    public double getPipeElecSurveil() {
+        return pipeElecSurveil;
+    }
+
+    public void setPipeElecSurveil(double pipeElecSurveil) {
+        this.pipeElecSurveil = pipeElecSurveil;
+    }
+
+    public double getPipeGasLength() {
+        return pipeGasLength;
+    }
+
+    public void setPipeGasLength(double pipeGasLength) {
+        this.pipeGasLength = pipeGasLength;
+    }
+
+    public double getPipeGasSurveil() {
+        return pipeGasSurveil;
+    }
+
+    public void setPipeGasSurveil(double pipeGasSurveil) {
+        this.pipeGasSurveil = pipeGasSurveil;
+    }
+
+    public double getPipeDrainageLength() {
+        return pipeDrainageLength;
+    }
+
+    public void setPipeDrainageLength(double pipeDrainageLength) {
+        this.pipeDrainageLength = pipeDrainageLength;
+    }
+
+    public double getPipeDrainageSurveil() {
+        return pipeDrainageSurveil;
+    }
+
+    public void setPipeDrainageSurveil(double pipeDrainageSurveil) {
+        this.pipeDrainageSurveil = pipeDrainageSurveil;
+    }
+
+    public double getPipeHeatingLength() {
+        return pipeHeatingLength;
+    }
+
+    public void setPipeHeatingLength(double pipeHeatingLength) {
+        this.pipeHeatingLength = pipeHeatingLength;
+    }
+
+    public double getPipeHeatingSurveil() {
+        return pipeHeatingSurveil;
+    }
+
+    public void setPipeHeatingSurveil(double pipeHeatingSurveil) {
+        this.pipeHeatingSurveil = pipeHeatingSurveil;
+    }
+
+    public double getHeatingArea() {
+        return heatingArea;
+    }
+
+    public void setHeatingArea(double heatingArea) {
+        this.heatingArea = heatingArea;
+    }
+
+    public double getTunnelForNewroadLength() {
+        return tunnelForNewroadLength;
+    }
+
+    public void setTunnelForNewroadLength(double tunnelForNewroadLength) {
+        this.tunnelForNewroadLength = tunnelForNewroadLength;
+    }
+
+    public double getNewRoadLenth() {
+        return newRoadLenth;
+    }
+
+    public void setNewRoadLenth(double newRoadLenth) {
+        this.newRoadLenth = newRoadLenth;
+    }
+
+    public double getPipeCoverRate() {
+        return pipeCoverRate;
+    }
+
+    public void setPipeCoverRate(double pipeCoverRate) {
+        this.pipeCoverRate = pipeCoverRate;
+    }
+
+    public double getNewRoadPipeCoverRate() {
+        return newRoadPipeCoverRate;
+    }
+
+    public void setNewRoadPipeCoverRate(double newRoadPipeCoverRate) {
+        this.newRoadPipeCoverRate = newRoadPipeCoverRate;
+    }
+
+    public double getFixedBbRate() {
+        return fixedBbRate;
+    }
+
+    public void setFixedBbRate(double fixedBbRate) {
+        this.fixedBbRate = fixedBbRate;
+    }
+
+    public double getMobileBbRate() {
+        return mobileBbRate;
+    }
+
+    public void setMobileBbRate(double mobileBbRate) {
+        this.mobileBbRate = mobileBbRate;
+    }
+
+    public double getFiberToHomeRate() {
+        return fiberToHomeRate;
+    }
+
+    public void setFiberToHomeRate(double fiberToHomeRate) {
+        this.fiberToHomeRate = fiberToHomeRate;
+    }
+
+    public double getPublicWifiRate() {
+        return publicWifiRate;
+    }
+
+    public void setPublicWifiRate(double publicWifiRate) {
+        this.publicWifiRate = publicWifiRate;
+    }
+}

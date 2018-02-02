@@ -1,0 +1,155 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+
+import com.cetc28.PeopleBenefitService.model.JxEcoBrandBuild;
+import com.cetc28.PeopleBenefitService.model.JxEcoManufactureCompre;
+import org.apache.ibatis.annotations.Param;
+import com.cetc28.PeopleBenefitService.model.JxEcoOpenDevelopment;
+import com.cetc28.ConfigurationManagement.model.Xzqh;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/9/21.
+ */
+public interface JxEcoManufactureCompreMapper {
+
+    /**
+     * 查询综合实力
+     * @param map（year,fromMonth,toMonth）
+     * @return
+     */
+    List<JxEcoManufactureCompre> queryByCondition(Map map);
+
+    /**
+     * 查询开放发展情况
+     * @param year
+     * @return
+     */
+    JxEcoOpenDevelopment queryCuYearOpenDev(String year);
+
+    /**
+     * 查询品牌
+     * @param list
+     * @return
+     */
+    List<JxEcoBrandBuild> queryBrandBuild(List list);
+
+    /**
+     * 查询最大年
+     * @return
+     */
+    List<Integer> queryMaxYear();
+
+    /**
+     * 查询年的最大月
+     * @param year
+     * @return
+     */
+    List<Integer> queryMonth(Integer year);
+
+    /**
+     * 查询综合实力
+     * @param map（year,month）
+     * @return
+     */
+    Map queryJxEcoManS(Map map);
+
+    /**
+     * 查询千亿产业的产值及同比增长率
+     * @param year
+     * @param month
+     * @return
+     */
+    public abstract Map queryBillionIndustry(@Param("year") Integer year,@Param("month") Integer month);
+
+    /**
+     * 获取年份范围
+     * @return
+     */
+    public List<Integer> queryYearsIndustry();
+
+    /**
+     * 获取月份范围
+     * @return
+     */
+    public List<Integer> queryMonthsIndustry(Integer year);
+
+
+    /**
+     * 查询创新信息
+     * @param year
+     * @param month
+     * @return
+     */
+    public abstract Map queryInnovationInfo(@Param("year") Integer year,@Param("month") Integer month);
+
+    /**
+     * 获取年份范围
+     * @return
+     */
+    public List<Integer> queryYearsInnovation();
+
+    /**
+     * 获取月份范围
+     * @return
+     */
+    public List<Integer> queryMonthsInnovation(Integer year);
+
+    /**
+     * 查询制作业能源消耗信息
+     * @param year
+     * @param month
+     * @return
+     */
+    public abstract Map queryEnergyConsumption(@Param("year") Integer year,@Param("month") Integer month);
+
+    /**
+     * 获取年份范围
+     * @return
+     */
+    public List<Integer> queryYearsEnergy();
+    /**
+     * 获取品牌建设年份范围
+     * @return
+     */
+    public List<String> queryYearsBuild();
+
+    /**
+     * 获取月份范围
+     * @return
+     */
+    public List<Integer> queryMonthsEnergy(Integer year);
+
+
+    /**
+     * djh1
+     * 获取制造业的编号、区号、规模、经度、纬度
+     * @return
+     */
+    public List queryEcoManu();
+    public List queryEcoManuInfo(@Param("indusKey")String indusKey);
+
+    /**
+     * djh2
+     *  获取下级行政区划信息
+     * @param  sjbh 市编号
+     * @return
+     */
+    public abstract List<Xzqh> queryListJxXzqh(@Param("sjbh")String sjbh);
+
+    /**
+     * 根据年份获取境内外上市公司数量
+     * @param year
+     * @return
+     */
+    public String getConditionConpany(String year);
+
+    /**
+     * 根据年份获取企业家数
+     * @param year
+     * @return
+     */
+    public String getHighBusiness(String year);
+}

@@ -1,0 +1,89 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+import com.cetc28.PeopleBenefitService.dto.Fdckftz;
+import com.cetc28.PeopleBenefitService.dto.HgJjDto;
+import com.cetc28.PeopleBenefitService.model.JxNetEcoStatistics;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by Fang on 2017/9/7.
+ */
+public interface IJxEcoDao {
+        public List<HgJjDto> queryGyzz(Integer monthSize,String year);
+
+        public List<HgJjDto> queryPreGyzz(Integer monthSize,String year, String endTime);
+
+        public List<HgJjDto> queryFwysczs(Integer monthSize,String year);
+
+        public List<HgJjDto> queryGdzctz(Integer monthSize,String year);
+
+        public List<HgJjDto> queryPreGdzctz(Integer monthSize,String year, String endTime);
+
+        public Fdckftz queryFdckftz(String year);
+
+        public List<HgJjDto> queryShxfplsze(Integer monthSize,String year);
+
+        public List<HgJjDto> queryShxfplszePrevious(Integer monthSize,String year, String endTime);
+
+        public List<HgJjDto> queryJck(Integer monthSize,String year);
+
+        public List<HgJjDto> queryPreJck(Integer monthSize,String year, String endTime);
+
+        public double queryPreFdckftz(String year, Integer monthSize);
+
+        /**
+         * 获取最新的互联网经济指数
+         * @return
+         */
+        public Map getEcoInternetIndex();
+
+        /**
+         * 查询电子商务信息
+         * @param year
+         * @param month
+         * @return
+         */
+        public Map queryNetBusiness(Integer year, Integer month);
+
+        /**
+         * 获取年份范围
+         * @return
+         */
+        public List<Integer> queryYears();
+
+        /**
+         * 获取年份范围
+         * @return
+         */
+        public List<Integer> queryMonths(Integer year);
+
+        /**
+         * 获取数据库中的最新时间
+         * @return
+         */
+        public String getMaxTime();
+
+        /**
+         * 查询指定时间的互联网经济数据
+         * @param time 时间
+         * @return
+         */
+        public JxNetEcoStatistics queryNetEcoStatistics(String time);
+
+        /**
+         * 查询最近几年的信息经济指数
+         * @param length 年年份数
+         * @return
+         */
+        public List listEcoIndex(int length);
+
+        /**
+         * 获取乌镇互联网综合实验区地址信息
+         * @return
+         */
+        public List queryIndustrialSite(@Param("status")Integer status, @Param("type")Integer type);
+
+}

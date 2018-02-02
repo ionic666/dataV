@@ -1,0 +1,43 @@
+package com.cetc28.ConfigurationManagement.service;
+
+import com.cetc28.ConfigurationManagement.model.PageResult;
+import com.cetc28.ConfigurationManagement.model.User;
+
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by FangYan on 2017/9/21.
+ */
+public interface IJxUserManageService {
+    public PageResult queryUserInfo(Integer pageNumber, Integer pageSize);
+
+    public List<User> queryUserByuserid(Integer userid);
+
+    public void delUser(Integer userid);
+
+    public void addUser(Map<String,Object> map);
+
+    public void addUserAndPer(Map<String,Object> map,String rolename);
+
+    public void updateLastLoginTime(String username,Timestamp time);
+
+    public List<String> queryRolePermission(String rolename);
+
+    public Integer updateRolePermission(Integer userid, Integer roleid);
+
+    public Integer queryRoleIdByName(String rolename);
+
+    public Integer checkRoleId(Integer userid);
+
+    public Integer insertRolePermission(Integer userid, Integer roleid);
+
+    void updateUserStatus(Integer status,Integer userid);
+
+    void updateUserPwd(String password,Integer userid);
+
+    boolean isExistUser(String username);
+
+    int checkUserPassword(String pre_password);
+}

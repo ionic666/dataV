@@ -1,0 +1,213 @@
+package com.cetc28.idata.model;
+
+public class JxSsCorpAnalysis {
+    private Short id;
+
+    private Short year;
+
+    private String regionCode;
+
+    private String corpName;
+
+    private Short employeeSum;
+
+    private Short insuredSum;
+
+    private Double averageInsuredAmount;
+
+    private Double averageInsuredAge;
+
+    private Short insuredDoctorSum;
+
+    private Short insuredMasterSum;
+
+    private Short insuredBachelorSum;
+
+    private Short insuredTechnicalSum;
+
+    private Short insuredSeniorSum;
+
+    private Short insuredJuniorSum;
+
+    private Short insuredElementarySum;
+
+    private Short insuredOtherSum;
+
+    private String legalPersonType;
+
+    private String businessType;
+
+    private String businessRange;
+
+    private String longitude;
+
+    private String latitude;
+
+    public Short getId() {
+        return id;
+    }
+
+    public void setId(Short id) {
+        this.id = id;
+    }
+
+    public Short getYear() {
+        return year;
+    }
+
+    public void setYear(Short year) {
+        this.year = year;
+    }
+
+    public String getRegionCode() {
+        return regionCode;
+    }
+
+    public void setRegionCode(String regionCode) {
+        this.regionCode = regionCode == null ? null : regionCode.trim();
+    }
+
+    public String getCorpName() {
+        return corpName;
+    }
+
+    public void setCorpName(String corpName) {
+        this.corpName = corpName == null ? null : corpName.trim();
+    }
+
+    public Short getEmployeeSum() {
+        return employeeSum;
+    }
+
+    public void setEmployeeSum(Short employeeSum) {
+        this.employeeSum = employeeSum;
+    }
+
+    public Short getInsuredSum() {
+        return insuredSum;
+    }
+
+    public void setInsuredSum(Short insuredSum) {
+        this.insuredSum = insuredSum;
+    }
+
+    public Double getAverageInsuredAmount() {
+        return averageInsuredAmount;
+    }
+
+    public void setAverageInsuredAmount(Double averageInsuredAmount) {
+        this.averageInsuredAmount = averageInsuredAmount;
+    }
+
+    public Double getAverageInsuredAge() {
+        return averageInsuredAge;
+    }
+
+    public void setAverageInsuredAge(Double averageInsuredAge) {
+        this.averageInsuredAge = averageInsuredAge;
+    }
+
+    public Short getInsuredDoctorSum() {
+        return insuredDoctorSum;
+    }
+
+    public void setInsuredDoctorSum(Short insuredDoctorSum) {
+        this.insuredDoctorSum = insuredDoctorSum;
+    }
+
+    public Short getInsuredMasterSum() {
+        return insuredMasterSum;
+    }
+
+    public void setInsuredMasterSum(Short insuredMasterSum) {
+        this.insuredMasterSum = insuredMasterSum;
+    }
+
+    public Short getInsuredBachelorSum() {
+        return insuredBachelorSum;
+    }
+
+    public void setInsuredBachelorSum(Short insuredBachelorSum) {
+        this.insuredBachelorSum = insuredBachelorSum;
+    }
+
+    public Short getInsuredTechnicalSum() {
+        return insuredTechnicalSum;
+    }
+
+    public void setInsuredTechnicalSum(Short insuredTechnicalSum) {
+        this.insuredTechnicalSum = insuredTechnicalSum;
+    }
+
+    public Short getInsuredSeniorSum() {
+        return insuredSeniorSum;
+    }
+
+    public void setInsuredSeniorSum(Short insuredSeniorSum) {
+        this.insuredSeniorSum = insuredSeniorSum;
+    }
+
+    public Short getInsuredJuniorSum() {
+        return insuredJuniorSum;
+    }
+
+    public void setInsuredJuniorSum(Short insuredJuniorSum) {
+        this.insuredJuniorSum = insuredJuniorSum;
+    }
+
+    public Short getInsuredElementarySum() {
+        return insuredElementarySum;
+    }
+
+    public void setInsuredElementarySum(Short insuredElementarySum) {
+        this.insuredElementarySum = insuredElementarySum;
+    }
+
+    public Short getInsuredOtherSum() {
+        return insuredOtherSum;
+    }
+
+    public void setInsuredOtherSum(Short insuredOtherSum) {
+        this.insuredOtherSum = insuredOtherSum;
+    }
+
+    public String getLegalPersonType() {
+        return legalPersonType;
+    }
+
+    public void setLegalPersonType(String legalPersonType) {
+        this.legalPersonType = legalPersonType == null ? null : legalPersonType.trim();
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType == null ? null : businessType.trim();
+    }
+
+    public String getBusinessRange() {
+        return businessRange;
+    }
+
+    public void setBusinessRange(String businessRange) {
+        this.businessRange = businessRange == null ? null : businessRange.trim();
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude == null ? null : longitude.trim();
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude == null ? null : latitude.trim();
+    }
+}

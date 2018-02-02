@@ -1,0 +1,228 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.IJxEcoDao;
+import com.cetc28.idata.dao.IJxEcoIndexDao;
+import com.cetc28.idata.dao.IJxEcoLhrhDao;
+import com.cetc28.idata.dto.Fdckftz;
+import com.cetc28.idata.dto.HgJjDto;
+import com.cetc28.idata.model.*;
+import com.cetc28.idata.service.IJxEcoService;
+import com.cetc28.util.ConditionValidate;
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+/**
+ * Created by Fang on 2017/9/7.
+ */
+@Service
+public class IJxEcoServiceImpl implements IJxEcoService {
+
+    @Autowired
+    private IJxEcoDao iJxEcoDao;
+    @Autowired
+    private IJxEcoIndexDao iJxEcoIndexDao;
+    @Autowired
+    private IJxEcoLhrhDao iJxEcoLhrhDao;
+
+    @Override
+    public List<HgJjDto> queryGyzz(Integer monthSize,String year) {
+        return  iJxEcoDao.queryGyzz(monthSize,year);
+    }
+
+    @Override
+    public List<HgJjDto> queryPreGyzz(Integer monthSize, String year, String endTime) {
+        return iJxEcoDao.queryPreGyzz(monthSize,year,endTime);
+    }
+
+    @Override
+    public List<HgJjDto> queryFwysczs(Integer monthSize,String year) {
+        return iJxEcoDao.queryFwysczs(monthSize,year);
+    }
+
+    @Override
+    public List<HgJjDto> queryGdzctz(Integer monthSize,String year) {
+        return iJxEcoDao.queryGdzctz(monthSize,year);
+    }
+
+    @Override
+    public List<HgJjDto> queryPreGdzctz(Integer monthSize, String year, String endTime) {
+        return iJxEcoDao.queryPreGdzctz(monthSize,year,endTime);
+    }
+
+    @Override
+    public Fdckftz queryFdckftz(String year) {
+        return iJxEcoDao.queryFdckftz(year);
+    }
+
+    @Override
+    public List<HgJjDto> queryShxfplsze(Integer monthSize,String year) {
+        return iJxEcoDao.queryShxfplsze(monthSize,year);
+    }
+
+    @Override
+    public List<HgJjDto> queryShxfplszePrevious(Integer monthSize, String year, String endTime) {
+        return iJxEcoDao.queryShxfplszePrevious(monthSize,year,endTime);
+    }
+
+    @Override
+    public List<HgJjDto> queryJck(Integer monthSize,String year) {
+        return iJxEcoDao.queryJck(monthSize,year);
+    }
+
+    @Override
+    public List<HgJjDto> queryPreJck(Integer monthSize, String year, String endTime) {
+        return iJxEcoDao.queryPreJck(monthSize, year, endTime);
+    }
+
+    @Override
+    public double queryPreFdckftz(String year, Integer monthSize) {
+        return iJxEcoDao.queryPreFdckftz(year,monthSize);
+    }
+
+    @Override
+    public Map getEcoInternetIndex() {
+        return  iJxEcoDao.getEcoInternetIndex();
+    }
+
+    @Override
+    public Map queryNetBusiness(Integer year, Integer month) {
+        Map result = new HashedMap();
+        if(!ConditionValidate.isEmpty(year)) {
+            List<Integer> yearRange =  iJxEcoDao.queryYears();
+            year = yearRange.get(0);
+            result.put("yearRange", yearRange);
+        }
+        if(!ConditionValidate.isEmpty(month)){
+            List<Integer> monthRange = iJxEcoDao.queryMonths(year);
+            month = monthRange.get(0);
+            result.put("monthRange",monthRange);
+        }
+        result.putAll(iJxEcoDao.queryNetBusiness(year, month));
+        return  result;
+    }
+
+    @Override
+    public JxNetEcoStatistics queryNetStatistics() {
+
+        //查询记录的最新时间
+        String maxTime = iJxEcoDao.getMaxTime();
+        //获取对比时间
+        String tbTime = (Integer.parseInt(maxTime.substring(0,4)) - 1)+maxTime.substring(4);
+        //查询最新的互联网经济数据
+        JxNetEcoStatistics newStatistic = iJxEcoDao.queryNetEcoStatistics(maxTime);
+        //查询上一年同季度的互联网经济数据
+        JxNetEcoStatistics statisticCompare = iJxEcoDao.queryNetEcoStatistics(tbTime);
+        //计算同比增长率
+        newStatistic.setIncreasement((newStatistic.getCoreproduction().doubleValue()-statisticCompare.getCoreproduction().doubleValue())*100/(statisticCompare.getCoreproduction().doubleValue()));
+
+        return newStatistic;
+    }
+
+    @Override
+    public List listEcoIndex(int length) {
+        return iJxEcoDao.listEcoIndex(length);
+    }
+
+
+    @Override
+    public List queryEcoIndex(int length) {
+        List result = new ArrayList<Map>();
+        //获取一级指标信息
+        List<JxEcoYJZB> yjzb = iJxEcoIndexDao.queryIndication();
+        //遍历一级指标
+        for(JxEcoYJZB zb:yjzb){
+            Map<String, Object> info = new HashMap<String, Object>();
+            List<JxEcoIndex> TT = iJxEcoIndexDao.queryEcoIndex(length,zb.getBh());
+            info.put("mc", zb.getMc());
+            info.put("statistics", TT);
+            result.add(info);
+        }
+        return  result;
+    }
+
+    @Override
+    public List queryEcoSubIndex(String year) {
+        List result = new ArrayList<Map>();
+        //获取一级指标信息
+        List<JxEcoYJZB> yjzb = iJxEcoIndexDao.queryIndication();
+        //遍历一级指标
+        for(JxEcoYJZB zb:yjzb){
+            Map<String, Object> info = new HashMap<String, Object>();
+            List TT = iJxEcoIndexDao.queryEcoSubIndex(year,zb.getBh());
+            info.put("mc", zb.getMc());
+            info.put("substatistics", TT);
+            result.add(info);
+        }
+        return  result;
+    }
+
+
+    @Override
+    public List queryIndustrialSite(Integer status, Integer type) {
+        return iJxEcoDao.queryIndustrialSite(status,type);
+    }
+
+    @Override
+    public List queryEcoInternetIndex() {
+        return iJxEcoIndexDao.queryInternetIndication();
+    }
+
+    @Override
+    public List queryEcoSubInternetIndex() {
+        List result = new ArrayList<Map>();
+        //获取一级指标信息
+        List<JxEcoInternetIndexValue> yjzb = iJxEcoIndexDao.queryInternetIndication();
+        //遍历一级指标
+        for(JxEcoInternetIndexValue zb1:yjzb){
+            Map<String,Object> info2 = new HashMap<String,Object>();
+            List<JxEcoInternetIndexValue> ejzb=iJxEcoIndexDao.queryEcoSubInternetIndex(zb1.getBh());
+            List subresult = new ArrayList<Map>();
+            for(JxEcoInternetIndexValue zb2:ejzb){
+                Map<String, Object> info3 = new HashMap<String, Object>();
+                List sjzb=iJxEcoIndexDao.queryEcoThirdInternetIndex(zb1.getYear(),zb2.getBh());
+                info3.put("secondmc",zb2.getMc());
+                info3.put("third",sjzb);
+                subresult.add(info3);
+            }
+            info2.put("mc", zb1.getMc());
+            info2.put("statistics", subresult);
+            result.add(info2);
+        }
+        return  result;
+    }
+
+    @Override
+    public List<JxEcoLhrh> queryEcoLhrh(Integer length) {
+        List result = new ArrayList<Map>();
+        //获取一级指标信息
+        List<JxEcoLhrh> yjzb = iJxEcoLhrhDao.queryIndication();
+        //遍历一级指标
+        for(JxEcoLhrh zb:yjzb){
+            Map<String, Object> info = new HashMap<String, Object>();
+            List<JxEcoLhrh> TT = iJxEcoLhrhDao.queryEcoIndex(length,zb.getBh());
+            info.put("mc", zb.getMc());
+            info.put("statistics", TT);
+            result.add(info);
+        }
+        return  result;
+    }
+
+    @Override
+    public List queryEcoLhrhSubIndex(String year) {
+        List result = new ArrayList<Map>();
+        //获取一级指标信息
+        List<JxEcoLhrh> yjzb = iJxEcoLhrhDao.queryIndication();
+        //遍历一级指标
+        for(JxEcoLhrh zb:yjzb){
+            Map<String, Object> info = new HashMap<String, Object>();
+            List TT = iJxEcoLhrhDao.queryEcoSubIndex(year,zb.getBh());
+            info.put("mc", zb.getMc());
+            info.put("substatistics", TT);
+            result.add(info);
+        }
+        return  result;
+    }
+}

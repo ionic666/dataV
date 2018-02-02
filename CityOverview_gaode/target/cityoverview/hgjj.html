@@ -1,0 +1,1036 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    <title>嘉兴城市运行全景特征图分系统</title>
+    <!--<link rel="stylesheet" type="text/css" href="myCss/indexAndMain.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/main_modal.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/toastr.css">-->
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script type="text/javascript"
+            src="http://webapi.amap.com/maps?v=1.4.1&key=608d75903d29ad471362f8c58c550daf"></script>
+    <!--<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>-->
+    <!--<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>-->
+    <script type="text/javascript" src="myjs/jquery-2.1.4.js"></script>
+    <!--<script type="text/javascript" src="myjs/toastr.min.js"></script>-->
+    <!--<script type="text/javascript" src="myjs/jquery.cookie.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/bootstrap.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.dataTables.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.easyui.min.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery-ui.js"></script>-->
+    <script type="text/javascript" src="map/js/echarts-all.js"></script>
+    <!--<%--<script type="text/javascript" src="myjs/loadMapService.js"></script>--%>-->
+
+    <style>
+        body{
+            box-sizing: border-box;
+            overflow: hidden !important;
+        }
+        ::-webkit-scrollbar{
+            background-color: #1B1B1D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+        .modelBox{
+            height:90%;
+            width:25%;
+            position: absolute;
+            z-index:101;
+        }
+        .modelBoxL{
+            top:10%;
+            left:0
+        }
+        .modelBoxC{
+            height:10%;
+            width: 50%;
+            bottom:2%;
+            right:25%;
+        }
+        .modelBoxC>div{
+            height:100%;
+            width: 35%;
+        }
+        .modelBoxC-a{
+            float: left;
+        }
+        .modelBoxC-b{
+            float: right;
+        }
+        .modelBoxR{
+            top:10%;
+            right:0
+        }
+        .modelBox .model{
+            height:32.8%;
+            width:100%;
+            margin-bottom:1%;
+            border-top: 2px #0cdaf5 solid;
+            position: relative;
+        }
+        .modelBox .model{ /*iframe*/
+            /*width:100%;*/
+            /*height:100%;*/
+            background: rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        .more{
+            position: absolute;
+            top:2%;
+            right:2%;
+            color: #0DD4EE;
+            cursor: pointer;
+        }
+        #changeImg img{
+            width:120px;
+            height:87px;
+        }
+        #login>button{
+            width: auto;
+            height: auto;
+            font-size: 1.5em;
+            color: #12C6D8;
+            background-color: #1E2222;
+            border: 0;
+            padding:0 0.2em;
+            float: right;
+            margin-right: 0.1em;
+        }
+        #login>button:hover{
+            color: #fff;
+        }
+        #login>h4{
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0.2em 0;
+            text-align: center;
+            color: #0CD9F4;
+
+        }
+        #login>form{
+            width: 100%;
+            height: 80%;
+
+        }
+        #login>form>input{
+            border-size: 0;
+            background-color: #00191C !important;
+        }
+        #login>form>input,#login>form>button{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+            line-height: 10%;
+        }
+        #login>form>button{
+            border-color: #e9ca3d;
+            border-color: #e9ca3d;
+            border-color: #0096AA;
+            background-color: #0096AA;
+        }
+        #login>form>label{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+        }
+
+        #legend div{
+            display: none;
+        }
+        #legend div p{
+            float: left;
+            display:block;
+            padding:10px;
+        }
+        #legend div p span{
+            margin:0px 3px;
+        }
+
+        /*地图infowindow样式表*/
+        .tundra{
+            position: relative;
+        }
+        #settingModal td{
+            border:0;
+            font-size: 1.3em;
+            color: #0a36e9;
+        }
+        a:hover{
+            color: #c74072;
+            text-decoration:none;
+        }
+        body{
+            width: 100%;
+        }
+
+        /*头部logo*/
+        .header {
+            width: 60%;
+            height: 7.8%;
+            margin: 0 auto;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: absolute;
+            z-index: 999;
+            top: 2%;
+            margin-left:50%;
+        }
+        .header>div{
+            display: inline-block;
+        }
+
+
+        /*高德地图info窗口样式开始*/
+        .amap-toolbar{
+            display:none;
+        }
+        .info {
+            border: solid 1px #7A9095 !important;
+            border-radius: 5px;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 14px;
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        /*高德地图info窗口样式开结束*/
+
+        .modelBox>.model>div:first-child{
+            padding-top:10px;
+            height:15%;
+            width:100%;
+        }
+        .modelBox>.model>div:last-child{
+            height:85%;
+            width:100%;
+        }
+        p.headerTitle{
+            padding-left: 3%;
+            font-size: 20px;
+            font-weight: bold;
+            color:#F2F2F2;
+            width: 40%;
+            font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+            margin:0;
+            float: left;
+            height: 100%;
+            position: relative;
+        }
+        .details{
+            /*margin-left:40%;*/
+        }
+        .details p{
+            font-size: 10px;
+            color:#fff;
+            margin:0px;
+        }
+        .details img{
+            width: 34px;
+        }
+        .details img,.details div,.detail span{
+            float: left;
+            margin-left: 15px;
+            text-align: center;
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 18px;
+            margin:0px;
+        }
+        #wrType{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            margin-left: 15px;
+        }
+        /*非公共样式--固定资产投资--开始*/
+        div#tblv{
+            height: 100%;
+            width: 50%;
+            padding: 1% 0 1% 8%;
+            padding-left: 55%;
+            color: #f2f2f2;
+            font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+            font-size: 14px !important;
+            position: relative;
+            top: 30%;
+        }
+        #tongbi {
+            margin-left: 3%;
+            display: inline-block;
+            text-align: center;
+            width: 38%;
+            color: #FF6550;
+            border: 2px solid #812300;
+            background-color: rgba(55,15,0,0.5);
+            border-radius: 3px;
+        }
+        /*非公共样式--固定资产投资--结束*/
+        /*非公共样式--房地产开发投资--开始*/
+        #tbzz{
+            font-size: 40px;
+            color: #FA6E3B;
+            margin-left: 5%;
+            font-weight: bold;
+        }
+        .bigfont{
+            color: #fff;
+            font-size: 20px;
+            margin: 0;
+        }
+        @font-face{
+            font-family: 'ITV Reem';
+            src: url(myjs/itvreem.woff) format('woff');
+        }
+        .kftz{
+            /*width: 600px;*/
+            /*margin: 50px auto;*/
+            font-family: 'ITV Reem';
+            /*font-size: 82px;*/
+            font-size: 40px;
+            color: #4AA9F5;
+            margin-left: 5%;
+            font-weight: bold;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+            fill:#4AA9F5;
+        }
+        #kftzYear:before{
+            content: "";
+            width:7px;
+            height:7px;
+            display: inline-block;
+            background-color: #0DD9F5;
+            border-radius: 50%;
+            margin-right:6px;
+            top:-1px;
+            position: relative;
+        }
+        #fdckftz{
+            height: 100%;
+            width: 100%;
+        }
+        #fdctbzz{
+            font-size: 40px;
+            font-weight: bold;
+        }
+        /*非公共样式--房地产开发投资--结束*/
+        /**3D旋转*!/*/
+        #lunbo{
+            margin:20px auto;
+            width:900px;
+            height: 400px;
+            display: block;
+            position: absolute;
+            top: 30%;
+            left: 28%;
+        }
+        #show{
+            position:relative;
+        }
+        .pic{
+            position:absolute;
+            height:120px;
+            width:160px;
+            /*background:#999999;*/
+            /*border:1px solid #eeeeee;*/
+            cursor:pointer;
+            transition: transform linear 1s;
+        }
+        .pic img{
+            width: 100%;
+            height: 100%;
+        }
+        *{
+            font-size:16px;
+        }
+    </style>
+</head>
+<body class="tundra">
+<div id="map" style="width:100%; height:100%;background-color: black">
+</div>
+
+<div class="header"></div>
+
+<div class="modelBox modelBoxL">
+    <div class="model model1" >
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">工业增加值</p>
+
+        </div>
+        <div id="model"></div>
+    </div>
+    <div class="model model2">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">服务业生产指数</p>
+        </div>
+        <div id="model2"></div>
+    </div>
+    <div class="model model3">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">固定资产投资</p>
+            <div id="tblv">
+                <span id="tbtitle"></span><span id="tongbi"></span>
+            </div>
+        </div>
+        <div id="model3">
+        </div>
+    </div>
+</div>
+<!--<div class="modelBox modelBoxC">-->
+    <!--<div class="modelBoxC-a"><img src="images/air.png" alt=""></div>-->
+    <!--<div class="modelBoxC-b"><img src="images/water.png" alt=""></div>-->
+<!--</div>-->
+<div class="modelBox modelBoxR">
+    <div class="model model4">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">房地产开发投资</p>
+
+        </div>
+        <div id="model4">
+            <div id="fdckftz">
+                <div style="height:40%;">
+                    <div style="margin-top:2%;width:30%;float:left;text-align: center">
+                        <img src="images/md.png" alt=""/>
+                    </div>
+                    <div style="width:70%;margin-left:30%">
+                        <p class="bigfont" style="text-align: center">
+                            <span class="kftz" class="counter"></span><span style="color:#4AA9F5;position: relative;top: -30px;">万元</span>
+                        </p>
+                        <p class="bigfont" style="text-align: center;position: relative;top: -10px;">开发投资</p>
+                    </div>
+                </div>
+                <div style="height:40%;">
+                    <div style="margin-top:2%;width:30%;float:left;text-align: center">
+                        <img src="images/group.png" alt=""/>
+                    </div>
+                    <div style="width:70%;margin-left:30%">
+                        <p class="bigfont"  style="text-align: center;color:#FA6E3B">
+                            <span id="fdctbzz" class="counter"></span> &nbsp;%
+                        </p>
+                        <p class="bigfont" style="text-align: center;">同比增长</p>
+                    </div>
+                </div>
+                <span id="kftzYear" style="color:#fff;float: right;font-size:1em;right: 5%;position: relative;">数据截止到2017年</span>
+            </div>
+        </div>
+    </div>
+    <div class="model model5">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">社会消费品零售总额</p>
+        </div>
+        <div id="model5">
+        </div>
+    </div>
+    <div class="model model6">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle" style="">进出口</p>
+        </div>
+        <div id="model6"></div>
+    </div>
+</div>
+<div id="lunbo">
+    <input id="l" type="button" value="left" style="display: none"/>
+    <div id="show">
+        <div class="pic"><img src="images/pic1.png" alt=""/></div>
+        <div class="pic"><img src="images/pic2.png" alt=""/></div>
+        <div class="pic"><img src="images/pic3.png" alt=""/></div>
+        <div class="pic"><img src="images/pic4.png" alt=""/></div>
+        <div class="pic"><img src="images/pic5.png" alt=""/></div>
+        <div class="pic"><img src="images/pic6.png" alt=""/></div>
+    </div>
+</div>
+</body>
+<script src="myjs/myEcharts.js"></script>
+<script src="myjs/map/hgjj.js"></script>
+<script src="myjs/index.js"></script>
+<script src="map/js/jquery.waypoints.min.js"></script>
+<script src="map/js/jquery.countup.js"></script>
+<script src="myjs/odoo.js"></script>
+
+<script>
+    var headerWidth=$(".header").width();	//获取头部标题的宽度
+    $(".header").css("left",-headerWidth/2-6+"px");//让头部标题居中
+    $(".header").css("background-image"," url(images/cyjj_title.png)");
+    //工业增加值
+    function gyzz(xAxisData,data1,data2){
+        var mycharts = echarts.init(document.getElementById('model'));
+        var option = {
+            color: ['#4DAFFF','#ED7D31'],
+            tooltip: {
+                trigger: 'axis'
+                //formatter:'{a}<br/>{b}:{c}亿(元)'
+            },
+            grid: {
+                x: '10%',
+                y: '18%',
+                x2: '8%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['工业增加值(亿元)','同比增长率(%)'],
+                textStyle: text_style,
+                x: 'right',
+                y: 'top'
+            },
+            xAxis: {
+                type: 'category',
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+//                boundaryGap:false,
+                axisTick: {show: true},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: [{
+                type: 'value',
+                name:'亿元',
+                nameTextStyle:{fontSize:font_size},      //设置y轴上单位的字体大小
+                min:0,
+                max:300,
+                splitLine: {show: true, lineStyle: {type: 'dashed',color: '#2D2D2D'}},
+                axisLine: {show: true, lineStyle: {color:'#B6B6B6'}},
+                axisTick: {show: false},
+                axisLabel: {show: true, textStyle: text_style}
+            }, {
+                type: 'value',
+                name:'%',
+                nameTextStyle:{fontSize:font_size},        //设置y轴上单位的字体大小
+                min:0,
+                max:10,
+                splitLine: {show: true, lineStyle: {type: 'dashed',color: '#2D2D2D'}},
+                axisLine: {show: true, lineStyle: {color:'#B6B6B6'}},
+                axisTick: {show: false},
+                axisLabel: {show: true, textStyle: text_style}
+            }],
+            series: [
+                {
+                    name: '工业增加值(亿元)',
+                    type: 'bar',
+                    barWidth: 22,
+//                    symbolSize: 3,
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:false,
+                                position: 'top',
+                                textStyle: text_style,
+                                formatter:'{c}亿元'
+                            }
+                        }
+                    },
+                    data: data1
+                },{
+                    yAxisIndex:1,
+                    name: '同比增长率(%)',
+                    type: 'line',
+                    symbol: 'triangle',
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:false,
+                                position: 'top',
+                                formatter:'{c}%',
+                                textStyle: text_style
+                            }
+                        }
+                    },
+                    data: data2
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //工业增长
+    $.ajax({
+        type:"POST",
+        url:'jxeco/hgjj/gyzz.do',
+        dataType:'json',
+        data:{"monthSize":5},
+        success:function(data){
+            var xAxisData=[];
+            var data1=[];
+            var data2=[];
+            for(var i=0;i<data.length;i++) {
+                var sj = String(data[i].sj);
+                xAxisData.push(sj.substring(5)+"月");
+                data1.push(parseFloat(data[i].gyzz));
+                data2.push(parseFloat(data[i].tbzz));
+            }
+            gyzz(xAxisData,data1,data2);
+        }
+    });
+    //服务业生产指数
+    function fwysczs(xAxisData,data1){
+        var mycharts = echarts.init(document.getElementById('model2'));
+        var option = {
+            color:['#2B96ED'],
+            tooltip: {
+                trigger: 'axis',
+                formatter:'{a}<br/>{b}:{c}%'
+            },
+            grid: {
+                x: '5%',
+                y: '10%',
+                x2: '10%',
+                y2: '20%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['同比上涨'],   //实际增长率
+                textStyle: text_style,
+                x: 'right',
+                y: 'top'
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap:false,
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: true},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                axisLabel: {show: false}
+            },
+            series: [
+                {
+                    name: '同比上涨',   //实际增长率
+                    type: 'line',
+                    symbol: 'rectangle',
+                    itemStyle: {
+                        normal:{
+                            areaStyle: {
+                                type:'default',
+                                color: '#2B96ED'
+                            },
+                            label: {
+                                show: true,
+                                position: 'top',
+                                textStyle: text_style,
+                                formatter:'{c}%'
+                            }
+                        }
+                    },
+                    data: data1
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    $.ajax({
+        type:"POST",
+        url:'jxeco/hgjj/fwysczs.do',
+        dataType:'json',
+        data:{"monthSize":5},
+        success:function(data){
+            var xAxisData=[];
+            var data1=[];
+            for(var i=0;i<data.length;i++) {
+                var sj = String(data[i].sj);
+                xAxisData.push(sj.substring(5)+"月");
+                data1.push(parseFloat(data[i].fwysczs));
+            }
+            xAxisData.reverse();
+            data1.reverse();
+            fwysczs(xAxisData,data1);
+        }
+    });
+    //固定资产投资
+    function gdzctz(xAxisData,data1){
+        var mycharts = echarts.init(document.getElementById('model3'));
+        var option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '8%',
+                y: '10%',
+                x2: '5%',
+                y2: '8%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['固定资产投资额(亿)'],  //实际增长率
+                show: false
+            },
+            xAxis: {
+                type: 'value',
+                splitLine: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                axisLabel: {show: false}
+            },
+            yAxis: {
+                type: 'category',
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: true},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            series: [
+                {
+                    name: '固定资产投资额(亿)',  //实际增长率
+                    type:'bar',
+                    barWidth: 18,
+                    itemStyle: {
+                        normal:{
+                            label: {
+                                show: true,
+                                position: 'right',
+                                textStyle: text_style,
+                                formatter:'{c}亿元'
+                            }
+                        }
+                    },
+                    data: data1
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //服务业生产指数
+    $.ajax({
+        type:"POST",
+        url:'jxeco/hgjj/gdzctz.do',
+        dataType:'json',
+        data:{"monthSize":5},
+        success:function(data){
+            var xAxisData=[];
+            var data1=[];
+            var sj = String(data[data.length-1].sj);
+            var tbtitle=sj.substring(5)+"月同比增长率";
+            var tongbi=parseFloat(data[data.length-1].tbzz)+'%';
+            for(var i=0;i<data.length;i++) {
+                var sj = String(data[i].sj);
+                xAxisData.push(sj.substring(5)+"月");
+                data1.push(parseFloat(data[i].gdzctz));
+            }
+            $("#tbtitle").html(tbtitle);
+            $("#tongbi").html(tongbi);
+            /* xAxisData.reverse();
+             data1.reverse();*/
+            gdzctz(xAxisData,data1);
+        }
+    });
+    //房地产开发投资
+    $(function () {
+        $.ajax({
+            url:"jxeco/hgjj/fdckftz.do",
+            type:"post",
+            dataType:"json",
+            success:function (msg) {
+                console.log(msg)
+                $("#kftzYear").text("数据截止到"+msg.time)
+//                odoo.default({ el:'#kftz',value:'￥68,123,000'})
+                odoo.default({ el:'.kftz',value:msg.fdckftz*10000})
+//                $("#kftz").html(msg.fdckftz);
+                $('#fdctbzz').html(Number(msg.percent)*100);
+                $('.counter').countUp({
+                    delay: 2,
+                    time: 200
+                });
+            }
+        })
+    })
+    //社会消费品零售总额
+    function shxfplsze(xAxisData,data1,data2){
+        var mycharts = echarts.init(document.getElementById('model5'));
+        var option = {
+            color: ['#2B96ED','#00FFFC'],
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '8%',
+                y: '15%',
+                x2: '8%',
+                y2: '35%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['零售总额累计（亿元）','同比增长率(%)'],
+                textStyle: text_style,
+                x: 'center',
+                y: 'bottom'
+            },
+            xAxis: {
+                type: 'category',
+                splitLine: {show: false},
+                axisLine: {
+                    show: true,
+                    lineStyle:{
+                        color:'white'
+                    }
+                },
+                axisTick: {show: true},
+                axisLabel: {show: true, textStyle: text_style},
+                data: xAxisData
+            },
+            yAxis: [{
+                type: 'value',
+                name:'亿元',
+                nameTextStyle:{fontSize:font_size},      //设置y轴上单位的字体大小
+                min:0,
+                max:400,
+                splitLine: {show: true, lineStyle: {type: 'dashed',color: '#2D2D2D'}},
+                axisLine: {show: true, lineStyle: {color:'#B6B6B6'}},
+                axisTick: {show: false},
+                axisLabel: {show: true, textStyle: text_style}
+            }, {
+                type: 'value',
+                name:'%',
+                nameTextStyle:{fontSize:font_size},        //设置y轴上单位的字体大小
+                min:0,
+                max:50,
+                splitLine: {show: true, lineStyle: {type: 'dashed',color: '#2D2D2D'}},
+                axisLine: {show: true, lineStyle: {color:'#B6B6B6'}},
+                axisTick: {show: false},
+                axisLabel: {show: true, textStyle: text_style}
+            }],
+            series: [
+                {
+                    name: '零售总额累计（亿元）',
+                    type: 'bar',
+                    barWidth: 22,
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show: false,
+                                position: 'top',
+                                textStyle: text_style,
+                                formatter:'{c}亿元'
+                            }
+                        }
+                    },
+                    data: data1
+                },
+                {
+                    yAxisIndex:1,
+                    name: '同比增长率(%)',
+                    type: 'line',
+                    symbol: 'triangle',
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show: false,
+                                position: 'inside',
+                                textStyle: text_style,
+                                formatter:'{c}%'
+                            }
+                        }
+                    },
+                    data: data2
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    $.ajax({
+        type:"POST",
+        url:'jxeco/hgjj/shxfplsze.do',
+        dataType:'json',
+        data:{"monthSize":5},
+        success:function(data){
+            var xAxisData=[];
+            var data1=[];
+            var data2=[];
+            for(var i=0;i<data.length;i++) {
+                var sj = String(data[i].sj);
+                xAxisData.push(sj.substring(5)+"月");
+                data1.push(parseFloat(data[i].shxfplsze));
+                data2.push(parseFloat(data[i].tbzz));
+            }
+//            shxfplsze(xAxisData,data1);
+            shxfplsze(xAxisData,data1,data2);
+        }
+    });
+    //进出口
+    function jck(xAxisData,data1,data2){
+        var mycharts = echarts.init(document.getElementById('model6'));
+        var option = {
+            color: ['#E46100','#009CFF'],
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '8%',
+                y: '20%',
+                x2: '10%',
+                y2: '25%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['进出口累计总额(亿元)', '同比增长率(%)'],
+                textStyle: text_style
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: ['20%', '20%'],
+                axisTick: {show: false},
+                axisLine: {
+                    show: true,
+                    lineStyle:{
+                        color:'white'
+                    }
+                },
+                axisLabel: {show: true, textStyle: text_style},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name:'亿元',
+                    nameTextStyle:{fontSize:font_size},      //设置y轴上单位的字体大小
+                    min:0,
+                    max:400,
+                    splitLine: {show: true, lineStyle: {type: 'dashed',color: '#2D2D2D'}},
+                    axisLine: {show: true, lineStyle: {color:'#B6B6B6'}},
+                    axisTick: {show: false},
+                    axisLabel: {show: true, textStyle: text_style}
+                },
+                {
+                    type: 'value',
+                    name:'%',
+                    nameTextStyle:{fontSize:font_size},        //设置y轴上单位的字体大小
+                    min:0,
+                    max:25,
+                    splitLine: {show: true, lineStyle: {type: 'dashed',color: '#2D2D2D'}},
+                    axisLine: {show: true, lineStyle: {color:'#B6B6B6'}},
+                    axisTick: {show: false},
+                    axisLabel: {show: true, textStyle: text_style}
+                }
+            ],
+            series: [
+                {
+                    name: '进出口累计总额(亿元)',
+                    type: 'bar',
+                    barWidth: 22,
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:false,
+                                position:'top',
+                                textStyle:text_style,
+                                formatter:'{c}亿元'
+                            }
+                        }
+                    },
+                    data: data1
+                },
+                {
+                    yAxisIndex:1,
+                    name: '同比增长率(%)',
+                    type: 'line',
+                    symbol: 'triangle',
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:false,
+                                position: 'top',
+                                formatter:'{c}%',
+                                textStyle: text_style
+                            }
+                        }
+                    },
+                    data: data2
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    $.ajax({
+        type:"POST",
+        url:'jxeco/hgjj/jck.do',
+        dataType:'json',
+        data:{"monthSize":5},
+        success:function(data){
+            var xAxisData=[];
+            var data1=[];
+            var data2=[];
+            for(var i=0;i<data.length;i++) {
+                var sj = String(data[i].sj);
+                xAxisData.push(sj.substring(5)+"月");
+                data1.push(parseFloat(data[i].jck));
+                data2.push(parseFloat(data[i].tbzz*100));
+            }
+            jck(xAxisData,data1,data2);
+        }
+    });
+    window.onload=function(){
+        //加载地图的方法
+        map = new AMap.Map('map', {
+            mapStyle: 'amap://styles/dark',//样式URL
+            center: [ 120.76,30.77]
+        });
+        AMap.event.addListener(map,'click',function(e){
+            map.clearInfoWindow();
+            console.log("666")
+        });
+        hgjj.hgjjAjax();
+        hgjj.fun();
+
+    }
+</script>
+
+</html>

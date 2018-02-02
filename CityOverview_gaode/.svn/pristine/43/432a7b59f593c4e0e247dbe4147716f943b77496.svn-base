@@ -1,0 +1,182 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="../../myCss/iframe.css"/>
+	<style type="text/css">
+		body{
+			padding: 10px 0 0 10px;
+		}
+		div.psbz{
+			width: 100%;
+			height: 100%;
+		}
+		div#main{
+			height: 75%;
+			width: 95%;
+		}
+		.addGreen-psbz{
+			font-size: 26px;
+		}
+		.smxIcon{
+			height: 33px;
+			width: 33px;
+			display: block;
+		}
+		p.headerTitle{
+			float: left;
+		}
+		.rkzrzzsnText{
+			float: left;
+			height: 21%;
+			margin-left: 6%;
+		}
+		.rkzrzzsnText>ul>li{
+			text-align: center;
+			float: left;
+			margin-left: 10px;
+		}
+		.rkzrzzsnText ul li p{
+			height: 100%;
+			padding: 4% 0;
+		}
+		.rkzrzzsnText>ul>li img{
+			margin: 0 auto;
+		}
+		.addRed-gsbz{
+			font-size: 26px;
+
+		}
+		.fontSize8{
+			font-size: 1em;
+		}
+	</style>
+</head>
+<body>
+<div class="psbz">
+	<p class="headerTitle">
+		排水保障
+	</p>
+	<%--<div class="rkzrzzsnText">--%>
+	<%--<ul>--%>
+	<%--<li>--%>
+	<%--<p class="addBold">本月排污<span class="addGreen addGreen-psbz" id="pwl"></span>亿立方米</p>--%>
+	<%--</li>--%>
+	<%--</ul>--%>
+	<%--</div>--%>
+	<div class="rkzrzzsnText">
+		<ul>
+			<li><img class="smxIcon" src="../../images/psbz.png" alt="本月排污"/><p class="fontSize8">本月排污</p></li>
+			<li><p><span class="addYellow addRed-gsbz counter" id="pwl"></span><span class="fontSize8">亿立方米</span></p></li>
+		</ul>
+	</div>
+	<%--社保自助服务开通率折线图--%>
+	<div id="main">
+	</div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+	var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+	function CreatSsServiceChart(data1,data2){
+		var myChart=echarts.init(document.getElementById("main"));
+		var option={
+			color: ['#06C5FF'],
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'shadow'
+				}
+			},
+			legend: {
+				data: ['排水管道总长(公里)'],
+				x: 'right',
+				y: 'top',
+				orient: 'horizontal',
+				textStyle: text_style
+			},
+			grid: {
+				x: '15%',
+				y: '15%',
+				x2: '15%',
+				y2: '10%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			xAxis: {
+				type: 'value',
+				splitLine: {show: false},
+				axisLine: {show: false},
+				axisTick: {show: false},
+				axisLabel: {show: false}
+			},
+			yAxis: {
+				type: 'category',
+				axisLine: {lineStyle: {color: '#676767'}},
+				axisTick: {show: true},
+				axisLabel: {show: true, textStyle: text_style, interval: 0},
+				splitLine: {show: false},
+				nameLocation: 'end',
+				data: data1
+			},
+			series: [
+				{
+					name: '排水管道总长(公里)',
+					type: 'bar',
+					itemStyle: {normal: {borderWidth: 0,label:{show:true,textStyle: text_style}}},
+					barWidth: 13,
+					barGap: '2%',
+					data: data2
+				}
+			]
+		};
+		myChart.setOption(option);
+	}
+
+	//获取近4年排水管道总长
+	$.ajax({
+		type:"POST",
+		url:'../../jxutility/utilitynet/netInfo.do?bH='+qhbh+'&yearSize=3',
+		dataType:'json',
+		success:function(data){
+			var data1=[],
+					data2=[];
+
+			$.each(data,function(i){
+				var date=data[i].dateY;
+				data1.push(date+'年');
+				data2.push(data[i].pipeDrainageLength);
+			});
+			CreatSsServiceChart(data1,data2);
+		}
+	});
+
+
+
+	//当月排污量
+	$.ajax({
+		type:"POST",
+		url:'../../jxutility/drainage/waterDischargeByBh.do?bH='+qhbh+'',
+		dataType:'json',
+		success:function(data){
+			$('#pwl').append(data.waterDischargeAll/10000);
+			$('.counter').countUp({
+				delay: 2,
+				time: 200
+			});
+		}
+	});
+</script>
+</body>
+</html>

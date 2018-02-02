@@ -1,0 +1,148 @@
+/**
+ * Created by LiBin on 2017/11/6.
+ */
+manufacture= {
+    industryData: {},
+    timer: '',//定时器
+    n: -1,
+    len: 0,
+    font_color: {
+        "eco001": '#28DFD9',     //电子信息产业
+        "eco002": '#2873EF',     //装备产业
+        "eco003": '#FFAB33',     //纺织服装皮革产业
+        "eco004": '#DBE224',     //化纤维产业
+        "eco005": '#37D337',     //新能源产业
+        "eco006": '#D9389B',     //化工新材料
+        "eco007": '#6EC6F3',     //节能环保产业
+        "eco008": '#32DF9C'      //"健康食品产业"
+    },
+    pointImg: {
+        "eco001": 'images/dzxxcy.gif',     //电子信息产业
+        "eco002": 'images/zbcy.gif',     //装备产业
+        "eco003": 'images/fzfzpg.gif',     //纺织服装皮革产业
+        "eco004": 'images/hxwcy.gif',     //化纤维产业
+        "eco005": 'images/xnycy.gif',     //新能源产业
+        "eco006": 'images/hgxcl.gif',     //化工新材料
+        "eco007": 'images/jnhbcy.gif',     //节能环保产业
+        "eco008": 'images/jkspcy.gif'      //"健康食品产业"
+    },
+    manufactureAjax: function () {
+        var me = this;
+        //$("#legend2").css("display","block");
+        $.ajax({
+            type: 'post',
+            url: "jxecomanufacture/queryEcoManuInfo.do",
+            dataType: 'JSON',
+            success: function (data) {
+                var str = "";
+                $.each(data, function (i) {
+                    str += '<li color="' + me.font_color[data[i]["info"][0]['indus_key']] + '" style="color:' + me.font_color[data[i]["info"][0]['indus_key']] + '">' + data[i].mc + '</li>';
+                    //保存产业经济数据
+                    me.industryData[data[i].mc] = data[i].info
+                })
+                $("#legend2 ul").html(str);
+                me.n = -1;
+                me.len = $("#legend2").find("li").length;
+                //manufacture.choose(data);
+            }
+        })
+        this.bindClick();
+        manufacture.timer = setInterval(function () {
+            me.n++;
+            if (me.n == me.len) {
+//					console.log("结束")
+                clearInterval(manufacture.timer);
+                //me.n = -1;
+            } else {
+                $("#legend2").find("li").eq(me.n).addClass("active").siblings();
+                //console.log(me.n);
+                manufacture.choose();
+
+            }
+        }, 2200)
+
+    },
+
+    bindClick: function () {
+        var me = this;
+        $("#legend2").undelegate().delegate('li', 'click', function () {
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+                $(this).css("color", "#fff");
+                //manufactureLayer.clear();
+                map.clearMap();
+                me.choose();
+                clearInterval(manufacture.timer);
+                return
+            } else {
+                $(this).addClass("active");
+                $(this).css("color", $(this).attr("color"));
+                //manufactureLayer.clear();
+                map.clearMap();
+                me.choose();
+                clearInterval(manufacture.timer);
+                return
+            }
+        })
+    },
+     showlayers:function(data){
+         //console.log("{{{")
+         //console.log(data);
+         for (var i = 0; i < data.length; i++) {
+             //var dd = data[i].info;
+             //for (var j = 0; j < dd.length; j++) {
+                 var prr = [];
+                 prr.push(parseFloat(data[i].jd));
+                 prr.push(parseFloat(data[i].wd));
+                 var img = manufacture.pointImg[data[i].details['indus_key']];
+                 //console.log(dd[j].value)
+                 switch (data[i].details.value) {
+                     case 1:
+                         manufacture.addPoint(prr, 24, 24, img);
+                         break;
+                     case 2:
+                         manufacture.addPoint(prr, 48, 48, img);
+                         break;
+                     case 3:
+                         manufacture.addPoint(prr, 72, 72, img);
+                         break;
+                 }
+             }
+
+         }
+     ,
+    addPoint:function(arr,h,w,img) {//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+        var _marker = new AMap.Marker({
+            map: map,
+            position: arr,        //经纬度
+            icon: new AMap.Icon({
+                size: new AMap.Size(h, w),  //图标大小
+                image: img       //自定义图片
+            })
+
+        });
+    },
+    choose: function () {
+        if ($("#legend2").find("li.active").length != 0) {//排除全都不选
+//				console.log(this.industryData)
+            var pointArr=[];
+            for (var i = 0; i < $("#legend2").find("li.active").length; i++) {
+					var dtt=this.industryData[$("#legend2").find("li.active").eq(i).text()];
+                for (var n = 0; n < this.industryData[$("#legend2").find("li.active").eq(i).text()].length; n++) {
+                    var XY = wgs84togcj02(parseFloat(this.industryData[$("#legend2").find("li.active").eq(i).text()][n].jD), parseFloat(this.industryData[$("#legend2").find("li.active").eq(i).text()][n].wD));
+                    var jd = XY[0];
+                    var wd = XY[1];
+                    pointArr.push({
+                        jd: jd,
+                        wd: wd,
+                        details: this.industryData[$("#legend2").find("li.active").eq(i).text()][n]
+                    });
+                }
+            }
+            //console.log("###");
+            //console.log(pointArr)
+            //console.log(data)
+            manufacture.showlayers(pointArr)
+        }
+    }
+}

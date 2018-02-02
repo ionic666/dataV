@@ -1,0 +1,87 @@
+package com.cetc28.idata.model;
+
+import java.math.BigDecimal;
+
+public class JxAddminItems {
+    private BigDecimal id;
+
+    private String icode;
+
+    private String iname;
+
+    private String starttime;
+
+    private String state;
+
+    private String depart;
+
+    private String changetime;
+
+
+    private String applicant;
+
+    public BigDecimal getId() {
+        return id;
+    }
+
+    public void setId(BigDecimal id) {
+        this.id = id;
+    }
+
+    public String getIcode() {
+        return icode;
+    }
+
+    public void setIcode(String icode) {
+        this.icode = icode == null ? null : icode.trim();
+    }
+
+    public String getIname() {
+        return iname;
+    }
+
+    public void setIname(String iname) {
+        this.iname = iname == null ? null : iname.trim();
+    }
+
+    public String getStarttime() {
+        return starttime;
+    }
+
+    public void setStarttime(String starttime) {
+        this.starttime = starttime == null ? null : starttime.trim();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state == null ? null : state.trim();
+    }
+
+    public String getDepart() {
+        return depart;
+    }
+
+    public void setDepart(String depart) {
+        this.depart = depart == null ? null : depart.trim();
+    }
+
+    public String getChangetime() {
+        return changetime;
+    }
+
+    public void setChangetime(String changetime) {
+        this.changetime = changetime == null ? null : changetime.trim();
+    }
+
+    public String getApplicant() {
+        return applicant;
+    }
+
+    public void setApplicant(String applicant) {
+        this.applicant = applicant;
+    }
+
+}

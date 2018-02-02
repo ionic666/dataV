@@ -1,0 +1,59 @@
+package com.cetc28.idata.dto;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：wangxw
+ * 创建日期：2017/9/25 16:21
+ * 描述信息：
+ * ***************************************************************
+ */
+
+public class MiHospitalVolumeStatisticsDto {
+    private String hospitalName;
+    private String longitude;
+    private String latitude;
+    private Long volume;
+    private Long sumVolume;
+
+    public String getHospitalName() {
+        return hospitalName;
+    }
+
+    public void setHospitalName(String hospitalName) {
+        this.hospitalName = hospitalName;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public Long getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Long volume) {
+        this.volume = volume;
+    }
+
+    public Long getSumVolume() {
+        return sumVolume;
+    }
+
+    public void setSumVolume(Long sumVolume) {
+        this.sumVolume = sumVolume;
+    }
+}

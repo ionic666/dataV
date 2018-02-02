@@ -1,0 +1,258 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #environmentWindow .modal-dialog{
+      margin-right: 10px;
+      width:500px;
+    }
+    #environmentWindow .modal-content{
+      height: 400px;
+      /*background: url("map/images/economicModel/bgw(1).png") no-repeat;
+      background-position: -7px 0;
+      background-size: 102% 101%;*/
+    }
+    #environmentWindow .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #environmentWindow .modal-title{
+      margin-top: -5px;
+    }
+    #environmentWindow .modal-body{
+      padding: 0px;
+    }
+    #environmentWindow .nav li{
+      width: 117px;
+      height: 32px;
+        line-height: 32px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .lisoft{
+        color: white;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      background-image: url("map/images/Layer24.png");
+    }
+
+    .actsoft{
+        color: #000000;
+      background-image: url("map/images/Layer24copy2.png");
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+
+
+    #environmentWindow div .nav{
+      height:32px;
+        margin-top: -10px;
+    }
+    #environmentWindow .nav li a:hover{
+      color: #000;
+      text-decoration: none;
+    }
+    #environmentWindow{
+      color: #000000;
+      background-color:white ;
+    }
+
+    #evidata1 td{
+        height: 10px;line-height: 10px;
+    }
+
+  </style>
+</head>
+<body>
+<div class="modal fade" style="overflow: hidden;width: 520px;height: 400px;top: 10px;left: 70px;background-color: transparent" id="environmentWindow" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog" style="width: 520px">
+    <div class="modal-content" style="height: 380px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+          <img src="map/images/economicModel/close.png">
+        </button>
+        <div class="nav" style="margin-top: -11px;">
+          <ul class="list-group">
+            <li onclick="toUrl(this,'#envir1')" id="lisoft1" class="list-unstyled act_2" value="2"><div class="stext">概况</div></li>
+            <li onclick="toUrl(this,'#envir2')" id="lisoft2" class="list-unstyled li_3" value="3"><div class="stext">污水处理厂</div></li>
+            <li onclick="toUrl(this,'#envir3')" id="lisoft3" class="list-unstyled li_4" value="4"><div class="stext">区污水处理</div></li>
+          </ul>
+        </div>
+        <%--<h4 class="modal-title ecoWindowTitle" id="infoModalLabel">社会经济</h4>--%>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content" style="border: none">
+          <div id="envir1" class="tab-pane active"><!--第一页产品规模这个图表-->
+              <div style="height: 110px;width: 460px;">
+                  <div style="width: 220px;height: 100px;float: left;border-radius: 10px;background-color: rgba(199,199,199,0.6);padding:5px;padding-left: 10px">
+                      <p>第一季度</p>
+                      <p>污水总量：4500万m³<br/>
+                      处理总量：4230万m³<br/>
+                      集中处理率：94%</p>
+                  </div>
+                  <div style="width: 220px;height: 100px;float: right;border-radius: 10px;background-color: rgba(151,187,228,0.6);text-align: center;padding-top: 20px">
+                      <p>主城污水集中处理率2016年目标</p>
+                      <p><strong style="color: #000000;font-size: 18px;font-weight: bold">95%</strong></p>
+                  </div>
+              </div>
+            <div style="height:180px;width:480px;overflow-y: auto;margin-top: 3px">
+                <table id="evidata1" class="table table-striped table-bordered table-hover">
+
+                </table>
+            </div>
+          </div>
+          <div id="envir2" class="tab-pane " ><!--z这是第二页的饼图-->
+            <div style="height:330px;width:480px;" id="pie">
+              <table id="evidata2" class="table table-striped table-bordered table-hover">
+
+              </table>
+            </div>
+          </div>
+          <div id="envir3" class="tab-pane "><!--z这是第三页的条形图-->
+            <div style="height:330px;width:480px;" id="environmentChart">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  <%--弹出页面数据初始化--%>
+
+  function toUrlenvir(evt,index){
+    $(evt).addClass("actsoft").removeClass("lisoft");
+    $(evt).siblings().addClass("lisoft").removeClass("actsoft");
+    $("#envir"+index).addClass("active");
+    $("#envir"+index).siblings().removeClass("active");
+  }
+    function initEnvironment1(url){
+        $.ajax({
+            type:'post',
+            url:url,
+            dataType:'JSON',
+            success:function(data){
+                if(data){
+//                    console.log(data);
+                    $("#evidata1").html("");
+                    var str="<thead><tr><td>年度</td><td>污水集中处理率</td><td>年度目标</td></tr></thead><tbody>";
+                    for(var i=0;i<data.length;i++){
+                        str+='<tr><td>'+data[i].sj+'</td><td>'+data[i].value+'</td><td>'+data[i].mb+'</td></tr>';
+                    }
+                    str+="</tbody>";
+                    $("#evidata1").append(str);
+                }
+            }
+        })
+    }
+  function initEnvironment2(url,layers,imgSource){
+      $.ajax({
+          type:'post',
+          url:url,
+          dataType:'JSON',
+          success:function(data){
+              if(data){
+//                  console.log(data);
+                  $("#evidata2").html("");
+                  var xdata=new Array();
+                  var ydata1=new Array();
+                  var ydata2=new Array();
+//                  var ydata2=new Array();
+                  var str="<thead><tr><td>行政区划</td><td>单位名称</td><td>设计规模（万m³/日）</td><td>排放标准</td><td>备注</td></tr></thead><tbody>";
+                  for(var i=0;i<data.length;i++){
+                      str+='<tr><td>'+data[i].qy+'<input type="hidden" value=\"'+data[i].jd+'\"/><input type="hidden" value=\"'+data[i].wd+'\"/></td><td>'+data[i].mc+'</td><td>'+data[i].sjgm+'</td><td>'+data[i].pfbz+'</td><td></td></tr>';
+                      if(data[i].sjgm>20) {
+                          xdata.push(data[i].qy);
+                          ydata1.push(data[i].sjgm);
+                          ydata2.push(data[i].sjcl);
+                      }
+                  }
+                  str+="</tbody>";
+                  $("#evidata2").append(str);
+                  $("#evidata2 tr").click(function(){
+                      var jd=$($(this).find("input")[0]).val();
+                      var wd=$($(this).find("input")[1]).val();
+                      mapToCenter(jd,wd);
+                  })
+                  initEnvirChart(xdata,ydata1,ydata2);
+                  showLayers(data,layers,imgSource);
+              }
+          }
+      })
+  }
+    function initEnvirChart(xdata,ydata1,ydata2){
+        var myechart = echarts.init(document.getElementById('environmentChart'));
+
+        option = {
+            title : {
+                text: '各区污水设计规模和实际处理量'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:[
+                    '设计规模','实际处理量'
+                ],
+                x:'right'
+            },
+            calculable : true,
+            grid: {y: 70, y2:40, x2:20},
+            xAxis : [
+                {
+                    type : 'category',
+                    data : xdata
+                },
+                {
+                    type : 'category',
+                    axisLine: {show:false},
+                    axisTick: {show:false},
+                    axisLabel: {show:false},
+                    splitArea: {show:false},
+                    splitLine: {show:false},
+                    data : xdata
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel:{formatter:'{value} 万/m³'}
+                }
+            ],
+            series : [
+                {
+                    name:'设计规模',
+                    type:'bar',
+                    itemStyle: {normal: {color:'rgba(252,206,16,1)', label:{show:true}}},
+                    data:ydata1
+                },
+                {
+                    name:'实际处理量',
+                    type:'bar',
+                    itemStyle: {normal: {color:'rgba(181,195,52,1)', label:{show:true,textStyle:{color:'#27727B'}}}},
+                    data:ydata2
+                }
+            ]
+        };
+        myechart.setOption(option);
+    }
+</script>
+</body>
+</html>

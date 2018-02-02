@@ -1,0 +1,210 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #greenbeltWindow .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #greenbeltWindow .modal-title{
+      margin-top: -5px;
+    }
+    #greenbeltWindow .modal-body{
+      padding: 0px;
+    }
+    #greenbeltWindow .nav .list-group li{
+      width: 117px;height: 32px;line-height: 32px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .lisoft{
+        color: white;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      background-image: url("map/images/Layer24.png");
+    }
+
+    .actsoft{
+        color: #000000;
+      background-image: url("map/images/Layer24copy2.png");
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+
+    #greenbeltWindow .nav li a:hover{
+      color: #000;
+      text-decoration: none;
+    }
+    #greenbeltWindow{
+      color: #000000;
+      background-color:white ;
+    }
+
+  </style>
+</head>
+<body>
+<div class="modal fade" style="overflow: hidden;width: 580px;height: 400px;top: 10px;left: 70px;background-color: transparent" id="greenbeltWindow" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog" style="width: 580px">
+    <div class="modal-content" style="height: 380px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+          <img src="map/images/economicModel/close.png">
+        </button>
+        <div class="nav" style=" height:32px;margin-top: -11px;">
+          <ul class="list-group">
+              <li onclick="toUrl(this,'#envir1_3')"  class="list-unstyled act_3" value="3"><div class="stext">公园绿地</div></li>
+              <li onclick="toUrl(this,'#envir2_3')"  class="list-unstyled li_4" value="4"><div class="stext">人均统计</div></li>
+            <%--<li onclick="toUrlenvir3(this,'3')" id="lisoft3_2" class="list-unstyled lisoft">历史数据</li>--%>
+          </ul>
+        </div>
+        <%--<h4 class="modal-title ecoWindowTitle" id="infoModalLabel">社会经济</h4>--%>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content" style="height: 330px">
+          <div id="envir1_3" class="tab-pane active"><!--第一页产品规模这个图表-->
+                <div style="height:290px;width:540px;overflow-y: auto;margin-top: 3px;">
+                    <table id="evidata1_3" class="table table-striped table-bordered table-hover">
+                    </table>
+                </div>
+          </div>
+            <div id="envir2_3" class="tab-pane"><!--第一页产品规模这个图表-->
+                <div id="greenbeltWindow_chart1" style="height:290px;width:540px;margin-top: 3px;">
+
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    function toUrlenvir3(evt,index){
+        $(evt).addClass("actsoft").removeClass("lisoft");
+        $(evt).siblings().addClass("lisoft").removeClass("actsoft");
+        $("#envir"+index+"_3").addClass("active");
+        $("#envir"+index+"_3").siblings().removeClass("active");
+    }
+
+    function initEnvironment1_3(url){
+        $.ajax({
+            type:'post',
+            url:url,
+            dataType:'JSON',
+            success:function(data){
+                if(data){
+//                    console.log(data);
+                    var Xdata=new Array();
+                    var Ydata=new Array();
+                    for(var i=0;i<data.length;i++) {
+                        Xdata.push(data[i].sj);
+                        Ydata.push(data[i].value);
+                    }
+                    initEnvirChart_3(Xdata,Ydata);
+                }
+            }
+        })
+    }
+
+    function initEnvironment2_3(url,layers,imgSource){
+      $.ajax({
+          type:'post',
+          url:url,
+          dataType:'JSON',
+          success:function(data){
+              if(data){
+//                  console.log(data);
+                  $("#evidata1_3").html("");
+                  var str="<thead><tr><td>名称</td><td>区域</td><td>面积</td></tr></thead><tbody>";
+                  for(var i=0;i<data.length;i++){
+                      str+='<tr><td>'+data[i].mc+'<input type="hidden" value=\"'+data[i].jd+'\"/><input type="hidden" value=\"'+data[i].wd+'\"/></td><td>'+data[i].ssqy+'</td><td>'+data[i].mj+'</td></tr>';
+                  }
+                  str+="</tbody>";
+                  $("#evidata1_3").append(str);
+                  $("#evidata1_3 tr").click(function(){
+                      var jd=$($(this).find("input")[0]).val();
+                      var wd=$($(this).find("input")[1]).val();
+                      mapToCenter(jd,wd);
+                  })
+                  showLayers(data,layers,imgSource);
+              }
+          }
+      })
+  }
+
+        function initEnvirChart_3(xdata,ydata1){
+        var myechart = echarts.init(document.getElementById("greenbeltWindow_chart1"));
+
+        var option = {
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:[
+                    '人均公园绿地面积'
+                ],
+                x:'right'
+            },
+            calculable : true,
+            grid: {y: 50, y2:30, x2:20,x:30},
+            xAxis : [
+                {
+                    type : 'category',
+                    data : xdata
+                },
+                {
+                    type : 'category',
+                    axisLine: {show:false},
+                    axisTick: {show:false},
+                    axisLabel: {show:false},
+                    splitArea: {show:false},
+                    splitLine: {show:false},
+                    data : xdata
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel:{formatter:'{value}'}
+                }
+            ],
+            series : [
+                {
+                    name:'人均公园绿地面积',
+                    type:'bar',
+//                    itemStyle: {normal: {color:'rgba(252,206,16,1)', label:{show:true}}},
+                    itemStyle: {
+                        normal: {
+                            color: '#CBD570',
+                            label: {
+                                show: true,
+                                position: 'top',
+                                textStyle: {color: '#7ADBFF', fontSize: '14', fontWeight: 'bold'},
+                                formatter: '{c}'
+                            }
+                        }
+                    },
+                    data:ydata1
+                }
+            ]
+        };
+        myechart.setOption(option);
+    }
+</script>
+</body>
+</html>

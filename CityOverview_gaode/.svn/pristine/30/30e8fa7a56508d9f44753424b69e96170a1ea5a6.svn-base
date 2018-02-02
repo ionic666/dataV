@@ -1,0 +1,125 @@
+package com.cetc28.idata.model;
+
+import java.math.BigDecimal;
+
+public class JxUtilityManteDeviceBase {
+    private String deviceId;
+
+    private String bh;
+
+    private String utilityTypeCode;
+
+    private BigDecimal lat;
+
+    private BigDecimal lon;
+
+    private String deviceTypeCode;
+
+    private String deviceLoca;
+
+    private String structure;
+
+    private String embedMode;
+
+    private String dateYmd;
+
+    private String admi;
+
+    private String projectName;
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId == null ? null : deviceId.trim();
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh == null ? null : bh.trim();
+    }
+
+    public String getUtilityTypeCode() {
+        return utilityTypeCode;
+    }
+
+    public void setUtilityTypeCode(String utilityTypeCode) {
+        this.utilityTypeCode = utilityTypeCode == null ? null : utilityTypeCode.trim();
+    }
+
+    public BigDecimal getLat() {
+        return lat;
+    }
+
+    public void setLat(BigDecimal lat) {
+        this.lat = lat;
+    }
+
+    public BigDecimal getLon() {
+        return lon;
+    }
+
+    public void setLon(BigDecimal lon) {
+        this.lon = lon;
+    }
+
+    public String getDeviceTypeCode() {
+        return deviceTypeCode;
+    }
+
+    public void setDeviceTypeCode(String deviceTypeCode) {
+        this.deviceTypeCode = deviceTypeCode == null ? null : deviceTypeCode.trim();
+    }
+
+    public String getDeviceLoca() {
+        return deviceLoca;
+    }
+
+    public void setDeviceLoca(String deviceLoca) {
+        this.deviceLoca = deviceLoca == null ? null : deviceLoca.trim();
+    }
+
+    public String getStructure() {
+        return structure;
+    }
+
+    public void setStructure(String structure) {
+        this.structure = structure == null ? null : structure.trim();
+    }
+
+    public String getEmbedMode() {
+        return embedMode;
+    }
+
+    public void setEmbedMode(String embedMode) {
+        this.embedMode = embedMode == null ? null : embedMode.trim();
+    }
+
+    public String getDateYmd() {
+        return dateYmd;
+    }
+
+    public void setDateYmd(String dateYmd) {
+        this.dateYmd = dateYmd == null ? null : dateYmd.trim();
+    }
+
+    public String getAdmi() {
+        return admi;
+    }
+
+    public void setAdmi(String admi) {
+        this.admi = admi == null ? null : admi.trim();
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName == null ? null : projectName.trim();
+    }
+}

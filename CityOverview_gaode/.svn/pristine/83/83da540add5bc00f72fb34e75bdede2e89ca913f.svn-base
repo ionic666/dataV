@@ -1,0 +1,24 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.dto.CorpPenaltyCountDto;
+import com.cetc28.idata.model.JxSsCorpPenaltyInfo;
+
+import java.util.List;
+
+public interface JxSsCorpPenaltyInfoMapper {
+    int deleteByPrimaryKey(Short id);
+
+    int insert(JxSsCorpPenaltyInfo record);
+
+    int insertSelective(JxSsCorpPenaltyInfo record);
+
+    JxSsCorpPenaltyInfo selectByPrimaryKey(Short id);
+
+    int updateByPrimaryKeySelective(JxSsCorpPenaltyInfo record);
+
+    int updateByPrimaryKey(JxSsCorpPenaltyInfo record);
+
+    List<CorpPenaltyCountDto> selectSsCorpPenaltyCountInFiveY(String regionCode, String corpName);
+
+    List<JxSsCorpPenaltyInfo> selectSsCorpPenaltyLatestThree(String regionCode, String corpName);
+}

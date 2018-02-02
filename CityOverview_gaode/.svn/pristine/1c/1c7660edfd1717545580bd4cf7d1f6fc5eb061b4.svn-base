@@ -1,0 +1,153 @@
+package com.cetc28.idata.model;
+
+public class JxSsServiceStatistics {
+    private Short id;
+
+    private Short year;
+
+    private Double onlineService;
+
+    private Double selfServiceAioMachine;
+
+    private Double mobileAppService;
+
+    private Double phoneMessageService;
+
+    private Double selfServiceTakeRate;
+
+    private Double remoteSsRelationTarnsfer;
+
+    private Double remoteSsBenefitsQa;
+
+    private Double remoteMedicalSettlement;
+
+    private Double piBenefitsComparison;
+
+    private Double ssServiceIndex;
+
+    private Double ssOnlineServiceIndex;
+
+    private Double ssSelfServiceIndex;
+
+    private Double ssRemoteServiceIndex;
+
+    public Short getId() {
+        return id;
+    }
+
+    public void setId(Short id) {
+        this.id = id;
+    }
+
+    public Short getYear() {
+        return year;
+    }
+
+    public void setYear(Short year) {
+        this.year = year;
+    }
+
+    public Double getOnlineService() {
+        return onlineService;
+    }
+
+    public void setOnlineService(Double onlineService) {
+        this.onlineService = onlineService;
+    }
+
+    public Double getSelfServiceAioMachine() {
+        return selfServiceAioMachine;
+    }
+
+    public void setSelfServiceAioMachine(Double selfServiceAioMachine) {
+        this.selfServiceAioMachine = selfServiceAioMachine;
+    }
+
+    public Double getMobileAppService() {
+        return mobileAppService;
+    }
+
+    public void setMobileAppService(Double mobileAppService) {
+        this.mobileAppService = mobileAppService;
+    }
+
+    public Double getPhoneMessageService() {
+        return phoneMessageService;
+    }
+
+    public void setPhoneMessageService(Double phoneMessageService) {
+        this.phoneMessageService = phoneMessageService;
+    }
+
+    public Double getSelfServiceTakeRate() {
+        return selfServiceTakeRate;
+    }
+
+    public void setSelfServiceTakeRate(Double selfServiceTakeRate) {
+        this.selfServiceTakeRate = selfServiceTakeRate;
+    }
+
+    public Double getRemoteSsRelationTarnsfer() {
+        return remoteSsRelationTarnsfer;
+    }
+
+    public void setRemoteSsRelationTarnsfer(Double remoteSsRelationTarnsfer) {
+        this.remoteSsRelationTarnsfer = remoteSsRelationTarnsfer;
+    }
+
+    public Double getRemoteSsBenefitsQa() {
+        return remoteSsBenefitsQa;
+    }
+
+    public void setRemoteSsBenefitsQa(Double remoteSsBenefitsQa) {
+        this.remoteSsBenefitsQa = remoteSsBenefitsQa;
+    }
+
+    public Double getRemoteMedicalSettlement() {
+        return remoteMedicalSettlement;
+    }
+
+    public void setRemoteMedicalSettlement(Double remoteMedicalSettlement) {
+        this.remoteMedicalSettlement = remoteMedicalSettlement;
+    }
+
+    public Double getPiBenefitsComparison() {
+        return piBenefitsComparison;
+    }
+
+    public void setPiBenefitsComparison(Double piBenefitsComparison) {
+        this.piBenefitsComparison = piBenefitsComparison;
+    }
+
+    public Double getSsServiceIndex() {
+        return ssServiceIndex;
+    }
+
+    public void setSsServiceIndex(Double ssServiceIndex) {
+        this.ssServiceIndex = ssServiceIndex;
+    }
+
+    public Double getSsOnlineServiceIndex() {
+        return ssOnlineServiceIndex;
+    }
+
+    public void setSsOnlineServiceIndex(Double ssOnlineServiceIndex) {
+        this.ssOnlineServiceIndex = ssOnlineServiceIndex;
+    }
+
+    public Double getSsSelfServiceIndex() {
+        return ssSelfServiceIndex;
+    }
+
+    public void setSsSelfServiceIndex(Double ssSelfServiceIndex) {
+        this.ssSelfServiceIndex = ssSelfServiceIndex;
+    }
+
+    public Double getSsRemoteServiceIndex() {
+        return ssRemoteServiceIndex;
+    }
+
+    public void setSsRemoteServiceIndex(Double ssRemoteServiceIndex) {
+        this.ssRemoteServiceIndex = ssRemoteServiceIndex;
+    }
+}

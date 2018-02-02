@@ -1,0 +1,35 @@
+package com.cetc28.PeopleBenefitService.dto;
+
+/**
+ * 房地产开发投资
+ * Created by FangYan on 2017/9/15.
+ */
+public class Fdckftz {
+    private double kftz;
+    private Integer monthSize;
+    private String maxSj;
+
+    public double getKftz() {
+        return kftz;
+    }
+
+    public void setKftz(double kftz) {
+        this.kftz = kftz;
+    }
+
+    public Integer getMonthSize() {
+        return monthSize;
+    }
+
+    public void setMonthSize(Integer monthSize) {
+        this.monthSize = monthSize;
+    }
+
+    public String getMaxSj() {
+        return maxSj;
+    }
+
+    public void setMaxSj(String maxSj) {
+        this.maxSj = maxSj;
+    }
+}

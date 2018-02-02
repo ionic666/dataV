@@ -1,0 +1,73 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * 企业画像Dao层
+ * created by linyu in 2017/12/28
+ */
+public interface IJxEcoComPicDao {
+    /**
+     * 根据企业ID获取企业股东数量
+     * @param companyId
+     * @return
+     */
+    public abstract Integer getOwnerNum(String companyId);
+
+    /**
+     * 根据企业ID获取企业法律诉讼数量
+     * @param companyId
+     */
+    public abstract Integer getLawsuitNum(String companyId);
+
+    /**
+     * 根据企业ID获取企业招聘数量
+     * @param companyId
+     */
+    public abstract Integer getRecruitNum(String companyId);
+
+    /**
+     * 根据企业ID获取企业投标数量
+     * @param companyId
+     */
+    public abstract Integer getBidNum(String companyId);
+
+    /**
+     * 根据企业ID获取资格证书数量
+     * @param companyId
+     * @return
+     */
+    public abstract Integer getCertificateNum(String companyId);
+
+    /**
+     * 根据企业ID获取专利数量
+     * @param companyId
+     * @return
+     */
+    public abstract Integer getPatentNum(String companyId);
+
+    /**
+     * 根据企业ID获取著作权数量
+     * @param companyId
+     * @return
+     */
+    public abstract Integer getCopyRightNum(String companyId);
+
+    /**
+     * 根据企业id、图像id获取企业画像数据
+     * @param companyId
+     * @param picId
+     * @return
+     */
+    public abstract List queryComPicInfo(@Param("companyId")String companyId, @Param("picId")String picId);
+
+    /**
+     * 查询某一企业的股权构成，用于绘制饼状图
+     * @param companyId
+     * @return
+     */
+    public abstract List queryOwnership(String companyId);
+}

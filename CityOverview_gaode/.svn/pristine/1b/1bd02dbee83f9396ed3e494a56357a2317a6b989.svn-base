@@ -1,0 +1,263 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    .infoTitle{
+      width: 31%;
+      height: 85%;
+      float: left;
+      padding-left: 3%;
+    }
+    /*.infoTitle p{*/
+      /*margin-top: 5%;*/
+    /*}*/
+    div.gqbz{
+      width: 100%;
+      height: 100%;
+
+    }
+    div#gqbz{
+      height: auto;
+      min-height: 85%;
+      width: 65%;
+      float: left;
+    }
+    .fontSize-14{
+      font-size: 14px;
+    }
+    .fontSize-16{
+      font-size: 16px;
+    }
+    .textAlign-right{
+      text-align: right;
+    }
+    .addRed-gdbz{
+      font-size: 22px;
+    }
+    .smxIcon{
+      height: 30px;
+      width: 30px;
+      display: block;
+      margin:10px auto;
+      vertical-align: middle;
+    }
+    .infoTitle>ul>li{
+      display: inline-block;
+      margin: auto;
+      vertical-align: middle;
+    }
+    .infoTitle>ul{
+      margin-top: 15%;
+    }
+    .infoTitle>ul span{
+      vertical-align: middle;
+    }
+    .addRed-gsbz{
+      font-size: 26px;
+
+    }
+    .fontSize8{
+      font-size: 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="gqbz">
+  <p class="headerTitle">
+    管网基础设施
+  </p>
+  <div class="infoTitle">
+    <ul>
+      <li><img class="smxIcon" src="../../images/utility/jcbj.png" alt="监测报警"/><span class="fontSize8">监测报警</span></li>
+      <li><p><span class="addYellow addRed-gsbz counter" id="jcbj"></span><span class="fontSize8">次</span></p></li>
+    </ul>
+    <ul>
+      <li><img class="smxIcon" src="../../images/utility/gwgz.png" alt="管网故障"/><span class="fontSize8">管网故障</span></li>
+      <li><p><span class="addYellow addRed-gsbz counter" id="gwgz"></span><span class="fontSize8">次</span></p></li>
+    </ul>
+    <%--<ul>--%>
+      <%--<li>--%>
+        <%--<p class="fontSize-16">监测报警<span class="addRed addRed-gdbz" id="jcbj">80</span>次</p><br/>--%>
+        <%--<p class="fontSize-16">管网故障<span class="addRed addRed-gdbz" id="gwgz">90</span>次</p>--%>
+      <%--</li>--%>
+    <%--</ul>--%>
+  </div>
+  <%--社保自助服务开通率折线图--%>
+  <div id="gqbz">
+  </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+  var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+  function gqbz(xAxisData,seriesData1,seriesData2) {
+    var myChart = echarts.init(document.getElementById("gqbz"));
+    var option = {
+      color: ['#5B9BD5'],
+      legend: {
+        data: ['智能化监测管理率','综合管廊覆盖率'],
+        textStyle: text_style,
+        x: 'right',
+        y: 'top'
+      },
+      calculable: false,
+      tooltip: {
+        trigger: 'axis',
+          formatter: '{a}<br/>{b}:{c}%'
+      },
+      grid: {
+        x: '17%',
+        y: '35%',
+        x2: '17%',
+        y2: '15%',
+        containLabel: true,
+        borderWidth: 0
+      },
+      xAxis: [
+        {
+          type: 'category',
+          splitLine: {show: false},
+          axisLine: {show: true, lineStyle: {color: '#BFBFBF'}},
+          axisTick: {show: true},
+          axisLabel: {show: true, textStyle: text_style},
+          data: xAxisData
+        }
+      ],
+      yAxis: [
+        {
+          min:0,
+          max:100,
+          splitNumber:5,
+          type: 'value',
+          splitLine: {show: false},
+          axisLine: { lineStyle: {
+            color: '#8D8C8C'
+          }},
+          axisTick: {show: false},
+          axisLabel: {
+            show: true,
+            textStyle: text_style,
+            formatter: '{value} %'}
+        },
+        {
+          min:0,
+          max:100,
+          splitNumber:5,
+          type: 'value',
+          splitLine: {show: false},
+          axisLine: { lineStyle: {
+            color: '#8D8C8C'
+          }},
+          axisTick: {show: false},
+          axisLabel: {
+            show: true,
+            textStyle: text_style,
+            formatter: '{value} %'}
+        }
+      ],
+      series: [
+        {
+          name: '智能化监测管理率',
+          type: 'line',
+          smooth: true,
+          itemStyle:{
+            normal:{
+
+              label:{
+                show:true,
+                formatter: '{c}%',
+                position:'top',
+                textStyle:text_style
+              }
+            }
+          },
+          data: seriesData1
+        },
+        {
+          name: '综合管廊覆盖率',
+          type: 'line',
+          smooth: true,
+          yAxisIndex: 1,
+          itemStyle:{
+            normal:{
+              color:'#ED7D31',
+              lineStyle:{
+                color:'#ED7D31'
+              },
+              label:{
+                show:true,
+                formatter: '{c}%',
+                  position:'bottom',
+                  textStyle:{
+                  color: '#fff'
+                }
+              }
+            }
+          },
+          data: seriesData2
+        }
+      ]
+    };
+    myChart.setOption(option);
+  }
+
+  //  查询近四年管网数据
+  $.ajax({
+    type:"POST",
+    url:'../../jxutility/utilitynet/pipeCoverRate.do?bH='+qhbh+'&yearSize=4',
+    dataType:'json',
+    success:function(data){
+      var xAxis=[],
+              series1=[],
+              series2=[],
+              xAxisData,
+              seriesData1,
+              seriesData2;
+
+      $.each(data,function(i){
+        var date=data[i].dateY;
+        xAxis.push(date+'年');
+        series1.push((data[i].newRoadPipeCoverRate*100).toFixed(2));
+        series2.push((data[i].pipeCoverRate*100).toFixed(2));
+      });
+      xAxisData = xAxis.reverse();
+      seriesData1 = series1.reverse();
+      seriesData2 = series2.reverse();
+      gqbz(xAxisData,seriesData1,seriesData2);
+    }
+  });
+
+  //监测报警&&管网故障
+  $.ajax({
+    type:"POST",
+    url:'../../jxutility/mantenance/manteCount.do?bH='+qhbh+'',
+    dataType:'json',
+    success:function(data){
+      $('#jcbj').html(data.noAlarm);
+      $('#gwgz').html(data.noFault);
+        $('.counter').countUp({
+            delay: 2,
+            time: 200
+        });
+    }
+  });
+</script>
+
+</body>
+</html>

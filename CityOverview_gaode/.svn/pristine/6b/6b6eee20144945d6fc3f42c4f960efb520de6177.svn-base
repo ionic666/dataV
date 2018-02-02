@@ -1,0 +1,136 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/4
+  Time: 13:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.soundhj{
+            width: 100%;
+            height: 100%;
+        }
+        .headerTitle{
+            float: left;
+        }
+        .details{
+            float: left;
+        }
+        .details img{
+            width: 34px;
+            float: left;
+            margin-left: 30px;
+        }
+        .details div{
+            float: left;
+            text-align: center;
+            margin-left: 10px;
+        }
+        .details p{
+            font-size: 4px;
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 18px;
+        }
+        div#soundhj{
+            height: 80%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="soundhj">
+    <p class="headerTitle">
+        声环境
+        <%--<img src="../../images/environment/sound.png" alt=""/>--%>
+    </p>
+    <div class="details">
+        <img src="../../images/environment/cbl.png" alt=""/>
+        <div>
+            <h2 id="wrzs" class="BlueFont">22.3%</h2>
+            <p>功能区昼夜噪声综合超标率</p>
+        </div>
+    </div>
+    <%--声环境柱状图--%>
+    <div id="soundhj">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function soundhj() {
+        var myChart = echarts.init(document.getElementById("soundhj"));
+        var option = {
+            color:['#00587C','#81DAFF','#2FABDE','#0082B7'],
+            tooltip : {
+                trigger: 'item',
+                formatter: " {a} <br> {b}:{c}%"
+            },
+            legend: {
+                data:['46-50dB','51-55dB','56-60dB','其它'],
+                show: false
+            },
+            title: {
+                text: '区域环境\n噪声分布',
+                x: 'center',
+                y: 'center',
+                itemGap: 20,
+                textStyle : {
+                    color : '#0CDAF5',
+                    fontFamily : '微软雅黑',
+                    fontSize : 18,
+                    fontWeight : 'bolder'
+                }
+            },
+            calculable : false,
+            series : [
+                {
+                    name:'区域环境噪声分布',
+                    type:'pie',
+                    radius : [70, 90],
+                    x: '60%',
+                    startAngle: -80,
+                    width: '35%',
+                    funnelAlign: 'left',
+//                    itemStyle: {
+//                        normal:{
+//                            labelLine: {
+//                                show: true,
+//                                color: '#bfbfbf'
+//                            }
+//                        }
+//                    },
+                    itemStyle: {
+                        normal:{
+                            labelLine: {
+                                show: false
+                            },
+                            label:{show:false}
+                        }
+                    },
+                    data:[
+                        {value:8, name:'46-50dB'},
+                        {value:52, name:'51-55dB'},
+                        {value:16, name:'56-60dB'},
+                        {value:24, name:'其它'}
+                    ]
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    }
+    soundhj();
+</script>
+</body>
+</html>

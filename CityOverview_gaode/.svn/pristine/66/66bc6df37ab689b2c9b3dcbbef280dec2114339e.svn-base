@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IJxEcoClusterDao" >
+    <select id="findClusterType" resultType="map">
+        select cluster_name,jd,wd,cluster_type,cluster_location from JX_ECO_INTERNET_CLUSTER
+    </select>
+
+    <select id="findCompanyInfo" resultType="com.cetc28.idata.dto.CompanyDto" parameterType="String">
+        select cluster_name,district,company_location,company_contact,company_scale,occupied_area,
+         output_value,business_scope from JX_ECO_INTERNET_COMPANY WHERE cluster_name=#{clusterName}
+    </select>
+
+    <select id="findClusterInfo" parameterType="String" resultType="map">
+        select company_num,cluster_area,cluster_location,cluster_description,cluster_type
+        FROM  JX_ECO_INTERNET_CLUSTER WHERE cluster_name=#{clusterName}
+    </select>
+
+    <select id="findClusterInfoByType" resultType="map">
+          select company_num,cluster_area,cluster_location,cluster_description,cluster_name
+        FROM  JX_ECO_INTERNET_CLUSTER WHERE clusterType=#{cluster_type}
+    </select>
+</mapper>

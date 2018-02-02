@@ -1,0 +1,1063 @@
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>五险覆盖情况</title>
+	<link rel="stylesheet" href="../../myCss/bootstrap.min.css"/>
+	<link rel="stylesheet" href="../../myCss/headTitle.css"/>
+<%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/tundra/tundra.css">--%>
+	<%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/esri/css/esri.css" />--%>
+	<%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dojox/layout/resources/ExpandoPane.css" />--%>
+	<%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/soria/soria.css" />--%>
+
+	<style>
+		html {
+			padding: 0;
+			margin: 0;
+			width: 100%;
+			height: 100%;
+			box-sizing: border-box;
+		}
+
+		body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			color: #fff;
+			font-family: "Microsoft YaHei";
+			font-size: 18px;
+			background-image: url('../../images/socialSecurity/sbbg.png');
+			background-size: 100% 100%;
+			position: relative;
+			box-sizing: border-box;
+		}
+
+		div, h2, h1, p {
+			margin: 0;
+		}
+
+		li {
+			list-style: none;
+		}
+		.header {
+			width: 100%;
+			height: 10%;
+		}
+		.title {
+			padding-top:1%;
+			margin:0 auto;
+			color: #0CDAF5;
+			font-size: 42px;
+			font-weight: bold;
+			text-align: center;
+			z-index: 200;
+		}
+		.main {
+			width: 100%;
+			height: 90%;
+			padding:1%;
+		}
+
+		.main .head{
+			width:100%;
+			height:42%;
+			background-color: rgba(0,41,81,0.8);
+			border:2px solid #1F6786;
+			border-radius: 2px;
+		}
+		.main .body{
+			width:100%;
+			height:7%;
+			margin:2% 0px 0px 0px;
+		}
+		.main .foot{
+			width:100%;
+			height:42%
+		}
+
+		.main .head>div{
+			padding:1%;
+			width:100%;
+			height:100%;
+		}
+		.main .head>div>div{
+			border-top:2px solid #0CDAF5;
+			width:32.5%;
+			margin:0 0px 0.5% 0px;
+			height:100%;
+			float: left;
+			background-color: rgba(0,0,0,0.5);
+		}
+		.main .head>div>div:nth-child(2){
+			margin:0 1.25% 0.5% 1.25%;
+		}
+		.main .body>div{
+			width:19%;
+			margin:0px 0.5%;
+			height:100%;
+			float: left;
+			text-align: center;
+		}
+		.main .body>div>button{
+			display: inline-block;
+			width:120px;
+			color:#fff;
+			background-color: #008A8A;
+			padding:5px 0px;
+			border:none;
+			border-radius: 4px;
+		}
+		.main .body>div>button.active{
+			background-color: #00BCBC;
+		}
+		.main .foot>div{
+			width:19%;
+			margin:0px 0.5%;
+			height:100%;
+			background-color: rgba(0,0,0,0.5);
+			border-top:2px solid #0FACC1;
+			float: left;
+		}
+		.echartsBox h3{
+			height:10%;
+			width:100%;
+			text-align: left;
+			margin:0;
+			padding-top:10px;
+			padding-left:10px;
+			/*padding:20px 0px;*/
+		 }
+		.echartsBox .echarts{
+			height:90%;
+			width:100%;
+		}
+		#xbbl{
+			height:25%;
+			width:70%;
+			padding-top:25px;
+			margin:0 auto;
+			position: relative;
+		}
+		#headEchart2{
+			height:75%;
+			width:70%;
+			margin:0 auto;
+		}
+		#xbbl>span.man {
+			width: 19px;
+			height: 100%;
+			background: url(../../images/nan.png) no-repeat center;
+			float: left;
+			display: block;
+		}
+		#xbbl>div.tool {
+			width: calc(100% - 38px);
+			width: -moz-calc(100% - 38px);
+			height: 100%;
+			float: left;
+		}
+		#xbbl>div.tool .tool-man {
+			width: 60%;
+			height: 100%;
+			float: left;
+			background: url(../../images/m-1.png) repeat-x;
+		}
+		#xbbl>div.tool .tool-woman {
+			width: 40%;
+			height: 100%;
+			float: left;
+			background: url(../../images/g-m-2.png) repeat-x;
+		}
+		#xbbl>span.woman {
+			width: 19px;
+			height: 100%;
+			background: url(../../images/nv.png) no-repeat center;
+			float: left;
+			display: block;
+		}
+		#xbbl div._man{
+			position: absolute;
+			top:70px;
+			left:0;
+		}
+		#xbbl div._woman{
+			position: absolute;
+			top:70px;
+			right:0;
+		}
+		/*页面导航*/
+
+	</style>
+</head>
+
+<body>
+<div id="pageNav">
+	<span>当前页面</span>
+	<select id="chooseNav">
+		<option value="001">首页</option>
+		<option value="002">企业参保</option>
+		<option value="003" selected="selected">五险覆盖</option>
+		<option value="004">异地社保</option>
+		<option value="005">阳光医保</option>
+	</select>
+</div>
+<%--返回上一页--%>
+<a href="javascript:void(0);" onclick="returnMainPage()"
+   style="max-width:3%;position: fixed;left:97%;top: 2%;z-index: 1000;display: none"><img src="../../images/returnUp.png" alt=""></a>
+<!-- 头部logo主题 -->
+<div class="header">
+	<%--<h1 class="title">五险覆盖情况</h1>--%>
+	<div class="_header">
+		<img src="../../images/btz.png" alt=""/>
+		<h1>五险覆盖情况</h1>
+		<%--<span>互联网经济强市</span>--%>
+		<img src="../../images/bty.png" alt=""/>
+	</div>
+</div>
+
+<!-- 页面主体部分 -->
+<img id="_sanjiao" style="position: absolute;top:0px;left:0px" src="../../images/_sanjiao.png" alt=""/>
+<div class="main">
+	<div class="head">
+		<div>
+			<div class="echartsBox"><h3>养老保险参保趋势</h3><div class="echarts" id="headEchart0"></div></div>
+			<div class="echartsBox"><h3>养老保险年龄结构统计</h3><div class="echarts" id="headEchart1"></div></div>
+			<div class="echartsBox">
+				<h3>养老保险性别比例统计</h3>
+				<div class="echarts">
+					<div id="xbbl">
+						<div class="_man">55%</div>
+						<div class="_woman">45%</div>
+						<span class="man"></span>
+						<div class="tool">
+							<div class="tool-man"></div>
+							<div class="tool-woman"></div>
+						</div>
+						<span class="woman"></span>
+					</div>
+					<div id="headEchart2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="body">
+		<div><button class="active">养老保险</button></div>
+		<div><button>生育保险</button></div>
+		<div><button>医疗保险</button></div>
+		<div><button>失业保险</button></div>
+		<div><button>工伤保险</button></div>
+	</div>
+	<div class="foot">
+		<div class="echartsBox"><h3>养老保险种类人员分布</h3><div class="echarts" id="footEchart0"></div></div>
+		<div class="echartsBox"><h3>生育保险平均缴费基数趋势</h3><div class="echarts" id="footEchart1"></div></div>
+		<div class="echartsBox"><h3>医疗保险种类人员分布</h3><div class="echarts" id="footEchart2"></div></div>
+		<div class="echartsBox"><h3>失业保险平均缴费基数趋势</h3><div class="echarts" id="footEchart3"></div></div>
+		<div class="echartsBox"><h3>工伤保险行业风险等级分布</h3><div class="echarts" id="footEchart4"></div></div>
+	</div>
+
+</div>
+<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<script type="text/javascript" src="../../myjs/index.js"></script>
+<script src="../../myjs/echarts3.4.0.min.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+</body>
+
+<script>
+	function returnMainPage() {
+		top.location.href = "../../shbz1.html";
+	}
+	//    导航切换
+	$('#chooseNav').change(function(){
+		var navText=$('#chooseNav').val();
+		console.log(navText)
+		switch(navText){
+			case '001':shouye();break;
+			case '002':qycb();break;
+			case '003':wxfg();break;
+			case '004':ydcb();break;
+			case '005':ygyb();break;
+
+		}
+	});
+	function shouye(){
+		top.location.href="../../shbz1.html";
+	}
+	function qycb(){
+		top.location.href="qycb.jsp";
+	}
+	function wxfg(){
+		top.location.href="wxfgqk.jsp";
+	}
+	function ydcb(){
+		top.location.href="ywbl.jsp";
+	}
+	function ygyb(){
+		top.location.href="sunPublicServe.jsp";
+	}
+	var headerWidth=$("._header").width();	//获取头部标题的宽度
+	$("._header").css("left",-headerWidth/2+"px");//让头部标题居中
+
+//	养老保险参保趋势
+	function echarts0Show(arr) {
+		var mycharts = echarts.init(document.getElementById('headEchart0'));
+		var option = {
+			color: ['#3696D9'],
+			tooltip : {
+				trigger: 'axis',
+				/*采用回调函数*/
+				formatter: function (params) {
+					if(params.length == 0){
+						return null;
+					}
+					else{
+						var str=params[0].name+"<br />";
+						for(var i = 0; i< params.length; i++){
+							str+=params[i].seriesName+"："+params[i].value+"万人<br/>";
+						}
+					}
+					return str;
+				}
+			},
+			grid: {
+				x: '12%',
+				y: '20%',
+				x2: '5%',
+				y2: '15%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			legend: {
+				y:20,
+				data:['参保人数'],
+				textStyle: text_style,
+				formatter: function (params) {
+					return params+'(万人)'
+				 }
+			},
+			calculable : false,
+			xAxis : [
+				{
+					type : 'category',
+					boundaryGap: ['20%', '20%'],
+					axisLine: {lineStyle: {color: '#BFBFBF'}},
+					splitLine: {show: false},
+					axisLabel: {show: true, textStyle: text_style},
+					axisTick: {show: false},
+					data : ['2013年','2014年','2015年','2016年','2017年']
+				}
+			],
+			yAxis : [
+				{
+					type: 'value',
+//					min:0,
+//					max:100,
+					splitNumber:4,
+					splitLine: {
+						show: true,
+						lineStyle:{
+							color: ['#8D8C8C'],
+							width: 1,
+							type: 'dotted'
+						}
+					},
+					axisLine: { lineStyle: {
+						color: '#8D8C8C'
+					}},
+					axisTick: {show: false},
+					axisLabel: {
+						show: true,
+						textStyle: text_style,
+						formatter: '{value} '}
+				}
+			],
+			series : [{
+				 name:'参保人数',
+				 type:'line',
+				 data:arr,
+				 itemStyle:{
+					 normal:{
+						 lineStyle:{
+							 color:'#3696D9',
+							 shadowColor:'#FFC000',
+							 shadowBlur:40
+						 }
+					 }
+				 }
+			 }]
+		};
+		mycharts.setOption(option);
+	}
+//	养老保险年龄结构统计
+	function echarts1Show(arr){
+		var myChart=echarts.init(document.getElementById("headEchart1"));
+		var option={
+			color: ['#00B9B9'],
+			title : {
+				subtext: '单位(元)',
+				subtextStyle:{
+					align:'center',
+					fontSize: 16,
+					//color: '#b8d1d1',
+					color: '#fff',
+					fontWeight:'normal'
+				}
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'shadow'
+				},
+				formatter: function (params) {
+					if(params.length == 0){
+						return null;
+					}
+					else{
+						var str=params[0].name+"<br />";
+						for(var i = 0; i< params.length; i++){
+							str+=params[i].seriesName+"："+params[i].value+"元<br/>";
+						}
+					}
+					return str;
+				}
+			},
+			grid: {
+				x: '5%',
+				y: '15%',
+				x2: '5%',
+				y2: '5%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			xAxis: {
+				type: 'value',
+				splitLine: {show: false},
+				axisLine: {show: false},
+				axisTick: {show: false},
+				axisLabel: {show: false}
+			},
+			yAxis: {
+				type: 'category',
+				axisLine: {lineStyle: {color: '#676767'}},
+				axisTick: {show: true},
+				axisLabel: {show: true, textStyle: text_style, interval: 0},
+				splitLine: {show: false},
+				nameLocation: 'end',
+				data: ['0-18岁','10-30岁','30-50岁','50-65岁','65岁以上']
+			},
+			series: [
+				{
+					name:'缴费人数',
+					type: 'bar',
+					itemStyle: {normal: {borderWidth: 0,label:{show:true,textStyle: text_style}}},
+					barWidth: 13,
+					barGap: '2%',
+					data:arr
+				}
+			]
+		};
+		myChart.setOption(option);
+	}
+//	养老保险性别比例统计
+	function echarts2Show(obj) {
+		var myChart_rqnl = echarts.init(document.getElementById("headEchart2"));
+		var option_rqnl = {
+			color: ['#3696D9', '#00B9B9'],
+			calculable: false,
+//			legend: {
+//				data: ['异地就医(女)', '异地就医(男)'],
+//				x: 'center',
+//				y: 'bottom',
+//				itemGap: 40,
+//				textStyle: {
+//					color: '#fff'
+//				}
+//			},
+			grid: {
+				y: '10%',
+				containLabel: true,
+				borderWidth: 0,
+				y2: '25%'
+			},
+			tooltip: {
+				trigger: 'axis',
+				formatter: function (params, ticket, callback) {
+					var res = '人群年龄分布(' + params[0].name + ')';
+					for (var i = 0, l = params.length; i < l; i++) {
+						if (params[i].value < 0) {
+							params[i].value = -params[i].value;
+						}
+						res += '<br/>' + params[i].seriesName + ' : ' + params[i].value + '%';
+					}
+					setTimeout(function () {
+						// 仅为了模拟异步回调
+						callback(ticket, res);
+					}, 100)
+				}
+			},
+			xAxis: [
+				{
+					type: 'value',
+					max: 25,
+					min: -25,
+					splitLine: {show: false},
+					axisLine: {show: false},
+					axisTick: {show: false},
+					axisLabel: {
+						show: true,
+						textStyle: text_style,
+						formatter: function (value) {
+							if (value < 0) {
+								return (-value + "%");
+							} else {
+								return (value + '%');
+							}
+						}
+					}
+				}
+			],
+			yAxis: [
+				{
+					type: 'category',
+					splitLine: {show: false},
+					axisLine: {show: false},
+					axisLabel: {show: true, textStyle: text_style},
+					axisTick: {show: false},
+					data: ['0-18岁', '18-30岁', '30-50岁', '50-65岁', '65岁以上']
+				}
+			],
+			series: [
+
+				{
+					name: '异地就医(男)',
+					type: 'bar',
+					stack: '总量',
+					barWidth: 15,
+					itemStyle: {
+						normal: {
+							label: {
+								show: false
+							}
+						}
+					},
+					data: obj.male
+				},
+				{
+					name: '异地就医(女)',
+					type: 'bar',
+					stack: '总量',
+					barWidth: 15,
+					data: obj.female
+				}
+			]
+		};
+		myChart_rqnl.setOption(option_rqnl);
+	}
+//	养老保险种类人员分布
+	function echarts3Show(arr){
+		var myChart=echarts.init(document.getElementById("footEchart0"));
+		var option = {
+			tooltip : {
+				trigger: 'item',
+				formatter: "{a} <br/>{b} : {c} %)"
+			},
+			color:["#00EAEA","#003B3B","#016363","#009E9E"],
+			legend: {
+				orient : 'horizontal',
+				x : 'center',
+				y:'bottom',
+				data:['城镇职工养老保险','城镇居民养老保险','新农村养老保险','商业养老保险'],
+				textStyle: text_style
+			},
+			calculable : false,
+			series : [
+				{
+					name:'养老保险种类人员分布',
+					type:'pie',
+					radius : ['40%', '60%'],
+					center:['50%','50%'],
+					itemStyle : {
+						normal : {
+							label : {
+								position : 'inner',
+								textStyle: text_style,
+								formatter:function(value){
+									return value.value+'%';
+								}
+							},
+							labelLine : {
+								show : false
+							}
+						}
+					},
+					data:arr
+				}
+			]
+		};
+		myChart.setOption(option);
+	}
+//	生育保险平均缴费基数趋势
+	function echarts4Show(arr) {
+		var mycharts = echarts.init(document.getElementById('footEchart1'));
+		var option = {
+			color: ['#3696D9'],
+			tooltip : {
+				trigger: 'axis',
+				/*采用回调函数*/
+				formatter: function (params) {
+				 if(params.length == 0){
+				 return null;
+				 }
+				 else{
+				 var str=params[0].name+"<br />";
+				 for(var i = 0; i< params.length; i++){
+				 str+=params[i].seriesName+"："+params[i].value+"元<br/>";
+				 }
+				 }
+				 return str;
+				 }
+			},
+			grid: {
+				x: '5%',
+				y: '25%',
+				x2: '5%',
+				y2: '5%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			legend: {
+				y:20,
+				data:['缴费基数'],
+				textStyle: text_style,
+				formatter: function (params) {
+					return '单位：元'
+				}
+			},
+			calculable : false,
+			xAxis : [
+				{
+					type : 'category',
+					boundaryGap: ['20%', '20%'],
+					axisLine: {lineStyle: {color: '#BFBFBF'}},
+					splitLine: {show: false},
+					axisLabel: {show: true, textStyle: text_style},
+					axisTick: {show: false},
+					data : ['7月','8月','9月','10月']
+				}
+			],
+			yAxis : [
+				{
+					type: 'value',
+//					min:0,
+//					max:100,
+					splitNumber:4,
+					splitLine: {
+						show: true,
+						lineStyle:{
+							color: ['#8D8C8C'],
+							width: 1,
+							type: 'dotted'
+						}
+					},
+					axisLine: { lineStyle: {
+						color: '#8D8C8C'
+					}},
+					axisTick: {show: false},
+					axisLabel: {
+						show: true,
+						textStyle: text_style,
+						formatter: '{value} '}
+				}
+			],
+			series : [{
+				name:'缴费基数',
+				type:'line',
+				data:arr,
+				itemStyle:{
+					normal:{
+						lineStyle:{
+							color:'#3696D9',
+							shadowColor:'#FFC000',
+							shadowBlur:40
+						}
+					}
+				}
+			}]
+		};
+		mycharts.setOption(option);
+	}
+//	医疗保险种类人员分布
+	function echarts5Show(arr){
+		var myChart=echarts.init(document.getElementById("footEchart2"));
+		var option = {
+			tooltip : {
+				trigger: 'item',
+				formatter: "{a} <br/>{b} : {c} %"
+			},
+			color:["#4DB6FF","#003961","#015792","#2286CC"],
+			legend: {
+				orient : 'horizontal',
+				x : 'center',
+				y:'bottom',
+				data:['综合医疗保险','手术医疗保险','住院医疗保险','普通医疗保险'],
+				textStyle: text_style
+			},
+			calculable : false,
+			series : [
+				{
+					name:'医疗保险种类人员分布',
+					type:'pie',
+					radius : ['40%', '60%'],
+					center:['50%','50%'],
+					itemStyle : {
+						normal : {
+							label : {
+								position : 'inner',
+								textStyle: text_style,
+								formatter:function(value){
+									return value.value+'%';
+								}
+							},
+							labelLine : {
+								show : false
+							}
+						}
+					},
+					data:arr
+				}
+			]
+		};
+		myChart.setOption(option);
+	}
+//	失业保险平均缴费基数趋势
+	function echarts6Show(arr) {
+		var myChart = echarts.init(document.getElementById("footEchart3"));
+		var option = {
+			color: ['#02CE86'],
+			tooltip : {
+				trigger: 'axis',
+				/*采用回调函数*/
+				formatter: function (params) {
+					if(params.length == 0){
+						return null;
+					}
+					else{
+						var str=params[0].name+"<br />";
+						for(var i = 0; i< params.length; i++){
+							str+=params[i].seriesName+"："+params[i].value+"元<br/>";
+						}
+					}
+					return str;
+				}
+			},
+			grid: {
+				x: '5%',
+				y: '25%',
+				x2: '5%',
+				y2: '5%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			legend: {
+				y:20,
+				data:['缴费基数'],
+				textStyle: text_style,
+				formatter: function (params) {
+					return '单位：元'
+				}
+			},
+			calculable : false,
+			xAxis : [
+				{
+					type : 'category',
+					boundaryGap: ['20%', '20%'],
+					axisLine: {lineStyle: {color: '#BFBFBF'}},
+					splitLine: {show: false},
+					axisLabel: {show: true, textStyle: text_style},
+					axisTick: {show: false},
+					data : ['7月','8月','9月','10月']
+				}
+			],
+			yAxis : [
+				{
+					type: 'value',
+//					min:0,
+//					max:100,
+					splitNumber:4,
+					splitLine: {
+						show: true,
+						lineStyle:{
+							color: ['#8D8C8C'],
+							width: 1,
+							type: 'dotted'
+						}
+					},
+					axisLine: { lineStyle: {
+						color: '#8D8C8C'
+					}},
+					axisTick: {show: false},
+					axisLabel: {
+						show: true,
+						textStyle: text_style,
+						formatter: '{value} '}
+				}
+			],
+			series : [{
+				name:'缴费基数',
+				type:'line',
+				data:arr,
+				itemStyle:{
+					normal:{
+						lineStyle:{
+							color:'#02CE86',
+							shadowColor:'#FFC000',
+							shadowBlur:40
+						}
+					}
+				}
+			}]
+		};
+		myChart.setOption(option);
+	}
+//	工伤保险行业风险等级分布
+	function echarts7Show(arr){
+		var myChart=echarts.init(document.getElementById("footEchart4"));
+		var option = {
+			tooltip : {
+				trigger: 'item',
+				formatter: "{a} <br/>{b} : {c} %"
+			},
+			color:["#2DE2A3","#00603F","#009662"],
+			legend: {
+				orient : 'horizontal',
+				x : 'center',
+				y:'bottom',
+				data:['较大风险行业','中等风险行业','较小风险行业'],
+				textStyle: text_style
+			},
+			calculable : false,
+			series : [
+				{
+					name:'工伤保险行业风险等级分布',
+					type:'pie',
+					radius : ['40%', '60%'],
+					center:['50%','50%'],
+					itemStyle : {
+						normal : {
+							label : {
+								position : 'inner',
+								textStyle: text_style,
+								formatter:function(value){
+									return value.value+'%';
+								}
+							},
+							labelLine : {
+								show : false
+							}
+						}
+					},
+					data:arr
+				}
+			]
+		};
+		myChart.setOption(option);
+	}
+
+	function echartsAjax(name){
+		console.log(name)
+		switch (name){
+			case '养老保险':
+				$.ajax({
+					type: 'post',
+					url: "../../jxSocialSecurity/searchYnbxInfo.do",
+					dataType: 'JSON',
+					success:function(data){
+							console.log(data)
+					}
+				})
+				break
+			case '生育保险':
+				$.ajax({
+					type: 'post',
+					url: "../../jxSocialSecurity/searchSeyubxinfo.do",
+					dataType: 'JSON',
+					success:function(data){
+						console.log(data.trend)
+
+//						console.log(data.age)
+//						console.log(data.sex)
+					}
+				})
+				break
+		}
+	}
+	function main(){
+//		养老保险种类人员分布 请求
+		$.ajax({
+			type:'post',
+			url:'../../jxSocialSecurity/searchYnbxzlryfb.do',
+			dataType: 'JSON',
+			success:function(data){
+				var arr=[]
+				//职工 居民 农村 商业 顺序排放
+				arr.push({value:data[0].zhigong,name:'城镇职工养老保险'})
+				arr.push({value:data[0].jumin,name:'城镇居民养老保险'})
+				arr.push({value:data[0].nongcun,name:'新农村养老保险'})
+				arr.push({value:data[0].shangye,name:'商业养老保险'});
+				echarts3Show(arr)
+			}
+		})
+//		生育保险平均缴费基数趋势
+		$.ajax({
+			type:'post',
+			url:'../../jxSocialSecurity/ searchSyubxzlryfb.do',
+			dataType:'JSON',
+			success:function(data){
+				var arr=[];
+				arr.push(parseFloat(data[0]['7']))
+				arr.push(parseFloat(data[0]['8']))
+				arr.push(parseFloat(data[0]['9']))
+				arr.push(parseFloat(data[0]['10']))
+				echarts4Show(arr)
+			}
+		})
+//		医疗保险种类人员分布
+		$.ajax({
+			type:'post',
+			url:'../../jxSocialSecurity/searchYlbxzlryfb.do',
+			dataType:'JSON',
+			success:function(data){
+				var arr=[]
+				arr.push({value:data[0].zhonghe,name:'综合医疗保险'})
+				arr.push({value:data[0].shoushu,name:'手术医疗保险'})
+				arr.push({value:data[0].zhuyuan,name:'住院医疗保险'})
+				arr.push({value:data[0].putong,name:'普通医疗保险'});
+				echarts5Show(arr)
+			}
+		})
+//		失业保险平均缴费基数趋势
+		$.ajax({
+			type:'post',
+			url:'../../jxSocialSecurity/searchSybxzlryfb.do',
+			dataType:'JSON',
+			success:function(data){
+				var arr=[];
+				arr.push(parseFloat(data[0]['7']))
+				arr.push(parseFloat(data[0]['8']))
+				arr.push(parseFloat(data[0]['9']))
+				arr.push(parseFloat(data[0]['10']))
+				echarts6Show(arr)
+			}
+		})
+//		工伤保险行业风险等级分布
+		$.ajax({
+			type:'post',
+			url:'../../jxSocialSecurity/searchGsbxzlryfb.do',
+			dataType:'JSON',
+			success:function(data){
+				var arr=[];
+				arr.push({value:data[0].big,name:'较大风险行业'})
+				arr.push({value:data[0].mid,name:'中等风险行业'})
+				arr.push({value:data[0].small,name:'较小风险行业'})
+				echarts7Show(arr)
+			}
+		})
+
+
+	}
+	main()
+
+//保险点击切换事件
+$(".main .body button").click(function(e){
+	var e=e||event;
+	e.stopPropagation();
+	$(".main .body button").removeClass("active");
+	$(this).addClass("active");
+	$("#_sanjiao").css({top:$(".main .body").get(0).offsetTop-$(".main .body").width()*2/100-1,left:$(this).get(0).offsetLeft+43})
+	echartsAjax($(this).text())
+})
+function echartsAjax(name){
+	switch (name){
+		case '养老保险':
+			$.ajax({
+				type: 'post',
+				url: "../../jxSocialSecurity/searchYnbxInfo.do",
+				dataType: 'JSON',
+				success:function(data){
+					dispose(data)
+				}
+			})
+			break
+		case '生育保险':
+			$.ajax({
+				type: 'post',
+				url: "../../jxSocialSecurity/searchSeyubxinfo.do",
+				dataType: 'JSON',
+				success:function(data){
+					dispose(data)
+				}
+			})
+			break
+		case '医疗保险':
+			$.ajax({
+				type: 'post',
+				url: "../../jxSocialSecurity/ searchYlbxInfo.do",
+				dataType: 'JSON',
+				success:function(data){
+					dispose(data)
+				}
+			})
+			break
+		case '失业保险':
+			$.ajax({
+				type: 'post',
+				url: "../../jxSocialSecurity/searchSiyebxinfo.do",
+				dataType: 'JSON',
+				success:function(data){
+					dispose(data)
+				}
+			})
+			break
+		case '工伤保险':
+			$.ajax({
+				type: 'post',
+				url: "../../jxSocialSecurity/ searchGsbxInfo.do",
+				dataType: 'JSON',
+				success:function(data){
+					dispose(data)
+				}
+			})
+			break
+	}
+}
+function dispose(data){
+	echarts0Show(data.trend);
+	echarts1Show(data.age)
+	var obj={
+		femaleall:data.sex.femaleall,
+		female:data.sex.female,
+		maleall:data.sex.maleall
+	}
+	var len=data.sex.male.length;
+	var arr=[]
+	for(var i=0;i<len;i++){
+		arr.push(parseFloat(-data.sex.male[i]))
+	}
+	obj.male=arr;
+	echarts2Show(obj);
+	$("#xbbl .tool-man").css('width',data.sex.maleall+'%');
+	$("#xbbl .tool-woman").css('width',data.sex.femaleall+'%');
+	$("#xbbl div._man").html(data.sex.maleall+'%');
+	$("#xbbl div._woman").html(data.sex.femaleall+'%');
+}
+
+	window.onload=function(){
+//		$("#_sanjiao").css({top:$(".main .body").get(0).offsetTop-$(".main .body").width()*2/100-1,left:$(".main .body button.active").get(0).offsetLeft+43})
+		$(".main .body button.active").click();
+	}
+
+</script>
+</html>

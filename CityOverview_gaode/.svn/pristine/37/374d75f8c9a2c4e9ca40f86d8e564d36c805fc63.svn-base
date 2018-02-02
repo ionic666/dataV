@@ -1,0 +1,77 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tonghao
+  Date: 2017/12/11
+  Time: 13:37
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<%--图层模态框--%>
+<div class="modal fade"
+     style="width: 700px;height: 410px;margin: 0 auto;top:100px"
+     id="coverageWindow" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header" >
+        <button type="button" <%--onclick="closeInfoWindow()"--%> class="close" data-dismiss="modal" aria-label="close" >
+          <img src="map/images/economicModel/close.png" onclick="coverageWindowClose()">
+        </button>
+        <ul class="coverageChoose ">
+          <li class="tuceng yewu active" value="1">业务图层</li>
+          <li class="tuceng jichu" value="2">基础图层</li>
+          <%--<li onclick="toUrl(this,'#comState')"  class="list-unstyled li_5" value="5"><div class="stext">预测</div></li>--%>
+        </ul>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content ">
+          <%--图层中业务图层--%>
+          <div id="proSizewarn">
+            <div style="height:100%;width:100%;padding:2% 3%;">
+              <select class="startList" name="startList">
+              </select>
+              <table class="table coManage">
+                <thead>
+                <th style="width: 15%;border-bottom: 0;">图层名称</th>
+                <th style="width: 55%;border-bottom: 0;">图层链接</th>
+                <th style="width: 15%;border-bottom: 0;">图层类型</th>
+                <th style="width: 15%;border-bottom: 0;">操作</th>
+                </thead>
+                <tbody id="warnListTable">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div id="proStructurewarn_warning"><!--z这是第二页的饼图-->
+            <div style="height:100%;width:100%;padding:2% 3%;">
+
+              <table class="table coManage">
+                <thead>
+                <th style="width: 15%;border-bottom: 0;">图层名称</th>
+                <th style="width: 55%;border-bottom: 0;">图层链接</th>
+                <th style="width: 15%;border-bottom: 0;">图层类型</th>
+                <th style="width: 15%;border-bottom: 0;">操作</th>
+                </thead>
+                <tbody  id="warnjieruTable">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+//  $("#coverageWindow").draggable()
+</script>
+</body>
+</html>

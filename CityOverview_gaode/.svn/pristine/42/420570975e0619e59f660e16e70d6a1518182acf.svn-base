@@ -1,0 +1,49 @@
+package com.cetc28.ConfigurationManagement.model;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所十三部
+ * 项目名称：CityOverview
+ * 设计人员：linyu
+ * 创建日期：2017/9/4 18:55
+ * 描述信息：用户监测信息实体类
+ * ***************************************************************
+ */
+public class JxIndicatorsUser {
+    private String bh;
+    private String sjbh;
+    private String pxxh;
+    private String userid;
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getSjbh() {
+        return sjbh;
+    }
+
+    public void setSjbh(String sjbh) {
+        this.sjbh = sjbh;
+    }
+
+    public String getPxxh() {
+        return pxxh;
+    }
+
+    public void setPxxh(String pxxh) {
+        this.pxxh = pxxh;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+}

@@ -1,0 +1,120 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Jessica
+  Date: 2017/9/18
+  Time: 10:11
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.online{
+            width: 100%;
+            height: 100%;
+            padding: 10px 0 15px 0;
+        }
+        p.headerTitle{
+            width: 250px;
+        }
+        div#online{
+            height: 85%;
+            width: 100%;
+            padding: 10px 0 15px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="online">
+    <p class="headerTitle">
+        网上统一入口率
+    </p>
+    <%--网上统一入口率环形图--%>
+    <div id="online"></div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function online(xArea,yRate){
+        var myChart = echarts.init(document.getElementById("online"));
+        var option = {
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} %"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                textStyle: text_style,
+                data:xArea
+            },
+//            grid: {
+//                /*x: '20%',
+//                y: '20%',
+//                x2: '3%',
+//                y2: '15%',*/
+//                containLabel: true,
+//                borderWidth: 0
+//            },
+            calculable: false,
+            series : [
+                {
+                    name:'网上统一入口率',
+                    type:'pie',
+                    radius : ['50%', '70%'],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : true,
+                                textStyle: text_style
+                            },
+                            labelLine : {
+                                show : true
+                            }
+                        },
+                        emphasis : {
+                            label : {
+                                show : true,
+                                position : 'center',
+                                textStyle : text_style
+                            }
+                        }
+                    },
+                    data:[
+                        {value:yRate[0],name:xArea[0]},
+                        {value:yRate[1],name:xArea[1]},
+                        {value:yRate[2],name:xArea[2]},
+                        {value:yRate[3],name:xArea[3]},
+                        {value:yRate[4],name:xArea[4]},
+                        {value:yRate[5],name:xArea[5]},
+                        {value:yRate[6],name:xArea[6]}
+                    ]
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    $.ajax({
+        type:"POST",
+        url:'../../jxaddmin/queryOnestopAndOnline.do',
+        dataType:'json',
+        success:function(data){
+            var len=data.length;
+            var xArea=[];
+            var yRate=[];
+            for(var i=0;i<len;i++){
+                xArea.push(data[i].mc);
+                yRate.push(data[i].onlinerate);
+            }
+            online(xArea,yRate);
+        }
+    });
+</script>
+</body>
+</html>

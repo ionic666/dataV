@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.JxEduInformazationMapper" >
+  <resultMap id="BaseResultMap" type="com.cetc28.idata.model.JxEduInformazation" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="YEAR" property="year" jdbcType="DECIMAL" />
+    <result column="QHBH" property="qhbh" jdbcType="VARCHAR" />
+    <result column="COMPUITER_NUM" property="compuiterNum" jdbcType="DECIMAL" />
+    <result column="INTERNET_NUM" property="internetNum" jdbcType="DECIMAL" />
+    <result column="MULTIMEDIA_NUM" property="multimediaNum" jdbcType="DECIMAL" />
+    <result column="CLASS_NUM" property="classNum" jdbcType="DECIMAL" />
+    <result column="DIGITAL_RESOURCE" property="digitalResource" jdbcType="DECIMAL" />
+    <result column="TEACHER_LEVEL" property="teacherLevel" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, YEAR, QHBH, COMPUITER_NUM, INTERNET_NUM, MULTIMEDIA_NUM, CLASS_NUM, DIGITAL_RESOURCE, 
+    TEACHER_LEVEL
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cetc28.idata.model.JxEduInformazationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from JX_EDU_INFORMATION_STATISTICS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.cetc28.idata.model.JxEduInformazation" >
+    insert into JX_EDU_INFORMATION_STATISTICS (ID, YEAR, QHBH, 
+      COMPUITER_NUM, INTERNET_NUM, MULTIMEDIA_NUM, 
+      CLASS_NUM, DIGITAL_RESOURCE, TEACHER_LEVEL
+      )
+    values (#{id,jdbcType=DECIMAL}, #{year,jdbcType=DECIMAL}, #{qhbh,jdbcType=VARCHAR}, 
+      #{compuiterNum,jdbcType=DECIMAL}, #{internetNum,jdbcType=DECIMAL}, #{multimediaNum,jdbcType=DECIMAL}, 
+      #{classNum,jdbcType=DECIMAL}, #{digitalResource,jdbcType=DECIMAL}, #{teacherLevel,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.idata.model.JxEduInformazation" >
+    insert into JX_EDU_INFORMATION_STATISTICS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="year != null" >
+        YEAR,
+      </if>
+      <if test="qhbh != null" >
+        QHBH,
+      </if>
+      <if test="compuiterNum != null" >
+        COMPUITER_NUM,
+      </if>
+      <if test="internetNum != null" >
+        INTERNET_NUM,
+      </if>
+      <if test="multimediaNum != null" >
+        MULTIMEDIA_NUM,
+      </if>
+      <if test="classNum != null" >
+        CLASS_NUM,
+      </if>
+      <if test="digitalResource != null" >
+        DIGITAL_RESOURCE,
+      </if>
+      <if test="teacherLevel != null" >
+        TEACHER_LEVEL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=DECIMAL},
+      </if>
+      <if test="qhbh != null" >
+        #{qhbh,jdbcType=VARCHAR},
+      </if>
+      <if test="compuiterNum != null" >
+        #{compuiterNum,jdbcType=DECIMAL},
+      </if>
+      <if test="internetNum != null" >
+        #{internetNum,jdbcType=DECIMAL},
+      </if>
+      <if test="multimediaNum != null" >
+        #{multimediaNum,jdbcType=DECIMAL},
+      </if>
+      <if test="classNum != null" >
+        #{classNum,jdbcType=DECIMAL},
+      </if>
+      <if test="digitalResource != null" >
+        #{digitalResource,jdbcType=DECIMAL},
+      </if>
+      <if test="teacherLevel != null" >
+        #{teacherLevel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

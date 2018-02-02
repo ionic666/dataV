@@ -1,0 +1,572 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: TongHao
+  Date: 2017/8/21
+  Time: 13:43
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>医保基金使用量</title>
+    <%--<link rel="stylesheet" type="text/css" href="map/css/bootstrap.css"/>--%>
+    <%--<link rel="stylesheet" href="myCss/socialSecurity.css"/>--%>
+    <%--<script src="map/js/jquery-1.11.3.js"></script>--%>
+    <%--<script src="myjs/echarts-all.js"></script>--%>
+    <style>
+        html,body{
+            width:100%;
+            height:100%;
+        }
+        .socialSecurityLeft-top,.socialSecurityLeft-middle,.socialSecurityLeft-bottom{
+            width: 100%;
+            height: 33%;
+            margin-top: 1%;
+            border-top: 2px #0cdaf5 solid;
+            background:rgba(0,0,0,0.5);
+        }
+        .socialSecurityLeft-headerTitle{
+            padding: 0 3%;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #F2F2F2;
+            height: 12%;
+            width: auto;
+            display: inline-block;
+            line-height: 2em;
+            margin: 4px 4px;
+            background-color: #656565;
+        }
+
+        .socialSecurityLeft-ptjs{
+            height: 83%;
+            width: 98%;
+            overflow: hidden;
+            margin-left: 2%;
+        }
+        .socialSecurityLeft-donate_bar{
+            height: 95%;
+            width: 96%;
+            overflow: hidden;
+        }
+        .socialSecurityLeft-donate_bar tr{
+            width: 98%;
+            height: 25px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: table-row;
+            vertical-align: inherit;
+            /*border: 1px solid #ddd;*/
+        }
+        .socialSecurityLeft-donate_bar td{
+            width: 48%;
+            border-top: 1px solid #ddd;
+
+            padding: 1%;
+            line-height: 1.42857143;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .socialSecurityLeft-donate_bar p，.socialSecurityLeft-donate_bar h6{
+            /*text-decoration: none;*/
+            font-size: 14px;
+            /*color: #666;*/
+            margin: 0;
+            padding: 0;
+        }
+        .socialSecurityLeft-noticeInfo1{
+            border-left: 1px solid #ddd;
+        }
+        .socialSecurityLeft-noticeInfo2{
+            border: 1px solid #fff;
+        }
+        .socialSecurityLeft-noticeInfo1>h6{
+            color: #1296DB;
+            font-size: 1.1em;
+        }
+        .socialSecurityLeft-noticeInfo2>h6{
+            color: #fff;
+            font-size: 1.1em;
+        }
+        .socialSecurityLeft-noticeInfo1>p,.socialSecurityLeft-noticeInfo2>p{
+            color:#fff;
+            font-size: 0.8em;
+        }
+        .smxIcon{
+            height: 33px;
+            width: 33px;
+            display: block;
+            margin:10px auto;
+            vertical-align: middle;
+        }
+        .socialSecurityLeft-ssjy{
+            width: 100%;
+            height: 76%;
+        }
+        .socialSecurityLeft-ssjy>div{
+            margin-top: 2%;
+            margin-left: 8%;
+            height: 50%;
+        }
+        .socialSecurityLeft-ssjy>div>ul>li{
+            display: inline-block;
+            margin: auto;
+            vertical-align: middle;
+        }
+        .socialSecurityLeft-ssjy-a>ul span{
+            vertical-align: middle;
+        }
+        #transactionNum,#transactionAmount{
+            font-size: 2em;
+            font-weight: bold;
+            padding: 0.3em;
+        }
+        #transactionNum{
+            color: #1AFF2B;
+        }
+        #transactionAmount{
+            color: #D4237A;
+        }
+        .dataStatistics,.dataStatistics1{
+            float: left;
+        }
+        .dw{
+            float: left;
+            margin-top: 60px;
+        }
+        .datatd td{background-color:#333;height:37px;padding-left:2px;border:1px solid #fff}
+        /*高德地图样式表*/
+        .amap-toolbar{
+            display:none;
+        }
+        .info {
+            border: solid 1px #7A9095 !important;
+            border-radius: 5px;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 14px;
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        .info span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        .socialSecurityLeft-ssjy>div {
+            margin-top: 1%;
+            margin-left: 8%;
+            height: 50%;
+        }
+        .socialSecurityLeft-ssjy>div>ul>li{
+            display: inline-block;
+            margin: auto;
+            vertical-align: middle;
+        }
+        .socialSecurityLeft-ssjy-a>ul span{
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+<div class=""
+     style="height:89%;width: 25%;top:10%;display:none;position: absolute"
+     id="socialSecurityLeft">
+    <div class="modal-dialog" style="width: 100%;height: 98%">
+        <div class="modal-content" style="width: 100%;height: 100%;padding:  0 !important;background-color: rgba(0, 0, 0,0.5)">
+            <!-- 实时交易 -->
+            <div class="socialSecurityLeft-top">
+                <p class="socialSecurityLeft-headerTitle">实时交易</p>
+                <div id="model3" class="socialSecurityLeft-ssjy" style="height: 75%">
+                    <div class="socialSecurityLeft-ssjy-a">
+                        <p>实时交易笔数</p>
+                        <div>
+                            <div class="dataStatistics" id="jybs">
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set set_last"></div>
+                            </div>
+                            <span class="dw">笔</span>
+                        </div>
+                    </div>
+
+                    <div class="socialSecurityLeft-ssjy-b">
+                        <p>实时交易金额</p>
+                        <div>
+                            <div class="dataStatistics1" id="jyje">
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set"></div>
+                                <div class="digit_set set_last"></div>
+                            </div>
+                            <span class="dw">元</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 当日交易情况 -->
+            <div class="socialSecurityLeft-middle">
+                <p class="socialSecurityLeft-headerTitle">当日交易情况</p>
+                <div class="socialSecurityLeft-jyqk" id="socialSecurityLeftJyqk" style="width: 100%;height: 85%;">
+
+                </div>
+            </div>
+
+            <!-- 通告信息 -->
+            <div class="socialSecurityLeft-bottom">
+                <p class="socialSecurityLeft-headerTitle">通告信息</p>
+                <div class="socialSecurityLeft-ptjs socialSecurityLeft-tgxx" id="socialSecurityLeft_donate_carousel" style="width: 95%;height: 83%;overflow: hidden">
+                    <%--<table class="socialSecurityLeft-donate_bar socialSecurityLeft-table-bordered" id="socialSecurityLeftTable" cellpadding="0"cellspacing="0">--%>
+                    <%--</table>--%>
+                    <table border="0" style="width: 100%" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="100%">
+                                <div id="A1" style="height: 223px">
+                                    <div id="A2">
+                                        <table width="100%">
+                                            <tbody class="datatd">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+<%--<script src="myjs/echarts3.4.0.min.js"></script>--%>
+<%--<script type="text/javascript" src="map/js/bootstrap.js"></script>--%>
+<script type="text/javascript" src="myjs/jquery.dataStatistics.js"></script>
+
+<script>
+    function getServerDate(){
+        var time =  new Date($.ajax({async: false}).getResponseHeader("Date"));
+        var secondNum;
+        //每天8点开始计数,小于8点设为0
+        if(time.getHours() < 8){
+            secondNum=0;
+        }
+        //获取一天中的秒数
+        else{
+            secondNum = (time.getHours() - 8) *3600 + time.getMinutes()*60 + time.getSeconds();
+        }
+        //将秒数作为初始值和最终值传入
+        dataStatis(secondNum);
+    }
+    function dataStatis(secondNum) {
+        console.log(secondNum);
+        //如果秒数为0就显示0，静止不动
+        if(secondNum==0){
+            $('#jybs').dataStatistics({min:0,max:0,time:100,len:7});
+            $('#jyje').dataStatistics({min:0,max:0,time:100,len:7});
+        }
+        else{
+            $('#jybs').dataStatistics({min:Math.round(secondNum*0.69),max:39950,time:15000000,len:7});
+            $('#jyje').dataStatistics({min:Math.round(secondNum*0.69*190),max:7801391,time:800,len:7});
+        }
+    }
+    //当日交易情况
+    function dayTransaction(hover,dayTransactionData) {
+        var myChart3 = echarts.init(document.getElementById("socialSecurityLeftJyqk"));
+        var option3 = {
+            tooltip: {
+                trigger: "axis",
+                formatter: "{a} <br/>{b}时 : {c}千元"
+            },
+            color: ['#0000FF'],
+            calculable: false,
+            grid: {
+                x: '12%',
+                y: '13%',
+                x2: '10%',
+                y2: '12%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: [
+                {
+                    name: '时',
+                    nameTextStyle:text_style,
+                    type: 'category',
+                    axisLine: {lineStyle: {color: '#8D8C8C'}},
+                    axisTick: {show: false},
+                    axisLabel: {show: true,
+                        textStyle: text_style},
+                    splitLine: {show: false},
+                    data: hover
+                }
+            ],
+            yAxis: [
+                {
+                    name: '交易量（千元）',
+                    nameTextStyle:text_style,
+                    type: 'value',
+                    splitNumber:3,
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#8D8C8C'],
+                            width: 1,
+                            type: 'dashed'}},
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    axisTick: {show: false},
+                    axisLabel: {show: true,
+                        textStyle: text_style,
+                        interval: 1}
+                }
+            ],
+            series: [
+                {
+                    name:'当日交易情况',
+                    type: 'line',
+                    smooth: true,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: false
+                            },
+                            lineStyle:{
+                                shadowColor:'orange',
+                                shadowBlur: 35
+                            }
+                        }
+                    },
+                    data: dayTransactionData
+                }
+            ]
+        };
+        myChart3.setOption(option3);
+    }
+   function socialSecurityLeftAjax (){
+       $("#socialSecurityRight").modal("show");
+       socialSecurityRightAjax ();
+       $.ajax({
+           type:"POST",
+           url:'jxSocialSecurity/getMiVolumeStatisticsData.do',
+           dataType:'json',
+           success:function(data){
+               console.log("111");
+               console.log(data)
+               var MiVolumeStatisticsData = data.MiVolumeStatisticsData;
+               var transactionNum = MiVolumeStatisticsData.transactionNum,//当日交易笔数
+                       transactionAmount =MiVolumeStatisticsData.transactionAmount; //当日交易金额
+//
+//               var dayTransactionTypeData = [],//当日交易类型占比
+//                       dayTransactionType = ['普通住院','连续转病住院','医疗挂号','门诊规定病','家庭病床','普通门诊','药店购药'];
+               var areaNum =[],areaName = [];//当日各区域交易量排行--区域编码，区域名称
+               $(document).ready(function(){
+                   getServerDate();
+               });
+               $("#transactionNum").text(transactionNum);
+               $("#transactionAmount").text(transactionAmount);
+               //、、通告信息
+               $(".socialSecurityLeft-donate_bar").html("");
+               var str="";
+               $.each(MiVolumeStatisticsData.dayNoticeInfoData,function(i){
+                   var transactionType =MiVolumeStatisticsData.dayNoticeInfoData[i].transactionType,//就医类型
+                           transactionTime =(MiVolumeStatisticsData.dayNoticeInfoData[i].transactionTime).substring(11,19),//时间
+                           insuredPerson =(MiVolumeStatisticsData.dayNoticeInfoData[i].insuredPerson).substring(0,1),//患者
+                           nameLenth = MiVolumeStatisticsData.dayNoticeInfoData[i].insuredPerson.length,
+                           transactionAmount =MiVolumeStatisticsData.dayNoticeInfoData[i].transactionAmount;//总金额
+                   var span ="<span class='socialSecurityLeft-star'></span>";
+//                   console.log(nameLenth+transactionType+transactionTime+insuredPerson+transactionAmount);
+                   str+='<tr style="width: 100%"> <td class="socialSecurityLeft-noticeInfo1" style="width: 50%"><h6>'+transactionType+'</h6><p>参保人：<span>'+insuredPerson+'</span>'+span+'</p></td> <td class="socialSecurityLeft-noticeInfo2" style="width: 50%"><h6>'+transactionTime+'</h6><p><span>总金额:</span>'+transactionAmount+'</p></td> </tr>';
+//                console.log(nameLenth+transactionType+transactionTime+insuredPerson+transactionAmount);
+                   for(var z = 0;z<nameLenth-1;z++){
+                       $(".socialSecurityLeft-star").eq(i).append("*");
+                   }
+               });
+
+               var hover = [],//24小时
+                   dayTransactionData = [];//当日交易情况
+               var myDate = new Date();
+               var maxHour = myDate.getHours();
+               for(var i=0;i<=maxHour;i++){
+                   hover.push(i);
+               };
+               $.each(MiVolumeStatisticsData.dayTransactionData,function(i){
+                   if(i<=maxHour){
+                       dayTransactionData.push(MiVolumeStatisticsData.dayTransactionData[i]);
+                   }
+               });
+               dayTransaction(hover,dayTransactionData);//图表--当日交易情况
+
+               $('.datatd').html(str)
+
+           }
+       });
+//       specificCorpLeftAjax();
+//       setTimeout ('specificCorpLeftAjax()',1000);
+        specificCorpLeftAjax()
+   }
+    function _InitScroll(_S1,_S2,_W,_H,_T){
+        return "var marqueesHeight"+_S1+"="+_H+";var stopscroll"+_S1+"=false;var scrollElem"+_S1+"=document.getElementById('"+_S1+"');with(scrollElem"+_S1+"){style.width="+_W+";style.height=marqueesHeight"+_S1+";style.overflow='hidden';noWrap=true;}scrollElem"+_S1+".onmouseover=new Function('stopscroll"+_S1+"=true');scrollElem"+_S1+".onmouseout=new Function('stopscroll"+_S1+"=false');var preTop"+_S1+"=0; var currentTop"+_S1+"=0; var stoptime"+_S1+"=0;var leftElem"+_S2+"=document.getElementById('"+_S2+"');scrollElem"+_S1+".appendChild(leftElem"+_S2+".cloneNode(true));setTimeout('init_srolltext"+_S1+"()',"+_T+");function init_srolltext"+_S1+"(){scrollElem"+_S1+".scrollTop=0;setInterval('scrollUp"+_S1+"()',50);}function scrollUp"+_S1+"(){if(stopscroll"+_S1+"){return;}currentTop"+_S1+"+=1;if(currentTop"+_S1+"==(marqueesHeight"+_S1+"+1)) {stoptime"+_S1+"+=1;currentTop"+_S1+"-=1;if(stoptime"+_S1+"=="+_T/50+") {currentTop"+_S1+"=0;stoptime"+_S1+"=0;}}else{preTop"+_S1+"=scrollElem"+_S1+".scrollTop;scrollElem"+_S1+".scrollTop +=1;if(preTop"+_S1+"==scrollElem"+_S1+".scrollTop){scrollElem"+_S1+".scrollTop=0;scrollElem"+_S1+".scrollTop +=1;}}}";
+    }
+    eval(_InitScroll("A1","A2",456,38*5,100));
+</script>
+<script>
+
+    //根据初始化数据，绘制地图上的点
+//高德地图---开始
+
+
+  function specificCorpLeftAjax(){
+    $.ajax({
+        type:"POST",
+        url:'jxSocialSecurity/getHospitalStatisticsTooltipData.do',
+        dataType:'json',
+        data:{"regionCode":qhbh},
+        success: function (data) {
+
+            var len=data.miHospitalVolumeStatisticsDtoList.length;
+
+            for(var i=0;i<len;i++){
+
+                addPoint(wgs84togcj02(parseFloat(data.miHospitalVolumeStatisticsDtoList[i].longitude),parseFloat(data.miHospitalVolumeStatisticsDtoList[i].latitude)),25,25,'images/hospital.png',data.miHospitalVolumeStatisticsDtoList[i]);
+
+            }
+
+//            infoWindow(data.miHospitalVolumeStatisticsDtoList[0]);
+
+        }
+    })
+}
+    function closeInfoWindow(){
+        map.clearInfoWindow();
+    }
+    //构建自定义信息窗体
+    function createInfoWindow(title, content) {
+        var info = document.createElement("div");
+        info.className = "info";
+
+        //可以通过下面的方式修改自定义窗体的宽高
+        info.style.width = "240px";
+        // 定义顶部标题
+        var top = document.createElement("div");
+        var titleD = document.createElement("div");
+        var closeX = document.createElement("img");
+        top.className = "info-top";
+        titleD.innerHTML = title;
+        closeX.src = "images/gaode-close.png";
+        closeX.onclick = closeInfoWindow;
+
+        top.appendChild(titleD);
+        top.appendChild(closeX);
+        info.appendChild(top);
+
+        // 定义中部内容
+        var middle = document.createElement("div");
+        middle.className = "info-middle";
+        middle.style.backgroundColor = 'white';
+        middle.innerHTML = content;
+        info.appendChild(middle);
+
+        // 定义底部内容   //下方的小箭头
+        var bottom = document.createElement("div");
+        bottom.className = "info-bottom";
+        bottom.style.position = 'relative';
+        bottom.style.top = '0px';
+        bottom.style.margin = '0 auto';
+        var sharp = document.createElement("img");
+        sharp.src = "images/gaode-sharp.png";
+        bottom.appendChild(sharp);
+        info.appendChild(bottom);
+        return info;
+    }
+    function infoWindow(details){
+        var title = '<span style="font-size:14px;color:#0CDAF5;">'+details.hospitalName+'</span>';
+        var content = [];
+        content.push("<p style='color:#fff;'>今日交易笔数："+details.volume+"笔</p>");
+        content.push("<p style='color:#fff;'>累计交易笔数："+details.sumVolume+"笔</p>");
+        var infoWindow = new AMap.InfoWindow({
+            isCustom: true,  //使用自定义窗体
+            content: createInfoWindow(title, content.join("")),
+            offset: new AMap.Pixel(15, -35)
+        });
+        infoWindow.open(map, wgs84togcj02(parseFloat(details.longitude),parseFloat(details.latitude)));
+        setTimeout(function(){
+            map.setCenter(wgs84togcj02(parseFloat(details.longitude),parseFloat(details.latitude)));
+        },500)
+    }
+    function addPoint(arr,h,w,img,details){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+        console.log(arguments)
+        var _marker=new AMap.Marker({
+            map: map,
+            position: arr,        //经纬度
+            icon: new AMap.Icon({
+                size: new AMap.Size(h, w),  //图标大小
+                image: img       //自定义图片
+            })
+        });
+        AMap.event.addListener(_marker,'click',function(e){
+            //console.log(e.target.Xg.extData)
+//            console.log(e.target.Xg.extData)
+            infoWindow(details)
+        });
+
+    }
+
+//  高德地图---结束
+</script>
+</body>
+</html>

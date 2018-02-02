@@ -1,0 +1,31 @@
+package com.cetc28.ConfigurationManagement.service.impl;
+
+import com.cetc28.ConfigurationManagement.dao.IJxCompanyInfoDao;
+import com.cetc28.ConfigurationManagement.service.IJxCompanyInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class JxComopanyInfoSeviceImpl implements IJxCompanyInfoService {
+    @Autowired
+    private IJxCompanyInfoDao ijxCompanyDao;
+
+    @Override
+    public void companyInfoRenewed() {
+        List list = new ArrayList();
+        list = ijxCompanyDao.queryCompanyBaseInfo();
+        for(Object info : list){
+            String name = ((HashMap<String, String>)info).get("NAME");
+            int isExist = ijxCompanyDao.isCompanyExist(name);
+            if(isExist==0){
+                ijxCompanyDao.insertCompanyInfo((Map)info);
+            }
+
+        }
+    }
+}

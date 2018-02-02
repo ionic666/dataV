@@ -1,0 +1,35 @@
+log4j.rootLogger=DEBUG,INFO,console,file
+
+#print to the Console
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.Threshold=debug
+log4j.appender.console.Target=System.out
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d [%t] %5p - %m [%l] %n
+
+#print to the log file
+log4j.appender.file=org.apache.log4j.DailyRollingFileAppender  
+log4j.appender.file.File=${WebApp.TomcatPath}../logs/cityoverview.log
+log4j.appender.file.DatePattern='_'yyyy-MM-dd
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%d [%t] %5p - %m %n
+
+log4j.logger.org.apache=WARN
+
+log4j.logger.org.logicalcobwebs.proxool=WARN
+
+log4j.logger.org.codehaus=WARN
+
+log4j.logger.org.springframework=WARN
+
+log4j.logger.org.hibernate=WARN
+
+### \u6253\u5370SQL ###
+#log4j.logger.com.ibatis=DEBUG
+#log4j.logger.com.ibatis.common.jdbc.SimpleDataSource=DEBUG
+#log4j.logger.com.ibatis.common.jdbc.ScriptRunner=DEBUG
+#log4j.logger.com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate=DEBUG
+#log4j.logger.java.sql.Connection=DEBUG
+log4j.logger.java.sql.Statement=DEBUG
+log4j.logger.java.sql.PreparedStatement=DEBUG    
+log4j.logger.java.sql.ResultSet=DEBUG

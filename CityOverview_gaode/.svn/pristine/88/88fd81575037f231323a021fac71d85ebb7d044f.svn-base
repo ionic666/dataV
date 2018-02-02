@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IJxRoleDao">
+    <!-- <select id="queryRoleName" resultType="com.cetc28.idata.dto.Jsqx">
+        SELECT rolename,m.modulename from JX_MANAGE_ROLE r
+        LEFT  JOIN  JX_MANAGE_ROLE_MODULE rm ON r.roleid=rm.roleid
+        LEFT  JOIN  JX_MANAGE_MODULE m ON  rm.moduleid=m.moduleid
+     </select>-->
+
+    <select id="queryAllRoleName" resultType="java.lang.String">
+        SELECT rolename from JX_MANAGE_ROLE where rolename!='超级管理员'
+    </select>
+
+    <select id="queryRoleNameEx" resultType="java.lang.String">
+        select rolename from (select t.rolename,
+        (case when rolename=(select r.rolename from jx_manage_user_role ur
+        left join jx_manage_role r on ur.roleid=r.roleid where ur.userid=#{userid})
+        then 1 else null end) flag
+        from JX_MANAGE_ROLE t  where t.roleid>0 order by flag)
+    </select>
+
+    <select id="queryRoleInfo" parameterType="Integer" resultType="com.cetc28.idata.model.Role">
+        select * from JX_MANAGE_ROLE where roleid>0 ORDER BY roleid desc
+    </select>
+
+    <insert id="addRole" parameterType="java.util.Map">
+        INSERT  INTO  JX_MANAGE_ROLE (roleid,rolename,descrip,create_by,create_time,update_by,update_time,status) VALUES
+        (seq_role_add.nextval,#{rolename},#{descrip},#{create_by},#{create_time},#{update_by},#{update_time},#{status})
+    </insert>
+
+    <delete id="delRole" parameterType="java.lang.Integer">
+        DELETE FROM JX_MANAGE_ROLE WHERE roleid=#{roleid}
+    </delete>
+
+    <delete id="delRoleMoule" parameterType="java.lang.String">
+        DELETE FROM JX_MANAGE_ROLE_MODULE WHERE roleid=#{roleid}
+    </delete>
+
+    <delete id="delUserRole" parameterType="java.lang.Integer">
+        DELETE FROM JX_MANAGE_USER_ROLE WHERE roleid=#{roleid}
+    </delete>
+
+    <update id="updateRoleP" parameterType="java.util.Map">
+        update JX_MANAGE_ROLE set rolename=#{rolename},descrip=#{descrip},update_by=#{update_by},update_time=#{update_time} where roleid=#{roleid}
+    </update>
+
+    <update id="updateRoleStatus" parameterType="java.util.Map">
+        update JX_MANAGE_ROLE set status=#{status} where roleid=#{roleid}
+    </update>
+
+    <select id="queryModuleidByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select moduleid from JX_MANAGE_MODULE where modulename=#{modulename}
+    </select>
+    <insert id="addPermision" parameterType="java.util.Map">
+        INSERT  INTO  JX_MANAGE_ROLE_MODULE (roleid,moduleid) VALUES (#{roleid},#{moduleid})
+    </insert>
+
+    <delete id="delPermision" parameterType="java.lang.String">
+        DELETE from JX_MANAGE_ROLE_MODULE where roleid=#{roleid}
+    </delete>
+
+    <select id="queryisExeitRole" parameterType="java.lang.String" resultType="com.cetc28.idata.model.Role">
+        select * from JX_MANAGE_ROLE where rolename=#{rolename}
+    </select>
+
+    <select id="queryModuleNamebyRoleid" parameterType="java.lang.Integer" resultType="java.lang.String">
+            select m.modulename from JX_MANAGE_MODULE m left join jx_manage_role_module rm on rm.moduleid = m.moduleid where rm.roleid=#{roleid}
+    </select>
+
+    <select id="queryRoleIdByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT roleid from JX_MANAGE_ROLE r WHERE r.rolename=#{rolename}
+    </select>
+</mapper>

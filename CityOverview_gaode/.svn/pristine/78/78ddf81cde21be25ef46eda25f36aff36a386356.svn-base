@@ -1,0 +1,71 @@
+package com.cetc28.idata.model;
+
+/**
+ * Created by jianglulu on 2017/9/21.
+ * 制造业综合实力实体表
+ */
+public class JxEcoManufactureCompre {
+    private Integer id;
+    private Integer year;
+    private Integer month;
+    private String mtv;     //工业总产值(MANUFACTURE_TOTAL_VALUE)
+    private String edv;     //出口交货值(EXIT_DELIVERY_VALUE)
+    private String mav;     //工业增加值(MANUFACTURE_ADD_VALUE)
+    private String pty;     //利润总额(PROFIT_TOTAL_VALUE)
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public String getMtv() {
+        return mtv;
+    }
+
+    public void setMtv(String mtv) {
+        this.mtv = mtv;
+    }
+
+    public String getEdv() {
+        return edv;
+    }
+
+    public void setEdv(String edv) {
+        this.edv = edv;
+    }
+
+    public String getMav() {
+        return mav;
+    }
+
+    public void setMav(String mav) {
+        this.mav = mav;
+    }
+
+    public String getPty() {
+        return pty;
+    }
+
+    public void setPty(String pty) {
+        this.pty = pty;
+    }
+}

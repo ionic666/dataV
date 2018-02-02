@@ -1,0 +1,145 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.dto.JxUtilityStatisByMonth;
+import com.cetc28.idata.dto.JxUtilityStatisByYear;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/14 9:07
+ * 描述信息：城市生命线dao接口
+ *****************************************************************/
+@Repository
+public interface IJxUtilityDao {
+
+    /**
+     * 按区划编号查找最新月份的供水量
+     * @param bH 区划编号
+     * @return JxUtilityStatisByMonth 宏观页面按月统计指标对象，只填充供水量属性
+     */
+    public JxUtilityStatisByMonth findLatestWaterSupplyByBh(String bH);
+
+    /**
+     * 按上级编号查找各区当月供水量，并求和，计算全市最新月份的供水量
+     * @param sJBH 上级编号
+     * @return JxUtilityStatisByMonth 宏观页面按月统计指标对象，只填充供水量属性
+     */
+    public JxUtilityStatisByMonth findLatestWaterSupplyBySjbh(String sJBH);
+
+    /**
+     * 按区划编号，查找自来水供销差率
+     * @param monthSize 倒数月数
+     * @param bH 区划编号
+     * @return List<JxUtilityStatisByMonth> 宏观页面按月统计指标对象List，只填充自来水供销差率属性
+     */
+    public List<JxUtilityStatisByMonth> findWaterStsRateByBh(Integer monthSize, String bH);
+
+    /**
+     * 按上级编号，查找各区自来水供销差率，进而计算全市自来水供销差率
+     * @param monthSize 倒数月数
+     * @param sJBH 上级编号
+     * @return List<JxUtilityStatisByMonth> 宏观页面按月统计指标对象List，只填充自来水供销差率属性
+     */
+    public List<JxUtilityStatisByMonth> findWaterStsRateBySjbh(Integer monthSize, String sJBH);
+
+    /**
+     * 按区划编号查找当月排水信息
+     * @param bH 区划编号
+     * @return JxUtilityStatisByMonth  宏观页面按月统计指标对象，只填充排水量属性
+     */
+    public JxUtilityStatisByMonth findLatestDrainageByBh(String bH);
+
+    /**
+     * 按上级编号，查找各区当月排水信息，并求和，计算当月全市排水信息
+     * @param sJBH 上级编号
+     * @return  JxUtilityStatisByMonth  宏观页面按月统计指标对象，只填充排水量属性
+     */
+    public JxUtilityStatisByMonth findLatestDrainageBySjbh(String sJBH);
+
+    /**
+     * 按区划编号查找当月供电信息，包括总供电量、居民生活用电量和工业用电量
+     * @param bH 区划编号
+     * @return  JxUtilityStatisByMonth  宏观页面按月统计指标对象，只填充供电量属性
+     */
+    public JxUtilityStatisByMonth findLatestElecSupByBh(String bH);
+
+    /**
+     * 按区划编号查找电网负荷率统计信息
+     * @param monthSize 倒数月数
+     * @param bH 区划编号
+     * @return 宏观页面按月统计指标对象，只填充电网负荷率属性
+     */
+    public List<JxUtilityStatisByMonth> findPowerLoadingRate(Integer monthSize, String bH);
+
+    /**
+     * 按区划编号查找当月供气信息
+     * @param bH 区划编号
+     * @return JxUtilityStatisByMonth  宏观页面按月统计指标对象，只填充供气量属性
+     */
+    public JxUtilityStatisByMonth findLatestGasSupByBh(String bH);
+
+    /**
+     * 按区划编号查找燃气供销差率统计信息
+     * @param monthSize 倒数月数
+     * @param bH 区划编号
+     * @return 宏观页面按月统计指标对象，只填充燃气供销差率属性
+     */
+    public List<JxUtilityStatisByMonth> findGasStsRateByBh(Integer monthSize, String bH);
+
+    /**
+     * 按区划编号查找当月供热信息
+     * @param bH 区划编号
+     * @return JxUtilityStatisByMonth  宏观页面按月统计指标对象，只填充供热量属性
+     */
+    public JxUtilityStatisByMonth findLatestHeatSupByBh(String bH);
+
+    /**
+     * 按区划编号查找当月管网运维报警、故障、投诉次数信息
+     * @param bH 区划编号
+     * @return JxUtilityStatisByYear  宏观页面按月统计指标对象，只填充管网运维属性
+     */
+    public JxUtilityStatisByMonth findManteInfoByBh(String bH);
+
+    /**
+     * 按区划编号查找排水管道长度、供热面积信息
+     * @param bH 区划编号
+     * @param yearSize 倒数年数
+     * @return JxUtilityStatisByYear  宏观页面按年统计指标对象，只填充排水管道长度、供热面积属性
+     */
+    public List<JxUtilityStatisByYear> findUtilityNetInfoByBh(Integer yearSize, String bH);
+
+    /**
+     * 按区划编号查找管网智能化监测管理率、综合管廊覆盖率信息
+     * @param bH 区划编号
+     * @param yearSize 倒数年数
+     * @return JxUtilityStatisByYear  宏观页面按年统计指标对象，只填充管网智能化监测管理率、综合管廊覆盖率属性
+     */
+    public List<JxUtilityStatisByYear> findUtilityPipeSurveilInfoByBh(Integer yearSize,String bH);
+
+    /**
+     * 按区划编号查找城市互联网基础设施普及率（固定宽带普及率，移动宽带普及率，光纤到户渗透率，公共WIFI覆盖率）信息
+     * @param bH 区划编号
+     * @param yearSize 倒数年数
+     * @return JxUtilityStatisByYear  宏观页面按年统计指标对象，只填充管互联网相关属性
+     */
+    public List<JxUtilityStatisByYear> findUtilityInternetByBh(Integer yearSize, String bH);
+
+    /**
+     * 按区划编号查找最新月的某区生命线窗口数据
+     * @param bH 区划编号
+     * @return JxUtilityStatisByYear  宏观页面按年统计指标对象，只填充管互联网相关属性
+     */
+    public JxUtilityStatisByMonth findLatestUtilitySupplyByBh(String bH);
+
+
+
+}
+
+
+
+
+

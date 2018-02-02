@@ -1,0 +1,658 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: zhoujun
+  Date: 2017/9/15
+  Time: 9:01
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title>教育资源承载情况</title>
+	<style type="text/css">
+		/*表格自动换行*/
+		table{
+			word-wrap:break-word;
+			word-break: break-all;
+		}
+
+		.educationZYCZQKEchartsChange{
+			position: absolute;
+			top:4%;
+			left:20%;
+			color:#fff;
+			/*height:80px;*/
+		}
+		.educationZYCZQKEchartsChange ul li{
+			float: left;
+			min-width: 100px;
+			cursor: pointer;
+			padding:5px;
+			text-align: center;
+			/*margin: -12px 0px;*/
+			/*padding: 5px 20px;*/
+			background-image: url("images/listTitle.png");
+			background-size: 100% 100%;
+			color: rgb(21,203,227);
+		}
+		.educationZYCZQKEchartsChange ul li.active{
+			background-image: url("images/listTitleActive.png");
+			background-size: 100% 100%;
+			font-size: 20px;
+			color: rgb(2, 14, 16);
+		}
+
+		.eduRltqh{
+			padding:5px 10px;
+			cursor: pointer;
+		}
+		.eduRltqh .point{
+			display: inline-block;
+			width:15px;
+			height:15px;
+			border:1px solid #fff;
+			border-radius: 7px;
+			vertical-align:middle;
+			margin-right: 10px;
+		}
+		.eduRltqh.active .point{
+			border:1px solid red;
+		}
+		.eduRltqh.active span{
+			color:red;
+		}
+		#eduTitleChange li{
+			text-align: center;
+			padding: 5px 15px;
+			width: 122px;
+			line-height: 20px;
+			background-image: url("images/threeBG.png");
+			background-size: 100% 100%;
+			color: rgb(21,203,227);
+			cursor: pointer;
+			float: left;
+		}
+		#eduTitleChange li.active{
+			background-image: url("images/threeBGHover.png");
+			width: 122px;
+			background-size: 100% 100%;
+			font-size: 18px;
+			color: rgb(2, 14, 16);
+		}
+	</style>
+</head>
+<body>
+
+<div class="modal fade"
+     style="height:60%;width:25%;top:10%;left: 10px;display:none;position: absolute"
+     id="educationZYCZQK" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog" style="padding:0;margin:0;height:100%;width:100%">
+		<div class="modal-content" style="padding:0;margin:0;height:100%;width:100%;overflow: hidden;">
+			<%--<div class="modal-header">--%>
+			<p class="headerTitles">教育资源承载情况</p>
+			<%--</div>--%>
+			<div class="modal-body" style="padding:0;margin:0;width:100%;height: calc( 100% - 70px)">
+				<div class="echartsHeight50" >
+					<p class="echartsHeight50P">超载区域排行</p>
+					<div id="czqyph">
+						<table>
+							<thead>
+								<tr>
+									<th style="width: 70%">学区</th>
+									<th style="width: 30%">超载人数(<span class="zyczqkYear">2017</span>年)</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="echartsHeight50">
+					<p  class="echartsHeight50P" >空载区域排行</p>
+					<div id="kzqyph">
+						<table>
+							<thead>
+							<tr>
+								<th style="width: 70%">学区</th>
+								<th style="width: 30%">空载人数(<span class="zyczqkYear">2017</span>年)</th>
+							</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade"
+	 style="height:28%; width:99%;top:71%; left:10px;display:none;position: absolute"
+	 id="educationZYCZQKEcharts" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog" style="margin:0px;height:100%;">
+		<div class="modal-content" style="position: relative;margin:0;height:100%;" >
+			<p class="echartsHeight50P">教育资源承载力分析</p>
+			<div class="educationZYCZQKEchartsChange">
+				<ul>
+				</ul>
+			</div>
+			<div id="jyzyczQkDiv"></div>
+		</div>
+	</div>
+</div>
+<div class="modal fade"
+	 style="height:60px; width:120px;top:calc(100% - 400px); left:85%;display:none;position: absolute"
+	 id="eduChange" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div >
+		<p class="eduRltqh" ><span  class="point"></span><span  style="font-size: 14px">超载</span></p>
+		<p class="eduRltqh" ><span  class="point"></span><span  style="font-size: 14px">空载</span></p>
+	</div>
+</div>
+<div class=""
+	 style="height:35px; width:300px;top:2%; left:75%;display:none;position: absolute;"
+	 id="eduTitleChange">
+	<ul  style="display: block;">
+		<li class="active">态势图</li>
+		<li>热力图</li>
+	</ul>
+</div>
+
+
+<script>
+	var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+	//教育承载模块程序入口
+	function educationZYCZQKAjax(){
+		$("#eduChange").modal("show");
+		$("#eduTitleChange").modal("show");
+		$("#educationZYCZQKEcharts").modal("show");
+		$.ajax({
+			type: 'post',
+			url: "jxedu/listOverloadSchoolInfo.do?qhbh="+qhbh,
+			dataType: 'JSON',
+			success: function (data) {
+				console.log(data)
+				$("#czqyph tbody").html("");
+				$("#kzqyph tbody").html("");
+				$(".zyczqkYear").html(data.year);
+				var czlen=data.overload.length;
+				var kzlen=data.idle.length;
+				//取空载、超载情况前5名
+				if(czlen > 5){
+					czlen = 5;
+				}
+				if(kzlen > 5){
+					kzlen = 5;
+				}
+				for(var i=0;i<czlen;i++){
+					var tr=$("<tr>");
+					var td1=$("<td>");
+					var td2=$("<td>");
+					td1.html(data.overload[i].schoolName);
+					td2.html(data.overload[i].enrollmentDifference);
+					tr.append(td1).append(td2);
+					tr.data("data",data.overload[i]);
+					$("#czqyph tbody").append(tr);
+				}
+				for(var i=0;i<kzlen;i++){
+					var tr=$("<tr>");
+					var td1=$("<td>");
+					var td2=$("<td>");
+					td1.html(data.idle[i].schoolName);
+					td2.html(Math.abs(data.idle[i].enrollmentDifference));
+					tr.append(td1).append(td2);
+					tr.data("data",data.idle[i]);
+					$("#kzqyph tbody").append(tr);
+				}
+//				CZeducationZYCZQKDrawMapPoint(data)
+//				KZeducationZYCZQKDrawMapPoint(data)
+			}
+		})
+	}
+	//空载区域绘制坐标点
+	function KZeducationZYCZQKDrawMapPoint(data){
+		var len=data.idle.length;
+		var pointArr=[];
+		for(var i=0;i<len;i++){
+			if(!data.idle[i].jd || !data.idle[i].wd){
+				var geo;
+				if(data.idle[i].type == "sc002"){
+					geo = querySchoolInfo(0, data.idle[i].schoolName);
+				}else if(data.idle[i].type == "sc003"){
+					geo = querySchoolInfo(1, data.idle[i].schoolName);
+				}
+				if(geo!= null){
+					data.idle[i].jd = geo.x;
+					data.idle[i].wd = geo.y;
+				}
+			}
+			if(data.idle[i].jd && data.idle[i].wd){
+				var obj={};
+				var jd=bd09towgs84(parseFloat(data.idle[i].jd),parseFloat(data.idle[i].wd))[0];
+				var wd=bd09towgs84(parseFloat(data.idle[i].jd),parseFloat(data.idle[i].wd))[1];
+				obj.jd=jd;
+				obj.wd=wd;
+				obj.details=data.idle[i];
+				pointArr.push(obj)
+			}
+		}
+		educationZYCZQKShowLayers(pointArr,KZeducationZYCZQKLayer,"images/kz.png");
+		map.addLayer(KZeducationZYCZQKLayer);
+//		var point=esri.geometry.Point(jd, wd);
+//		map.centerAt(point);
+	}
+
+	//超载区域绘制坐标点
+	function CZeducationZYCZQKDrawMapPoint(data){
+		var len=data.overload.length;
+		var pointArr=[];
+		for(var i=0;i<len;i++){
+			if(!data.overload[i].jd || !data.overload[i].wd){
+				var geo;
+				if(data.overload[i].type == "sc002"){
+					geo = querySchoolInfo(0, data.overload[i].schoolName);
+				}else if(data.overload[i].type == "sc003"){
+					geo = querySchoolInfo(1, data.overload[i].schoolName);
+				}
+				if(geo!= null){
+					data.overload[i].jd = geo.x;
+					data.overload[i].wd = geo.y;
+				}
+			}
+			if(data.overload[i].jd||data.overload[i].wd){
+				var obj={};
+				var jd=bd09towgs84(parseFloat(data.overload[i].jd),parseFloat(data.overload[i].wd))[0];
+				var wd=bd09towgs84(parseFloat(data.overload[i].jd),parseFloat(data.overload[i].wd))[1];
+				obj.jd=jd;
+				obj.wd=wd;
+				obj.details=data.overload[i];
+				pointArr.push(obj)
+			}
+		}
+		educationZYCZQKShowLayers(pointArr,CZeducationZYCZQKLayer,"images/chaozai.png");
+		map.addLayer(CZeducationZYCZQKLayer);
+//		var point=esri.geometry.Point(jd, wd);
+//		map.centerAt(point);
+	}
+	function educationZYCZQKShowLayers(data,layer,darkredImage) {
+		var pointSymobol = new Array(data.length);
+		var pointGraphic = new Array(data.length);
+		var darkredImage= darkredImage;
+		for (var j = 0; j < data.length; j++) {
+			var x = data[j].jd, y = data[j].wd;
+			var z = lonLat2Mercator(x,y);
+			pointSymobol[j] = new esri.symbol.PictureMarkerSymbol(darkredImage, 32, 32);
+			var planePoint = new esri.geometry.Point(z[0], z[1], map.spatialReference);
+			pointGraphic[j] = new esri.Graphic(planePoint, pointSymobol[j]);
+			pointGraphic[j].setAttributes =data[j];
+			layer.add(pointGraphic[j]);
+			layer.refresh();
+		}
+	}
+
+	//echarts 图表生成绘制方法
+	function educationZYCZQKEcharts(yearsArr,idleloadNumArr,overloadNumArr){
+		var mycharts=echarts.init(document.getElementById('jyzyczQkDiv'));
+		option = {
+			tooltip : {
+				trigger: 'axis'
+			},
+			color:["#ED7D31","#5B9BD5"],
+			legend: {
+				data:['空载人数','超载人数'],
+				textStyle:{
+					color:'#fff'
+				},
+				x:'right'
+			},
+			grid: {
+				borderWidth:0
+			},
+			calculable : false,
+			xAxis : [
+				{
+					type : 'category',
+					boundaryGap : false,
+					data : yearsArr,
+					axisLabel: {
+						interval: 0,  //横轴信息全部显示
+						rotate: 0,
+						textStyle: {
+							color: '#fff'
+						}
+					},
+					axisLine: {
+						show:true,
+						lineStyle: {
+							color: '#898989',
+							width: 2,
+							type: 'solid'
+						}
+					},
+					axisTick: {
+						show: false,
+						lineStyle: {
+							color: '#fff'
+						}
+					},
+					splitLine: {show: false}
+				}
+			],
+			yAxis : [
+				{
+					type : 'value',
+					axisLabel: {
+						interval: 0,  //横轴信息全部显示
+						rotate: 0,
+						textStyle: {
+							color: '#fff'
+						}
+					},
+					axisLine: {
+						show:true,
+						lineStyle: {
+							color: '#898989',
+							width: 2,
+							type: 'solid'
+						}
+					},
+					axisTick: {
+						show: false,
+						lineStyle: {
+							color: '#fff'
+						}
+					},
+					splitLine: {show: false}
+				}
+			],
+			series : [
+				{
+					name:'空载人数',
+					type:'line',
+					stack: '总量',
+					data:idleloadNumArr,
+					itemStyle:{
+						normal:{
+							label:{
+								show:true,
+								position:'top',
+								formatter: '{c}',
+								textStyle:{
+									color: '#fff'
+								}
+							},
+							lineStyle:{
+								shadowColor:'green',
+								shadowBlur: 40
+							}
+						}
+					}
+				},
+				{
+					name:'超载人数',
+					type:'line',
+					stack: '总量',
+					data:overloadNumArr,
+					itemStyle:{
+						normal:{
+							label:{
+								show:true,
+								position:'top',
+								formatter: '{c}',
+								textStyle:{
+									color: '#fff'
+								}
+							},
+							lineStyle:{
+								shadowColor:'green',
+								shadowBlur: 40
+							}
+						}
+					}
+				}
+			]
+		};
+
+		mycharts.setOption(option);
+	}
+	//加载echarts 图表上方地区名称ajax请求
+	$.ajax({
+		type: 'post',
+		url: "jxsys/listJxXzqh.do?sjxh="+qhbh,
+		dataType: 'JSON',
+		success: function (data) {
+			var len=data.length;
+			for(var i=0;i<len;i++){
+				var li=$("<li>");
+				li.data("dq",data[i]);
+				li.html(data[i].mc);
+//				console.log(li.data("dq"))
+				li.attr("bh",data[i].bh)
+				$(".educationZYCZQKEchartsChange ul").append(li)
+			}
+		}
+	})
+
+	//地区切换事件
+	$(".educationZYCZQKEchartsChange").delegate("li","click",function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active")
+		educationZYCZQKAjaxShowEcharts($(this).attr('bh'))
+//		educationZYCZQKAjax()
+	})
+
+	//echart数据 AJAX 请求
+	function educationZYCZQKAjaxShowEcharts(bh){
+		$.ajax({
+			type: 'post',
+			url: "jxedu/listEduStatisticInfo.do",
+			dataType: 'JSON',
+			data:{
+				qhbh:bh,
+				length:4
+			},
+			success: function (data) {
+				var len=data.length;
+				var idleloadNumArr=[];
+				var overloadNumArr=[];
+				var yearsArr=[];
+				for(var i=0;i<len;i++){
+					yearsArr.push(data[i].year+'年');
+					idleloadNumArr.push(data[i].idleloadNum);
+					overloadNumArr.push(data[i].overloadNum);
+				}
+				idleloadNumArr=idleloadNumArr.reverse();
+				overloadNumArr=overloadNumArr.reverse();
+				yearsArr=yearsArr.reverse();
+				educationZYCZQKEcharts(yearsArr,idleloadNumArr,overloadNumArr)
+			}
+		})
+	}
+
+	//态势图 热力图切换
+	$("#eduTitleChange ul li").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		eduLayerChange()
+	})
+
+	var heatLayer;
+	$(".eduRltqh").click(function(){
+		$(this).siblings().removeClass("active");
+		map.infoWindow.hide();
+		$(this).addClass("active");
+		eduLayerChange()
+	})
+	function eduLayerChange(){
+		var eduTitleChangeText=$("#eduTitleChange ul").find("li.active").text();
+		var eduChangeText=$("#eduChange ").find(".eduRltqh.active").text();
+		$.ajax({
+			type: 'post',
+			url: "jxedu/listOverloadSchoolInfo.do?qhbh="+qhbh,
+			dataType: 'JSON',
+			success: function (data) {
+				if(heatLayer != null){
+					map.removeLayer(heatLayer);
+				}
+				map.removeLayer(CZeducationZYCZQKLayer);
+				map.removeLayer(KZeducationZYCZQKLayer);
+				if(eduTitleChangeText=="态势图"){
+					if(eduChangeText=="空载"){
+						KZeducationZYCZQKDrawMapPoint(data)
+					}else if(eduChangeText=="超载"){
+						CZeducationZYCZQKDrawMapPoint(data)
+					}
+				}
+				if(eduTitleChangeText=="热力图"){
+					if(eduChangeText=="空载"){
+						eduKZheatsMapData();
+					}else if(eduChangeText=="超载"){
+						eduCZheatsMapData()
+					}
+				}
+			}
+		})
+
+	}
+
+
+	//获取热力图空载数据
+	function eduKZheatsMapData(){
+			heatLayer = new  HeatmapLayer({//热力图
+				config: {
+					"useLocalMaximum": true,
+					"radius": 50,
+					"gradient": {
+						0.45: "rgb(000,000,255)",
+						0.55: "rgb(000,255,255)",
+						0.65: "rgb(000,255,000)",
+						0.95: "rgb(255,255,000)",
+						1.00: "rgb(255,000,000)"
+					}
+				},
+				"map": map,
+				"domNodeId": "heatLayer",
+				"opacity": 0.85
+			});
+			var points = [];
+			$.ajax({
+				type: 'post',
+				url: "jxedu/listOverloadSchoolInfo.do",
+				dataType: 'JSON',
+				data:{qhbh:qhbh},
+				success: function (data) {
+					console.log(data)
+					//学区空载热力图
+					var len=data.idle.length;
+					var pointArr=[];
+					for(var i=0;i<len;i++) {
+						if (!data.idle[i].jd || !data.idle[i].wd) {
+							var geo;
+							if (data.idle[i].type == "sc002") {
+								geo = querySchoolInfo(0, data.idle[i].schoolName);
+							} else if (data.idle[i].type == "sc003") {
+								geo = querySchoolInfo(1, data.idle[i].schoolName);
+							}
+							if (geo != null) {
+								data.idle[i].jd = geo.x;
+								data.idle[i].wd = geo.y;
+							}
+						}
+						if (data.idle[i].jd && data.idle[i].wd) {
+							var obj = {};
+							obj.attributes={count:Math.abs(data.idle[i].enrollmentDifference)};
+							obj.geometry={
+								spatialReference: {wkid: map.spatialReference},
+								type: "point",
+								x: lonLat2Mercator(parseFloat(data.idle[i].jd), parseFloat(data.idle[i].wd))[0],
+								y: lonLat2Mercator(parseFloat(data.idle[i].jd), parseFloat(data.idle[i].wd))[1]
+							}
+							pointArr.push(obj)
+						}
+					}
+					heatLayer.setData(pointArr);
+					points.push(pointArr);
+				}
+			})
+		map.addLayer(heatLayer);
+	}
+	//获取热力图超载数据
+	function eduCZheatsMapData(){
+			heatLayer = new  HeatmapLayer({//热力图
+				config: {
+					"useLocalMaximum": true,
+					"radius": 50,
+					"gradient": {
+						0.45: "rgb(000,000,255)",
+						0.55: "rgb(000,255,255)",
+						0.65: "rgb(000,255,000)",
+						0.95: "rgb(255,255,000)",
+						1.00: "rgb(255,000,000)"
+					}
+				},
+				"map": map,
+				"domNodeId": "heatLayer",
+				"opacity": 0.85
+			});
+			var points = [];
+			$.ajax({
+				type: 'post',
+				url: "jxedu/listOverloadSchoolInfo.do",
+				dataType: 'JSON',
+				data:{qhbh:qhbh},
+				success: function (data) {
+					console.log(data)
+					//学区超载热力图
+					var len=data.overload.length;
+					var pointArr=[];
+					for(var i=0;i<len;i++) {
+						if (!data.overload[i].jd || !data.overload[i].wd) {
+							var geo;
+							if (data.overload[i].type == "sc002") {
+								geo = querySchoolInfo(0, data.overload[i].schoolName);
+							} else if (data.overload[i].type == "sc003") {
+								geo = querySchoolInfo(1, data.overload[i].schoolName);
+							}
+							if (geo != null) {
+								data.overload[i].jd = geo.x;
+								data.overload[i].wd = geo.y;
+							}
+						}
+						if (data.overload[i].jd && data.overload[i].wd) {
+							var obj = {};
+							obj.attributes={count:Math.abs(data.overload[i].enrollmentDifference)};
+							obj.geometry={
+								spatialReference: {wkid: map.spatialReference},
+								type: "point",
+								x: lonLat2Mercator(parseFloat(data.overload[i].jd), parseFloat(data.overload[i].wd))[0],
+								y: lonLat2Mercator(parseFloat(data.overload[i].jd), parseFloat(data.overload[i].wd))[1]
+							}
+							pointArr.push(obj)
+						}
+					}
+					heatLayer.setData(pointArr);
+					points.push(pointArr);
+				}
+			})
+		map.addLayer(heatLayer);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：wangxw
+ * 创建日期：2017/9/14 8:58
+ * 描述信息：
+ * ***************************************************************
+ */
+package com.cetc28.idata.service;
+
+
+import com.cetc28.idata.dto.CardStatisticsTooltipDto;
+import com.cetc28.idata.dto.CorpPenaltyCountDto;
+import com.cetc28.idata.dto.MiHospitalVolumeStatisticsDto;
+import com.cetc28.idata.model.*;
+
+import java.util.List;
+import java.util.Map;
+
+public interface JxSocialSecurityService {
+
+    List<JxSsServiceStatistics> getSsOnlineServiceInFiveY();
+
+    JxSsCardStatistics getSsCardHolderLatestY(Integer rowNo);
+
+    List<JxSsCorpStatistics> getSsCorporationInThreeY();
+
+    JxSsStatistics getSsSafeguardRateLatestY();
+
+    List<JxSsCardStatistics> getSsCardStatisticsInFiveY();
+
+    JxSsCorpStatistics getSsCorporationInLatestY(String regionCode, String legalPersonType, String businessType);
+
+    List<JxSsCorpStatistics> getSsCorporationInFiveY(String regionCode, String legalPersonType, String businessType,Integer rowNo);
+
+    JxSsCorpAnalysis getSsCorpAnalysisLatestY(String regionCode, String corpName);
+
+    List<JxSsCorpAnalysis> getSsCorpAnalysisInFiveY(String regionCode, String corpName, Integer rowNo);
+
+    List<CorpPenaltyCountDto> getSsCorpPenaltyCountInFiveY(String regionCode, String corpName);
+
+    List<JxSsCorpPenaltyInfo> getSsCorpPenaltyLatestThree(String regionCode, String corpName);
+
+    List<JxSsCorpAnalysis> getCorpAnalysisTooltipLatestY(String regionCode);
+
+    List<CardStatisticsTooltipDto> getCardStatisticsTooltipLatestY(String regionCode);
+
+    JxSsMiVolumeStatistics getSsMiVolumeStatisticsLatestDay();
+
+    List<JxSsMiNoticeInfo> getSsMiNoticeInfoLatestDay();
+
+    List<JxSsMiHospitalVolume> getSsMiHospitalVolumeRank5();
+
+    List<MiHospitalVolumeStatisticsDto> getHospitalStatisticsTooltipData(String regionCode);
+
+    List<Map.Entry<String,Double>> getRankMap(Map<String, Double> dayTransactionByRegion);
+
+    //计算同比增长率
+    List<Double> computeGrowPercent(List<Object> statisticsDataList);
+
+    List getHostpitalInfo(String hostpitalName);
+}

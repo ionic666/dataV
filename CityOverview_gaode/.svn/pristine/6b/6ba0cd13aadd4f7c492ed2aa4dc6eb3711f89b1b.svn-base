@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IJxEduDao" >
+  <resultMap id="BaseResultMap" type="com.cetc28.idata.model.JxSchoolInfo" >
+    <id column="SCHOOL_CODE" property="schoolCode" jdbcType="VARCHAR" />
+    <result column="QHBH" property="qhbh" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="JD" property="jd" jdbcType="VARCHAR" />
+    <result column="WD" property="wd" jdbcType="VARCHAR" />
+    <result column="ADDR" property="addr" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+    <result column="CONTACT" property="contact" jdbcType="VARCHAR" />
+    <result column="CONTACT_TEL" property="contactTel" jdbcType="VARCHAR" />
+    <result column="TEACHER_NO" property="teacherNo" jdbcType="DECIMAL" />
+    <result column="STUDENT_NO" property="studentNo" jdbcType="DECIMAL" />
+    <result column="ROOM_NUMBER" property="roomNumber" jdbcType="DECIMAL" />
+    <result column="BZ" property="bz" jdbcType="VARCHAR" />
+    <result column="ATTRI" property="attri" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    SCHOOL_CODE, QHBH, NAME, JD, WD, ADDR, TYPE, TEL, CONTACT, CONTACT_TEL, TEACHER_NO, 
+    STUDENT_NO, ROOM_NUMBER, BZ, ATTRI
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cetc28.idata.model.JxSchoolInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from xxzygl.JX_MS_SCHOOLINFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from xxzygl.JX_MS_SCHOOLINFO
+    where SCHOOL_CODE = #{schoolCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from xxzygl.JX_MS_SCHOOLINFO
+    where SCHOOL_CODE = #{schoolCode,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cetc28.idata.model.JxSchoolInfoExample" >
+    delete from xxzygl.JX_MS_SCHOOLINFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cetc28.idata.model.JxSchoolInfo" >
+    insert into xxzygl.JX_MS_SCHOOLINFO (SCHOOL_CODE, QHBH, NAME,
+      JD, WD, ADDR, TYPE, 
+      TEL, CONTACT, CONTACT_TEL, 
+      TEACHER_NO, STUDENT_NO, ROOM_NUMBER, 
+      BZ, ATTRI)
+    values (#{schoolCode,jdbcType=VARCHAR}, #{qhbh,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{jd,jdbcType=VARCHAR}, #{wd,jdbcType=VARCHAR}, #{addr,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{contactTel,jdbcType=VARCHAR}, 
+      #{teacherNo,jdbcType=DECIMAL}, #{studentNo,jdbcType=DECIMAL}, #{roomNumber,jdbcType=DECIMAL}, 
+      #{bz,jdbcType=VARCHAR}, #{attri,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.idata.model.JxSchoolInfo" >
+    insert into xxzygl.JX_MS_SCHOOLINFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="schoolCode != null" >
+        SCHOOL_CODE,
+      </if>
+      <if test="qhbh != null" >
+        QHBH,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="jd != null" >
+        JD,
+      </if>
+      <if test="wd != null" >
+        WD,
+      </if>
+      <if test="addr != null" >
+        ADDR,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="tel != null" >
+        TEL,
+      </if>
+      <if test="contact != null" >
+        CONTACT,
+      </if>
+      <if test="contactTel != null" >
+        CONTACT_TEL,
+      </if>
+      <if test="teacherNo != null" >
+        TEACHER_NO,
+      </if>
+      <if test="studentNo != null" >
+        STUDENT_NO,
+      </if>
+      <if test="roomNumber != null" >
+        ROOM_NUMBER,
+      </if>
+      <if test="bz != null" >
+        BZ,
+      </if>
+      <if test="attri != null" >
+        ATTRI,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="schoolCode != null" >
+        #{schoolCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qhbh != null" >
+        #{qhbh,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="jd != null" >
+        #{jd,jdbcType=VARCHAR},
+      </if>
+      <if test="wd != null" >
+        #{wd,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null" >
+        #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherNo != null" >
+        #{teacherNo,jdbcType=DECIMAL},
+      </if>
+      <if test="studentNo != null" >
+        #{studentNo,jdbcType=DECIMAL},
+      </if>
+      <if test="roomNumber != null" >
+        #{roomNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="bz != null" >
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="attri != null" >
+        #{attri,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update xxzygl.JX_MS_SCHOOLINFO
+    <set >
+      <if test="record.schoolCode != null" >
+        SCHOOL_CODE = #{record.schoolCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qhbh != null" >
+        QHBH = #{record.qhbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jd != null" >
+        JD = #{record.jd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wd != null" >
+        WD = #{record.wd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addr != null" >
+        ADDR = #{record.addr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        TYPE = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tel != null" >
+        TEL = #{record.tel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contact != null" >
+        CONTACT = #{record.contact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactTel != null" >
+        CONTACT_TEL = #{record.contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teacherNo != null" >
+        TEACHER_NO = #{record.teacherNo,jdbcType=DECIMAL},
+      </if>
+      <if test="record.studentNo != null" >
+        STUDENT_NO = #{record.studentNo,jdbcType=DECIMAL},
+      </if>
+      <if test="record.roomNumber != null" >
+        ROOM_NUMBER = #{record.roomNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.bz != null" >
+        BZ = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attri != null" >
+        ATTRI = #{record.attri,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update xxzygl.JX_MS_SCHOOLINFO
+    set SCHOOL_CODE = #{record.schoolCode,jdbcType=VARCHAR},
+      QHBH = #{record.qhbh,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      JD = #{record.jd,jdbcType=VARCHAR},
+      WD = #{record.wd,jdbcType=VARCHAR},
+      ADDR = #{record.addr,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=VARCHAR},
+      TEL = #{record.tel,jdbcType=VARCHAR},
+      CONTACT = #{record.contact,jdbcType=VARCHAR},
+      CONTACT_TEL = #{record.contactTel,jdbcType=VARCHAR},
+      TEACHER_NO = #{record.teacherNo,jdbcType=DECIMAL},
+      STUDENT_NO = #{record.studentNo,jdbcType=DECIMAL},
+      ROOM_NUMBER = #{record.roomNumber,jdbcType=DECIMAL},
+      BZ = #{record.bz,jdbcType=VARCHAR},
+      ATTRI = #{record.attri,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cetc28.idata.model.JxSchoolInfo" >
+    update xxzygl.JX_MS_SCHOOLINFO
+    <set >
+      <if test="qhbh != null" >
+        QHBH = #{qhbh,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="jd != null" >
+        JD = #{jd,jdbcType=VARCHAR},
+      </if>
+      <if test="wd != null" >
+        WD = #{wd,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        ADDR = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        CONTACT = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null" >
+        CONTACT_TEL = #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherNo != null" >
+        TEACHER_NO = #{teacherNo,jdbcType=DECIMAL},
+      </if>
+      <if test="studentNo != null" >
+        STUDENT_NO = #{studentNo,jdbcType=DECIMAL},
+      </if>
+      <if test="roomNumber != null" >
+        ROOM_NUMBER = #{roomNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="bz != null" >
+        BZ = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="attri != null" >
+        ATTRI = #{attri,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SCHOOL_CODE = #{schoolCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cetc28.idata.model.JxSchoolInfo" >
+    update xxzygl.JX_MS_SCHOOLINFO
+    set QHBH = #{qhbh,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      JD = #{jd,jdbcType=VARCHAR},
+      WD = #{wd,jdbcType=VARCHAR},
+      ADDR = #{addr,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      TEL = #{tel,jdbcType=VARCHAR},
+      CONTACT = #{contact,jdbcType=VARCHAR},
+      CONTACT_TEL = #{contactTel,jdbcType=VARCHAR},
+      TEACHER_NO = #{teacherNo,jdbcType=DECIMAL},
+      STUDENT_NO = #{studentNo,jdbcType=DECIMAL},
+      ROOM_NUMBER = #{roomNumber,jdbcType=DECIMAL},
+      BZ = #{bz,jdbcType=VARCHAR},
+      ATTRI = #{attri,jdbcType=VARCHAR}
+    where SCHOOL_CODE = #{schoolCode,jdbcType=VARCHAR}
+  </update>
+
+  <select id="listSchooType" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select DISTINCT a.type, b.value from xxzygl.JX_MS_SCHOOLINFO a  left join JX_SYS_DICT b on a.type = b.key where a.qhbh like #{qhbh}||'%' ORDER BY a.type
+  </select>
+
+  <select id="queryMaxYear" resultType="java.lang.String">
+    select max(year) from jxedu.JXEDU_PRE_AMOUNT
+  </select>
+
+  <select id="listOverloadSchoolInfo" parameterType="java.lang.String"  resultType="com.cetc28.idata.dto.SchoolResourceDto">
+   SELECT * FROM (
+    select school.NAME schoolName,
+             school.TEACHER_NO teacherNumber,
+             school.TYPE type,
+             school.ROOM_NUMBER classroomNumber,
+            /* amount.AGED_CHILDREN_NO schoolAgedChildrenNo,*/
+             amount.PRE_AMOUNT expectedEnrollmentNo,
+             amount.AMOUNT actualEnrollmentNo,
+             amount.AMOUNT-amount.PRE_AMOUNT enrollmentDifference,
+             school.JD jd,
+             school.WD wd
+        from jxedu.JXEDU_PRE_AMOUNT amount, xxzygl.JX_MS_SCHOOLINFO school
+        where school.school_code=amount.SCHOOL_CODE and amount.year=#{year}
+        and  school.qhbh like #{qhbh}||'%'
+    )
+    <choose>
+      <when test="flag == 0">
+        where enrollmentDifference &gt; 0
+      </when>
+      <otherwise>
+        where enrollmentDifference &lt; 0
+      </otherwise>
+    </choose>
+    order by abs(enrollmentDifference) desc
+
+
+</select>
+
+  <select id="selectJxEduMediaRoom"  resultType="com.cetc28.idata.model.JxEduMediaEdu" parameterType="Integer">
+    <![CDATA[ select year,SCHOOLTYPE, MEDIAROOM,SCHOOLNAME from (select * from JX_EDU_MEDIA_EDU order by year desc )where rownum<=#{count}*4 order by year,SCHOOLTYPE]]>
+  </select>
+
+  <select id="selectJxEduNetworkLearn"  resultType="com.cetc28.idata.model.JxEduMediaEdu" parameterType="Integer">
+    <![CDATA[select ntile(4) over (order by t.schooltype,t.year ) as schooltype,t.networklearn,t.year,t.schoolname from (select * from ( select * from JX_EDU_MEDIA_EDU  order by year desc ) a where rownum<=#{count}*4 ) t]]>
+  </select>
+
+  <select id="selectJxEduWireless"  resultType="com.cetc28.idata.model.JxEduMediaEdu">
+    <![CDATA[select year,SCHOOLTYPE, WIRELESS,SCHOOLNAME from (select * from JX_EDU_MEDIA_EDU order by year desc)where rownum<5 order by year,SCHOOLTYPE]]>
+  </select>
+
+  <select id="listSchoolType" resultType="java.util.HashMap">
+    SELECT DISTINCT(SCHOOLTYPE), SCHOOLNAME FROM JX_EDU_MEDIA_EDU　ORDER  BY SCHOOLTYPE
+  </select>
+
+  <select id="listSchoolStatisticInfo" resultType="com.cetc28.idata.model.JxEduMediaEdu">
+    <![CDATA[SELECT * FROM (SELECT * FROM JX_EDU_MEDIA_EDU WHERE SCHOOLTYPE = #{0} ORDER BY YEAR DESC) WHERE ROWNUM<= #{1} ORDER  BY YEAR]]>
+  </select>
+  <select id="queryBasicEduInfo" resultType="java.util.HashMap">
+    <![CDATA[ SELECT  * FROM (SELECT  * FROM JX_EDU_BASIC_INFO ORDER BY year desc) WHERE ROWNUM<=1]]>
+  </select>
+
+</mapper>

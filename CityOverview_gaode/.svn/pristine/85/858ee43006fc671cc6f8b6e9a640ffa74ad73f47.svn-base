@@ -1,0 +1,206 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+
+    #hotFocus.modal {
+      display: none;
+    }
+
+    #hotFocus .modal-dialog {
+      width: 100%;
+      height: 90%;
+    }
+    #hotFocus .modal-content {
+      border-radius: 0;
+    }
+    #div1{
+      width: 100%;height: 100%;padding: 8px
+    }
+    #div1 .hnlist ul {
+      list-style: none outside none;
+      padding-left: 15px;
+      margin-top: 10px;
+    }
+
+    #div1 .hnlist-content ul li a{
+      color: #000000;
+    }
+    #div1 .hnlist-content ul li a:hover{
+      color: orange;
+    }
+    #div1 .hnlist-content span{
+      float: right;
+      display: block;
+      margin: 0 8px;
+      color: #53637d;
+      cursor: pointer;
+    }
+    #div1 .hnlist-title {
+      height: 31px;
+      background: url(http://192.168.40.81/IIAS/lib/js/cnewslist/title_bg.jpg) repeat-x;
+    }
+    #div1 .hnlist-item {
+      list-style: none outside none;
+      padding-left: 10px;
+      line-height: 24px;
+      font-size: 12px;
+      font-family: "微软雅黑";
+      background: url(http://192.168.40.81/IIAS/lib/js/cnewslist/square.jpg) left center no-repeat;
+    }
+    #div1 .hnlist-title p {
+      color: #2283d7;
+      font-size: 16px;
+      font-family: "微软雅黑";
+      float: left;
+      height: 31px;
+      line-height: 31px;
+      text-indent: 45px;
+      background: url(http://192.168.40.81/IIAS/lib/js/cnewslist/four_bg.jpg) 0 0 no-repeat;
+      width: 157px;
+      padding: 0 0 0 10px;
+      margin: 0;
+      font-weight: bold;
+    }
+    #div1 .more_img {
+      background-image: url(http://192.168.40.81/IIAS/lib/js/cnewslist/more.jpg);
+      float: right;
+      border: 0;
+      width: 50px;
+      height: 20px;
+      margin: 8px 10px 0 0;
+    }
+  </style>
+</head>
+<body>
+<div class="modal fade" style="width: 820px;height: 420px;top: 100px;left: 200px;" id="hotFocus" tabindex="-1" role="dialog" aria-hidden="true" style=""
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-header" style="background-color: #d6d6d6">
+      <button type="button" class="close" data-dismiss="modal" aria-label="close">
+        <img src="map/images/economicModel/close.png">
+      </button>
+      </div>
+    <div class="modal-content" >
+      <div id="div1" >
+        <div class="hnlist">
+          <div class="hnlist-title">
+            <p>热点聚焦</p>
+            <a href="" target="_blank">
+              <div class="more_img"></div>
+            </a>
+          </div>
+          <div class="hnlist-content">
+            <ul class="list-unstyled">
+              <li  class="hnlist-item " >
+                <div>
+                  <a href=""  target="_blank" >
+                    德云社20年纪念网友：望多出几个岳云鹏
+                  </a>
+                  <span class="hnlist-item-span">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li class="hnlist-item " >
+                <div>
+                  <a href="" target="_blank" >互联网金融探寻“新玩法”</a>
+                  <span class="hnlist-item-span hnlist-item-span_0">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li  class="hnlist-item ">
+                <div>
+                  <a href="" target="_blank" >南京今年将办10场以上马拉松 特色赛唱主角</a>
+                  <span class="hnlist-item-span">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li class="hnlist-item " >
+                <div>
+                  <a href="" target="_blank" >南京小升初招生拉开大幕 现场：家长凌晨来排队</a>
+                  <span class="hnlist-item-span ">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li  class="hnlist-item ">
+                <div>
+                  <a href="" target="_blank" >秦凯连夺男双三米板金牌：对里约奥运会很有信心</a>
+                  <span class="hnlist-item-span ">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li  class="hnlist-item ">
+                <div>
+                  <a href=""  target="_blank" >特写：高墙内一堂动人的女性课</a>
+                  <span class="hnlist-item-span ">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li class="hnlist-item " >
+                <div>
+                  <a href=""  target="_blank" >这不仅是指6亿多中国网民和腾讯、百度等中国公司在......</a>
+                  <span class="hnlist-item-span ">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li class="hnlist-item ">
+                <div>
+                  <a href="" target="_blank" >南京退房摇号方式做出调整：网络摇号成固定方式</a>
+                  <span class="hnlist-item-span ">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li class="hnlist-item ">
+                <div>
+                  <a href="" target="_blank">两“奇葩”酒驾司机被追刑责</a>
+                  <span class="hnlist-item-span ">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li class="hnlist-item " >
+                <div>
+                  <a href="" target="_blank" >复旦专家：不能因历史问题对日本地震“幸灾乐祸”</a>
+                  <span class="hnlist-item-span ">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li class="hnlist-item " >
+                <div>
+                  <a href="" target="_blank" >首个招标式创业项目落地南京</a>
+                  <span class="hnlist-item-span ">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+              <li class="hnlist-item ">
+                <div>
+                  <a href="" target="_blank" >乌鲁木齐男性性病为何会复发</a>
+                  <span class="hnlist-item-span ">相似主题数:1</span>
+                  <span>摘要</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</div>
+</body>
+</html>

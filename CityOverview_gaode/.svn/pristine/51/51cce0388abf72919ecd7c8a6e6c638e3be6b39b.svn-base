@@ -1,0 +1,17 @@
+function showZtsnc(){
+    var busArr =[e0,e1,e2];
+    var pointSymobol=new Array(3);
+    var pointGraphic=new Array(3);
+    var textGpraphic =new Array(3);
+    var imageSoure ="map/images/ztsnc_alert.png";
+	for(var j=0;j<3;j++){
+        pointSymobol[j]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+        var planePoint =new esri.geometry.Point(busArr[j][0].jd,busArr[j][0].wd,map.spatialReference);
+        pointGraphic[j]=new esri.Graphic(planePoint,pointSymobol[j]);
+        pointGraphic[j].attributes=busArr[j][0];
+        graphicZtsncLayer.add(pointGraphic[j]) ;
+        graphicZtsncLayer.refresh();
+	}
+}
+
+

@@ -1,0 +1,186 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="../../myCss/iframe.css"/>
+	<style type="text/css">
+		body{
+			padding: 10px 0 0 10px;
+		}
+		div.gsbz{
+			width: 100%;
+			height: 100%;
+		}
+		div#gsbzLine{
+			height: 75%;
+			width: 95%;
+		}
+		.addRed-gsbz{
+			font-size: 26px;
+		}
+		.smxIcon{
+			height: 33px;
+			width: 33px;
+			display: block;
+		}
+		p.headerTitle{
+			float: left;
+		}
+		.rkzrzzsnText{
+			float: left;
+			height: 21%;
+			margin-left: 6%;
+		}
+		.rkzrzzsnText>ul>li{
+			text-align: center;
+			float: left;
+			margin-left: 10px;
+		}
+		.rkzrzzsnText ul li p{
+			height: 100%;
+			padding: 4% 0;
+		}
+		.rkzrzzsnText>ul>li img{
+			margin: 0 auto;
+		}
+		.fontSize8{
+			font-size: 8px;
+		}
+	</style>
+</head>
+<body>
+<div class="gsbz">
+	<p class="headerTitle">
+		供水保障
+	</p>
+	<%--<div class="rkzrzzsnText">--%>
+	<%--<ul>--%>
+	<%--<li>--%>
+	<%--<p class="addBold">本月供水<span class="addRed addRed-gsbz" id="">20.45</span>亿立方米</p>--%>
+	<%--</li>--%>
+	<%--<li>--%>
+
+	<%--</li>--%>
+	<%--</ul>--%>
+	<%--</div>--%>
+	<div class="rkzrzzsnText">
+		<ul>
+			<li><img class="smxIcon" src="../../images/gsbz.png" alt="本月供水"/><span class="fontSize8">本月供水</span></li>
+			<li><p><span class="addYellow addRed-gsbz counter" id="gsl"></span><span class="fontSize8">亿立方米</span></p></li>
+		</ul>
+	</div>
+	<%--社保自助服务开通率折线图--%>
+	<div id="gsbzLine">
+	</div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+	var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+	function CreatSsServiceChart(month,tapWaterStsRate){
+		var mycharts = echarts.init(document.getElementById('gsbzLine'));
+		var option = {
+			tooltip : {
+				trigger: 'axis'
+			},
+			legend: {
+				data:[{name: '自来水水产销差率',textStyle: {color: '#fff'}}],
+				x: 'right'
+
+
+			},
+			calculable : true,
+			grid:{
+				x: '10%',
+				y: '15%',
+				x2: '15%',
+				y2: '10%',
+				containLabel: true,
+				borderWidth:0
+			},
+			xAxis : [
+				{
+					type : 'category',
+					boundaryGap : false,
+					splitLine: {show: false},
+					axisLine: {show: false},
+					axisTick: {show: false},
+					axisLabel: {show: true,textStyle: {color: '#fff'}},
+					data : month
+				}
+			],
+			yAxis : [
+				{
+					type : 'value',
+					show: false,
+					splitLine: {show: false},
+					axisLine: {show: false},
+					axisTick: {show: false},
+					axisLabel: {show: false}
+
+				}
+			],
+			series : [
+				{
+					name:'自来水水产销差率',
+					type:'line',
+					stack: '总量',
+					itemStyle: {normal: {borderWidth: 0,label:{show:true,textStyle: text_style,formatter: '{c}%'},areaStyle: {type: 'default'},color:'#5B9BD5'}},
+					data:tapWaterStsRate
+				}
+			]
+		};
+
+		mycharts.setOption(option);
+	}
+	//  查询近四个月的供水量的数据
+	$.ajax({
+		type:"POST",
+		url:'../../jxutility/water/tapWaterStsRateByBh.do?bH='+qhbh+'&monthSize=4',
+		dataType:'json',
+		success:function(data){
+			var mon=[],
+					tapWater=[],
+					month,
+					tapWaterStsRate;
+
+			$.each(data,function(i){
+				var date=data[i].dateYm;
+				mon.push(date.substr(date.length-1,1)+'月');
+				tapWater.push(data[i].tapWaterStsRate*100);
+			});
+			month = mon.reverse();
+			tapWaterStsRate = tapWater.reverse();
+			CreatSsServiceChart(month,tapWaterStsRate);
+		}
+	});
+
+
+
+	//当月供水量
+	$.ajax({
+		type:"POST",
+		url:'../../jxutility/water/waterSupplyByBh.do?bH='+qhbh+'',
+		dataType:'json',
+		success:function(data){
+			$('#gsl').append(data.tapWaterSupply/10000);
+			$('.counter').countUp({
+				delay: 2,
+				time: 200
+			});
+		}
+	});
+</script>
+</body>
+</html>

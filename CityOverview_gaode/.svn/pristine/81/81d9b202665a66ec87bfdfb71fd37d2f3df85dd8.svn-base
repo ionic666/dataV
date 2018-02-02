@@ -1,0 +1,25 @@
+package com.cetc28.PeopleBenefitService.dto;
+
+/**
+ * Created by jianglulu on 2017/11/13.
+ */
+public class JxeduTerSchDto {
+    private Integer studentno;
+    private Integer teacherno;
+
+    public Integer getStudentno() {
+        return studentno;
+    }
+
+    public void setStudentno(Integer studentno) {
+        this.studentno = studentno;
+    }
+
+    public Integer getTeacherno() {
+        return teacherno;
+    }
+
+    public void setTeacherno(Integer teacherno) {
+        this.teacherno = teacherno;
+    }
+}

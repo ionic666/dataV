@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IJxEcoClusterDao" >
+    <select id="findClusterType" resultType="map">
+        select cluster_name,jd,wd,cluster_type,cluster_location,company_num from JX_ECO_INTERNET_CLUSTER order by cluster_id
+    </select>
+
+    <select id="findCompanyInfo" resultType="map" parameterType="String">
+        select a.cluster_name,a.district,a.company_location,a.company_contact,a.company_scale,a.occupied_area,
+         a.output_value,a.business_scope,a.company_type,a.company_age,a.company_name,a.jd,a.wd,a.FOUNDING_TIME,
+         a.REGISTERED_CAPITAL,a.BUSINESS_ENTITY
+         from JX_ECO_INTERNET_COMPANY a
+         LEFT JOIN JX_ECO_INTERNET_CLUSTER  b  on a.cluster_name=b.cluster_name
+         WHERE b.cluster_type=#{clusterType}
+         <if test=" companyName!='' ">
+             AND a.company_name  LIKE '%'||#{companyName}||'%'
+         </if>
+    </select>
+
+
+    <select id="searchCluserCompanyInfo" resultType="map" parameterType="String">
+        select a.cluster_name,a.district,a.company_location,a.company_contact,a.company_scale,a.occupied_area,a.REGISTERED_CAPITAL,a.BUSINESS_ENTITY,
+        a.output_value,a.business_scope,a.company_type,a.company_age,a.company_name,a.jd,a.wd,a.FOUNDING_TIME from JX_ECO_INTERNET_COMPANY a
+        LEFT JOIN JX_ECO_INTERNET_CLUSTER  b  on a.cluster_name=b.cluster_name
+        <where>
+            <if test=" companyName!='' ">
+                AND a.company_name  LIKE '%'||#{companyName}||'%'
+            </if>
+        </where>
+    </select>
+
+    <select id="findClusterInfo" parameterType="String" resultType="map">
+        select
+        CLUSTER_NAME,CLUSTER_DESCRIPTION,CORE_PRODUCT,output,OUTPUT_VALUE_INCR
+          ,main_business_income,MAIN_BUSINESS_INCR,profit,PROFIT_INCR
+        FROM  JX_ECO_INTERNET_CLUSTER WHERE cluster_name=#{clusterName}
+    </select>
+
+    <select id="findClusterInfoByType" resultType="map">
+          select * from
+          (select t.CLUSTER_NAME,t.CLUSTER_DESCRIPTION,t.CORE_PRODUCT,t.output,t.OUTPUT_VALUE_INCR
+          ,t.main_business_income,t.MAIN_BUSINESS_INCR,t.profit,t.PROFIT_INCR
+          FROM  JX_ECO_INTERNET_CLUSTER t
+          WHERE cluster_type=#{clusterType}) d
+          left join
+          (select round(avg(t.jd),6) as jd,round(avg(t.wd),6) as wd,t.cluster_name from JX_ECO_INTERNET_COMPANY t group by t.cluster_name) b
+          on d.cluster_name =b.cluster_name
+    </select>
+
+    <select id="findClusterTypes" resultType="String">
+        select cluster_type from JX_ECO_INTERNET_CLUSTER
+    </select>
+</mapper>

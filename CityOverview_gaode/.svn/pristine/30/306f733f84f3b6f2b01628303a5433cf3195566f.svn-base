@@ -1,0 +1,55 @@
+package com.cetc28.idata.model;
+
+import java.util.Date;
+
+public class JxSsMiNoticeInfo {
+    private Short id;
+
+    private String transactionType;
+
+    private String transactionTime;
+
+    private String insuredPerson;
+
+    private Double transactionAmount;
+
+    public Short getId() {
+        return id;
+    }
+
+    public void setId(Short id) {
+        this.id = id;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType == null ? null : transactionType.trim();
+    }
+
+    public String getTransactionTime() {
+        return transactionTime;
+    }
+
+    public void setTransactionTime(String transactionTime) {
+        this.transactionTime = transactionTime;
+    }
+
+    public String getInsuredPerson() {
+        return insuredPerson;
+    }
+
+    public void setInsuredPerson(String insuredPerson) {
+        this.insuredPerson = insuredPerson == null ? null : insuredPerson.trim();
+    }
+
+    public Double getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    public void setTransactionAmount(Double transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
+}

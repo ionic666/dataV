@@ -1,0 +1,50 @@
+package com.cetc28.idata.dto;
+
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+/**
+ * Created by sunyuan on 2017/2/12.
+ */
+@JsonSerialize
+@JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
+public class AsjDto {
+
+    private String asjbh;
+    private Integer aqjb;
+    private String gjz;
+    private String asjms;
+
+    public String getAsjbh() {
+        return asjbh;
+    }
+
+    public void setAsjbh(String asjbh) {
+        this.asjbh = asjbh;
+    }
+
+    public Integer getAqjb() {
+        return aqjb;
+    }
+
+    public void setAqjb(Integer aqjb) {
+        this.aqjb = aqjb;
+    }
+
+    public String getGjz() {
+        return gjz;
+    }
+
+    public void setGjz(String gjz) {
+        this.gjz = gjz;
+    }
+
+    public String getAsjms() {
+        return asjms;
+    }
+
+    public void setAsjms(String asjms) {
+        this.asjms = asjms;
+    }
+}

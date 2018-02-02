@@ -1,0 +1,134 @@
+package com.cetc28.IntelligentInfrastructure.service.impl;
+
+import com.cetc28.IntelligentInfrastructure.dao.IJxUtilityMainteDao;
+import com.cetc28.IntelligentInfrastructure.dto.*;
+import com.cetc28.IntelligentInfrastructure.service.IJxUtilityMainteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/22 19:50
+ * 描述信息：
+ *****************************************************************/
+@Service
+public class JxUtilityMainteServiceImpl implements IJxUtilityMainteService {
+
+    @Autowired
+    private IJxUtilityMainteDao iJxUtilityMainteDao;
+
+    public List<JxUtilityManteFaultDto> findLatestFaultAll() {
+        return iJxUtilityMainteDao.findLatestFaultAll();
+    }
+
+    public Map findLastMonthDate() {
+        return iJxUtilityMainteDao.findLastMonthDate();
+    }
+
+   /* public List<JxUtilityManteFaultDto> findLatestFaultByUt(String utilityTypeDes, String dateBegin, String dateEnd, String faultState) {
+        return iJxUtilityMainteDao.findLatestFaultByUtDate(utilityTypeDes, dateBegin, dateEnd,faultState);
+    }*/
+
+    /*public List<JxUtilityManteFaultDto> findLatestFaultListByUt(String utilityTypeDes, String orderDes, String dateBegin, String dateEnd, String faultState) {
+        if (orderDes.equals("02")) {
+            return iJxUtilityMainteDao.findLatestFaultByUtRank(utilityTypeDes, dateBegin, dateEnd, faultState);
+        }
+        else {
+            return iJxUtilityMainteDao.findLatestFaultByUtDate(utilityTypeDes, dateBegin, dateEnd,faultState);
+        }
+    }*/
+
+    public List<List> findFault( String utilityTypeDes, String dateBegin,
+                                                    String dateEnd,String faultStateDes,
+                                                    String order) {
+
+        List<JxUtilityManteFaultDto> faultList1 = iJxUtilityMainteDao.findFault(utilityTypeDes, dateBegin, dateEnd, faultStateDes, order); //查找列表中要显示的故障点信息
+
+     /*   List<JxUtilityManteFaultDto> faultList2 = iJxUtilityMainteDao.findFault(utilityTypeDes, dateBegin, dateEnd, faultStateDes,"utilityType"); */
+        Map<String,List<JxUtilityManteFaultDto>> mapByFaultType = new HashMap<String, List<JxUtilityManteFaultDto>>(); //用HashMap对故障数据进行分组统计，按管网类型分组，Key为管网类型，Value为对应的故障信息list
+        for (int i = 0; i < faultList1.size(); i++) {
+            JxUtilityManteFaultDto jxUtilityManteFaultDto = faultList1.get(i); //依次读取每一个故障点
+            if(!mapByFaultType.containsKey(jxUtilityManteFaultDto.getUtilityType())) { //判断Map中是否已建立该类故障的List，没有则新建一个键值对，有则把该故障点添加到在已有的List中
+                List<JxUtilityManteFaultDto> listPoint = new ArrayList<JxUtilityManteFaultDto>();
+                listPoint.add(jxUtilityManteFaultDto);
+                mapByFaultType.put(jxUtilityManteFaultDto.getUtilityType(), listPoint);
+            }else{
+                mapByFaultType.get(jxUtilityManteFaultDto.getUtilityType()).add(jxUtilityManteFaultDto);
+            }
+        }
+
+        List list = new ArrayList(); //把列表显示的故障点信息和GIS图中要加载的故障点信息分别包装在一个List中
+        list.add(faultList1);
+        list.add(mapByFaultType);
+        return list;
+
+    }
+
+
+    public List<JxUtilityManteFaultByMonth> findLatestFaultNum() {
+        return iJxUtilityMainteDao.findLatestFaultNum();
+    }
+
+    public List<JxUtilityManteFaultByMonth> findLatestFaultFactNum() {
+        return iJxUtilityMainteDao.findLatestFaultFactNum();
+    }
+
+    public List<List> findFaultTendency(Integer monthSize){
+        List list = new ArrayList();
+        List<JxUtilityManteFaultByMonth> typeList = iJxUtilityMainteDao.findUtilityType(); // 返回存储各类管网类型的List
+        Iterator it = typeList.iterator(); //遍历管网类型列表，对各管网类型分别求指定时间段内的故障点数量的实体类实例
+        while (it.hasNext()) {
+            JxUtilityManteFaultByMonth faultType = (JxUtilityManteFaultByMonth)it.next();
+            List<JxUtilityManteFaultByMonth> faultByUtList = iJxUtilityMainteDao.findFaultNumByUtAndMs(monthSize, faultType.getUtilityTypeDes()); //调用的方法返回存储某类管网类型信息和对应故障点
+            list.add(faultByUtList);
+        }
+        return list;
+    }
+
+
+
+    public JxUtilityManteDeviceBaseDto findDeviceInfoById(String DeviceId) {
+        return iJxUtilityMainteDao.findDeviceInfoById(DeviceId);
+    }
+
+    public List<JxUtilityManteAlarmPointDto> findLatestAlarmPointAll() {
+        List l = new ArrayList();
+        List<JxUtilityManteAlarmPointDto> list= iJxUtilityMainteDao.findLatestAlarmPointAll();
+        Iterator it = list.iterator();
+        while(it.hasNext()) {
+            JxUtilityManteAlarmPointDto alarmPoint = (JxUtilityManteAlarmPointDto)it.next();
+            JxUtilityManteDeviceBaseDto deviceBase = findDeviceInfoById(alarmPoint.getDeviceNo());
+            alarmPoint.setLat(deviceBase.getLat());
+            alarmPoint.setLon(deviceBase.getLon());
+            alarmPoint.setDeviceLoca(deviceBase.getDeviceLoca());
+            alarmPoint.setDeviceTypeDes(deviceBase.getDeviceTypeDes());
+            alarmPoint.setUtilityTypeDes(deviceBase.getUtilityTypeDes());
+            alarmPoint.setAdmi(deviceBase.getAdmi());
+//            Map<String,Object> map1 = new HashMap<String,Object>();
+//            map1.put("alarmPoint",alarmPoint);
+//            map1.put("deviceBase",deviceBase);
+            l.add(alarmPoint);
+;        }
+        return l;
+    }
+
+    public List<Map> findLatestDeviceStateAll() {
+        List l = new ArrayList();
+        List<JxUtilityManteDeviceStateDto> list = iJxUtilityMainteDao.findLatestDeviceStateAll();
+        Iterator it= list.iterator();
+        while (it.hasNext()) {
+            JxUtilityManteDeviceStateDto deviceState = (JxUtilityManteDeviceStateDto)it.next();
+            JxUtilityManteDeviceBaseDto deviceBase = findDeviceInfoById(deviceState.getDeviceId());
+            Map<String,Object> map1 = new HashMap<String,Object>();
+            map1.put("deviceState",deviceState);
+            map1.put("deviceBase",deviceBase);
+            l.add(map1);
+        }
+        return l;
+    }
+
+}

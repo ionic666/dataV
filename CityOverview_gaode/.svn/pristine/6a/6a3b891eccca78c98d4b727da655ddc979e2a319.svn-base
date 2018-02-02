@@ -1,0 +1,102 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="../../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    .main{
+      width: 95%;
+      height: 87%;
+      padding-top: 5%;
+    }
+    .main h1{
+      color: #0CFF00;
+    }
+    .main h1 span{
+      color: #0CDAF5;
+    }
+    .main>.main-content{
+      width: 97%;
+      height: 46%;
+    }
+    .main-content>div{
+      width: 35%;
+      height: 90%;
+      margin-left: 3%;
+      float: left;
+    }
+    .main-content .infoTitle{
+      width: 50%;
+    }
+    .infoLogo1>img,.infoLogo2>img{
+      width: 3.8em;
+      height: 3.8em;
+      float: right;
+    }
+    .infoTitle{
+      vertical-align: middle;
+    }
+    .infoTitle>a{
+      /*color: #00FF00;*/
+      font-size: 1.2em;
+      line-height: 3.1em;
+      text-align: center;
+    }
+    .infoTitle>p{
+      font-size: 1em;
+      line-height: 24px;
+      text-align: center;
+    }
+    .headerLittleTitle{
+      position: absolute;
+      font-weight: bold;
+    }
+    p.headerTitle{
+      width: 45%;
+    }
+    .dw{
+      font-size: 16px;
+    }
+    a{
+      cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="gsbz">
+  <p class="headerTitle">
+    核心产业和重点企业
+  </p>
+
+  <div class="main">
+    <div class="main-content main-top">
+      <div class="infoLogo1"><img src="../../../images/information/hlwcyhx1.png" alt=""/></div>
+      <div class="infoTitle"><a onclick="hxqy()">互联网核心产业</a></div>
+    </div>
+    <div class="main-content main-middle">
+      <div class="infoLogo2"><img src="../../../images/information/zdqy.png" alt=""/></div>
+      <div class="infoTitle"><a onclick="zdqy()">重点企业</a></div>
+    </div>
+
+  </div>
+</div>
+<script>
+  function hxqy(){
+    location.href="../../../iframeSecond/secondBox/hlwjjqs.jsp";
+  }
+  function zdqy(){
+    location.href="../../../iframeSecond/secondBox/hlwzdqy.jsp";
+  }
+</script>
+</body>
+</html>

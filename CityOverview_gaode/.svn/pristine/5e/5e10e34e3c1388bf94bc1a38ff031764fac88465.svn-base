@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.JxSsCorpPenaltyInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.cetc28.PeopleBenefitService.model.JxSsCorpPenaltyInfo" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="REGION_CODE" property="regionCode" jdbcType="VARCHAR" />
+    <result column="CORP_NAME" property="corpName" jdbcType="VARCHAR" />
+    <result column="PENALTY_TIME" property="penaltyTime" jdbcType="TIMESTAMP" />
+    <result column="PENALTY_DEPARTMENT" property="penaltyDepartment" jdbcType="VARCHAR" />
+    <result column="ILLEGAL_DETAIL" property="illegalDetail" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, REGION_CODE, CORP_NAME, PENALTY_TIME, PENALTY_DEPARTMENT, ILLEGAL_DETAIL
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from JX_SS_CORP_PENALTY_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from JX_SS_CORP_PENALTY_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCorpPenaltyInfo" >
+    insert into JX_SS_CORP_PENALTY_INFO (ID, REGION_CODE, CORP_NAME, 
+      PENALTY_TIME, PENALTY_DEPARTMENT, ILLEGAL_DETAIL
+      )
+    values (#{id,jdbcType=DECIMAL}, #{regionCode,jdbcType=VARCHAR}, #{corpName,jdbcType=VARCHAR}, 
+      #{penaltyTime,jdbcType=TIMESTAMP}, #{penaltyDepartment,jdbcType=VARCHAR}, #{illegalDetail,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCorpPenaltyInfo" >
+    insert into JX_SS_CORP_PENALTY_INFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="regionCode != null" >
+        REGION_CODE,
+      </if>
+      <if test="corpName != null" >
+        CORP_NAME,
+      </if>
+      <if test="penaltyTime != null" >
+        PENALTY_TIME,
+      </if>
+      <if test="penaltyDepartment != null" >
+        PENALTY_DEPARTMENT,
+      </if>
+      <if test="illegalDetail != null" >
+        ILLEGAL_DETAIL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCode != null" >
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corpName != null" >
+        #{corpName,jdbcType=VARCHAR},
+      </if>
+      <if test="penaltyTime != null" >
+        #{penaltyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="penaltyDepartment != null" >
+        #{penaltyDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="illegalDetail != null" >
+        #{illegalDetail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCorpPenaltyInfo" >
+    update JX_SS_CORP_PENALTY_INFO
+    <set >
+      <if test="regionCode != null" >
+        REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corpName != null" >
+        CORP_NAME = #{corpName,jdbcType=VARCHAR},
+      </if>
+      <if test="penaltyTime != null" >
+        PENALTY_TIME = #{penaltyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="penaltyDepartment != null" >
+        PENALTY_DEPARTMENT = #{penaltyDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="illegalDetail != null" >
+        ILLEGAL_DETAIL = #{illegalDetail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cetc28.PeopleBenefitService.model.JxSsCorpPenaltyInfo" >
+    update JX_SS_CORP_PENALTY_INFO
+    set REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      CORP_NAME = #{corpName,jdbcType=VARCHAR},
+      PENALTY_TIME = #{penaltyTime,jdbcType=TIMESTAMP},
+      PENALTY_DEPARTMENT = #{penaltyDepartment,jdbcType=VARCHAR},
+      ILLEGAL_DETAIL = #{illegalDetail,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <select id="selectSsCorpPenaltyCountInFiveY" resultType="com.cetc28.PeopleBenefitService.dto.CorpPenaltyCountDto">
+    select t.illegal_detail as illegalDetail,count(*) as counts from
+    (select st.* from JX_SS_CORP_PENALTY_INFO st where st.region_code=#{0} and st.corp_name=#{1})t
+    group by t.illegal_detail
+  </select>
+  <select id="selectSsCorpPenaltyLatestThree" resultMap="BaseResultMap">
+    <![CDATA[select t.* from(select st.*,row_number() over (order by st.penalty_time desc)rn
+    from JX_SS_CORP_PENALTY_INFO st
+    where st.region_code=#{0} and st.corp_name=#{1})t where rn<=3]]>
+  </select>
+</mapper>

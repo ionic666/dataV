@@ -1,0 +1,68 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.JxEcoKeycomDao;
+import com.cetc28.idata.model.JxEcoKeycomsj;
+import com.cetc28.idata.service.IJxEcoKeycomsjService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/18.
+ */
+@Service
+public class JxEcoKeycomsjImpl implements IJxEcoKeycomsjService {
+
+    @Autowired
+    private JxEcoKeycomDao jxEcoKeycomDao;
+
+    @Override
+    public Map queryKeycomData() {
+        Map result=new HashMap();
+        List<JxEcoKeycomsj> firstlist=jxEcoKeycomDao.querykeycomsj();
+        result.put("first",firstlist);
+        List<String> bhRange=jxEcoKeycomDao.queryBhRange(firstlist.get(0).getId());
+        List bhMcRangeList=new ArrayList();
+        for(String bhValue:bhRange){
+            Map<String,String> bhMc=new HashMap();
+            String mc=jxEcoKeycomDao.queryMcByBh(bhValue);
+            bhMc.put("bhValue",bhValue);
+            bhMc.put("mc", mc);
+            bhMcRangeList.add(bhMc);
+        }
+        result.put("bhRange",bhMcRangeList);
+        Map param=new HashMap();
+        param.put("bhValue",bhRange.get(0));
+        param.put("id",firstlist.get(0).getId());
+        result.put("keycom",jxEcoKeycomDao.querykeycomsec(firstlist.get(0).getId()));
+        result.put("mapcom",jxEcoKeycomDao.queryComByCondition(param));
+        return result;
+    }
+
+    @Override
+    public Map queryComByCondition(String id, String bhValue) {
+        Map result=new HashMap();
+        List<JxEcoKeycomsj> firstlist=jxEcoKeycomDao.querykeycomsjbyid(id);
+        result.put("first",firstlist);
+        List<String> bhRange=jxEcoKeycomDao.queryBhRange(id);
+        List bhMcRangeList=new ArrayList();
+        for(String bh:bhRange){
+            Map<String,String> bhMc=new HashMap();
+            String mc=jxEcoKeycomDao.queryMcByBh(bh);
+            bhMc.put("bhValue",bh);
+            bhMc.put("mc", mc);
+            bhMcRangeList.add(bhMc);
+        }
+        Map param=new HashMap();
+        param.put("bhValue",bhValue);
+        param.put("id",id);
+        result.put("bhRange",bhMcRangeList);
+        result.put("keycom",jxEcoKeycomDao.querykeycomsec(id));
+        result.put("mapcom",jxEcoKeycomDao.queryComByCondition(param));
+        return result;
+    }
+}

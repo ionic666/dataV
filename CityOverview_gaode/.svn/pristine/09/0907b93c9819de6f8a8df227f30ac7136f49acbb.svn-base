@@ -1,0 +1,11 @@
+package com.cetc28.importExcel.service;
+
+import com.cetc28.util.general.dto.GeneralMsg;
+import org.springframework.web.multipart.MultipartFile;
+
+/**
+ * Created by wangxw on 2017/8/28.
+ */
+public interface ImportExcelService {
+    public abstract GeneralMsg impSchoolInfo(MultipartFile dataControllerFile, GeneralMsg msg);
+}

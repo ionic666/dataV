@@ -1,0 +1,272 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/22
+  Time: 9:01
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    div.innovateLead{
+      width: 100%;
+      height: 100%;
+    }
+    ul#selectDate{
+      margin-top: 2%;
+      padding-left: 1%;
+      height: 12%;
+    }
+    #selectDate>li{
+      display: inline-block;
+    }
+    select{
+      padding: 2px 4px;
+      background-color: rgba(0,0,0,0.5);
+    }
+    div#innovateLead{
+      height: 70%;
+      width: 98%;
+    }
+    #innovateLead>ul{
+      width: 100%;
+      height: 100%;
+      padding-left: 2%;
+      padding-top: 3%;
+    }
+    #innovateLead>ul>li{
+        width: 50%;
+        height: 50%;
+        float: left;
+        /*padding: 5% 0 0 5%;*/
+        vertical-align: middle;
+    }
+    #innovateLead>ul>li div {
+      float: left;
+      width: 50%;
+      height: 100%;
+      text-align: center;
+    }
+    #innovateLead ul h2 {
+      /*width: 50%;*/
+      /*height: 100%;*/
+      /*float: left;*/
+      /*line-height: 60px;*/
+      font-size:13px;
+      color: #0CDAF5;
+    }
+    #innovateLead ul span{
+      color: #0CDAF5;
+      font-size:24px;
+    }
+    #innovateLead img {
+      width: 40px;
+      margin-bottom: 10px;
+    }
+    #innovateLead h6{
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<div class="innovateLead">
+  <p class="headerTitle">
+    创新引领
+    <%--<img src="../../images/manufacture/innovateLead.png" alt=""/>--%>
+  </p>
+  <ul id="selectDate">
+    <li>
+      <select id="selectY1" class="selectY">
+        <%--<option value ="2013">2013</option>--%>
+        <%--<option value ="2014">2014</option>--%>
+        <%--<option value="2015">2015</option>--%>
+        <%--<option value="2016">2016</option>--%>
+        <%--<option value="2017" selected="selected">2017</option>--%>
+      </select>
+    </li>
+    <li>
+      <select id="selectM1" CLASS="selectM">
+        <option value ="1" selected="selected">1月</option>
+      </select>
+    </li>
+    <li><span>--</span></li>
+    <li>
+      <select id="selectY2" class="selectY">
+      </select>
+    </li>
+    <li>
+      <select id="selectM2" class="selectM">
+      </select>
+    </li>
+  </ul>
+  <div id="innovateLead">
+    <%--<table id="table" border="1" cellspacing="0">--%>
+
+    <%--</table>--%>
+      <ul>
+        <li>
+          <div>
+            <img src="../../images/innovateLead1.png" alt="">
+          </div>
+          <div style="float: left">
+            <h2 class="gwYellow" id="HIGH_TECH_PROD"></h2 >
+            <h6 id="gwgw">高新技术产业产值</h6>
+          </div>
+        </li>
+        <li>
+          <div>
+            <img src="../../images/innovateLead2.png" alt="">
+          </div>
+         <div>
+           <h2  class="gwYellow" id="HIGH_TECH_PROD_INCREASE"></h2 >
+           <h6 id="">增速</h6>
+         </div>
+        </li>
+        <li>
+          <div>
+            <img src="../../images/innovateLead3.png" alt="">
+          </div>
+          <div>
+            <h2  class="gwYellow" id="NEW_PRODUCT_RATIO"></h2 >
+            <h6 id="rqgw">新产品产值率</h6>
+          </div>
+        </li>
+        <li>
+          <div>
+            <img src="../../images/innovateLead4.png" alt="">
+          </div>
+          <div>
+            <h2  class="gwYellow" id="LABOUR_RATIO"></h2 >
+            <h6 id="pqgw">规上工业全员劳动生产率</h6>
+          </div>
+        </li>
+      </ul>
+  </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script>
+  $(function(){
+    var selectY_value,selectM_value;//定义年份，月份
+//        默认发送ajax请求获取年、月
+    function ajaxEcommerce1(year,month){
+      $.ajax({
+        type: 'post',
+        url: "../../jxecomanufacture/queryInnovationInfo.do?year="+year+"&month="+month,
+        dataType: 'JSON',
+        success: function (data) {
+          var len = data.monthRange.length;
+          $("#selectM2").empty();
+          if(selectY_value == null) {
+            $(".selectY").empty();
+            $.each(data.yearRange, function (i) {
+                      var year = data.yearRange[i];
+                      $(".selectY").append("<option value =" + year + ">" + year + "年</option>");
+                      if (i == 0) {
+                        selectY_value = data.yearRange[i];//年份默认为最大值
+                        return selectY_value;
+                      }
+                    }
+            )
+          }
+          $.each(data.monthRange,function(i){
+                    var month = data.monthRange[i];
+                    $("#selectM2").append("<option value ="+month+">"+month+"月</option>");
+                    if(i==0){
+                      selectM_value = data.monthRange[i];//月份默认为最大值
+                      return selectM_value;
+                    }
+                  }
+          );
+          dataAssignment(data);
+          $('.counter').countUp({
+            delay: 2,
+            time: 500
+          });
+        }
+
+      });
+    }
+
+//        日期范围选择
+    function selectDate(){
+
+      selectY_value = $("#selectY2").children().eq(0).val();
+      $(".selectY").change(function(){
+        var selectY_index = $(this).children('option:selected').index();
+        selectY_value = $(this).children('option:selected').val();
+
+        var selectY_id = $(this).attr('id');
+        if(selectY_id == "selectY1"){
+          $("#selectY2").children().prop('selected',false);
+          $("#selectY2").children().eq(selectY_index).prop('selected',true);
+        }else{
+          $("#selectY1").children().prop('selected',false);
+          $("#selectY1").children().eq(selectY_index).prop('selected',true);
+        }
+      })
+
+      //监测月份发生改变后后立即发送ajax请求
+      $("#selectM2").on('change',function(){
+        selectM_value = $(this).children('option:selected').val();//获取选择的月份
+        ajaxEcommerce2(selectY_value,selectM_value);
+      });
+      //监测年份发生改变后后立即发送ajax请求
+      $("#selectY2").on('change',function(){
+        selectY_value = $(this).children('option:selected').val();//获取选择的年份
+        ajaxEcommerce1(selectY_value,"");
+      });
+      $("#selectY1").on('change',function(){
+        //变更月份的选择范围
+        selectY_value = $(this).children('option:selected').val();//获取选择的年份
+        ajaxEcommerce1(selectY_value,"");
+      });
+    }
+    //自定义选择年月后发送请求获取数据
+    function ajaxEcommerce2(year,month){
+      console.log(month)
+      $.ajax({
+        type: 'post',
+        url: "../../jxecomanufacture/queryInnovationInfo.do?year="+year+"&&month="+month,
+        dataType: 'JSON',
+        success: function (data) {
+          dataAssignment(data);
+        }
+      });
+    }
+    //页面赋值函数
+    function dataAssignment(data){
+//      $("#table").empty();
+      $("#HIGH_TECH_PROD").html("<span class='counter'>"+data.HIGH_TECH_PROD+"</span>亿");
+      $("#HIGH_TECH_PROD_INCREASE").html("<span class='counter'>"+data.HIGH_TECH_PROD_INCREASE+"</span>%");
+      $("#NEW_PRODUCT_RATIO").html("<span class='counter'>"+data.NEW_PRODUCT_RATIO+"</span>%");
+      $("#LABOUR_RATIO").html("<span class='" +
+      "counter'>"+data.LABOUR_RATIO+"</span>万元/人年");
+//      $("#table").append("<tr><th>指标</th> <th>数值</th> <th>增速(%)</th> </tr>");
+//      $("#table").append("<tr><td>高新技术产业产值</td> <td>"+data.HIGH_TECH_PROD+"</td> <td>"+data.HIGH_TECH_PROD_INCREASE+"</td> </tr>");
+//      $("#table").append("<tr><td>新产品产值率</td> <td>"+data.NEW_PRODUCT_RATIO+"</td> <td>"+data.NEW_PRODUCT_RATIO_INCREASE+"</td> </tr>");
+//      $("#table").append("<tr><td>规上工业全局劳动生产率</td> <td>"+data.LABOUR_RATIO+"</td> <td>"+data.LABOUR_RATIO_INCREASE+"</td> </tr>");
+//      $("#table").append("<tr><td>规上工业企业科技活动经费<br/>支出占主营业务收入比重</td> <td>"+data.EXPEND_RATIO+"</td> <td>"+data.EXPEND_RATIO_INCREASE+"</td> </tr>");
+      $('.counter').countUp({
+        delay: 2,
+        time: 200
+      });
+    }
+
+    ajaxEcommerce1("","");//默认发送发一次请求
+
+    selectDate();
+  })
+
+</script>
+</body>
+</html>
+

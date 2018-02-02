@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.FindlocationDao" >
+    <select id="find" resultType="String">
+      <![CDATA[select name from
+    (select name,rownum as rn from JX_ADDMINSERV_CONVENIENT) where rn=#{num}+1 ]]>
+    </select>
+
+    <select id="add">
+        UPDATE JX_ADDMINSERV_CONVENIENT
+        SET jd=#{0},wd=#{1}
+        WHERE name=#{2}
+    </select>
+</mapper>

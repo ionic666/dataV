@@ -1,0 +1,838 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    <title>嘉兴城市运行全景特征图分系统</title>
+    <!--<link rel="stylesheet" type="text/css" href="myCss/indexAndMain.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/main_modal.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/toastr.css">-->
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="myCss/map/hlwjj.css">
+    <link rel="stylesheet" href="myCss/headTitle.css">
+    <script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+    <!--<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>-->
+    <!--<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>-->
+    <script type="text/javascript" src="myjs/jquery-2.1.4.js"></script>
+    <!--<script type="text/javascript" src="myjs/toastr.min.js"></script>-->
+    <!--<script type="text/javascript" src="myjs/jquery.cookie.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/bootstrap.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.dataTables.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.easyui.min.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery-ui.js"></script>-->
+    <script type="text/javascript" src="map/js/echarts-all.js"></script>
+    <!--<%--<script type="text/javascript" src="myjs/loadMapService.js"></script>--%>-->
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            box-sizing: border-box;
+            overflow: hidden !important;
+        }
+        ::-webkit-scrollbar{
+            background-color: #1B1B1D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+        .modelBox{
+            height:90%;
+            width:25%;
+            position: absolute;
+            z-index:101;
+        }
+        .modelBoxL{
+            top:10%;
+            left:0
+        }
+        .modelBoxC{
+            height:10%;
+            width: 50%;
+            bottom:2%;
+            right:25%;
+        }
+        .modelBoxC>div{
+            height:100%;
+            width: 35%;
+        }
+        .modelBoxC-a{
+            float: left;
+        }
+        .modelBoxC-b{
+            float: right;
+        }
+        .modelBoxR{
+            top:10%;
+            right:0
+        }
+        .modelBox .model{
+            height:32.8%;
+            width:100%;
+            margin-bottom:1%;
+            border-top: 2px #0cdaf5 solid;
+            position: relative;
+        }
+        .modelBox .model{ /*iframe*/
+            /*width:100%;*/
+            /*height:100%;*/
+            background: rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        .more{
+            position: absolute;
+            top:2%;
+            right:2%;
+            color: #0DD4EE;
+            cursor: pointer;
+        }
+        #changeImg img{
+            width:120px;
+            height:87px;
+        }
+        #login>button{
+            width: auto;
+            height: auto;
+            font-size: 1.5em;
+            color: #12C6D8;
+            background-color: #1E2222;
+            border: 0;
+            padding:0 0.2em;
+            float: right;
+            margin-right: 0.1em;
+        }
+        #login>button:hover{
+            color: #fff;
+        }
+        #login>h4{
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0.2em 0;
+            text-align: center;
+            color: #0CD9F4;
+
+        }
+        #login>form{
+            width: 100%;
+            height: 80%;
+
+        }
+        #login>form>input{
+            border-size: 0;
+            background-color: #00191C !important;
+        }
+        #login>form>input,#login>form>button{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+            line-height: 10%;
+        }
+        #login>form>button{
+            border-color: #e9ca3d;
+            border-color: #e9ca3d;
+            border-color: #0096AA;
+            background-color: #0096AA;
+        }
+        #login>form>label{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+        }
+
+        #legend div{
+            display: none;
+        }
+        #legend div p{
+            float: left;
+            display:block;
+            padding:10px;
+        }
+        #legend div p span{
+            margin:0px 3px;
+        }
+
+        /*地图infowindow样式表*/
+        .tundra{
+            position: relative;
+        }
+        #settingModal td{
+            border:0;
+            font-size: 1.3em;
+            color: #0a36e9;
+        }
+        a:hover{
+            /*color: #c74072;*/
+            text-decoration:none;
+        }
+        body{
+            width: 100%;
+        }
+
+        /*头部logo*/
+        /*.header {*/
+            /*width: 60%;*/
+            /*height: 7.8%;*/
+            /*margin: 0 auto;*/
+            /*background-size: 100% 100%;*/
+            /*background-repeat: no-repeat;*/
+            /*position: absolute;*/
+            /*z-index: 999;*/
+            /*top: 2%;*/
+            /*margin-left:50%;*/
+        /*}*/
+        /*.header>div{*/
+            /*display: inline-block;*/
+        /*}*/
+
+
+        /*高德地图info窗口样式开始*/
+        .amap-toolbar{
+            display:none;
+        }
+        .info {
+            border: solid 1px #7A9095 !important;
+            border-radius: 5px;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 14px;
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        /*高德地图info窗口样式开结束*/
+
+        .modelBox>.model>div:first-child{
+            padding-top:10px;
+            height:15%;
+            width:100%;
+        }
+        .modelBox>.model>div:last-child{
+            height:85%;
+            width:100%;
+        }
+        p.headerTitle{
+            padding-left: 3%;
+            font-size: 24px;
+            /*font-weight: bold;*/
+            color:#F2F2F2;
+            width: 50%;
+            font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+            margin:0;
+            float: left;
+            height: 100%;
+            position: relative;
+        }
+        .details{
+            /*margin-left:40%;*/
+        }
+        .details p{
+            font-size: 10px;
+            color:#fff;
+            margin:0px;
+        }
+        .details img{
+            width: 34px;
+        }
+        .details img,.details div,.detail span{
+            float: left;
+            margin-left: 15px;
+            text-align: center;
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 18px;
+            margin:0px;
+        }
+        #wrType{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            margin-left: 15px;
+        }
+        /*信息化指数*/
+        .main{
+            width: 95%;
+            height: 75%;
+            margin-top: 5%;
+        }
+        .main>.main-content{
+            width: 97%;
+            height: 45%;
+        }
+        .main-content>div{
+            width: 35%;
+            height: 90%;
+            margin-left: 3%;
+            float: left;
+        }
+        .infoLogo1>img,.infoLogo2>img{
+            width: 4em;
+            height: 4em;
+            float: right;
+        }
+        .infoLogo4{
+            margin-top: 8%;
+            float: left;
+        }
+        .infoLogo4>img{
+            width: 1.2em;
+            height: 1.2em;
+            /*float: right;*/
+        }
+        .infoTitle{
+            vertical-align: middle;
+        }
+        .infoTitle>h1{
+            color: #0CDAF5;
+            text-align: center;
+        }
+        .infoTitle>p{
+            font-size: 1.2em;
+            line-height: 24px;
+            color: #fff;
+            text-align: center;
+        }
+        .dw{
+            font-size: 16px;
+        }
+        /*互联网经济*/
+      .main2{
+            width: 97%;
+            height: 75%;
+           padding-left: 5%;
+        }
+        .main2>.main-content1{
+            width: 49%;
+            height: 20%;
+            margin: 5% auto;
+            float: left;
+            text-align: center;
+        }
+        .main2 .main-top{
+            width: 45%;
+        }
+        .main2 .main-middle{
+            width: 54%;
+        }
+        .infoTitle1{
+            vertical-align: middle;
+            width: 70%;
+            height: 90%;
+            margin-left: 1%;
+            float: left;
+            color: #fff;
+            text-align: center;
+        }
+        .main-content1 .infoLogo1{
+            float: left;
+        }
+        .infoTitle1>h1{
+            color: #00FF00;
+            text-align: center;
+        }
+        .infoTitle1>p{
+            font-size: 1.1em;
+            line-height: 24px;
+            font-weight: normal;
+            text-align: center;
+        }
+        .infoTitle-span1{
+            color: #0CDAF5;
+            font-size: 1.7em;
+        }
+        .infoTitle-span2{
+            color: #0CDAF5;
+            font-size: 1.7em;
+        }
+        .infoTitle-span3{
+            color: #0CDAF5;
+            font-size: 1.7em;
+        }
+        .infoTitle-span4{
+            color: #0CDAF5;
+            font-size: 1.7em;
+        }
+        /*电子商务*/
+        .modelBox .main3{
+            width: 97%;
+            height: 69%;
+            margin-top: 2%;
+        }
+        .main3 .main-top{
+            width: 58%;
+        }
+        .main3 .infoLogo1>img, .main3 .infoLogo2>img {
+            width: 3em;
+            height: 3em;
+            float: right;
+        }
+
+        .main3>.main-content {
+            /* width: 46%; */
+            height: 20%;
+            margin: 5% auto;
+            float: left;
+        }
+        .main3 .main-content .infoTitle {
+            width: 57%;
+            vertical-align: middle;
+        }
+        .main3 .main-middle {
+            width: 40%;
+        }
+        .main3 .counter1 {
+            color: #0CDAF5;
+            font-size: 26px;
+        }
+        #selectDate{
+            margin-left: 1em;
+            color: #fff;
+        }
+        #selectDate>li{
+            color: #fff;
+            display: inline-block;
+        }
+        select{
+            padding: 2px 4px;
+            color: #fff;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .infoTitle>a{
+            color: #fff;
+            font-size: 1.2em;
+            line-height: 3.1em;
+            text-align: center;
+        }
+        a{
+            cursor:pointer;
+            text-decoration:none;
+        }
+        .indicator_name{
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body class="tundra">
+<div id="map" style="width:100%; height:100%;background-color: black">
+    <div class="_header">
+        <img src="images/btz.png" alt=""/>
+        <h1>互联网经济强市</h1> 
+        <!--<%&#45;&#45;<span>智慧结算</span>&#45;&#45;%>  <%&#45;&#45;副标题&#45;&#45;%>-->
+        <img src="images/bty.png" alt=""/>
+    </div>
+</div>
+
+
+
+<div class="modelBox modelBoxL">
+    <div class="model model1" >
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">信息化指数</p>
+        </div>
+        <div id="model" class="main">
+            <div class="main-content main-top">
+                <div class="infoLogo1"><img src="images/information/info1_1.png" alt=""/></div>
+                <div class="infoTitle"><h1 id="informationIndex1" class="counter"></h1><p id="">信息化指数</p></div>
+            </div>
+            <div class="main-content main-bottom">
+                <div class="infoLogo2"><img src="images/information/qspm1.png" alt=""/></div>
+                <div class="infoTitle"><h1 id="provinceNum1" class="counter"></h1><p>全省排名</p></div>
+            </div>
+        </div>
+    </div>
+    <div class="model model2">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">信息经济指数</p>
+        </div>
+        <div id="model2" class="main">
+            <div class="main-content main-top">
+                <div class="infoLogo1"><img src="images/information/xxjjzs.png" alt=""/></div>
+                <div class="infoTitle"><h1 id="informationIndex2" class="counter"></h1><p>信息经济指数</p></div>
+            </div>
+            <div class="main-content main-bottom">
+                <div class="infoLogo2"><img src="images/information/qspm1.png" alt=""/></div>
+                <div class="infoTitle"><h1 id="provinceNum2" class="counter"></h1><p>全省排名</p></div>
+            </div>
+        </div>
+    </div>
+    <div class="model model3">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">“两化”融合指数</p>
+        </div>
+        <div id="model3" class="main">
+            <div class="main-content main-top">
+                <div class="infoLogo1"><img src="images/information/hlw1cyhx1.png" alt=""/></div>
+                <div class="infoTitle"><h1 id="informationIndex3" class="counter"></h1><p>两化融合指数</p></div>
+            </div>
+            <div class="main-content main-bottom">
+                <div class="infoLogo2"><img src="images/information/info3_2.png" alt=""/></div>
+                <div class="infoTitle"><h1 id="provinceNum3" class="counter"></h1><p>全省排名</p></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="modelBox modelBoxC">-->
+    <!--<div class="modelBoxC-a"><img src="images/air.png" alt=""></div>-->
+    <!--<div class="modelBoxC-b"><img src="images/water.png" alt=""></div>-->
+<!--</div>-->
+<div class="modelBox modelBoxR">
+    <div class="model model4">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">核心产业和重点企业</p>
+            <a class="more" style="display: block;" href="iframeSecond/secondBox/hlwjjqs.jsp">更多▶</a>
+        </div>
+        <div id="model4" class="main">
+            <div class="main-content main-top">
+                <div class="infoLogo1"><img src="images/information/hlwcyhx1.png" alt=""/></div>
+                <div class="infoTitle"><a onclick="hxqy()">互联网核心产业</a></div>
+            </div>
+            <div class="main-content main-middle">
+                <div class="infoLogo2"><img src="images/information/zdqy.png" alt=""/></div>
+                <div class="infoTitle"><a onclick="zdqy()">重点企业</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="model model5">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">互联网经济产业平台</p>
+            <a class="more" style="display: block;" href="iframeSecond/secondBox/hlwqsDetails.jsp?type=乌镇核心区域">更多▶</a>
+        </div>
+        <div id="model5" class="main2">
+            <div class="main-content1 main-top">
+                <div class="infoLogo4"><img src="images/information/ecoPlatform.png" alt=""/></div>
+                <div class="infoTitle1"><p class="area"><a onclick="wuzhen()">乌镇核心区域</a></p><span class="infoTitle-span1 counter">30</span>平方公里</div>
+            </div>
+            <div class="main-content1 main-middle">
+                <div class="infoLogo4"><img src="images/information/ecoPlatform.png" alt=""/></div>
+                <div class="infoTitle1"><p class="area"><a onclick="jxkj()">嘉兴科技城</a></p><span class="infoTitle-span2 counter">29.5</span>平方公里</div>
+            </div>
+            <div class="main-content1 main-top">
+                <div class="infoLogo4"><img src="images/information/ecoPlatform.png" alt=""/></div>
+                <div class="infoTitle1"><p class="area"><a onclick="xzgx()">秀洲高新区</a></p><span class="infoTitle-span3 counter">5.72</span>平方公里</div>
+            </div>
+            <div class="main-content1 main-middle">
+                <div class="infoLogo4"><img src="images/information/ecoPlatform.png" alt=""/></div>
+                <div class="infoTitle1"><p class="area"><a onclick="jxjj()">嘉兴经济技术开发区</a></p><span class="infoTitle-span4 counter">110</span>平方公里</div>
+            </div>
+        </div>
+    </div>
+    <div class="model model6">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle" style="">电子商务</p>
+        </div>
+        <ul id="selectDate">
+            <li>
+                <select id="selectY1" class="selectY">
+                    <!--<%&#45;&#45;<option value ="2013">2013</option>&#45;&#45;%>-->
+                    <!--<%&#45;&#45;<option value ="2014">2014</option>&#45;&#45;%>-->
+                    <!--<%&#45;&#45;<option value="2015">2015</option>&#45;&#45;%>-->
+                    <!--<%&#45;&#45;<option value="2016">2016</option>&#45;&#45;%>-->
+                    <!--<%&#45;&#45;<option value="2017" selected="selected">2017</option>&#45;&#45;%>-->
+                </select>
+            </li>
+            <li>
+                <select id="selectM1">
+                    <option value ="1" selected="selected">1月</option>
+                </select>
+            </li>
+            <li><span>--</span></li>
+            <li>
+                <select id="selectY2" class="selectY">
+                    <!--<%&#45;&#45;<option value ="2013">2013</option>&#45;&#45;%>-->
+                    <!--<%&#45;&#45;<option value ="2014">2014</option>&#45;&#45;%>-->
+                    <!--<%&#45;&#45;<option value="2015">2015</option>&#45;&#45;%>-->
+                    <!--<%&#45;&#45;<option value="2016">2016</option>&#45;&#45;%>-->
+                    <!--<%&#45;&#45;<option value="2017" selected="selected">2017</option>&#45;&#45;%>-->
+                </select>
+            </li>
+            <li>
+                <select id="selectM2">
+                </select>
+            </li>
+        </ul>
+        <div id="model6" class="main3" style="width: 97%;height: 69%">
+            <div class="main-content main-top">
+                <div class="infoLogo2"><img src="images/information/info6_2.png" alt=""/></div>
+                <div class="infoTitle"><p class="infoTitle1-span1"></p></div>
+            </div>
+            <div class="main-content main-middle">
+                <div class="infoLogo2"><img src="images/information/qspm.png" alt=""/></div>
+                <div class="infoTitle"><p class="infoTitle1-span2"></p></div>
+            </div>
+
+            <div class="main-content main-top">
+                <div class="infoLogo2"><img src="images/information/info6_4.png" alt=""/></div>
+                <div class="infoTitle"><p class="infoTitle1-span3"></p></div>
+            </div>
+            <div class="main-content main-middle">
+                <div class="infoLogo2"><img src="images/information/qspm.png" alt=""/></div>
+                <div class="infoTitle"><p class="infoTitle1-span4"></p></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="lunbo">
+    <input id="l" type="button" value="left" style="display: none"/>
+    <div id="show">
+        <div class="pic"><img src="images/pic1.png" alt=""/></div>
+        <div class="pic"><img src="images/pic2.png" alt=""/></div>
+        <div class="pic"><img src="images/pic3.png" alt=""/></div>
+        <div class="pic"><img src="images/pic4.png" alt=""/></div>
+        <div class="pic"><img src="images/pic5.png" alt=""/></div>
+        <div class="pic"><img src="images/pic6.png" alt=""/></div>
+    </div>
+</div>
+
+<div id="hlwjjTopMessage">
+    <div>
+        <span>2016年10月，中央网信办和国家发改委批复嘉兴市建设乌镇互联网创新发展试验区。         </span><span>2016年10月，中央网信办和国家发改委批复嘉兴市建设乌镇互联网创新发展试验区。      </span>
+    </div>
+</div>
+</body>
+<script src="myjs/myEcharts.js"></script>
+<script src="myjs/map/hlwjj.js"></script>
+<script src="myjs/index.js"></script>
+<script src="map/js/jquery.waypoints.min.js"></script>
+<script src="map/js/jquery.countup.js"></script>
+<script src="myjs/odoo.js"></script>
+
+<script>
+    var headerWidth=$("._header").width();	//获取头部标题的宽度
+    console.log(headerWidth)
+    $("._header").css("left",-headerWidth/2+"px");//让头部标题居中
+    $.ajax({
+        type: 'post',
+        url: "jxeco/netEco/getEcoInternetIndex.do",
+        dataType: 'JSON',
+        success: function (data) {
+            var infoIndex0 = data.ECO_INDEX,
+                provinceNum = data.ECO_RANK;
+            $("#informationIndex2").html(infoIndex0);
+            $("#provinceNum2").html(provinceNum);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+            var infoIndex1 = data.INFOR_INDEX,
+                    provinceNum = data.INFOR_RANK;
+            $("#informationIndex1").html(infoIndex1);
+            $("#provinceNum1").html(provinceNum);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+
+            var infoIndex2 = data.MIX_INDEX,
+                    provinceNum = data.MIX_RANK;
+            $("#informationIndex3").html(infoIndex2);
+            $("#provinceNum3").html(provinceNum);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+        }
+    })
+//    信息经济核心
+    $.ajax({
+        type: 'post',
+        url: "jxeco/netEco/queryNetStatistics.do",
+        dataType: 'JSON',
+        success: function (data) {
+            var infoIndex = data.coreproduction,
+                increasement= data.increasement,
+                provinceNum = data.coreRank;
+            $("#informationIndex4").html(infoIndex);
+            $("#increasement4").html(increasement);
+            /* $("#provinceNum").html(provinceNum);*/
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+        }
+    });
+    var myDate=new Date();
+    var month=myDate.getMonth()+1;
+    window.onload=function(){
+        //加载地图的方法
+        map = new AMap.Map('map', {
+            mapStyle: 'amap://styles/16e4e3ccd1f66f229a6276fe149db8df',//样式URL
+            center: [ 120.76,30.77]
+        });
+        AMap.event.addListener(map,'click',function(e){
+            map.clearInfoWindow();
+            console.log("666")
+        });
+        hlwjj.hlwjjAjax();
+        var selectY_value,selectM_value;//定义年份，月份
+//        默认发送ajax请求获取年、月
+        function ajaxEcommerce1(year,month){
+            $.ajax({
+                type: 'post',
+                url: "jxeco/netEco/queryNetBusiness.do?year="+year+"&month="+month+"",
+                dataType: 'JSON',
+                success: function (data) {
+                    console.log(data);
+                    var len = data.monthRange.length;
+                    $("#selectM2").empty();
+                    //清空原先的option
+                    if(selectY_value == null){
+                        $(".selectY").empty();
+                        $.each(data.yearRange,function(i){
+                                var year =data.yearRange[i];
+                                $(".selectY").append("<option value ="+year+">"+year+"年</option>");
+                                if(i==0 && selectY_value==null){
+                                    selectY_value = data.yearRange[i];//年份默认为最大值
+//                                    console.log(selectY_value);
+                                    return selectY_value;
+                                }
+                            }
+                        )
+                    }
+                    $.each(data.monthRange,function(i){
+                            var month = data.monthRange[i];
+                            $("#selectM2").append("<option value ="+month+">"+month+"月</option>");
+                            if(i==0){
+                                selectM_value = data.monthRange[i];//月份默认为最大值
+                                return selectM_value;
+                            }
+                        }
+                    );
+
+                    dataAssignment(data);//初次进入页面获取最新年月的数据
+                }
+            });
+        }
+        //自定义选择年月后发送请求获取数据
+        function ajaxEcommerce2(year,month){
+            $.ajax({
+                type: 'post',
+                url: "jxeco/netEco/queryNetBusiness.do?year="+year+"&month="+month+"",
+                dataType: 'JSON',
+                success: function (data) {
+                    dataAssignment(data);
+                }
+            });
+        }
+
+        //页面赋值函数
+        function dataAssignment(data){
+            $(".infoTitle1-span1").html("<span class='counter1'>"+data.NET_SALE+"</span>亿元<br/><span class='indicator_name'>网络零售</span>");
+            $(".infoTitle1-span2").html("<span class='counter1'>"+data.NET_SALE_RANK+"</span><br/><span class='indicator_name'>全省排名</span>");
+            $(".infoTitle1-span3").html("<span class='counter1'>"+data.NET_CONSUMPTION+"</span>亿元<br/><span class='indicator_name'>居民网络消费</span>");
+            $(".infoTitle1-span4").html("<span class='counter1'>"+data.NET_CONSUMPTION_RANK+"</span><br/><span class='indicator_name'>全省排名</span>");
+            $('.counter1').countUp({
+                delay: 2,
+                time: 200
+            });
+
+        }
+
+//        日期范围选择
+        function selectDate(){
+
+            selectY_value = $("#selectY2").children().eq(0).val();
+            $(".selectY").change(function(){
+                var selectY_index = $(this).children('option:selected').index();
+                selectY_value = $(this).children('option:selected').val();
+//                console.log(selectY_value);
+                var selectY_id = $(this).attr('id');
+                if(selectY_id == "selectY1"){
+                    $("#selectY2").children().prop('selected',false);
+                    $("#selectY2").children().eq(selectY_index).prop('selected',true);
+                }else{
+                    $("#selectY1").children().prop('selected',false);
+                    $("#selectY1").children().eq(selectY_index).prop('selected',true);
+                }
+            })
+            //监测月份发生改变后后立即发送ajax请求
+            $("#selectM2").on('change',function(){
+                selectM_value = $(this).children('option:selected').val();//获取选择的月份
+                ajaxEcommerce2(selectY_value,selectM_value);
+            });
+
+            //监测年份发生改变后后立即发送ajax请求
+            $("#selectY2").on('change',function(){
+                selectY_value = $(this).children('option:selected').val();//获取选择的年份
+                ajaxEcommerce1(selectY_value,"");
+            });
+            $("#selectY1").on('change',function(){
+                //变更月份的选择范围
+                selectY_value = $(this).children('option:selected').val();//获取选择的年份
+                ajaxEcommerce1(selectY_value,"");
+            });
+        }
+        ajaxEcommerce1("","");//默认发送发一次请求
+
+        selectDate();
+    }
+
+<!--电子商务-->
+
+
+    function hxqy(){
+        top.location.href="iframeSecond/secondBox/hlwjjqs.jsp";
+    }
+    function zdqy(){
+        top.location.href="iframeSecond/secondBox/hlwzdqy.jsp";
+    }
+
+    function wuzhen(){
+        top.location.href="iframeSecond/secondBox/hlwqsDetails.jsp?type=乌镇核心区域";
+    }
+    function jxkj(){
+        top.location.href="iframeSecond/secondBox/hlwqsDetails.jsp?type=嘉兴科技城";
+    }
+    function xzgx(){
+        top.location.href="iframeSecond/secondBox/hlwqsDetails.jsp?type=秀洲高新区";
+    }
+    function jxjj(){
+        top.location.href="iframeSecond/secondBox/hlwqsDetails.jsp?type=嘉兴经济技术开发区";
+    }
+
+</script>
+</html>

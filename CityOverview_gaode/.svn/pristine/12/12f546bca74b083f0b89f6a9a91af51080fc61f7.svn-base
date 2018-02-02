@@ -1,0 +1,139 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/13
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.onlineService{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 240px;
+        }
+        div#onlineServiceBar{
+            height: 85%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="onlineService">
+    <p class="headerTitle">
+        社保服务在线办理情况
+    </p>
+    <%--社保服务在线办理情况柱状图--%>
+    <div id="onlineServiceBar">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function CreatSsServiceChart(xAxisYear,onlineServiceData,selfServiceData,appServiceData,messageServiceData){
+        var mycharts = echarts.init(document.getElementById('onlineServiceBar'));
+        var option = {
+            color: ['#EA6060','#E3CD55','#47D881','#53A6E2'],
+            tooltip : {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '3%',
+                y: '25%',
+                x2: '3%',
+                y2: '16%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data:['自助服务一体机','手机APP','电话及短信服务','网上办理'],
+                itemWidth: 10,
+                itemHeight:10,
+                itemGap:20,
+                textStyle: text_style,
+                x:'left',
+                y:'8%'
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : xAxisYear,
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    splitLine: {show: false},
+                    axisLabel: {show: true,
+                        textStyle: text_style,
+                        formatter: '{value} 年'}
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#8D8C8C'],
+                            width: 1,
+                            type: 'dotted'}},
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    axisTick: {show: false},
+                    axisLabel: {show: false}
+                }
+            ],
+            series : [
+                {
+                    name:'自助服务一体机',
+                    type:'bar',
+                    data:selfServiceData
+                },
+                {
+                    name:'手机APP',
+                    type:'bar',
+                    data:appServiceData
+                },
+                {
+                    name:'电话及短信服务',
+                    type:'bar',
+                    data:messageServiceData
+                },
+                {
+                    name:'网上办理',
+                    type:'bar',
+                    data:onlineServiceData
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    //查询社保服务网上办理情况近5年的数据
+    $.ajax({
+        type:"POST",
+        url:'../../jxSocialSecurity/getSsOnlineServiceInFiveY.do',
+        dataType:'json',
+        success:function(data){
+            var xAxisYear=data.xAxisYear;
+            var onlineServiceData=data.onlineServiceData;
+            var selfServiceData=data.selfServiceData;
+            var appServiceData=data.appServiceData;
+            var messageServiceData=data.messageServiceData;
+            CreatSsServiceChart(xAxisYear,onlineServiceData,selfServiceData,appServiceData,messageServiceData);
+        }
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+package com.cetc28.ConfigurationManagement.model;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * 模块实体类
+ * Created by FangYan on 2017/9/19.
+ */
+public class Module implements Serializable{
+    private  int moduleid;
+    private Set<Role> roles = new HashSet<Role>(0);//模块与角色   多对多
+    private String modulename;  //模块名
+    private String permission;//权限
+    private String url;//路径
+    private Integer status;//状态
+
+    public int getModuleid() {
+        return moduleid;
+    }
+
+    public void setModuleid(int moduleid) {
+        this.moduleid = moduleid;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public String getModulename() {
+        return modulename;
+    }
+
+    public void setModulename(String modulename) {
+        this.modulename = modulename;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+}

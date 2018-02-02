@@ -1,0 +1,52 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxEcoKeycomsj;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/18.
+ */
+public interface JxEcoKeycomDao {
+    /**
+     * 查询重点企业一级标题
+     * @return
+     */
+    List<JxEcoKeycomsj> querykeycomsj();
+
+    /**
+     * 根据id查询重点企业
+     * @param id
+     * @return
+     */
+    List<JxEcoKeycomsj> querykeycomsjbyid(String id);
+
+    /**
+     * 查询企业
+     * @param id
+     * @return
+     */
+    List querykeycomsec(String id);
+
+    String queryMcByBh(String bhValue);
+    List<String> queryBhRange();
+
+    /**
+     * 根据平台id和区号值查询企业
+     * @param map
+     * @return
+     */
+    List queryComByCondition(Map map);
+
+    /**
+     * 根据企业名称搜索企业
+     * @param name
+     * @return
+     */
+    List<HashMap<String,String>> serchKeycom(String name);
+
+    Integer queryType(Map map);
+    Integer queryAge(Map map);
+}

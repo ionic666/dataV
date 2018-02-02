@@ -1,0 +1,42 @@
+package com.cetc28.idata.service;
+
+import com.cetc28.idata.model.JcjAsjxx;
+
+import java.util.List;
+
+/**
+ * Created by sunyuan on 2017/1/28.
+ */
+public interface IAsjxxService {
+
+    public List<JcjAsjxx> queryAllAsjxx();
+    public List<JcjAsjxx> queryAll();
+
+
+    public String deleteAsjxxbyBh(String asjbh);
+
+    public String updateAsjxx();
+
+    public String saveAsjxx();
+
+    public String saveAsjxxMult();
+
+    public String saveAsjxxParam();
+
+    public String proc1();
+
+    public String proc2();
+
+    public String proc3();
+
+    public String proc4();
+
+    public List pageTest();
+
+    public List hashTest();
+
+
+
+
+
+}

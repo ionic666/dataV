@@ -1,0 +1,102 @@
+package com.cetc28.idata.service;
+
+import com.cetc28.idata.dto.Fdckftz;
+import com.cetc28.idata.dto.HgJjDto;
+import com.cetc28.idata.model.JxEcoLhrh;
+import com.cetc28.idata.model.JxNetEcoStatistics;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by Fang on 2017/9/7.
+ */
+public interface IJxEcoService {
+    public List<HgJjDto> queryGyzz(Integer monthSize,String year);
+
+    List<HgJjDto> queryPreGyzz(Integer monthSize, String year, String endTime);
+
+    public List<HgJjDto> queryFwysczs(Integer monthSize,String year);
+
+    public List<HgJjDto> queryGdzctz(Integer monthSize,String year);
+
+    List<HgJjDto> queryPreGdzctz(Integer monthSize, String year, String endTime);
+
+    public Fdckftz queryFdckftz(String year);
+
+    public List<HgJjDto> queryShxfplsze(Integer monthSize,String year);
+
+    public List<HgJjDto> queryShxfplszePrevious(Integer monthSize,String year,String endTime);
+
+    public List<HgJjDto> queryJck(Integer monthSize,String year);
+
+    public List<HgJjDto> queryPreJck(Integer monthSize,String year,String endTime);
+
+    public double queryPreFdckftz(String year, Integer monthSize);
+
+    /**
+     * 获取最新的互联网经济指数
+     * @return
+     */
+    public Map getEcoInternetIndex();
+
+    /**
+     * 查询电子商务信息
+     * @param year
+     * @param month
+     * @return
+     */
+    public Map queryNetBusiness(Integer year, Integer month);
+
+    /**
+     * 查询最新季度的互联网经济统计信息
+     * @return
+     */
+    public JxNetEcoStatistics queryNetStatistics();
+
+    /**
+     * 查询最近几年的信息经济指数
+     * @param length 年份数
+     * @return
+     */
+    public List listEcoIndex(int length);
+
+    /**
+     * 查询最近几年的信息经济主要指标值
+     * @param length 年份数
+     * @return
+     */
+    public List queryEcoIndex(int length);
+
+    /**
+     *  输入年份查询该年嘉兴的信息经济主要指标的二级指标的单位及值
+     * @param year 年份数
+     * @return
+     */
+    public List queryEcoSubIndex(String year);
+
+
+    /**
+     * 获取乌镇互联网综合实验区地址信息
+     * @return
+     */
+    public List queryIndustrialSite(Integer status ,Integer type);
+
+    /**
+     * 查询最近一年的信息化指数 一级指标值
+     * @return
+     */
+    public List queryEcoInternetIndex();
+
+    /**
+     * 查询最近一年的信息化指数 三级指标的单位及值
+     * @return
+     */
+    public List queryEcoSubInternetIndex();
+
+
+    public List<JxEcoLhrh> queryEcoLhrh(Integer length);
+
+    public List queryEcoLhrhSubIndex(String year);
+
+}

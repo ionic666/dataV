@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IJxUtilityDao">
+
+
+    <!-- 查找最新月的供水量，输入参数：区划编号 -->
+    <select id="findLatestWaterSupplyByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ select bh AS bH, date_ym as dateYm,water_supply_all AS waterSupplyAll, tap_water_supply AS tapWaterSupply
+            FROM JX_UTILITY_WATER_STATISTICS WHERE bh=#{0} AND TO_DATE(date_ym,'YYYY-MM')=
+           (SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_WATER_STATISTICS) ]]>
+    </select>
+
+    <!-- 查找最新月的全市供水量，通过各区县计算，输入参数：上级编号 -->
+    <select id="findLatestWaterSupplyBySjbh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ SELECT x.sjbh AS bH , date_ym AS dateYm,SUM(water_supply_all) AS waterSupplyAll, SUM(tap_water_supply) AS tapWaterSupply
+            FROM JX_UTILITY_WATER_STATISTICS t LEFT JOIN xxzygl.XZQH x ON x.bh=t.bh WHERE x.sjbh=#{0} AND TO_DATE(date_ym,'YYYY-MM')=
+           (SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_WATER_STATISTICS) GROUP BY date_ym, x.sjbh ]]>
+    </select>
+
+    <!-- 查找自来水供销差率，输入参数：倒数时间段（月数）和区划编号 -->
+    <select id="findWaterStsRateByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ select * from (select bh as Bh, date_ym as dateYm, tap_water_sts_rate as tapWaterStsRate from JX_UTILITY_WATER_STATISTICS
+           where bh=#{1} order by TO_DATE(date_ym,'YYYY-MM') desc) where rownum<=#{0} ]]>
+    </select>
+
+    <!-- 查找全市自来水供销差率，按上级编号和倒数时间段查找,通过各区县计算得到，输入参数：倒数时间段（月数）和上级编号 -->
+    <select id="findWaterStsRateBySjbh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ select * from (select x.sjbh AS bH, date_ym as dateYm, round(sum(tap_water_supply*tap_water_sts_rate)/sum(tap_water_supply),4) as tapWaterStsRate
+           from JX_UTILITY_WATER_STATISTICS t left join xxzygl.XZQH x on x.bh=t.bh where x.sjbh=#{1}
+           group by date_ym, x.sjbh order by TO_DATE(date_ym,'YYYY-MM') desc) where rownum<=#{0} ]]>
+    </select>
+
+    <!-- 查找最新月的排水量,输入参数：区划编号-->
+    <select id="findLatestDrainageByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ select bH, date_ym as dateYm, water_discharge_all AS waterDischargeAll, rain_discharge_all AS rainDischargeAll, waste_resi_all AS wasteResiAll,
+          waste_resi_stand AS wasteResiStandard, waste_indu_all AS wasteInduAll, waste_indu_stand AS wasteInduStandard from JX_UTILITY_DRAINAGE_STATISTICS
+          WHERE bh='003001' AND TO_DATE(date_ym,'YYYY-MM')=(SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_DRAINAGE_STATISTICS) ]]>
+    </select>
+
+    <!-- 查找最新月的嘉兴市全市的排水量,通过各区县计算得到，输入参数：上级编号 -->
+    <select id="findLatestDrainageBySjbh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ select x.sjbh AS bH,date_ym as dateYm,SUM(water_discharge_all) AS waterDischargeAll, SUM(rain_discharge_all) AS rainDischargeAll, SUM(waste_resi_all) AS wasteResiAll,
+          SUM(waste_resi_stand) AS wasteResiStandard, SUM(waste_indu_all) AS wasteInduAll, SUM(waste_indu_stand) AS wasteInduStandard from JX_UTILITY_DRAINAGE_STATISTICS t
+          LEFT JOIN xxzygl.XZQH x ON x.bh=t.bh WHERE x.sjbh=#{0} AND TO_DATE(date_ym,'YYYY-MM')=
+          (SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_DRAINAGE_STATISTICS) GROUP BY date_ym, x.sjbh ]]>
+    </select>
+
+    <!-- 查找最新月的总用电量,城乡居民用电量，工业用电量，输入参数：区划编号 -->
+    <select id="findLatestElecSupByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ SELECT bh AS bH, date_ym AS dateYm,elec_supply_all AS elecSupplyAll, residents AS elecResi, industry AS elecIndu from JX_UTILITY_ELEC_STATISTICS
+           WHERE bh=#{0} AND TO_DATE(date_ym,'YYYY-MM')=(SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_ELEC_STATISTICS) ]]>
+    </select>
+
+    <!-- 查找最新月的全市供电量，城乡居民用电量，工业用电量，通过各区县计算，输入参数：上级编号 -->
+    <select id="findLatestElecSupBySjbh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ SELECT x.sjbh AS bH, date_ym AS dateYm, SUM(elec_supply_all) AS elecSupplyAll, SUM(residents) AS elecResi, SUM(industry) AS elecIndu
+          FROM JX_UTILITY_ELEC_STATISTICS t  LEFT JOIN xxzygl.XZQH x ON x.bh=t.bh WHERE x.sjbh=#{0} AND TO_DATE(date_ym,'YYYY-MM') =
+          (SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_ELEC_STATISTICS) GROUP BY date_ym ]]>
+    </select>
+
+    <!-- 查找电网负荷率历史统计，输入参数：倒数时间段（月数）和区划编号 -->
+    <select id="findPowerLoadingRate" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ select * from (select bh AS bH, date_ym as dateYm, elec_power_loading_rate as elecPowerLoadingRate from JX_UTILITY_ELEC_STATISTICS
+           where bh=#{1} order by TO_DATE(date_ym,'YYYY-MM') desc) where rownum<=#{0} ]]>
+    </select>
+
+    <!-- 查找最新月的天然气供应量，输入参数：区划编号 -->
+    <select id="findLatestGasSupByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ SELECT bh AS bH, date_ym AS dateYm,ng_supply AS ngSupply from JX_UTILITY_GAS_STATISTICS
+           WHERE bh=#{0} AND TO_DATE(date_ym,'YYYY-MM')=(SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_GAS_STATISTICS) ]]>
+    </select>
+
+    <!-- 查找供气历史统计，输入参数倒数时间段（月数）和区划编号 -->
+    <select id="findGasStsRateByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ select * from (select bh AS bH, date_ym as dateYm, ng_sts_rate as ngStsRate from JX_UTILITY_GAS_STATISTICS
+           where bh=#{1} order by TO_DATE(date_ym,'YYYY-MM') desc) where rownum<=#{0} ]]>
+    </select>
+
+    <!-- 查找最新月全市的总供热量,输入参数：区划编号 -->
+    <select id="findLatestHeatSupByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ SELECT bh AS bH, date_ym AS dateYm,heating_supply_all AS heatingSupplyAll from JX_UTILITY_HEATING_STATISTICS
+           WHERE bh=#{0} AND TO_DATE(date_ym,'YYYY-MM')=(SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_HEATING_STATISTICS) ]]>
+    </select>
+
+
+    <!-- 查找最新月全市管网的监测报警次数、故障次数、投诉次数，输入参数：区划编号 -->
+    <select id="findManteInfoByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        <![CDATA[ SELECT bh AS bH, date_ym AS dateYm,no_alarm AS noAlarm,no_fault AS noFault, no_complaint AS noComplaint from JX_UTILITY_MANTE_STATISTICS
+           WHERE bh=#{0} AND TO_DATE(date_ym,'YYYY-MM')=(SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_MANTE_STATISTICS) ]]>
+    </select>
+
+    <!-- 查找排水管道长度、供热面积的历史统计，输入参数：倒数时间段（年数）和区划编号 -->
+    <select id="findUtilityNetInfoByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByYear">
+        <![CDATA[ select * from (select bh AS bH, date_y as dateY, pipe_drainage_len as pipeDrainageLength, heating_area AS heatingArea from JX_UTILITY_PIPELINE_STATISTICS
+           where bh=#{1} order by TO_DATE(date_y,'YYYY') desc) where rownum<=#{0} ]]>
+    </select>
+
+    <!-- 查找管网智能化监测管理率、综合管廊覆盖率的历史统计，输入参数：倒数时间段（年数）和区划编号 -->
+    <select id="findUtilityPipeSurveilInfoByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByYear">
+        <![CDATA[ select * from (select bh AS bH, date_y as dateY, round((pipe_water_surv+pipe_elec_surv+pipe_gas_surv)/(pipe_water_len + pipe_elec_len + pipe_gas_len),4) as pipeCoverRate,
+ 　　　　　round(tunnel_for_newroad/newroad_len,4) AS newRoadPipeCoverRate from JX_UTILITY_PIPELINE_STATISTICS
+           where bh=#{1} order by TO_DATE(date_y,'YYYY') desc) where rownum<=#{0} ]]>
+    </select>
+
+    <!-- 查找互联网基础设施（固定宽带普及率，移动宽带普及率，光纤到户渗透率，公共WIFI覆盖率）的历史统计，输入参数：倒数时间段（年数）和区划编号 -->
+    <select id="findUtilityInternetByBh" resultType="com.cetc28.idata.dto.JxUtilityStatisByYear">
+        <![CDATA[ select * from (select bh AS bH, date_y as dateY, fixed_bb_rate as fixedBbRate, mobile_bb_rate AS mobileBbRate, fiber_To_Home_Rate AS fiberToHomeRate,
+          public_Wifi_Rate AS publicWifiRate from JX_UTILITY_INTERNET_STATISTICS
+           where bh=#{1} order by TO_DATE(date_y,'YYYY') desc) where rownum<=#{0} ]]>
+    </select>
+
+    <!-- 查找最新月某区的地图窗口数据，输入参数：区划编号 -->
+    <select id="findLatestUtilitySupplyByBh" parameterType="java.lang.String" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">
+        select w.bh as bH, w.date_ym as dateYm,water_supply_all AS waterSupplyAll,elec_supply_all AS elecSupplyAll, ng_supply AS ngSupply,heating_supply_all AS heatingSupplyAll,
+                  waste_resi_all AS wasteResiAll, waste_indu_all AS wasteInduAll, no_fault AS noFault
+                  FROM JX_UTILITY_WATER_STATISTICS w LEFT JOIN JX_UTILITY_ELEC_STATISTICS e LEFT JOIN JX_UTILITY_GAS_STATISTICS g
+                  LEFT JOIN JX_UTILITY_HEATING_STATISTICS h LEFT JOIN JX_UTILITY_DRAINAGE_STATISTICS d LEFT JOIN JX_UTILITY_MANTE_STATISTICS m
+                  ON d.bh=m.bh AND d.date_ym=m.date_ym ON h.bh=d.bh AND h.date_ym=m.date_ym ON g.bh=d.bh AND g.date_ym=m.date_ym
+                  ON e.bh=d.bh AND e.date_ym=m.date_ym ON w.bh=d.bh AND w.date_ym=m.date_ym
+                  WHERE w.bh=#{bH} AND TO_DATE(w.date_ym,'YYYY-MM')=(SELECT MAX(TO_DATE(date_ym,'YYYY-MM')) FROM JX_UTILITY_WATER_STATISTICS)
+    </select>
+
+    <!--<select id="findStsRate" resultType="com.cetc28.idata.dto.JxUtilityStatisByMonth">-->
+        <!--<![CDATA[ select fwysczs,sj from (SELECT hg.fwysczs,hg.sj  FROM  JX_ECO_HGJJ hg WHERE substr(hg.sj,0,4)=#{1}-->
+           <!--order by TO_DATE(hg.sj,'YYYY-MM') desc) where rownum<=#{0}]]>-->
+    <!--</select>-->
+
+</mapper>

@@ -1,0 +1,87 @@
+package com.cetc28.PeopleBenefitService.dto;
+
+
+public class SchoolResourceDto {
+
+	private String schoolName;
+	private String type;
+	private int teacherNumber;
+	private int classroomNumber;
+	private int expectedEnrollmentNo;
+	private int schoolAgedChildrenNo;
+	private int actualEnrollmentNo;
+	private int enrollmentDifference;
+	private String jd;
+	private String wd;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getJd() {
+		return jd;
+	}
+
+	public void setJd(String jd) {
+		this.jd = jd;
+	}
+
+	public String getWd() {
+		return wd;
+	}
+
+	public void setWd(String wd) {
+		this.wd = wd;
+	}
+
+	public int getEnrollmentDifference() {
+		return enrollmentDifference;
+	}
+	public void setEnrollmentDifference(int enrollmentDifference) {
+		this.enrollmentDifference = enrollmentDifference;
+	}
+
+	
+	public String getSchoolName() {
+		return schoolName;
+	}
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+	public int getTeacherNumber() {
+		return teacherNumber;
+	}
+	public void setTeacherNumber(int teacherNumber) {
+		this.teacherNumber = teacherNumber;
+	}
+	public int getClassroomNumber() {
+		return classroomNumber;
+	}
+	public void setClassroomNumber(int classroomNumber) {
+		this.classroomNumber = classroomNumber;
+	}
+	public int getExpectedEnrollmentNo() {
+		return expectedEnrollmentNo;
+	}
+	public void setExpectedEnrollmentNo(int expectedEnrollmentNo) {
+		this.expectedEnrollmentNo = expectedEnrollmentNo;
+	}
+	public int getSchoolAgedChildrenNo() {
+		return schoolAgedChildrenNo;
+	}
+	public void setSchoolAgedChildrenNo(int schoolAgedChildrenNo) {
+		this.schoolAgedChildrenNo = schoolAgedChildrenNo;
+	}
+	public int getActualEnrollmentNo() {
+		return actualEnrollmentNo;
+	}
+	public void setActualEnrollmentNo(int actualEnrollmentNo) {
+		this.actualEnrollmentNo = actualEnrollmentNo;
+	}
+
+
+}

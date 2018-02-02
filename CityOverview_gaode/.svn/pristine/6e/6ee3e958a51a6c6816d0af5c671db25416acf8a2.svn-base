@@ -1,0 +1,239 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.JxEcoManufactureCompreMapper;
+import com.cetc28.idata.dto.JxEcoManufactureCpDto;
+import com.cetc28.idata.model.*;
+import com.cetc28.idata.service.JxEcoManufactureCompreService;
+import com.cetc28.util.ConditionValidate;
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.*;
+
+/**
+ * Created by jianglulu on 2017/9/21.
+ */
+@Service
+public class JxEcoManufactureCompreServiceImpl implements JxEcoManufactureCompreService {
+
+    @Autowired
+    private JxEcoManufactureCompreMapper jxEcoManufactureCompreMapper;
+
+    @Override
+    public JxEcoManufactureCpDto queryManufacture(Map map) {
+        List<JxEcoManufactureCompre> jxEcoManufactureCompreList = jxEcoManufactureCompreMapper.queryByCondition(map);
+        if (jxEcoManufactureCompreList == null || jxEcoManufactureCompreList.size() == 0) {
+            return new JxEcoManufactureCpDto();
+        }
+        Map<String, Integer> lastMap = new HashMap<String, Integer>();
+        Integer lastYear = (Integer) map.get("year") - 1;
+        lastMap.put("year", lastYear);
+        lastMap.put("fromMonth", (Integer) map.get("fromMonth"));
+        lastMap.put("toMonth", (Integer) map.get("toMonth"));
+        List<JxEcoManufactureCompre> jxEcoManufactureComprelastList = jxEcoManufactureCompreMapper.queryByCondition(lastMap);
+        JxEcoManufactureCpDto currentYearM = new JxEcoManufactureCpDto();
+        JxEcoManufactureCpDto lastYearM = new JxEcoManufactureCpDto();
+        //处理数据
+        double mtv = 0;     //工业总产值(MANUFACTURE_TOTAL_VALUE)
+        double edv = 0;     //出口交货值(EXIT_DELIVERY_VALUE)
+        double mav = 0;     //工业增加值(MANUFACTURE_ADD_VALUE)
+        double pty = 0;     //利润总额(PROFIT_TOTAL_VALUE)
+        for (int i = 0; i < jxEcoManufactureCompreList.size(); i++) {
+            JxEcoManufactureCompre jmf = jxEcoManufactureCompreList.get(i);
+            mtv = mtv + Double.valueOf(jmf.getMtv());
+            edv = edv + Double.valueOf(jmf.getEdv());
+            mav = mav + Double.valueOf(jmf.getMav());
+            pty = pty + Double.valueOf(jmf.getPty());
+        }
+        currentYearM.setMtv(mtv);
+        currentYearM.setEdv(edv);
+        currentYearM.setMav(mav);
+        currentYearM.setPty(pty);
+        if (jxEcoManufactureComprelastList == null || jxEcoManufactureComprelastList.size() == 0) {
+            currentYearM.setMavpencent("100%");
+            currentYearM.setEdvpencent("100%");
+            currentYearM.setMtvpencent("100%");
+            currentYearM.setPtypencent("100%");
+            return currentYearM;
+        } else {
+            mtv = 0;     //工业总产值(MANUFACTURE_TOTAL_VALUE)
+            edv = 0;     //出口交货值(EXIT_DELIVERY_VALUE)
+            mav = 0;     //工业增加值(MANUFACTURE_ADD_VALUE)
+            pty = 0;     //利润总额(PROFIT_TOTAL_VALUE)
+            for (int i = 0; i < jxEcoManufactureComprelastList.size(); i++) {
+                JxEcoManufactureCompre jmf = jxEcoManufactureComprelastList.get(i);
+                mtv = mtv + Double.valueOf(jmf.getMtv());
+                edv = edv + Double.valueOf(jmf.getEdv());
+                mav = mav + Double.valueOf(jmf.getMav());
+                pty = pty + Double.valueOf(jmf.getPty());
+            }
+            lastYearM.setMtv(mtv);
+            lastYearM.setEdv(edv);
+            lastYearM.setMav(mav);
+            lastYearM.setPty(pty);
+
+            //计算同比率
+            double mavpencent = (currentYearM.getMav() - lastYearM.getMav()) / lastYearM.getMav();
+            double edvpencent = (currentYearM.getEdv() - lastYearM.getEdv()) / lastYearM.getEdv();
+            double mtvpencent = (currentYearM.getMtv() - lastYearM.getMtv()) / lastYearM.getMtv();
+            double ptypencent = (currentYearM.getPty() - lastYearM.getPty()) / lastYearM.getPty();
+
+            DecimalFormat a = new DecimalFormat("#0.00%");
+            currentYearM.setMavpencent(a.format(mavpencent));
+            currentYearM.setEdvpencent(a.format(edvpencent));
+            currentYearM.setMtvpencent(a.format(mtvpencent));
+            currentYearM.setPtypencent(a.format(ptypencent));
+            return currentYearM;
+        }
+
+    }
+
+    @Override
+    public Map queryBillionIndustry(Integer year, Integer month) {
+        Map result = new HashedMap();
+        if (!ConditionValidate.isEmpty(year)) {
+            List<Integer> yearRange = jxEcoManufactureCompreMapper.queryYearsIndustry();
+            year = yearRange.get(0);
+            result.put("yearRange", yearRange);
+        }
+        if (!ConditionValidate.isEmpty(month)) {
+            List<Integer> monthRange = jxEcoManufactureCompreMapper.queryMonthsIndustry(year);
+            month = monthRange.get(0);
+            result.put("monthRange", monthRange);
+        }
+        result.putAll(jxEcoManufactureCompreMapper.queryBillionIndustry(year, month));
+        return result;
+    }
+
+    @Override
+    public Map queryInnovationInfo(Integer year, Integer month) {
+        Map result = new HashedMap();
+        if (!ConditionValidate.isEmpty(year)) {
+            List<Integer> yearRange = jxEcoManufactureCompreMapper.queryYearsInnovation();
+            year = yearRange.get(0);
+            result.put("yearRange", yearRange);
+        }
+        if (!ConditionValidate.isEmpty(month)) {
+            List<Integer> monthRange = jxEcoManufactureCompreMapper.queryMonthsInnovation(year);
+            month = monthRange.get(0);
+            result.put("monthRange", monthRange);
+        }
+        result.putAll(jxEcoManufactureCompreMapper.queryInnovationInfo(year, month));
+        return result;
+    }
+
+    @Override
+    public Map queryEnergyConsumption(Integer year, Integer month) {
+        Map result = new HashedMap();
+        if (!ConditionValidate.isEmpty(year)) {
+            List<Integer> yearRange = jxEcoManufactureCompreMapper.queryYearsEnergy();
+            year = yearRange.get(0);
+            result.put("yearRange", yearRange);
+        }
+        if (!ConditionValidate.isEmpty(month)) {
+            List<Integer> monthRange = jxEcoManufactureCompreMapper.queryMonthsEnergy(year);
+            month = monthRange.get(0);
+            result.put("monthRange", monthRange);
+        }
+        result.putAll(jxEcoManufactureCompreMapper.queryEnergyConsumption(year, month));
+        return result;
+    }
+
+    @Override
+    public JxEcoOpenDevelopment queryCuYearOpenDev(String year) {
+        return jxEcoManufactureCompreMapper.queryCuYearOpenDev(year);
+    }
+
+    @Override
+    public Map queryBrandBuild(Integer fromYear, Integer toYeat) {
+        Map result = new HashedMap();
+        List<String> yearRange = jxEcoManufactureCompreMapper.queryYearsBuild();
+        result.put("yearRange", yearRange);
+        if (!ConditionValidate.isEmpty(toYeat) || !ConditionValidate.isEmpty(toYeat)) {
+            toYeat = Integer.valueOf(yearRange.get(0));
+            fromYear = toYeat - 1;
+        }
+
+        List<String> sList = new ArrayList<String>();
+        for (int i = fromYear; i <= toYeat; i++) {
+            sList.add(String.valueOf(i));
+        }
+        result.put("data", jxEcoManufactureCompreMapper.queryBrandBuild(sList));
+        return result;
+    }
+
+    @Override
+    public List queryMaxYear() {
+        return jxEcoManufactureCompreMapper.queryMaxYear();
+    }
+
+    @Override
+    public List queryMonth(Integer year) {
+        return jxEcoManufactureCompreMapper.queryMonth(year);
+    }
+
+    @Override
+    public Map queryJxEcoManS(Map<String, Integer> map) {
+        Map result = new HashedMap();
+        if (!ConditionValidate.isEmpty(map.get("year"))) {
+            List<Integer> yearRange = jxEcoManufactureCompreMapper.queryMaxYear();
+            map.put("year", yearRange.get(0));
+            result.put("yearRange", yearRange);
+        }
+        if (!ConditionValidate.isEmpty(map.get("month"))) {
+            List<Integer> monthRange = jxEcoManufactureCompreMapper.queryMonth(map.get("year"));
+            map.put("month", monthRange.get(0));
+            result.put("monthRange", monthRange);
+        }
+        result.putAll(jxEcoManufactureCompreMapper.queryJxEcoManS(map));
+        return result;
+    }
+
+
+    /**
+     * djh1
+     * 输入制造业名称查询该制造业在嘉兴市各个区的规模地位，以及位置（经纬度）
+     *
+     * @param
+     * @return
+     */
+    @Override
+    public List queryEcoManuInfo() {
+        List result = new ArrayList<Map>();
+        //获取一级指标信息
+        List<JxEcoManu> manu = jxEcoManufactureCompreMapper.queryEcoManu();
+        //遍历一级指标
+        for (JxEcoManu ii : manu) {
+            Map info = new HashMap();
+            List TT = jxEcoManufactureCompreMapper.queryEcoManuInfo(ii.getIndus_key());
+            info.put("mc", ii.getValue());
+            info.put("info", TT);
+            result.add(info);
+        }
+        return result;
+    }
+    /**
+     * djh2
+     *查询各区的区号
+     * @param  sjbh 市编号
+     * @return
+     */
+    @Override
+    public List<Xzqh> queryListJxXzqh(String sjbh) {
+        return  jxEcoManufactureCompreMapper.queryListJxXzqh(sjbh);
+    }
+
+    @Override
+    public List getConditionConpany(String year) {
+        List result=new ArrayList();
+        result.add(jxEcoManufactureCompreMapper.getConditionConpany(year));
+        result.add(jxEcoManufactureCompreMapper.getHighBusiness(year));
+        return result;
+    }
+}

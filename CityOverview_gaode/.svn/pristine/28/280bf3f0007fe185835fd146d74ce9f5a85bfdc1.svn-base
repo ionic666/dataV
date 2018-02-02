@@ -1,0 +1,115 @@
+package com.cetc28.PeopleBenefitService.dto;
+
+/**
+ * Created by Fang on 2017/8/24.
+ */
+public class CsrkDto {
+    private  String bh;        //区划编号
+    private  String year;     //年份
+    private  double czrk;    //常驻人口
+    private  double hjrk;    //户籍人口
+    private  double nyrk;    //农业人口
+    private  double ldnlrk;  //劳动年龄人口
+    private  double ldrk;    //劳动人口
+    private  double lnrk;    //老年人口
+    private  double zrk;     //区域总人口
+    private  String mc;      //区划名称
+    private  double csMale;  //男性出生数量
+    private  double csFemale;  //女性出生数量
+
+    public double getCsMale() {
+        return csMale;
+    }
+
+    public void setCsMale(double csMale) {
+        this.csMale = csMale;
+    }
+
+    public double getCsFemale() {
+        return csFemale;
+    }
+
+    public void setCsFemale(double csFemale) {
+        this.csFemale = csFemale;
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+
+    public double getLnrk() {
+        return lnrk;
+    }
+
+    public void setLnrk(double lnrk) {
+        this.lnrk = lnrk;
+    }
+
+    public double getZrk() {
+        return zrk;
+    }
+
+    public void setZrk(double zrk) {
+        this.zrk = zrk;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public double getCzrk() {
+        return czrk;
+    }
+
+    public void setCzrk(double czrk) {
+        this.czrk = czrk;
+    }
+
+    public double getHjrk() {
+        return hjrk;
+    }
+
+    public void setHjrk(double hjrk) {
+        this.hjrk = hjrk;
+    }
+
+    public double getNyrk() {
+        return nyrk;
+    }
+
+    public void setNyrk(double nyrk) {
+        this.nyrk = nyrk;
+    }
+
+    public double getLdnlrk() {
+        return ldnlrk;
+    }
+
+    public void setLdnlrk(double ldnlrk) {
+        this.ldnlrk = ldnlrk;
+    }
+
+    public double getLdrk() {
+        return ldrk;
+    }
+
+    public void setLdrk(double ldrk) {
+        this.ldrk = ldrk;
+    }
+}

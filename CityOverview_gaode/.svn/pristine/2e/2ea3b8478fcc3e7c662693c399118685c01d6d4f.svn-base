@@ -1,0 +1,17 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+import com.cetc28.PeopleBenefitService.model.JxSsMiDHospital;
+
+public interface JxSsMiDHospitalMapper {
+    int deleteByPrimaryKey(Short hospitalCode);
+
+    int insert(JxSsMiDHospital record);
+
+    int insertSelective(JxSsMiDHospital record);
+
+    JxSsMiDHospital selectByPrimaryKey(Short hospitalCode);
+
+    int updateByPrimaryKeySelective(JxSsMiDHospital record);
+
+    int updateByPrimaryKey(JxSsMiDHospital record);
+}

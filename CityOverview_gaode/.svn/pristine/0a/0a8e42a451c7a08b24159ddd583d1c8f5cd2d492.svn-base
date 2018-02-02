@@ -1,0 +1,78 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: lenovo
+  Date: 2016/9/19
+  Time: 11:19
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+  <style>
+    div#detailPage{
+      background-color:#eee;
+      opacity:0.9;
+      z-index:10000;
+      font-family:Microsoft YaHei;
+      font-size:16px;
+    }
+    div#detailPage>.modal-dialog{
+      margin: 0 auto;
+      top:100px;
+      z-index:20000;
+      min-height:600px;
+      width:850px;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+<div class="modal fade"  id="detailPage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+          <img src="map/images/economicModel/close.png" onclick="closeInfoWindow(this,1);">
+        </button>
+        <h4 class="modal-title" id="myModalLabel">详情页面</h4>
+      </div>
+      <div id="msgContent" class="modal-body">
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function showDetails(pageUrl){
+    if(pageUrl==""){
+      return;
+    }
+    $('#detailPage').modal('show');
+    var pageUrl=pageUrl;
+    $.ajax({
+      type:'POST',
+      dataType:'JSON',
+      url:'icom/ChangeData_searchInformationDetails.action?pageUrl='+pageUrl,
+      success:function(data){
+        var str='';
+        var v=data.response.result;
+//          console.log(v);
+          str+='<li class="list-group-item">'
+          +'<div class="SPageTitle">'
+          +'<h4 class="text-info">'+ v.title+'</h4>'
+          +'</div>'
+          +'<div style="height: 20px"></div>'
+          +'<div class="SPageBody" style="text-indent:2em;">'+ v.content+'</div>'
+          +'</li>'
+
+        $('#msgContent').html(str);
+      }
+    });
+  }
+
+</script>
+</body>
+</html>

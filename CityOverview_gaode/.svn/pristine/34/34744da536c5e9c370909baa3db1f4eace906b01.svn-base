@@ -1,0 +1,184 @@
+package com.cetc28.idata.model;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: LYLYC
+ * Date: 17-8-10
+ * Time: 下午3:08
+ * To change this template use File | Settings | File Templates.
+ */
+public class JxEnvirAir {
+    private String qhbh;    //区划编号
+    private String bh;    //站点编号
+    private String mc;    //名称
+    private int so2;    //二氧化硫浓度
+    private int no2;    //二氧化氮浓度
+    private int pm10;   //Pm10浓度
+    private double co;     //一氧化碳浓度
+    private int o3;     //臭氧浓度
+    private int pm25;   //PM2.5浓度
+    private int aqi;    //AQI指数
+    private String sywrw;  //首要污染物
+    private String zldj;   //空气质量指数级别
+    private String jd;     //经度
+    private String wd;     // 纬度
+    private String zdlx;    //站点类型
+    private String dz;    //地址
+    private String jcsj;  //监测时间
+    private String msg;   //图上显示信息
+    private String preData;
+
+    public String getPreData() {
+        return preData;
+    }
+
+    public void setPreData(String preData) {
+        this.preData = preData;
+    }
+
+    public String getQhbh() {
+        return qhbh;
+    }
+
+    public void setQhbh(String qhbh) {
+        this.qhbh = qhbh;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+
+    public int getSo2() {
+        return so2;
+    }
+
+    public void setSo2(int so2) {
+        this.so2 = so2;
+    }
+
+    public int getNo2() {
+        return no2;
+    }
+
+    public void setNo2(int no2) {
+        this.no2 = no2;
+    }
+
+    public int getPm10() {
+        return pm10;
+    }
+
+    public void setPm10(int pm10) {
+        this.pm10 = pm10;
+    }
+
+    public double getCo() {
+        return co;
+    }
+
+    public void setCo(double co) {
+        this.co = co;
+    }
+
+    public int getO3() {
+        return o3;
+    }
+
+    public void setO3(int o3) {
+        this.o3 = o3;
+    }
+
+    public int getPm25() {
+        return pm25;
+    }
+
+    public void setPm25(int pm25) {
+        this.pm25 = pm25;
+    }
+
+    public int getAqi() {
+        return aqi;
+    }
+
+    public void setAqi(int aqi) {
+        this.aqi = aqi;
+    }
+
+    public String getSywrw() {
+        return sywrw;
+    }
+
+    public void setSywrw(String sywrw) {
+        this.sywrw = sywrw;
+    }
+
+    public String getZldj() {
+        return zldj;
+    }
+
+    public void setZldj(String zldj) {
+        this.zldj = zldj;
+    }
+
+    public String getJd() {
+        return jd;
+    }
+
+    public void setJd(String jd) {
+        this.jd = jd;
+    }
+
+    public String getWd() {
+        return wd;
+    }
+
+    public void setWd(String wd) {
+        this.wd = wd;
+    }
+
+    public String getZdlx() {
+        return zdlx;
+    }
+
+    public void setZdlx(String zdlx) {
+        this.zdlx = zdlx;
+    }
+
+    public String getDz() {
+        return dz;
+    }
+
+    public void setDz(String dz) {
+        this.dz = dz;
+    }
+
+    public String getJcsj() {
+        return jcsj;
+    }
+
+    public void setJcsj(String jcsj) {
+        this.jcsj = jcsj;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+}
+
+

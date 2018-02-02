@@ -1,0 +1,1337 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+	<title>嘉兴城市运行全景特征图分系统</title>
+	<link rel="stylesheet" type="text/css" href="map/arcgis_js/dijit/themes/tundra/tundra.css">
+	<link rel="stylesheet" type="text/css" href="map/arcgis_js/esri/css/esri.css" />
+	<link rel="stylesheet" type="text/css" href="map/arcgis_js/dojox/layout/resources/ExpandoPane.css" />
+	<link rel="stylesheet" type="text/css" href="map/arcgis_js/dijit/themes/soria/soria.css" />
+	<link rel="stylesheet" type="text/css" href="map/css/mycss/hdt.css"/>
+	<link rel="stylesheet" type="text/css" href="myCss/toolsInclude.css"/>
+	<link rel="stylesheet" type="text/css" href="myCss/indexAndMain.css"/>
+	<link rel="stylesheet" type="text/css" href="myCss/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="myCss/main_modal.css">
+	<link rel="stylesheet" type="text/css" href="myCss/toastr.css">
+	<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+	<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+	<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+	<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+	<script>
+		var cityId='<%=Web_srcUtil.getString("cityId")%>';
+		var mapHost='<%=Web_srcUtil.getString("mapHost")%>';
+		var mapPort='<%=Web_srcUtil.getString("mapPort")%>';
+		var arcgisServiceUrl='<%=Web_srcUtil.getString("arcgisServiceUrl")%>';
+		var jiaxingJtSslkServiceUrl='<%=Web_srcUtil.getString("jiaxingJtSslkServiceUrl")%>';
+		var mapServiceTpye='<%=Web_srcUtil.getString("mapServiceTpye")%>';
+	</script>
+	<script type="text/javascript" src="myjs/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="myjs/toastr.min.js"></script>
+	<script type="text/javascript" src="myjs/jquery.cookie.js"></script>
+	<script type="text/javascript" src="map/js/bootstrap.js"></script>
+	<script type="text/javascript" src="map/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" src="map/js/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="map/js/jquery-ui.js"></script>
+	<script type="text/javascript" src="map/js/echarts-all.js"></script>
+	<%--<script type="text/javascript" src="map/arcgis_js/init.js"></script>--%>
+	<%--<script type="text/javascript" src="map/arcgis_js/dojo/dojo.js" diConfig="parseOnLoad:true" ></script>--%>
+	<%--<script type="text/javascript" src="myjs/loadMapService.js"></script>--%>
+	<script src="myjs/index.js"></script>
+	<script src="myjs/main_modal.js"></script>
+	<%--宏观经济--%>
+	<script src="myjs/map/hgjj.js"></script>
+	<%--制造业经济--%>
+	<script src="myjs/map/manufacture.js"></script>
+
+
+	<style>
+		body{
+			box-sizing: border-box;
+			overflow: hidden !important;
+
+		}
+		::-webkit-scrollbar{
+			background-color: #1B1B1D;
+		}
+		::-webkit-scrollbar-thumb {
+			background-color: #303030;
+		}
+		.modelBox{
+			height:90%;
+			width:25%;
+			/*border:1px solid red;*/
+			position: absolute;
+			z-index:101;
+		}
+		.modelBoxL{
+			top:10%;
+			left:0
+		}
+		.modelBoxC{
+			height:10%;
+			width: 50%;
+			bottom:2%;
+			right:25%;
+			/*background-color: #fff;*/
+		}
+		.modelBoxC>div{
+			height:100%;
+			width: 35%;
+			/*background-color: #fff;*/
+		}
+		.modelBoxC-a{
+			float: left;
+		}
+		.modelBoxC-b{
+			float: right;
+		}
+		.modelBoxR{
+			top:10%;
+			right:0
+		}
+		.modelBox .model{
+			height:32.8%;
+			width:100%;
+			margin-bottom:1%;
+			border-top: 2px #0cdaf5 solid;
+			position: relative;
+		}
+		.modelBox .model iframe{
+			width:100%;
+			height:100%;
+			/*background: rgba(0,0,0,0.5);*/
+			cursor: pointer;
+		}
+		.modelBoxL .model iframe{
+			background: -moz-linear-gradient(left, #000000 70%, transparent 100%);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#000000), color-stop(100%,#ffffff));
+			background: -webkit-linear-gradient(left, #000000 70%,transparent 100%);
+			background: -o-linear-gradient(left, #000000 70%,transparent 100%);
+			background: -ms-linear-gradient(left, #000000 70%,transparent 100%);
+			background: linear-gradient(to right, #000000 70%,transparent 100%);
+		}
+		.modelBoxR .model iframe{
+			background: -moz-linear-gradient(right, #000000 70%, transparent 100%);
+			background: -webkit-gradient(linear, right top, right bottom, color-stop(0%,#000000), color-stop(100%,#ffffff));
+			background: -webkit-linear-gradient(right, #000000 70%,transparent 100%);
+			background: -o-linear-gradient(right, #000000 70%,transparent 100%);
+			background: -ms-linear-gradient(right, #000000 70%,transparent 100%);
+			background: linear-gradient(to left, #000000 70%,transparent 100%);
+		}
+		/*#toolsGather ul li {*/
+			/*margin: -12px 0px;*/
+			/*padding: 5px 20px;*/
+			/*background-image: url("images/listTitle.png");*/
+			/*background-size: 100% 100%;*/
+			/*color: rgb(21,203,227);*/
+			/*cursor: pointer;*/
+		/*}*/
+		/*#toolsGather ul li.active {*/
+			/*background-image: url("images/listTitleActive.png");*/
+			/*background-size: 100% 100%;*/
+			/*font-size: 20px;*/
+			/*color: rgb(2, 14, 16);*/
+		/*}*/
+		#toolsGather select{
+			font-family: "microsoft yahei";
+			background-color:#1E2222;
+			opacity:0;
+			border:none;
+			cursor: pointer;
+			padding:5px;
+			display:block;
+		}
+		#toolsGather select:hover{
+			opacity:1;
+		}
+		#toolsGather select option{
+			color:#fff;
+		}
+
+		.more{
+			position: absolute;
+			top:2%;
+			right:2%;
+			color: #0DD4EE;
+			cursor: pointer;
+		}
+		#setting{
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+				/*background-image: url("images/setting.png");*/
+			position: absolute;
+			right: 15px;
+			top: 17px;
+		}
+		#changeImg{
+			position: absolute;
+			right:26%;
+			bottom:2%;
+			z-index:200;
+			/*border:1px solid red;*/
+			width:120px;
+			height:87px;
+		}
+
+		#changeImg img{
+			width:120px;
+			height:87px;
+		}
+		#changeImgFirst{
+			position: absolute;
+			top:0px;
+			right:0px;
+			z-index:100
+		}
+		#changeImgseSecond{
+			position: absolute;
+			top:0px;
+			right:0px;
+			z-index:200
+		}
+		#changeImgseThirdly{
+			position: absolute;
+			top:0px;
+			right:0px;
+			z-index:300
+		}
+		/*body{*/
+		/*position: relative;*/
+		/*}*/
+		#login{
+			width: 26%;
+			height: 30%;
+			border: 1px solid #0CD9F4;
+			position:absolute;
+			left:37%;
+			top: 30% !important;
+			/*top:0;*/
+			z-index: 999;
+			background-color: #1E2222;
+		}
+		#login>button{
+			width: auto;
+			height: auto;
+			font-size: 1.5em;
+			color: #12C6D8;
+			background-color: #1E2222;
+			border: 0;
+			padding:0 0.2em;
+			float: right;
+			margin-right: 0.1em;
+		}
+		#login>button:hover{
+			color: #fff;
+		}
+		#login>h4{
+			font-size: 1.4em;
+			font-weight: bold;
+			padding: 0.2em 0;
+			text-align: center;
+			color: #0CD9F4;
+
+		}
+		#login>form{
+			width: 100%;
+			height: 80%;
+
+		}
+		#login>form>input{
+			border-size: 0;
+			background-color: #00191C !important;
+		}
+		#login>form>input,#login>form>button{
+			width: 70%;
+			height: 15%;
+			margin:5% 0 0 15%;
+			line-height: 10%;
+		}
+		#login>form>button{
+			border-color: #e9ca3d;
+			border-color: #e9ca3d;
+			border-color: #0096AA;
+			background-color: #0096AA;
+		}
+		#login>form>label{
+			width: 70%;
+			height: 15%;
+			margin:5% 0 0 15%;
+		}
+
+
+		#remember_me,.remember{
+			float: left;
+
+		}
+		.remember{
+			font-size: 1em;
+		}
+		#legend{
+			position: absolute;
+			left:26%;
+			bottom:2%;
+			z-index:200;
+			background: rgba(0,0,0,0.5);
+		}
+		#legend div{
+			display: none;
+		}
+		#legend div p{
+			float: left;
+			display:block;
+			padding:10px;
+		}
+		#legend div p span{
+			margin:0px 3px;
+		}
+
+		/*地图infowindow样式表*/
+		#map_zoom_slider{
+			display: none;
+		}
+		.modal-backdrop.in{
+			display:none ;
+		}
+		.esriPopupWrapper{
+			border-radius: 0;
+			border:2px solid #4C96C5;
+			background-color: #244C66;
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		.esriPopup .titlePane{
+			background-color: #245273;
+			padding-left: 10px;
+			border-radius: 0;
+		}
+		.esriPopup .title{
+			color: #3EA7F8;
+		}
+		.esriPopup .contentPane{
+			background-color: #244C66;
+			margin: 0;
+			padding: 10px 5px 0 10px;
+		}
+		.esriPopup .actionsPane{
+			padding: 0;
+		}
+		.mapDetails{
+			color: #fff;
+			background-color: #244C66;
+		}
+		.mapDetails p{
+			margin: 0;
+			padding: 0;
+			padding-bottom: 5px;
+			border-bottom: 1px dotted #3A79A5;
+		}
+		.mapDetails p:last-child{
+			border-bottom: 0;
+		}
+		.mapDetails p span{
+			color: red;
+			margin-left: 5px;
+		}
+		.esriPopup .titleButton.maximize{
+			display: none;
+		}
+		.esriPopup .outerPointer.left{
+			background-color: #244C66;
+			border:2px solid #4C96C5;
+			left: 9px;
+		}
+		.tundra{
+			position: relative;
+		}
+		#settingModal{
+			position: absolute;
+			margin-top: 2%;
+			margin-left: 88%;
+			width: 10%;
+			height: 100%;
+			border-radius: 10px;
+		}
+		#settingModal td{
+			border:0;
+			font-size: 1.3em;
+			color: #0a36e9;
+		}
+		#settingModal .modal-dialog{
+			width: 190px;
+		}
+		a:hover{
+			color: #c74072;
+			text-decoration:none;
+		}
+		body{
+			width: 100%;
+		}
+		#legend2{
+			position: absolute;
+			left:26%;
+			bottom:2%;
+			z-index:200;
+			background: rgba(0,0,0,0.5);
+			display:none;
+			width:34%;
+		}
+		#legend2 ul{
+			/*float: left;*/
+			display:block;
+			padding:10px;
+		}
+		#legend2 .manufactor li{
+			float: left;
+			min-width: 140px;
+			margin-left:15px;
+			cursor: pointer;
+			font-family: 微软雅黑;
+			/*content: "";*/
+			/*clear: both;*/
+		}
+		#legend2 .manufactor li.active:before{
+			content: "";
+			width:16px;
+			height:16px;
+			margin-right:10px;
+			display: inline-block;
+			background: url(images/xz.png);
+			position: relative;
+			top:2px;
+		}
+		#legend2 .manufactor li:before{
+			content: "";
+			width:16px;
+			height:16px;
+			margin-right:10px;
+			display: inline-block;
+			background: url(images/wxz.png);
+			position: relative;
+			top:2px;
+		}
+		.map_hlwjjTitlel{
+			border-radius: 5px;
+			height:38px;
+			line-height: 46px;
+			padding-right:33px;
+			padding-left:10px;
+			background-image: url(images/title_l2.png) ;
+			background-size: 100% 100%;
+		}
+		.map_eviTitlel{
+			border-radius: 5px;
+			height:120px;
+			width: 150px;
+			line-height: 25px;
+			padding:20px 20px 0 10px;
+			background-image: url(images/title_l.png) ;
+			background-size: 100% 100%;
+		}
+		.map_eviTitler{
+			border-radius: 5px;
+			min-height:130px;
+			width: 170px;
+			line-height: 25px;
+			padding:10px 10px 10px 40px;
+			background-image: url(images/evir.png) ;
+			background-size: 100% 100%;
+		}
+		.map_hlwjjTitler{
+			border-radius: 5px;
+			height:45px;
+			line-height: 30px;
+			padding-left:30px;
+			padding-right:10px;
+			background-image: url(images/title_r2.png) ;
+			background-size: 100% 100%;
+		}
+		/*.map_hlwjjTitler.active{*/
+		/*display: block;*/
+		/*}*/
+		.envirAll{
+			display: none;
+		}
+		.envirAll.active{
+			display: block;
+		}
+		/*系统设置弹出框*/
+		.window-xt{
+			background-color: #001010;
+			border: 1px solid #12C6D8;
+		}
+		.window-xt>div{
+			padding: 0 !important;
+		}
+		.window-xt tr{
+			margin-top: 1em;
+		}
+		#xtsz>li{
+			padding:1em 0.3em;
+		}
+		#xtsz>li>img{
+			width:1.2em;
+			height: 1.2em;
+			margin:0 1em;
+		}
+		.xtsz-user{
+			border: 1px solid #12C6D8;
+		}
+		.xtsz-user>img{
+			width:2em !important;
+			height: 2em !important;
+		}
+		.xtsz-li-hover:hover{
+			color: #fff !important;
+			background-color: rgba(1,97,109,0.7);
+		}
+		#xtsz>li>a:hover{
+			color: #fff !important;
+		}
+
+		/*头部logo*/
+		.header {
+			width: 60%;
+			height: 7.8%;
+			margin: 0 auto;
+			background-size: 100% 100%;
+			background-repeat: no-repeat;
+			position: absolute;
+			z-index: 999;
+			top: 2%;
+			margin-left:50%;
+		}
+		.header>div{
+			display: inline-block;
+		}
+		.header>div.headL{
+			background: url(images/headL.png)no-repeat ;
+			width:20%;
+			height:5%;
+			position: relative;
+			background-size:94%;
+		}
+		.header>div.headerLogo{
+			background: url(images/headlogo3.png)top center no-repeat;
+			width: 43%;
+			height: 100%;
+			margin-left:1%;
+			background-size: cover;
+		}
+		.header>div.headM{
+			/*width:15%;*/
+			/*height:100%;*/
+			margin:1%;
+			color: #fff;
+			position: relative;
+			font-size: 20px;
+			background-color:#096a71;
+			color:#67def4;
+			text-align: center;
+			top:-57% !important;
+			min-width: 13%;
+			padding:6px;
+			/*background-color:#CDDDC8;
+			color:#4BD1D4;*/
+		}
+		.header>div.headR{
+			background: url(images/headR.png) no-repeat 100% 100%;
+			width:20%;
+			height:5%;
+			position: relative;
+		}
+		/*3D旋转*/
+		#lunbo{
+			margin:20px auto;
+			width:900px;
+			height: 400px;
+			display: none;
+		}
+		#show{
+			position:relative;
+		}
+		.pic{
+			position:absolute;
+			height:120px;
+			width:160px;
+			/*background:#999999;*/
+			/*border:1px solid #eeeeee;*/
+			cursor:pointer;
+			transition: transform linear 1s;
+		}
+		.pic img{
+			width: 100%;
+			height: 100%;
+		}
+        /*城市生命线图例*/
+		#lifeLine{
+			position: absolute;
+			left:26%;
+			bottom:2%;
+			width: 155px;
+			/*height: 150px;*/
+			height: 120px;
+			z-index: 200;
+			background: rgba(0,0,0,0.5);
+			display: none;
+		}
+		#lifeLine ul{
+			width: 100%;
+			height: 100%;
+		}
+		#lifeLine ul li{
+			width: 100%;
+			/*height: 25%;*/
+			height: 33.3%;
+			padding:5px 10px;
+		}
+		#lifeLine ul li img{
+			width: 30px;
+			height: 35px;
+			float: left;
+		}
+		#lifeLine ul li img#greenLine{
+			height: 25px;
+			width: 18px;
+			margin-left: 6px;
+			margin-right: 4px;
+		}
+		#lifeLine ul li img#bjd{
+			height: 30px;
+			width: 28px;
+			margin-right: 2px;
+		}
+		#lifeLine #sg{
+			height: 5px;
+			margin-top: 15px;
+		}
+		#lifeLine ul li span{
+			float: left;
+			display: inline-block;
+			height: 30px;
+			line-height: 30px;
+			margin-left: 20px;
+		}
+		#setting{
+			opacity: 0;
+			position: absolute;
+			top:1%;
+			right:1%
+
+		}
+		#setting:hover {
+			opacity: 1;
+		}
+
+		#regionLayer2Box{
+			position: absolute;
+			width:100px;
+			height:100px;
+			/*background-color: black;*/
+			margin-left: 50%;
+			opacity: 0;
+			top:150px; /*这边的150需要和动画里面的值对应*/
+			background-image: url(images/regionLayer2BoxBG.png);
+			background-size: cover;
+		}
+
+
+		/*高德地图样式表*/
+		.amap-toolbar{
+			display:none;
+		}
+		.info {
+			border: solid 1px #7A9095 !important;
+			border-radius: 5px;
+		}
+		div.info-top {
+			position: relative;
+			background-color:rgba(0,29,36,0.8);
+			border-bottom: 1px solid #7A9095;
+			border-radius: 5px 5px 0 0;
+		}
+		div.info-top div {
+			display: inline-block;
+			color: #333333;
+			font-size: 14px;
+			font-weight: bold;
+			line-height: 31px;
+			padding: 0 10px;
+		}
+		div.info-top img {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			transition-duration: 0.25s;
+		}
+		div.info-top img:hover {
+			box-shadow: 0px 0px 5px #000;
+		}
+		div.info-middle {
+			font-size: 14px;
+			padding: 6px;
+			line-height: 20px;
+			background-color:rgba(0,29,36,0.8) !important;
+		}
+		div.info-bottom {
+			height: 0px;
+			width: 100%;
+			clear: both;
+			text-align: center;
+		}
+		div.info-bottom img {
+			position: relative;
+			z-index: 104;
+		}
+		.info span{
+			margin-left: 5px;
+			font-size: 11px;
+		}
+		.info-middle img {
+			float: left;
+			margin-right: 6px;
+		}
+		.amap-icon img{
+			width:100%;
+			height:100%;
+		}
+		.icon22{
+			line-height: 45px;
+			width:50px;
+			height: 50px;
+			background:url("images/tubiao.png") no-repeat ;
+			color:#fff;
+			text-align: center;
+			background-size: 100%;
+		}
+		/*高德地图info窗口样式开始*/
+
+
+
+		/*高德地图info窗口样式开结束*/
+	</style>
+
+	<link rel="stylesheet" href="myCss/map/hlwjj.css">
+	<link rel="stylesheet" href="myCss/map/xzfw.css">
+</head>
+<body class="tundra">
+<div id="map" style="width:100%; height:100%;background-color: black">
+	<div id="bigLogo">
+		<div id="right">
+			<img src="images/logo.png" alt="" id="logo"/>
+			<div class="timer"></div>
+		</div>
+	</div>
+	<div id ="legend2" >
+		<ul class="manufactor">
+		</ul>
+	</div>
+	<div id="changeImg" style="display: none">
+		<%--<img id="changeImgFirst"  src="images/s.png" />--%>
+		<img id="changeImgseSecond"  src="images/plane.png" /><img id="changeImgseThirdly" src="images/tools/7.png" />
+	</div>
+</div>
+<div  id="toolsGather" style="position: absolute;right: 4%;top:2%;z-index: 666;display: block;">
+	<select class=listTitle></select>
+	<%--<ul class="listTitle">--%>
+	<%--</ul>--%>
+</div>
+<div id="setting" style="display: block; cursor: pointer" class="sidebar-menu1">
+    <img id="login-logo" onclick="login()">
+</div>
+
+<div class="header"></div>
+
+<div class="signin" id="login" style="display:none">
+	<button onclick="loginClose()">x</button>
+	<h4>用户登录</h4>
+	<form class="form-signin" role="form" id="formlogin">
+		<input type="text" id="username" name="username" class="form-control" placeholder="用户名" required autofocus/>
+		<input type="password" id="password" name="password" class="form-control" placeholder="密码" required/>
+		<button class="btn btn-lg btn-info btn-block" type="button" id="loginsubmit">登录</button>
+		<label class="checkbox">
+			<input type="checkbox" id="remember_me" value="" onclick="saveuserinfo()"><span class="remember">记住我</span>
+		</label>
+	</form>
+</div>
+
+<div class="modelBox modelBoxL">
+	<div class="model model1">
+		<span class="more">更多▶</span>
+		<iframe id="iframe1" src="" frameborder="0"></iframe>
+	</div>
+	<div class="model model2">
+		<span class="more">更多▶</span>
+		<iframe id="iframe2" src="" frameborder="0"></iframe>
+	</div>
+	<div class="model model3">
+		<span class="more">更多▶</span>
+		<iframe id="iframe3" src="" frameborder="0"></iframe>
+	</div>
+</div>
+<div class="modelBox modelBoxC">
+	<div class="modelBoxC-a"><img src="images/air.png" alt=""></div>
+	<div class="modelBoxC-b"><img src="images/water.png" alt=""></div>
+</div>
+<div class="modelBox modelBoxR">
+	<div class="model model4">
+		<span class="more">更多▶</span>
+		<iframe id="iframe4" src="" frameborder="0"></iframe>
+	</div>
+	<div class="model model5">
+		<span class="more">更多▶</span>
+		<iframe id="iframe5" src="" frameborder="0"></iframe>
+	</div>
+	<div class="model model6">
+		<span class="more">更多▶</span>
+		<iframe id="iframe6" src="" frameborder="0"></iframe>
+	</div>
+</div>
+
+<%--模态框--%>
+<!--提示信息模态框-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 style="padding:5px;margin:0px;background-color: #005160"></h2>
+				<button id="ss" type="button" class="close" data-dismiss="modal"><span aria-hidden="true"></span><span class="sr-only">Close</span></button>
+				<%--<h4 class="modal-title">模态框模态框</h4>--%>
+			</div>
+			<div class="modal-body">
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 系统设置弹窗 -->
+<div class="modal fade" id="settingModal">
+	<div class="modal-dialog">
+		<div class="modal-content window-xt">
+			<div class="modal-body">
+				<ul id="xtsz">
+					<li class="xtsz-user">
+						<img src="images/icon.png" alt=""><span id="user_name"></span>
+					</li>
+					<li class="xtsz-li-hover">
+						<img src="images/manageSetting2.png" alt="" onclick="toManageSetting()">
+						<a style="cursor: pointer;color: #7F8993" onclick="toManageSetting()">系统设置</a>
+					</li>
+					<li class="xtsz-li-hover">
+						<img src="images/logout2.png" alt="" onclick="logout()">
+						<a style="cursor: pointer;color: #7F8993" onclick="logout()">退出登录</a>
+					</li>
+				</ul>
+				<%--<table>--%>
+				<%--<tbody>--%>
+				<%--<tr>--%>
+				<%--<td><img src="freeImages/administration/icon.png" width="44"></td>--%>
+				<%--<td id="user_name" style="text-align: center;font-size: 1.5em;color: #7F8993"></td>--%>
+				<%--</tr>--%>
+				<%--<tr>--%>
+				<%--<td><img src="freeImages/administration/manageSetting2.png" style="cursor: pointer" onclick="toManageSetting()"/></td>--%>
+				<%--<td>&nbsp;&nbsp;<a style="cursor: pointer;color: #7F8993" onclick="toManageSetting()" >系统设置</a></td>--%>
+				<%--<tr>--%>
+				<%--<tr>--%>
+				<%--<td><img src="freeImages/administration/logout2.png" style="cursor: pointer" onclick="logout()"></td>--%>
+				<%--<td>&nbsp;&nbsp;<a style="cursor: pointer;color: #7F8993" onclick="logout()">退出登录</a></td>--%>
+				<%--<tr/>--%>
+				<%--</tbody>--%>
+				<%--</table>--%>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="lunbo">
+	<input id="l" type="button" value="left" style="display: none"/>
+	<div id="show">
+		<div class="pic"><img src="images/pic1.png" alt=""/></div>
+		<div class="pic"><img src="images/pic2.png" alt=""/></div>
+		<div class="pic"><img src="images/pic3.png" alt=""/></div>
+		<div class="pic"><img src="images/pic4.png" alt=""/></div>
+		<div class="pic"><img src="images/pic5.png" alt=""/></div>
+		<div class="pic"><img src="images/pic6.png" alt=""/></div>
+	</div>
+</div>
+<%--城市生命线地图图例--%>
+<div id="lifeLine">
+	<ul>
+		<%--<li><img src="images/utility/sg.png" alt="" id="sg"/><span>供水管网</span></li>--%>
+		<li><img src="images/utility/gzd.gif" alt="" id="gzd"/><span id="guzd">故障点</span></li>
+		<li><img src="images/utility/bjd.gif" alt="" id="bjd"/><span>报警点</span></li>
+		<li><img src="images/smx.png" alt="" id="greenLine"/><span>区域保障统计</span></li>
+	</ul>
+</div>
+
+<%--行政服务点击地图区域弹出的动画框--%>
+<div id="regionLayer2Box">
+	<div style="color:#0AEDFB;height:10%;border:none;font-size: 20px">
+		<button id="regionLayer2BoxX" style=" position:relative;border:none;float:right;right:15px;height:100%;background-color: transparent;" type="button" >x</button>
+	</div>
+	<div style="height:90%;">
+		<div style="width:40%;float:left;height:100%">
+			<div class="regionLayer2BoxText" style=" margin:0 auto;box-shadow:0px 0px 25px 7px #264352;;width:75%;height:55%;position: relative;top:11%;border-radius: 50%;background-color: rgba(18,18,18,0.6);color: #0AEDFB;text-align: center;">秀洲区</div>
+		</div>
+		<div style="margin-left:40%;height:100%;">
+			<p class="details" style="color:#0AEDFB;margin:10% 10px 10% 0px; padding:0;height:20%;border:1px solid #2F5367;box-shadow:0px 0px 25px 7px #264352;background-color: rgba(18,18,18,0.6);text-align: center;white-space: nowrap">当月业务申请量：<span class="applynum"></span></p>
+			<p class="details" style="color:#0AEDFB;margin:10% 10px 10% 0px; padding:0;height:20%;border:1px solid #2F5367;box-shadow:0px 0px 25px 7px #264352;background-color: rgba(18,18,18,0.6);text-align: center;white-space: nowrap">当月业务办结量：<span class="finishnum"></span></p>
+			<p class="details" style="color:#0AEDFB;margin:10% 10px 10% 0px; padding:0;height:20%;border:1px solid #2F5367;box-shadow:0px 0px 25px 7px #264352;background-color: rgba(18,18,18,0.6);text-align: center;white-space: nowrap">当月业务办结率：<span class="bjl"></span></p>
+		</div>
+	</div>
+</div>
+
+<%--互联网经济头部信息--%>
+<div id="hlwjjTopMessage">
+	<div>
+		<span>2016年10月，中央网信办和国家发改委在嘉兴市成立乌镇互联网创新发展试验区   </span><span>2016年10月，中央网信办和国家发改委在嘉兴市成立乌镇互联网创新发展试验区   </span>
+	</div>
+</div>
+
+
+<script src="myjs/map/edu.js"></script>
+<script src="myjs/map/sthj.js"></script>
+<script src="myjs/map/shbz.js"></script>
+<script src="myjs/map/hlwjj.js"></script>
+<script src="myjs/map/administration.js"></script>
+<script src="myjs/map/citysmx.js"></script>
+<script>
+	var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+	var headerWidth=$(".header").width();	//获取头部标题的宽度
+	$(".header").css("left",-headerWidth/2-6+"px");//让头部标题居中
+
+
+	var mapMoveStart,mapMoveEnd//定义地图移动事件监听名称，入需要可解除对地图移动事件的监听
+	var timer={
+		date:"",
+		timeAjax:function(){
+			var me=this;
+			$.ajax({
+				url:'jxsys/getCurrentTime.do',
+				type:'POST',
+				dataType:'json',
+				success:function(date) {
+					me.date=date;
+					me.showCurDate();
+				}
+			});
+			return this
+		},
+		showCurDate:function(){
+			var me=this;
+			function changeNumber(num){
+				if(num<10){
+					return '0'+num;
+				}else{
+					return ''+num;
+				}
+			}
+			setInterval(function(){
+				var T=new Date(me.date)
+				newDate = changeNumber(T.getFullYear())+"年"+
+				changeNumber((parseInt(T.getMonth())+1))+"月"+
+				changeNumber(T.getDate())+"日  "+
+				changeNumber(T.getHours())+":"+
+				changeNumber(T.getMinutes())+":"+
+				changeNumber(T.getSeconds())+""
+				me.date+=1000;
+				$(".timer").html(newDate);
+//				console.log($(".timer"))
+			},1000)
+			return this
+		}
+	}
+//	timer.timeAjax();
+	/*地图定义变量*/
+	var map
+	//获取一级标题方法
+	function firstTitle(pageIndex){
+		$.ajax({
+			type: 'post',
+			url: "jxsys/listSysIndicators.do?bh=",
+			dataType: 'JSON',
+			success: function (data) {
+				var index=0;
+				var len=data.length;
+				var str="";
+				for(var i=0;i<len;i++){
+//					str+='<option bh="'+data[i].bh+'">'+data[i].mc+'</li>';
+					if(pageIndex == data[i].bh){
+						str+='<option selected value='+data[i].bh+'>'+data[i].mc+'</option>'
+					}else{
+						str+='<option value='+data[i].bh+'>'+data[i].mc+'</option>'
+					}
+				}
+				$("#toolsGather select").html(str);
+				listTitleShow();//让一级标题在页面显示
+			}
+		})
+	}
+	//地图图层 调用gis服务发布的图层存放空间
+	var MapLayer = null;
+	//一级标题业务逻辑切换
+	function listTitleShow(){
+		$("iframe").prop("src","");
+		var toolsGather_selectVal=$("#toolsGather select").val();
+		clearAll();    //页面切换清空定时器
+		six(toolsGather_selectVal);
+		switch(toolsGather_selectVal){
+			case "001"://生态环境
+				$(".header").css("background-image","url(images/environment_title.png)");
+				sthj.sthjAjax();
+				$(".modelBoxC").show();
+				break;
+			case "002":
+				edu.eduAjax();
+//				$(".envirAll").removeClass("active");
+				$(".header").css("background-image","url(images/edu_title.png)");
+				$(".modelBoxC").hide();//隐藏右下角图标示例
+				map.setZoom(12);
+					break
+			case "003":
+				$(".header").css("background-image","url(images/life_title.png)");
+				$(".modelBoxC").hide();//隐藏右下角图标示例
+				citysmx.citysmxAjax();
+//				$(".envirAll").removeClass("active");
+				$('#lifeLine').css('display','block');
+				break
+			case "004"://社会保障
+				$(".header").css("background-image","url(images/social_title.png)");
+				$(".modelBoxC").hide();
+				shbz.shbzAjax();
+				break
+			case"005"://行政服务
+				administration.adminAjax();
+				$(".header").css("background-image","url(images/xzfw_title.png)");
+				$(".modelBoxC").hide();//隐藏右下角图标示例
+				break
+			case "006"://宏观经济
+//				$(".envirAll").removeClass("active");
+				$(".modelBoxC").hide();//隐藏右下角图标示例
+				$(".header").css("background-image","url(images/cyjj_title.png)");
+				$('#lunbo').css('position','absolute');
+				$('#lunbo').css('display','block');
+				$('#lunbo').css('top','30%');
+				$('#lunbo').css('left','28%');
+				hgjj.hgjjAjax();
+				hgjj.fun();
+				break;
+			case "009":
+				$(".modelBoxC").hide();//隐藏右下角图标示例
+				$(".header").css("background-image","url(images/hlwqstitle.png)")
+				hlwjj.hlwjjAjax();
+//				$(".envirAll").removeClass("active");
+				break;
+			case "010":				//制造业经济
+				$(".modelBoxC").hide();//隐藏右下角图标示例
+				$(".header").css("background-image","url(images/manufacture_title.png)");
+				$("#legend2").css("display", "block");
+				manufacture.manufactureAjax();
+//				MapLayer = new AMap.TileLayer({
+//					// 获取gis发布图层
+//					tileUrl: 'http://192.168.30.85:6080/arcgis/rest/services/jx_bound_economy7/MapServer/tile/[z]/[y]/[x]',
+//					zIndex:100
+//				});
+//				MapLayer.setMap(map);
+//				map.setZoom(11);
+				break;
+		}
+		map.panTo([120.751,30.722]);//默认移到南湖区
+	}
+	//页面6个iframe数据的获取
+	function six(bh){
+		var userId="${sessionScope._CURRENT_USER.username}";
+		$.ajax({
+			type: 'post',
+			url: "jxsys/listIndicatorsShown.do?bh="+bh+'&userId='+userId,
+			dataType: 'JSON',
+			success: function (data) {
+				var len=data.length;
+//				var n=0;
+				for(var i=0;i<len;i++){
+					var src=data[i].mldz;
+					if(src==null){
+						src="";
+					}
+//					n++
+					if(!data[i].subindex){
+						$("#iframe"+(i+1)).parent().children("span").css("display","none")
+					}else{
+						$("#iframe"+(i+1)).parent().children("span").css("display","block")
+					}
+					$("#iframe"+(i+1)).prop("src",src);
+					$("#iframe"+(i+1)).attr("subflag",data[i].subflag);
+					$("#iframe"+(i+1)).attr("subindex",data[i].subindex);
+					$("#iframe"+(i+1)).attr("sjbh", data[i].sjbh);
+				}
+			}
+		})
+	}
+	//切换一级菜单内容
+	$(".listTitle").change(function(){
+		//清除地图移动的监听事件
+//		if (mapMoveStart) {
+//			AMap.event.removeListener(mapMoveStart);//移除事件，以绑定时返回的对象作为参数
+//			console.log("6666666666")
+//		}
+//		if (mapMoveEnd) {
+//			AMap.event.removeListener(mapMoveEnd);//移除事件，以绑定时返回的对象作为参数
+//		}
+
+		map.clearMap();//清除地图
+		map.clearInfoWindow();//关闭地图 infoWindow
+		listTitleShow();
+	})
+
+	//查看更多！根据数据库传入的对应内容 执行不同条件
+	$(".more").click(function(){
+		var modal=$(this).next().attr("subindex");
+		var sjbh=$(this).next().attr("sjbh");
+		if($(this).next().attr("subflag")==0){
+			location.href = "http://"+ mapHost+":" + mapPort + "/CityOverview/index.jsp?subindex="+modal +"&mainIndex=" + sjbh;
+		}
+		if($(this).next().attr("subflag")==1){
+			location.href = "http://"+ mapHost+":" + mapPort + "/CityOverview/iframeSecond/secondBox/"+modal+".jsp?mainIndex=" + sjbh;
+		}
+		if($(this).next().attr("subflag")==2){
+			var obj=eval(modal);//返回模块对象
+			obj.start();//调用模块初始化方法     所有模态框对象在main_modal.js文件中创建
+		}
+//		location.href = "http://"+ mapHost+":" + mapPort + "/CityOverview/index.jsp?subindex="+$(this).next().attr("subindex")
+	})
+
+
+	//画点
+	function addPoint(arr,h,w,img,details){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+		var _marker=new AMap.Marker({
+			map: map,
+			position: arr,        //经纬度
+			icon: new AMap.Icon({
+				size: new AMap.Size(h, w),  //图标大小
+				image: img       //自定义图片
+			})
+
+		});
+		map.setCenter(arr);
+//       坐标点点击事件
+		if(arguments.length==5){	//如果数据有details 就添加点击事件，否则就不添加点击事件
+			AMap.event.addListener(_marker,'click',function(e){
+//				var infoWindow = new AMap.InfoWindow();
+//				infoWindow.setContent(details.corpName);
+
+//				infoWindow.open(map, _marker.getPosition());
+				var title = '<span style="font-size:11px;color:#F00;">'+details.corpName+'</span>';
+				var content = [];
+				content.push("<img src='http://tpc.googlesyndication.com/simgad/5843493769827749134'>地址：北京市朝阳区阜通东大街6号院3号楼东北8.3公里");
+				content.push("电话：010-64733333");
+				content.push("<a href='http://ditu.amap.com/detail/B000A8URXB?citycode=110105'>详细信息</a>");
+				var infoWindow = new AMap.InfoWindow({
+					isCustom: true,  //使用自定义窗体
+					content: createInfoWindow(title, content.join("<br/>")),
+					offset: new AMap.Pixel(16, -45)
+				});
+				infoWindow.open(map, _marker.getPosition());
+
+//			alert("当前坐标为："+"东经："+arr[0]+" 北纬："+arr[1]+details)
+			});
+			//实例化信息窗体
+
+
+			//构建自定义信息窗体
+			function createInfoWindow(title, content) {
+				var info = document.createElement("div");
+				info.className = "info";
+
+				//可以通过下面的方式修改自定义窗体的宽高
+				//info.style.width = "400px";
+				// 定义顶部标题
+				var top = document.createElement("div");
+				var titleD = document.createElement("div");
+				var closeX = document.createElement("img");
+				top.className = "info-top";
+				titleD.innerHTML = title;
+				closeX.src = "http://webapi.amap.com/images/close2.gif";
+				closeX.onclick = closeInfoWindow;
+
+				top.appendChild(titleD);
+				top.appendChild(closeX);
+				info.appendChild(top);
+
+				// 定义中部内容
+				var middle = document.createElement("div");
+				middle.className = "info-middle";
+				middle.style.backgroundColor = 'white';
+				middle.innerHTML = content;
+				info.appendChild(middle);
+
+				// 定义底部内容
+				var bottom = document.createElement("div");
+				bottom.className = "info-bottom";
+				bottom.style.position = 'relative';
+				bottom.style.top = '0px';
+				bottom.style.margin = '0 auto';
+				var sharp = document.createElement("img");
+				sharp.src = "http://webapi.amap.com/images/sharp.png";
+				bottom.appendChild(sharp);
+				info.appendChild(bottom);
+				return info;
+			}
+
+			//关闭信息窗体
+			function closeInfoWindow() {
+				map.clearInfoWindow();
+			}
+		}
+	}
+
+	//绘制多边形，并设置填充颜色。模拟出学区
+	function polygon(Data){
+		var len=Data.length;
+		var newData=[];
+		for(var i=0;i<len;i++){
+			newData.push(wgs84togcj02(Data[i][0],Data[i][1]));//绘制学区经纬度纠偏
+		}
+//		console.log(Data)
+		var strokeColor="#FF0000", //设置多边形线颜色
+				strokeOpacity=0.2, //设置多边形线透明度
+				strokeWeight=6,    //设置多边形线宽
+				fillColor="#1791fc", //设置多边形填充色
+				fillOpacity=0.35;//设置多边形填充透明度
+		var polygon = new AMap.Polygon({
+			path: newData,//设置多边形边界路径
+			strokeColor: strokeColor, //线颜色
+			strokeOpacity: strokeOpacity, //线透明度
+			strokeWeight: strokeWeight,    //线宽
+			fillColor: fillColor, //填充色
+			fillOpacity: fillOpacity//填充透明度
+		});
+		polygon.setMap(map);//绘制多边形
+	}
+
+	//清空DOM
+	function clearDom(){
+		$('#lunbo').css('display','none'); //产业经济轮播框隐藏
+		$("#legend2").css('display','none');//制造业经济ul隐藏
+		$("#regionLayer2Box").css("display","none");//行政服务点击地图区域弹出的动画框
+		$('#lifeLine').css('display','none');//城市生命线图例隐藏
+		$('#hlwjjTopMessage').css('display','none');//互联网经济头部信息隐藏
+
+	}
+	//清空定时器
+	function clearDsq(){
+		clearInterval(hgjj.lunbo1);   //清空宏观经济中轮播定时器
+		clearInterval(manufacture.timer);//清空制造业经济中的定时器
+		if(shbz.timer){
+			$.each(shbz.timer,function(i,v){
+				clearTimeout(v);   //清空生态环境中轮播定时器
+			})
+		}
+
+		if(sthj.timer){
+			$.each(sthj.timer,function(i,v){
+				clearInterval(v);   //清空社会保障中轮播定时器
+			})
+		}
+		clearInterval(edu.timer)//请空教育模块中的定时器
+		clearInterval(administration.admiTime);//清除行政服务定时器
+		clearInterval(hlwjj.once);//清除互联网定时器
+		clearInterval(hlwjj.hlwjjTime);//清除互联网强势定时器
+	}
+	//重置
+	function clearAll(){
+		clearDom();//清除DOM 元素
+		clearDsq();//清除定时器
+		//清除行政服务图层绑定事件
+		if(administration.districtExplorer){
+			administration.districtExplorer.clearAreaNodeCacheByAdcode([330400]);
+			administration.districtExplorer.off('featureClick');
+		}
+		//清除图层
+		if(MapLayer){
+			MapLayer.setMap()
+		}
+	}
+
+
+	//页面加载完成后 开始执行
+	window.onload=function(){
+		var pageIndex = (location.href).slice(location.href.indexOf("=")+1)	//获取页面编号 如001 002
+		firstTitle(pageIndex);//发送请求 获得一级标题的内容 ，内部调用方法，让一级标题在页面显示
+		$("#toolsGather .listTitle").val(pageIndex);//设置一级标题下拉选项的值，实现输入地址可以跳转到对应的页面
+        //检查用户是否登录
+        $.ajax({
+            url:'manage/login/checkSession.do',
+            type:'POST',
+            dataType:'json',
+            success:function(data) {
+                if (data.status == 400) {
+                    $("#login-logo").attr("src", "images/icon2.png");
+                } else {
+                    $("#login-logo").attr("src", "images/icon.png");
+                }
+                $("#login").hide();
+                $("#user_name").html(data.data);
+            }
+        })
+
+		//加载地图的方法
+		map = new AMap.Map('map', {
+			mapStyle: 'amap://styles/e08db8ed18c196aa387f5352644fe504'//样式URL
+		});
+		AMap.event.addListener(map,'click',function(e){
+			map.clearInfoWindow();
+			console.log("666")
+		});
+	}
+
+
+
+	//用户登录功能开始
+	function login() {
+		$.ajax({
+			url:'manage/login/checkSession.do',
+			type:'POST',
+			dataType:'json',
+			success:function(data) {
+				if (data.status == 400) {
+					location.href="<%=request.getContextPath()%>/login.jsp";
+				} else {
+					$("#settingModal").modal('toggle');
+				}
+			}
+		})
+	}
+
+
+	//系统设置点击功能
+	function toManageSetting() {
+		$("#settingModal").modal('hide');
+		location.href = "settingManager/manager.jsp";
+	}
+	//退出登录功能
+	function logout(){
+		$.ajax({
+			url:"manage/login/loginOut.do",
+			dataType:"json",
+			type:"post",
+			success:function (data) {
+				if(data.status==200){
+					toastr.success("亲，您已安全退出");
+					$("#settingModal").modal('hide');
+					$("#login-logo").attr("src","images/icon2.png");
+				}
+			}
+		})
+	}
+
+	//用户登录功能结束
+
+
+
+
+</script>
+</body>
+</html>

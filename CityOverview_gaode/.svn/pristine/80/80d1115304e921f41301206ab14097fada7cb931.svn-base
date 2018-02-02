@@ -1,0 +1,95 @@
+package com.cetc28.PeopleBenefitService.model;
+
+import java.math.BigDecimal;
+
+public class JxEduInformazation {
+    private BigDecimal id;
+
+    private BigDecimal year;
+
+    private String qhbh;
+
+    private BigDecimal compuiterNum;
+
+    private BigDecimal internetNum;
+
+    private BigDecimal multimediaNum;
+
+    private BigDecimal classNum;
+
+    private BigDecimal digitalResource;
+
+    private String teacherLevel;
+
+    public BigDecimal getId() {
+        return id;
+    }
+
+    public void setId(BigDecimal id) {
+        this.id = id;
+    }
+
+    public BigDecimal getYear() {
+        return year;
+    }
+
+    public void setYear(BigDecimal year) {
+        this.year = year;
+    }
+
+    public String getQhbh() {
+        return qhbh;
+    }
+
+    public void setQhbh(String qhbh) {
+        this.qhbh = qhbh == null ? null : qhbh.trim();
+    }
+
+    public BigDecimal getCompuiterNum() {
+        return compuiterNum;
+    }
+
+    public void setCompuiterNum(BigDecimal compuiterNum) {
+        this.compuiterNum = compuiterNum;
+    }
+
+    public BigDecimal getInternetNum() {
+        return internetNum;
+    }
+
+    public void setInternetNum(BigDecimal internetNum) {
+        this.internetNum = internetNum;
+    }
+
+    public BigDecimal getMultimediaNum() {
+        return multimediaNum;
+    }
+
+    public void setMultimediaNum(BigDecimal multimediaNum) {
+        this.multimediaNum = multimediaNum;
+    }
+
+    public BigDecimal getClassNum() {
+        return classNum;
+    }
+
+    public void setClassNum(BigDecimal classNum) {
+        this.classNum = classNum;
+    }
+
+    public BigDecimal getDigitalResource() {
+        return digitalResource;
+    }
+
+    public void setDigitalResource(BigDecimal digitalResource) {
+        this.digitalResource = digitalResource;
+    }
+
+    public String getTeacherLevel() {
+        return teacherLevel;
+    }
+
+    public void setTeacherLevel(String teacherLevel) {
+        this.teacherLevel = teacherLevel == null ? null : teacherLevel.trim();
+    }
+}

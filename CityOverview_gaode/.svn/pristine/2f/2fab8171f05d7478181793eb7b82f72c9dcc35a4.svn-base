@@ -1,0 +1,111 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="../../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    .main{
+      width: 97%;
+      height: 75%;
+      margin-top: 5%;
+    }
+    .main>.main-content{
+      width: 49%;
+      height: 20%;
+      margin: 5% auto;
+      float: left;
+    }
+    .infoLogo1{
+      width: 35%;
+      height: 90%;
+      margin-left: 1%;
+      float: left;
+    }
+    .infoLogo1>img,.infoLogo2>img{
+      width: 3em;
+      height: 3em;
+      float: right;
+    }
+    .infoTitle{
+      vertical-align: middle;
+      width: 57%;
+      height: 90%;
+      margin-left: 1%;
+      float: left;
+    }
+    .infoTitle>h1{
+      color: #00FF00;
+      text-align: center;
+    }
+    .infoTitle>p{
+      font-size: 14px;
+      line-height: 24px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .infoTitle span{
+      font-size: 20px;
+
+    }
+    .infoTitle-span1{
+      color: #0CDAF5;
+    }
+    .infoTitle-span2{
+      color: #0CDAF5;
+    }
+    .infoTitle-span3{
+      color: #0CDAF5;
+    }
+    .infoTitle-span4{
+      color: #0CDAF5;
+    }
+    p.headerTitle{
+      width: 45%;
+    }
+  </style>
+</head>
+<body>
+<div class="gsbz">
+  <p class="headerTitle">
+    互联网经济产业平台
+  </p>
+  <div class="main">
+    <div class="main-content main-top">
+      <div class="infoLogo1"><img src="../../../images/information/info5_1.png" alt=""/></div>
+      <div class="infoTitle"><p>乌镇核心区域 <br/><span class="infoTitle-span1 counter">30</span>平方公里</p></div>
+    </div>
+    <div class="main-content main-middle">
+      <div class="infoLogo1"><img src="../../../images/information/info5_1.png" alt=""/></div>
+      <div class="infoTitle"><p>嘉兴科技城<br/><span class="infoTitle-span2 counter">29.5</span>平方公里</p></div>
+    </div>
+    <div class="main-content main-bottom">
+      <div class="infoLogo1"><img src="../../../images/information/info5_1.png" alt=""/></div>
+      <div class="infoTitle"><p>秀洲高新区<br/><span class="infoTitle-span3 counter">5.72</span>平方公里</p></div>
+    </div>
+    <div class="main-content main-bottom">
+      <div class="infoLogo1"><img src="../../../images/information/info5_1.png" alt=""/></div>
+      <div class="infoTitle"><p>嘉兴经济技术开发区<br/><span class="infoTitle-span4 counter">40</span>平方公里</p></div>
+    </div>
+  </div>
+</div>
+<script src="../../../map/js/jquery-1.11.3.js"></script>
+<script src="../../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../../map/js/jquery.countup.js"></script>
+<script>
+  $('.counter').countUp({
+    delay: 2,
+    time: 200
+  });
+</script>
+</body>
+</html>

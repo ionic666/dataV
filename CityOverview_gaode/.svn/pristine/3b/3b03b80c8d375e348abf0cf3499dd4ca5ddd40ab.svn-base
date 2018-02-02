@@ -1,0 +1,26 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.dto.CardStatisticsTooltipDto;
+import com.cetc28.idata.model.JxSsCardStatistics;
+
+import java.util.List;
+
+public interface JxSsCardStatisticsMapper {
+    int deleteByPrimaryKey(Short id);
+
+    int insert(JxSsCardStatistics record);
+
+    int insertSelective(JxSsCardStatistics record);
+
+    JxSsCardStatistics selectByPrimaryKey(Short id);
+
+    int updateByPrimaryKeySelective(JxSsCardStatistics record);
+
+    int updateByPrimaryKey(JxSsCardStatistics record);
+
+    JxSsCardStatistics selectSsCardHolderLatestY();
+
+    List<JxSsCardStatistics> selectSsCardStatisticsInFiveY();
+
+    List<CardStatisticsTooltipDto> selectCardStatisticsTooltipLatestY(String regionCode);
+}

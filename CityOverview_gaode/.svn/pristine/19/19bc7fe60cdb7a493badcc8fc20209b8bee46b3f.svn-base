@@ -1,0 +1,122 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/4
+  Time: 13:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.soundhj{
+            width: 100%;
+            height: 100%;
+        }
+        div#soundhj{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="soundhj">
+    <p class="headerTitle">
+        声环境
+    </p>
+    <%--声环境柱状图--%>
+    <div id="soundhj">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function soundhj(xAxisData,seriesData) {
+        var myChart = echarts.init(document.getElementById("soundhj"));
+        var option = {
+            color: ['#002060'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                formatter:'{b}<br/>{a} : {c}%'
+            },
+            legend: {
+                data: ['平均超标率'],
+                x: 'right',
+                y: 'top',
+                orient: 'vertical',
+                textStyle: text_style
+            },
+            grid: {
+                x: '15%',
+                y: '10%',
+                x2: '5%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: {
+                type: 'value',
+                splitLine: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                axisLabel: {show: false}
+            },
+            yAxis: {
+                type: 'category',
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: false},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            series: [
+                {
+                    name: '平均超标率',
+                    type: 'bar',
+                    barWidth: 20,
+                    barGap: '2%',
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                formatter: '{c}%',
+                                position: 'right',
+                                textStyle:text_style
+                            }
+                        }
+                    },
+                    data: seriesData
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    $.ajax({
+        type:"POST",
+        url:'../../jxenvir/NoiseOverproof.do',
+        dataType:'json',
+        success:function(data){
+//            console.log("声环境");
+//            console.log(data);
+            var len=data.length;
+            var xAxisData=[];
+            var seriesData=[];
+            for(var i=0;i<len;i++){
+                xAxisData.push(data[i].year+"年");
+                seriesData.push(data[i].noise_OVERPROOF_LV);
+            }
+            soundhj(xAxisData,seriesData);
+        }
+    });
+</script>
+</body>
+</html>

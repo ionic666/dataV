@@ -1,0 +1,39 @@
+package com.cetc28.ConfigurationManagement.service;
+
+
+import com.cetc28.ConfigurationManagement.dto.ReportDto;
+import com.cetc28.ConfigurationManagement.model.PageResult;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/11/9.
+ */
+public interface IJxReportService {
+//    PageResult queryReportList(Integer pageNumber, Integer pageSize, String startTime, String endTime);
+    PageResult queryReportList(Integer pageNumber, Integer pageSize, String startTime, String endTime,String rModule);
+
+    void addReport(ReportDto reportDto);
+
+    boolean checkTitle(String title);
+
+    /**
+     * 根据简报id查询简报
+     * @param rid
+     * @return
+     */
+    ReportDto queryReportByid(Integer rid);
+
+    /**
+     * 更新简报时间（id,updatetime）
+     * @param reportDto
+     */
+    void updateReportTime(ReportDto reportDto);
+
+    /**
+     * 查询所属板块
+     * @return
+     */
+    List queryRmodule();
+
+}

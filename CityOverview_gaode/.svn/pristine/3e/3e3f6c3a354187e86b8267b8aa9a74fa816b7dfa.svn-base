@@ -1,0 +1,208 @@
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.dto.CompanyDto;
+import com.cetc28.idata.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/18.
+ */
+@Controller
+@RequestMapping("/jxecokey")
+public class JxEcoKeycomController {
+
+    @Autowired
+    private IJxEcoKeycomsjService iJxEcoKeycomsjService;
+    @Autowired
+    private IJxEcoClusterjService iJxEcoClusterjService;
+    @Autowired
+    private IJxEcoIndPlatService iJxEcoIndPlatService;
+    @Autowired
+    private IJxEcoCoreComService iJxEcoCoreComService;
+    @Autowired
+    private IJxSerRateCaseService iJxSerRateCaseService;
+
+    /**
+     * 查询重点企业基本数据
+     * @return
+     */
+    @RequestMapping("/findkeycomdata.do")
+    @ResponseBody
+    public Map findkeycomdata(){
+        return iJxEcoKeycomsjService.queryKeycomData();
+    }
+
+    /**
+     * 查询核心企业基本数据
+     * @return
+     */
+    @RequestMapping("/findCorecomdata.do")
+    @ResponseBody
+    public Map findCorecomdata(){
+        return iJxEcoCoreComService.queryCoreComData();
+    }
+
+
+    /**
+     * 一级页面获取集群信息
+     * @return
+     */
+    @RequestMapping("/findClusterNameAndJwd.do")
+    @ResponseBody
+    public  List findClusterData(){
+        return  iJxEcoClusterjService.findClusterType();
+    }
+
+
+    /**
+     * 根据集群种类查找集群信息
+     * @param clusterType
+     * @return
+     */
+    @RequestMapping("/findClusterInfoByType.do")
+    @ResponseBody
+    public  List findClusterInfoByType(String clusterType){
+        return  iJxEcoClusterjService.findClusterInfoByType(clusterType);
+    }
+
+    /**
+     * 根据集群种类查找 公司信息　＋ 公司名称的模糊查询
+     * @param clusterType
+     * @return
+     */
+    @RequestMapping("/findCompanyInfo.do")
+    @ResponseBody
+    public  List findCompanyInfo(String clusterType,String companyName){
+        return  iJxEcoClusterjService.findCompanyInfo(clusterType, companyName);
+    }
+
+    /**
+     * 根据公司名称查找集群中的企业信息（linyu 添加）
+     * @param companyName
+     * @return
+     */
+    @RequestMapping("/searchCluserCompanyInfo.do")
+    @ResponseBody
+    public List searchCluserCompanyInfo(String companyName){
+        return  iJxEcoClusterjService.searchCluserCompanyInfo(companyName);
+    }
+
+
+
+    /**
+     * 根据重点企业id和区号值查询相关公司
+     * @param id
+     * @param bhValue
+     * @return
+     */
+    @RequestMapping("/queryComByCondition.do")
+    @ResponseBody
+    public Map queryComByCondition(String id, String bhValue){
+        return iJxEcoKeycomsjService.queryComByCondition(id, bhValue);
+    }
+
+    /**
+     * 根据核心企业和区号值查询相关公司
+     * @param bhname
+     * @param industryname
+     * @return
+     */
+    @RequestMapping("/queryCoreComByCondition.do")
+    @ResponseBody
+    public Map queryCoreComByCondition(String bhname, String industryname){
+        return iJxEcoCoreComService.queryComByCondition(bhname, industryname);
+    }
+    /**
+     * 根据重点企业名称查询公司信息
+     * @param name
+     * @return
+     */
+    @RequestMapping("/serchKeycomName.do")
+    @ResponseBody
+    public List serchKeycomName(String name) {
+        return iJxEcoKeycomsjService.serchKeycom(name);
+    }
+
+    @RequestMapping("/serchAllInfo.do")
+    @ResponseBody
+    public List serchAllInfo() {
+        return iJxEcoCoreComService.queryAll();
+    }
+    /**
+     * 根据产业名称查询公司信息
+     * @param name
+     * @return
+     */
+    @RequestMapping("/serchCoreName.do")
+    @ResponseBody
+    public List serchCoreName(String name) {
+        return iJxEcoCoreComService.serchCorecom(name);
+    }
+    /**
+     * 根据平台企业名称查询公司信息
+     * @param name
+     * @return
+     */
+    @RequestMapping("/serchIndPlatSec.do")
+    @ResponseBody
+    public List serchIndPlatSec(String name) {
+        return iJxEcoIndPlatService.queryEcoPlatSecByname(name);
+    }
+    /**
+     * 查询平台基本数据
+     * @return
+     */
+    @RequestMapping("/findIndPlatdata.do")
+    @ResponseBody
+    public Map findIndPlatdata(){
+        return iJxEcoIndPlatService.queryIndustrialPlatform();
+    }
+
+    /**
+     * 根据平台名称查询平台基本数据
+     * @return
+     */
+    @RequestMapping("/findIndPlatbyName.do")
+    @ResponseBody
+    public Map findIndPlatbyName(String name){
+        return iJxEcoIndPlatService.queryEcoPlatbyName(name);
+    }
+
+
+    //==============三率一感=============
+
+    /**
+     * 初始化
+     * @return
+     */
+    @RequestMapping("/queryDefaultData.do")
+    @ResponseBody
+    public Map queryDefaultData(){
+        return iJxSerRateCaseService.queryDefaultData();
+    }
+
+    /**
+     * 根据区县值获得建议
+     * @param bhValue
+     * @return
+     */
+    @RequestMapping("/querySuggestByBhValue.do")
+    @ResponseBody
+    public Map querySuggestByBhValue(String bhValue){
+        return iJxSerRateCaseService.querySuggestByBhValue(bhValue);
+    }
+
+    @RequestMapping("/queryRateCaseBySort.do")
+    @ResponseBody
+    public Map queryRateCaseBySort(String sort){
+        return iJxSerRateCaseService.queryRateCaseBySort(sort);
+    }
+
+}

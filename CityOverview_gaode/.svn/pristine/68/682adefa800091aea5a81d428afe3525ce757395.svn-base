@@ -1,0 +1,208 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    div.gdbz{
+      width: 100%;
+      height: 100%;
+    }
+    p.headerTitle{
+      float: left;
+    }
+    .rkzrzzsnText{
+      float: left;
+      height: 21%;
+      margin-left: 6%;
+    }
+    .rkzrzzsnText ul{
+      height: 100%;
+    }
+    div#gdzl{
+      height: 75%;
+      width: 100%;
+    }
+    .addRed-gdbz,.addRed-gdbz{
+      font-size: 26px;
+    }
+    .smxIcon{
+      height: 33px;
+      width: 33px;
+      display: block;
+      vertical-align: middle;
+    }
+
+    .rkzrzzsnText>ul>li{
+      text-align: center;
+      float: left;
+      margin-left: 10px;
+      height: 100%;
+    }
+    .rkzrzzsnText ul li p{
+      height: 100%;
+      padding: 4% 0;
+    }
+    .rkzrzzsnText>ul>li img{
+      margin: 0 auto;
+    }
+    .addRed-gsbz{
+      font-size: 26px;
+
+    }
+    .fontSize8{
+      font-size: 8px;
+    }
+
+  </style>
+</head>
+<body>
+<div class="gdbz">
+  <p class="headerTitle">
+    供电保障
+  </p>
+  <%--<div class="rkzrzzsnText">--%>
+    <%--<ul>--%>
+      <%--<li>--%>
+        <%--<p class="addBold">本月供电<span class="addRed addRed-gdbz" id="gdl"></span>亿千瓦时</p>--%>
+      <%--</li>--%>
+    <%--</ul>--%>
+  <%--</div>--%>
+  <div class="rkzrzzsnText">
+    <ul>
+      <li><img class="smxIcon" src="../../images/gdbz.png" alt="本月供电"/><span class="fontSize8">本月供电</span></li>
+      <li><p><span class="addYellow addRed-gdbz counter" id="gdl"></span><span class="fontSize8">亿千瓦时</span></p></li>
+    </ul>
+  </div>
+  <%--社保自助服务开通率折线图--%>
+  <div id="gdzl">
+  </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+
+<script>
+  var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+  function gdbz(xAxisData,seriesData) {
+    var myChart = echarts.init(document.getElementById("gdzl"));
+    var option = {
+      color: ['#5B9BD5'],
+      legend: {
+        data: ['电网负荷率'],
+        textStyle: text_style,
+        x: 'right',
+        y: 'top'
+      },
+      calculable: false,
+      tooltip: {
+        trigger: 'axis',
+        formatter: "{a}<br/>{b}:{c}%"
+      },
+      grid: {
+        x: '10%',
+        y: '25%',
+        x2: '15%',
+        y2: '15%',
+        containLabel: true,
+        borderWidth: 0
+      },
+      xAxis: [
+        {
+            type: 'category',
+            splitLine: {show: false},
+            axisLine: {show: true, lineStyle: {color: '#BFBFBF'}},
+            axisTick: {show: true},
+            axisLabel: {show: true, textStyle: text_style},
+            data: xAxisData
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          min:0,
+          max:100,
+          splitNumber:4,
+          splitLine: {show: false},
+          axisLine: { lineStyle: {
+            color: '#8D8C8C'
+          }},
+          axisTick: {show: false},
+          axisLabel: {
+            show: true,
+            textStyle: text_style,
+            formatter: '{value} %'}
+        }
+      ],
+      series: [
+        {
+          name: '电网负荷率',
+          type: 'line',
+          smooth: true,
+          itemStyle:{
+            normal:{
+              label:{
+                show:true,
+                formatter: '{c}%',
+                textStyle:text_style
+              }
+            }
+          },
+          data: seriesData
+        }
+      ]
+    };
+    myChart.setOption(option);
+  }
+
+//  查询近四个月供电量数据
+  $.ajax({
+    type:"POST",
+    url:'../../jxutility/elec/elecPowerLoadingRate.do?bH='+qhbh+'&monthSize=4',
+    dataType:'json',
+    success:function(data){
+      var xAxis=[],
+              series=[],
+              xAxisData,
+              seriesData;
+      $.each(data,function(i){
+        var date=data[i].dateYm;
+        xAxis.push(date.substr(date.length-1,1)+'月');
+        series.push(data[i].elecPowerLoadingRate*100);
+      });
+      xAxisData=xAxis.reverse();
+      seriesData=series.reverse();
+      gdbz(xAxisData,seriesData);
+    }
+  });
+
+  //当月供电量
+  $.ajax({
+    type:"POST",
+    url:'../../jxutility/elec/elecSupply.do?bH='+qhbh+'',
+    dataType:'json',
+    success:function(data){
+      $('#gdl').append(data.elecSupplyAll/10000);
+        $('.counter').countUp({
+            delay: 2,
+            time: 200
+        });
+    }
+  });
+</script>
+
+</body>
+</html>

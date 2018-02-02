@@ -1,0 +1,620 @@
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>阳光医保</title>
+    <link rel="stylesheet" href="../../myCss/bootstrap.min.css"/>
+    <%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/tundra/tundra.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/esri/css/esri.css" />--%>
+    <%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dojox/layout/resources/ExpandoPane.css" />--%>
+    <%--<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/soria/soria.css" />--%>
+
+    <style>
+        html {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            color: #fff;
+            font-family: "Microsoft YaHei";
+            font-size: 18px;
+            background-image: url('../../images/socialSecurity/sbbg.png');
+            background-size: 100% 100%;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        div, h2, h1, p {
+            margin: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .floatLeft {
+            /*display: inline-block;*/
+            float: left;
+        }
+
+        p.headerTitle {
+            padding-left: 20px;
+            font-size: 24px;
+            /*font-weight: bold;*/
+            color: #fff;
+            height: 26px;
+            width: 60%;
+            line-height: 30px;
+            margin: 10px 4px;
+        }
+        /*.header {*/
+            /*width: 100%;*/
+            /*height: 9%;*/
+            /*position: relative;*/
+            /*!*border: 1px solid red;*!*/
+        /*}*/
+
+        .main {
+            width: 100%;
+            height: 87%;
+            margin-top: 1%;
+            /*border: 1px solid blue;*/
+        }
+        div#right {
+            float: left;
+            /*width: 250px;*/
+            width: 100%;
+            height: 100%;
+            padding-top: 10px;
+            padding-left: 10px;
+        }
+
+        /*.title {*/
+            /*width: 20%;*/
+            /*height: 100%;*/
+            /*line-height: 100px;*/
+            /*color: #0CDAF5;*/
+            /*padding: 0.2em 1em;*/
+            /*font-size: 42px;*/
+            /*font-weight: bold;*/
+            /*!*position: absolute;*!*/
+            /*text-align: center;*/
+            /*margin: 0 auto;*/
+            /*!*left: 40%;*!*/
+            /*!*top: 37%;*!*/
+            /*z-index: 200;*/
+            /*!*background-image: url(../../images/publicServe/zdpyc.png);background-size: 100%,100%;background-repeat: no-repeat;*!*/
+        /*}*/
+
+        /*主体内容*/
+        .main > .mainLeft {
+            width: 28%;
+            height: 100%;
+            margin-right: 0.6%;
+            /*margin-top: 5%;*/
+        }
+
+        .main > .mainLeft > div{
+            width: 96%;
+            /*margin-top: 2%;*/
+            margin-left: 2%;
+            margin-right: 2%;
+            background-color: rgba(23, 33, 34, 0.8);
+            border-top: 2px #0CDAF5 solid;
+            border-bottom: 1px #12363A solid;
+        }
+        .main #introduce{
+            height: 65%;
+        }
+        div.introduceDetails,div#rulesDetails{
+            height: 81%;
+            width: 99%;
+            color: #fff;
+            font-size: 18px;
+            
+        }
+        div.introduceDetails p{
+            text-indent: 2em; 
+        }
+        .main #rules{
+            height: 32%;
+            margin-top: 3%;
+        }
+        
+        .main > .mainMiddle {
+            width: 70%;
+            height: 100%;
+            /*margin-top: 5%;*/
+        }
+        .main #search{
+            width: 98%;
+            height: 12%;
+            margin-left: 1%;
+            padding: 3% 2%;
+            background-color: rgba(23, 33, 34, 0.8);
+            border-top: 2px #0CDAF5 solid;
+            border-bottom: 1px #12363A solid;
+        }
+        #searchText{
+            font-size: 16px;
+            height: 35px;
+            width: 20%;
+            margin-left: 2%;
+            padding-left: 1%;
+            border: 1px solid #414142;
+            outline: 0;
+            background-color: #17191B;
+        }
+        #searchBtn{
+            margin-left: 2%;
+            padding: 5px 20px;
+            border-radius: 3px;
+            background-color: #CC7A29;
+            outline: 0;
+            border: 0;
+        }
+        .main > .mainMiddle > .mainMiddle-top {
+            width: 98%;
+            height: 50%;
+            margin: 1.5% 0 0 1%;
+            position: relative;
+            border: 2px solid #0FC9E2;
+        }
+
+        .main > .mainMiddle > .mainMiddle-bottom {
+            width: 98%;
+            height: 32%;
+            margin: 1.5% 0 0 1%;
+            background-color: rgba(23, 33, 34, 0.8);
+            border-top: 2px #0CDAF5 solid;
+            border-bottom: 1px #12363A solid;
+        }
+        #time{
+            width: 90%;
+            height: 20%;
+            padding-left: 10%;
+        }
+        #steps{
+            width: 80%;
+            height: 57%;
+            /* margin: 0 auto; */
+            margin-left: 13.7%;
+        }
+        .step{
+            width: 25%;
+            height: 100%;
+            float: left;
+            background: url('../../images/socialSecurity/step.png') no-repeat;
+            background-size: 75% 100%;
+            padding: 1% 6% 0 1%;
+            font-size: 16px;
+        }
+        .info {
+            border: solid 1px #889DA2;
+            border-radius: 2px;
+            box-shadow: 0px 0px 8px #60d8ef;
+            z-index: 5;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-middle p{
+            font-size: 18px;
+            display: inline-block;
+            width: 220px;
+        }
+        .info-middle .infoName{
+            display: inline-block;
+            width:95px;
+            color:#32DDE7;
+            vertical-align: top;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        .info span{
+            margin-left: 5px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        .infoContentDiv{
+            padding:8px 0px;
+        }
+        ._header h1{
+
+            font-size: 42px;
+            color:#0cdaf1;
+            font-family:微软雅黑;
+            -webkit-box-reflect: below 0px
+            -webkit-gradient(linear,left top,left bottom, from(rgba(0,0,0,0)),to(rgba(255,255,255,0.2)));
+            display: inline-block;
+            padding: 0;
+            margin:0px 20px 0px 20px;
+        }
+        ._header span{
+            font-size: 30px;
+            color:#b8d1d1;
+            font-family:微软雅黑;
+            background-color: #166D76;
+            margin:0px 20px;
+            padding:0px 10px;
+        }
+        ._header img{
+            position: relative;
+            top: -10%;
+        }
+        ._header{
+            /*position: absolute;*/
+            height: 9%;
+            z-index: 7777;
+            padding-top:0.5%;
+            text-align: center;
+            top:0;
+        }
+    </style>
+</head>
+
+<body>
+
+<%--返回上一页--%>
+<a href="javascript:void(0);" onclick="returnMainPage()"
+   style="max-width:3%;position: fixed;left:97%;top: 2%;z-index: 1000"><img src="../../images/returnUp.png" alt=""></a>
+<div class="_header">
+    <img src="../../images/btz.png" alt=""/>
+    <h1>阳光医保</h1>  
+    <img src="../../images/bty.png" alt=""/>
+</div>
+<!-- 页面主体部分 -->
+<div class="main">
+    <!-- 左侧两个模块 -->
+    <div class="mainLeft floatLeft">
+        <!-- 简介 -->
+        <div class="mainLeft-top" id="introduce">
+            <p class="headerTitle">简介</p>
+            <div class="introduceDetails">
+                <p>养老保险：养老保险是劳动者在达到法定退休年龄退休后，从政府和社会得到一定的经济补偿物质帮助和服务的一项社会保险制度；</p>
+                <p>医疗保险：社会保险民营医院将纳入医保范围，近日，中国医疗保险研究会副秘书长、国家人力资源和社会保障部社会保障研究所副所长李静湖
+                   表示，对民营医疗机构是一视同仁，按照一定的条件都纳入到基本医疗保险的定点范围。城镇员工基本医疗保险制度，是根据财政、企业和个人的承受
+                   能力所建立的保障职工基本医疗需求的社会保险制度；</p>
+                <p>工伤保险：工伤保险也称职业伤害保险。劳动者由于工作原因并在工作过程中受意外伤害，或因接触粉尘、放射线、有毒害物质等职业危害因素引起职业病后，
+                    由国家和社会给负伤、致残者以及死亡者生前供养亲属提供必要物质帮助；</p>
+                <p>失业保险：失业保险是国家通过立法强制实行的，由社会集中建立基金，对因失业而暂时中断生活来源的劳动者提供物质帮助的制度；</p>
+                <p>生育保险：生育保险是针对生育行为的生理特点，根据法律规定生育保险，在职女性因生育子女而导致劳动者暂时中断工作、失去正常收入来源时，
+                    由国家或社会提供的物质帮助。生育保险待遇包括生育津贴和生育医疗服务两项内容。</p>
+            </div>
+        </div>
+        
+        <!-- 平台性能 -->
+        <div class="mainLeft-bottom" id="rules">
+            <p class="headerTitle">医保审核规则</p>
+            <div id="rulesDetails">
+               
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 中间三个模块 -->
+    <div class="mainMiddle floatLeft">
+        <%--企业检索--%>
+        <div id="search">
+            医院检索
+            <%--搜索框--%>
+            <input type="text" placeholder="输入医院名称" id="searchText"/>
+            <button id="searchBtn">搜 索</button>
+        </div>
+        <div class="mainMiddle-top" id="mapBG">
+            <%--<img src="../../images/onlineDetails-map.png" alt="" id="map"/>--%>
+           
+        </div>
+
+        <div class="mainMiddle-bottom">
+            <p class="headerTitle">阳光医保建设历程</p>
+            <img src="../../images/socialSecurity/timeline.png" alt="" id="time">
+            <div id="steps">
+                <div class="step">阳光医保成长阶段——介绍</div>
+                <div class="step">阳光医保成长阶段——介绍</div>
+                <div class="step">阳光医保成长阶段——介绍</div>
+                <div class="step">阳光医保成长阶段——介绍</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<script type="text/javascript" src="../../myjs/index.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    var headerWidth=$("._header").width();	//获取头部标题的宽度
+    console.log(headerWidth)
+    $("._header").css("left",-headerWidth/2+"px");//让头部标题居中
+function returnMainPage(){
+    top.location.href="../../shbz.html";
+}
+//医保审核规则
+function rules(){
+    var mycharts = echarts.init(document.getElementById('rulesDetails'));
+    var option = {
+        tooltip: {
+            show: true
+        },
+        series: [{
+            name: '违规单据初审',
+            type: 'wordCloud',
+            size: ['100%', '100%'],
+            textRotation : [0, 0, 0, 0],
+            textPadding: 0,
+            autoSize: {
+                enable: true,
+                minSize: 18
+            },
+            data: [
+                {
+                    name: "超剂量用药",
+                    value: 534,
+                    itemStyle: {
+                        normal: {
+                            color: '#13bfbf'
+                        }
+                    }
+                },
+                {
+                    name: "项目匹配",
+                    value: 289,
+                    itemStyle: {
+                        normal: {
+                            color: '#66bf39'
+                        }
+                    }
+                },
+                {
+                    name: "事后人工审核",
+                    value: 435,
+                    itemStyle: {
+                        normal: {
+                            color: '#bfbf39'
+                        }
+                    }
+                },
+                {
+                    name: "医院等级限制",
+                    value: 673,
+                    itemStyle: {
+                        normal: {
+                            color: '#cc7a29'
+                        }
+                    }
+                },
+                {
+                    name: "项目内涵重复收费",
+                    value: 234,
+                    itemStyle: {
+                        normal: {
+                            color: '#d94436'
+                        }
+                    }
+                },
+                {
+                    name: "事后直接扣款",
+                    value: 543,
+                    itemStyle:{
+                        normal: {
+                            color: '#106abf'
+                        }
+                    }
+                },
+                {
+                    name: "诊疗限价",
+                    value: 500,
+                    itemStyle: {
+                        normal: {
+                            color: '#5b66d3'
+                        }
+                    }
+                },
+                {
+                    name: "性别限用",
+                    value:452,
+                    itemStyle: {
+                        normal: {
+                            color: '#8d36ca'
+                        }
+                    }
+                },
+                {
+                    name: "收费次数限制",
+                    value: 368,
+                    itemStyle: {
+                        normal: {
+                            color: '#d03a88'
+                        }
+                    }
+                }
+            ]
+        }]
+    };
+    mycharts.setOption(option);
+}
+rules();
+//搜索医院
+function searchHospital(){
+    alert("11")
+}
+//搜索框
+$("#searchBtn").click(function() {
+    var searchValue = $("#searchText").val();
+    map.clearMap();
+        var img="../../images/socialSecurity/hospital.png";
+    $.ajax({
+        type: "POST",
+        url: "../../jxSocialSecurity/getHostpitalInfo.do",
+        dataType: 'JSON',
+        data:{hostpitalName:searchValue},
+        success: function (data) {
+            console.log(data)
+            //添加地图信息---开始
+            for(var i=0;i<data.length;i++){
+                var jwd = [data[i].JD,data[i].WD];//经纬度纠偏
+                showPoint(jwd,30,24,img,data[i]);
+            }
+            showInfoWindow(data[0]);
+        }
+    })
+}
+)
+function showPoint(arr,h,w,img,details) {//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+    var _marker = new AMap.Marker({
+        map: map,
+        position: arr,        //经纬度
+        icon: new AMap.Icon({
+            size: new AMap.Size(h, w),  //图标大小
+            image: img       //自定义图片
+        })
+
+    })
+    //设置当前点为中心
+    map.setCenter(arr);
+    AMap.event.addListener(_marker, 'click', function (e){
+        showInfoWindow(details)
+    })
+}
+////关闭信息窗体
+function closeInfoWindow() {
+    map.clearInfoWindow();
+}
+//实例化信息窗体
+//构建自定义信息窗体
+function createInfoWindow(title, content) {
+    var info = document.createElement("div");
+    info.className = "info";
+
+    //可以通过下面的方式修改自定义窗体的宽高
+    info.style.width = "300px";
+    // 定义顶部标题
+    var top = document.createElement("div");
+    var titleD = document.createElement("div");
+    var closeX = document.createElement("img");
+    top.className = "info-top";
+    titleD.innerHTML = title;
+    closeX.src = "../../images/gaode-close.png";
+    closeX.onclick = closeInfoWindow;
+
+    top.appendChild(titleD);
+    top.appendChild(closeX);
+    info.appendChild(top);
+
+    // 定义中部内容
+    var middle = document.createElement("div");
+    middle.className = "info-middle";
+    middle.style.backgroundColor = 'white';
+    middle.innerHTML = content;
+    info.appendChild(middle);
+
+    // 定义底部内容   //下方的小箭头
+    var bottom = document.createElement("div");
+    bottom.className = "info-bottom";
+    bottom.style.position = 'relative';
+    bottom.style.top = '0px';
+    bottom.style.margin = '0 auto';
+    var sharp = document.createElement("img");
+    sharp.src = "../../images/hlw-sj.png";
+    bottom.appendChild(sharp);
+    info.appendChild(bottom);
+    return info;
+}
+function showInfoWindow(details) {
+
+    var title = '<span style="font-size:20px;color:#0CDAF5;">' + details.NAME + '</span>';
+    content = [];
+    content.push("<div class=infoContentDiv><span class='infoName'>单据</span><span>"+details.DANJU+"</span></div>");
+    content.push("<div class=infoContentDiv><span class='infoName'>明细</span><span>"+details.MINGXI+"</span></div>");
+    var infoWindow = new AMap.InfoWindow({
+        isCustom: true,  //使用自定义窗体
+        content: createInfoWindow(title, content.join("")),
+        offset: new AMap.Pixel(10,-35)
+    });
+    var jw =[parseFloat(details.JD),parseFloat(details.WD)];
+    infoWindow.open(map, jw);
+    setTimeout(function(){
+        map.setCenter(jw);
+    },500)
+}
+//上点方法
+window.onload=function(){
+    //加载地图的方法
+    map = new AMap.Map('mapBG', {
+        mapStyle: 'amap://styles/16e4e3ccd1f66f229a6276fe149db8df',//样式URL,
+        zoom:12
+        
+    });
+    $.ajax({
+        type: 'post',
+        url: "../../jxSocialSecurity/getHostpitalInfo.do",
+        dataType: 'JSON',
+        data:{hostpitalName:''},
+        success:function (data) {
+            console.log(data)
+//            医院图片
+            var img="../../images/socialSecurity/hospital.png";
+            for(var i=0;i<data.length;i++){
+                var X=data[i].JD,Y=data[i].WD;
+                var prr=[X,Y];
+                //地图上点
+                showPoint(prr,30,24,img,data[i]);
+            }
+            
+        }
+    })
+}
+</script>
+</body>
+</html>

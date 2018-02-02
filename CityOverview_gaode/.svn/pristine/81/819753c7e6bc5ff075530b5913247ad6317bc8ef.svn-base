@@ -1,0 +1,25 @@
+package com.cetc28.idata.model;
+
+import java.math.BigDecimal;
+
+public class JxNetEcoStatisticsKey {
+    private BigDecimal id;
+
+    private String time;
+
+    public BigDecimal getId() {
+        return id;
+    }
+
+    public void setId(BigDecimal id) {
+        this.id = id;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time == null ? null : time.trim();
+    }
+}

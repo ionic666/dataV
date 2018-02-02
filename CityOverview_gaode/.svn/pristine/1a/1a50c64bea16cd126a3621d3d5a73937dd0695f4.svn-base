@@ -1,0 +1,141 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #addOrUSpecialSubject .modal-dialog{
+      margin-right: 10px;
+      width:360px;
+    }
+    #addOrUSpecialSubject .modal-content{
+      /*background: url("map/images/economicModel/bgw(1).png") no-repeat;
+      background-position: -7px 0;
+      background-size: 102% 101%;*/
+    }
+    #addOrUSpecialSubject .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #addOrUSpecialSubject .modal-title{
+      margin-top: -5px;
+    }
+    #addOrUSpecialSubject .modal-body{
+      padding: 0px;
+    }
+    .a-upload {
+      padding: 4px 5px;
+      position: relative;
+      cursor: pointer;
+      color: #888;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      display: inline-block;
+      *display: inline;
+      *zoom: 1;
+    }
+
+    .a-upload  input {
+      position: absolute;
+      font-size: 100px;
+      right: 0;
+      top: 0;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      cursor: pointer
+    }
+    .a-upload:hover {
+      color: #444;
+      background: #eee;
+      border-color: #ccc;
+      text-decoration: none
+    }
+    .tishispan{
+      color: red;
+      text-decoration: none;
+    }
+    .zhuantiInput{
+      text-decoration: none;
+      width: 100%;
+    }
+    #addOrUSpecialSubject .modal-backdrop{
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<div class="modal fade" style="z-index:1200;width: 360px;height: 450px;margin: 0 auto;top:180px" id="addOrUSpecialSubject" tabindex="-1" role="dialog" aria-hidden="true" style=""
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header" >
+        <button type="button" class="close" data-dismiss="modal" aria-label="close" >
+          <img src="map/images/economicModel/close.png">
+        </button>
+        <%--<h4 class="modal-title ecoWindowTitle" id="infoModalLabel">社会经济</h4>--%>
+      </div>
+      <div class="modal-body">
+        <div>
+          <from name="SpecialSubjectTable" id="SpecialSubjectTable">
+            <table  class="table table-striped table-bordered table-hover">
+              <tr>
+                <td>专题名称</td>
+                <td><input class="zhuantiInput" autocomplete="off" id="ztmc" name="ztmc" type="text"/>
+                  <br/><span class="tishispan" id="ztmcTishi"></span>
+                  <input autocomplete="off" id="ztid" name="ztid" style="display: none" type="text"/>
+                </td>
+              </tr>
+              <tr>
+                <td>专题地址</td>
+                <td>
+                  <input class="zhuantiInput" autocomplete="off" id="ztdz" name="ztdz" type="text"/>
+                  <br/><span class="tishispan" id="ztdzTishi"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>专题描述</td>
+                <td>
+                  <textarea class="zhuantiInput" autocomplete="off" id="ztjj" name="ztjj" ></textarea>
+                  <br/><span class="tishispan" id="ztjjTishi"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>专题图标</td>
+                <td>
+                  <a href="javascript:void(0)" class="a-upload">
+                    <input class="zhuantiInput" autocomplete="off" type="file" id="imgFile" name="imgFile"/>点击这里上传文件
+                    <br/><span class="tishispan" id="zttpTishi"></span>
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </from>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="addOrUpdateCszt()">保存</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(".zhuantiInput").focus(function(){
+    $(this).next().next().html("");
+  })
+</script>
+</body>
+</html>

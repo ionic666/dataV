@@ -1,0 +1,188 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 15:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.cardHolder{
+            width: 100%;
+            height: 100%;
+        }
+        div.cardHolderText{
+            height: 28%;
+            font-size: 16px;
+            padding-top: 5%;
+            padding-left: 10%;
+        }
+        div.insuredPercentText{
+            height: 28%;
+            font-size: 16px;
+            padding-top: 1%;
+            padding-left: 10%;
+        }
+        div.cardHolder ul{
+            padding-top: 20px;
+            padding-left: 10px;
+            height: 100%;
+        }
+        div.cardHolder ul li{
+            width: 100%;
+            float: left;
+        }
+        /*div#cardHolderBar{*/
+            /*height: 15%;*/
+            /*width: 100%;*/
+        /*}*/
+        #townspeople{
+            width: 400px;
+            height: 15px;
+            margin-left: 5%;
+            margin-top: 2%;
+            background-color: #314B5D;
+            /*border: 1px solid #41719C;*/
+        }
+        .bar_pro{
+            width: 0;
+            height: 100%;
+            background-color: #53A6E2;
+            /*box-shadow: -2px 0 6px 9px #204079;*/
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        #cardHolderSum{
+            padding-left: 20%;
+        }
+        #insuredPercent{
+            padding-left: 28%;
+        }
+    </style>
+</head>
+<body>
+<div class="cardHolder">
+    <p class="headerTitle">
+        市民卡持卡人群
+    </p>
+    <div class="cardHolderText">
+        <ul>
+            <li>
+                <span>市民卡持卡人数</span>
+                <span class="BlueFont counter" id="cardHolderSum"></span>
+                <span>万人</span>
+            </li>
+        </ul>
+    </div>
+    <div class="insuredPercentText">
+        <ul>
+            <li>
+                <span>占参保人数</span>
+                <span class="BlueFont counter" id="insuredPercent"></span>%
+            </li>
+        </ul>
+    </div>
+    <%--市民卡持卡人群条形图--%>
+    <%--<div id="cardHolderBar">--%>
+    <%--</div>--%>
+    <div id="townspeople">
+        <div class="bar_pro"></div>
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+//    var font_color = '#BFBFBF', font_family = '微软雅黑', font_size = 7;
+//    var font_color_y = '#BFBFBF';
+//    var text_style={
+//        color:font_color,
+//        fontSize:font_size,
+//        fontFamily:font_family
+//    };
+//    function CreatSsServiceChart(xAxisYear,cardHolderSum,noCardSum){
+//        var mycharts = echarts.init(document.getElementById('cardHolderBar'));
+//        var option = {
+//            grid: {
+//                x: '0',
+//                y: '10%',
+//                x2: '5%',
+//                y2: '15%',
+//                containLabel: true,
+//                borderWidth: 0
+//            },
+//            calculable : false,
+//            xAxis : [
+//                {
+//                    type : 'value',
+//                    show : false,
+//                    splitLine : false
+//                }
+//            ],
+//            yAxis : [
+//                {
+//                    type : 'category',
+//                    show : false,
+//                    splitLine : false,
+//                    data : [xAxisYear]
+//                }
+//            ],
+//            series : [
+//                {
+//                    name:'市民卡持卡总人数',
+//                    type:'bar',
+//                    stack: '总量',
+//                    data:[cardHolderSum]
+//                },
+//                {
+//                    name:'无市民卡人数',
+//                    type:'bar',
+//                    stack: '总量',
+//                    data:[noCardSum]
+//                }
+//            ]
+//        };
+//        mycharts.setOption(option);
+//    }
+
+    //查询市民卡持卡人群最近一年的统计数据
+    $.ajax({
+        type:"POST",
+        url:'../../jxSocialSecurity/getSsCardHolderLatestY.do',
+        dataType:'json',
+        success:function(data){
+            /*console.log("11111111111");*/
+            var xAxisYear=data.xAxisYear;
+            var cardHolderSum=data.cardHolderSum;
+            var insuredSum=data.insuredSum;
+            var noCardSum = insuredSum - cardHolderSum;
+            $('#cardHolderSum').html(cardHolderSum);
+            var insuredPercent = cardHolderSum/insuredSum*100;
+            var cusWidth=insuredPercent.toFixed(2)+'%';
+            $('#insuredPercent').html(insuredPercent.toFixed(2));
+            $(".bar_pro").animate({
+                width: cusWidth
+            },2000);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+            //CreatSsServiceChart(xAxisYear,cardHolderSum,noCardSum);
+        }
+    });
+
+</script>
+</body>
+</html>

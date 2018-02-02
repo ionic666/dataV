@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IAsjxxDao">
+
+
+    <select id="selectAllAsjxx" resultType="com.cetc28.idata.model.JcjAsjxx" parameterType="java.lang.String">
+        select * from  JCJ_ASJXX where asjbh='aj201410290035'
+    </select>
+
+    <!--返回list-->
+    <select id="selectAllHashMap" resultType="java.util.HashMap" parameterType="java.lang.String">
+        select asjbh,afdz,aqjb,asjms from  JCJ_ASJXX
+    </select>
+
+    <select id="selectAll" resultType="com.cetc28.idata.model.JcjAsjxx" parameterType="java.lang.String">
+        select * from  JCJ_ASJXX
+    </select>
+
+
+    <delete id="deleteAsjxxbyBh" parameterType="java.lang.String">
+        delete from JCJ_ASJXX where asjbh=#{asjbh}
+    </delete>
+
+    <delete id="updateAsjxx" parameterType="com.cetc28.idata.model.JcjAsjxx">
+        UPDATE JCJ_ASJXX set afdz=#{afdz}, asjms=#{asjms} where asjbh='aj201410280046'
+    </delete>
+
+    <insert id="saveAsjxx" parameterType="com.cetc28.idata.model.JcjAsjxx">
+        insert into JCJ_ASJXX (asjbh,afdz) VALUES ('aj201610290025',#{afdz})
+    </insert>
+
+    <!--传入多个参数-->
+    <insert id="saveAsjxxMult">
+        insert into JCJ_ASJXX (asjbh,afdz,asjms) VALUES (#{0},#{1},#{2})
+    </insert>
+
+    <insert id="saveAsjxxParam">
+        insert into JCJ_ASJXX (asjbh,afdz,asjms) VALUES (#{asjbh},#{afdz},#{asjms})
+    </insert>
+
+    <!--存储过程-->
+    <update id="proc1" parameterType="java.lang.String">
+        begin proc1;end;
+    </update>
+
+    <update id="proc2">
+        begin proc2(#{aqjb},#{asjbh});end;
+    </update>
+
+    <select id="proc3" parameterMap="getProc3" statementType="CALLABLE">
+        begin proc3(?,?);end;
+    </select>
+
+    <parameterMap type="java.util.Map" id="getProc3">
+        <parameter property="asjbh" mode="IN" jdbcType="INTEGER"/>
+        <parameter property="aqjb" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
+
+    <resultMap id="AsjResultMap" type="com.cetc28.idata.dto.AsjDto" >
+        <id column="asjbh" property="asjbh" jdbcType="VARCHAR" />
+        <result column="aqjb" property="aqjb" jdbcType="INTEGER" />
+        <result column="gjz" property="gjz" jdbcType="VARCHAR" />
+        <result column="asjms" property="asjms" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="proc4" statementType="CALLABLE" parameterType="java.util.Map">
+        <![CDATA[
+            {call proc4(#{asj_cursor,mode=OUT,jdbcType=CURSOR,javaType=java.sql.ResultSet,resultMap=AsjResultMap}
+            )}
+        ]]>
+    </select>
+    <!--<select id="selectOne" resultType="String" parameterType="java.lang.String">-->
+    <!--select afdz from  JCJ_ASJXX where asjbh='aj201410280046'-->
+    <!--</select>-->
+</mapper>

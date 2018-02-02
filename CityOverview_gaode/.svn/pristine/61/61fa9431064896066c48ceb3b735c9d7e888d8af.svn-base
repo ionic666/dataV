@@ -1,0 +1,278 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: TongHao
+  Date: 2017/8/21
+  Time: 13:43
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>医保基金使用量</title>
+    <%--<link rel="stylesheet" type="text/css" href="map/css/bootstrap.css"/>--%>
+    <%--<link rel="stylesheet" href="myCss/socialSecurity.css"/>--%>
+    <%--<script src="map/js/jquery-1.11.3.js"></script>--%>
+    <%--<script src="myjs/echarts-all.js"></script>--%>
+    <style>
+        .socialSecurityRight-top,.socialSecurityRight-middle,.socialSecurityRight-bottom{
+            width: 100%;
+            height: 33%;
+            margin-top: 1%;
+            border-top: 2px #0cdaf5 solid;
+            background:rgba(0,0,0,0.5);
+        }
+        .socialSecurityRight-headerTitle{
+            padding: 0 3%;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #F2F2F2;
+            height: 12%;
+            width: auto;
+            display: inline-block;
+            line-height: 2em;
+            margin: 4px 4px;
+            background-color: #656565;
+        }
+        .socialSecurityRight-hospital{
+            color:#fff;
+            font-size: 14px;
+        }
+        #socialSecurityRightHospitalIndex{
+            width: 90%;
+            height: 75%;
+            margin-left: 5%;
+        }
+        #socialSecurityRight-yyph{
+            margin-top: 5%;
+        }
+        #socialSecurityRightHospitalIndex tr{
+            height: 100%;
+        }
+        #socialSecurityRightHospitalIndex td{
+            height: 100%;
+            width: 48%;
+            padding: 2%;
+            font-size: 1em;
+        }
+        #socialSecurityRightHospitalIndex img,#hospitalIndex span{
+
+            float: left;
+        }
+        #hospitalIndex span{
+            height:90% ;
+        }
+        #socialSecurityRightHospitalIndex span{
+            padding: 2%;
+        }
+    </style>
+</head>
+<body>
+<div class=""
+     style="height:89%;width: 25%;top:10%;left: 75%;display:none;position: absolute;"
+     id="socialSecurityRight" >
+        <div class="modal-content" style="width: 100%;height: 100%;padding: 0 !important;background-color: rgba(0, 0, 0,0.5)">
+            <!-- 交易类型 -->
+            <div class="socialSecurityRight-top" style="">
+                <p class="socialSecurityRight-headerTitle">交易类型</p>
+                <div id="socialSecurityRightJylx" style="width: 95%;height: 75%;"></div>
+            </div>
+
+            <!-- 医院排行 -->
+            <div class="socialSecurityRight-middle">
+                <p class="socialSecurityRight-headerTitle">医院排行</p>
+                <div id="socialSecurityRight-yyph" style="width: 95%;height: 75%;">
+                    <table id="socialSecurityRightHospitalIndex">
+                        <tr><td><img src="images/socialSecurity/transaction_6.png" alt=""/><span class="socialSecurityRight-hospital"></span></td><td><img src="images/socialSecurity/transaction_1.png" alt=""/></td></tr>
+                        <tr><td><img src="images/socialSecurity/transaction_7.png" alt=""/><span class="socialSecurityRight-hospital"></span></td><td><img src="images/socialSecurity/transaction_2.png" alt=""/></td></tr>
+                        <tr><td><img src="images/socialSecurity/transaction_8.png" alt=""/><span class="socialSecurityRight-hospital"></span></td><td><img src="images/socialSecurity/transaction_3.png" alt=""/></td></tr>
+                        <tr><td><img src="images/socialSecurity/transaction_9.png" alt=""/><span class="socialSecurityRight-hospital"></span></td><td><img src="images/socialSecurity/transaction_4.png" alt=""/></td></tr>
+                        <tr><td><img src="images/socialSecurity/transaction_10.png" alt=""/><span class="socialSecurityRight-hospital"></span></td><td><img src="images/socialSecurity/transaction_5.png" alt=""/></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <%--区域排行--%>
+            <div class="socialSecurityRight-bottom">
+                <p class="socialSecurityRight-headerTitle">区域排行</p>
+                <div id="socialSecurityRightQyph" style="width: 100%;height: 83%;"></div>
+            </div>
+        </div>
+</div>
+</div>
+
+
+
+
+
+<%--<script src="myjs/echarts3.4.0.min.js"></script>--%>
+<%--<script type="text/javascript" src="map/js/bootstrap.js"></script>--%>
+<script>
+    //    交易类型
+    function jylx(dayTransactionTypeData){
+        var myChart1=echarts.init(document.getElementById("socialSecurityRightJylx"));
+        var option1= {
+            color:['#70AD47','#245E92','#5B9BD5','#ED7D31','#A5A5A5','#FFC000','#4472C4'],
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            calculable : false,
+            series : [
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:true,
+                                textStyle:text_style,
+                                formatter:'{b}{d}%'
+                            }
+                        }
+                    },
+                    data:dayTransactionTypeData
+                }
+            ]
+        };
+        myChart1.setOption(option1);
+    }
+
+
+    //区域排行
+    function qyph(xArea,yRate){
+        var myChart2 = echarts.init(document.getElementById("socialSecurityRightQyph"));
+        var option2 = {
+            color: ['#125471'],
+            tooltip: {
+                trigger: 'axis',
+                formatter: "{a} <br/>{b} : {c}(万元)",
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            calculable: false,
+            grid: {
+                x: '12%',
+                y: '15%',
+                x2: '8%',
+                y2: '12%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    splitLine: {show: false},
+                    axisLine: {
+                        show: true,
+                        lineStyle:{
+                            color:'#8D8C8C'
+                        }
+                    },
+                    axisTick: {show: false},
+                    axisLabel: {show: true,interval:0,rotate:0, textStyle: text_style},
+                    data: xArea
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '交易量（万元）',
+                    nameTextStyle:text_style,
+                    max:200,
+                    splitNumber:4,
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#8D8C8C'],
+                            width: 1,
+                            type: 'dashed'}},
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    axisTick: {show: false},
+                    axisLabel: {show: true,interval:0,rotate:0, textStyle: text_style}
+                }
+            ],
+            series: [
+                {
+                    name: '交易量',
+                    type: 'bar',
+                    barWidth: 15,
+                    barGap: '0',
+                    barCategoryGap:'37%',
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:true,
+                                textStyle:text_style
+                            }
+                        }
+                    },
+                    data: yRate
+                }
+            ]
+        };
+        myChart2.setOption(option2);
+    }
+    function socialSecurityRightAjax (){
+        $.ajax({
+            type:"POST",
+            url:'jxSocialSecurity/getMiVolumeStatisticsData.do',
+            dataType:'json',
+            success:function(data){
+                var MiVolumeStatisticsData = data.MiVolumeStatisticsData;
+                var dayTransactionTypeData = [],//当日交易类型占比
+                        dayTransactionType = ['普通住院','连续转病住院','医疗挂号','门诊规定病','家庭病床','普通门诊','药店购药'];
+                var areaNum =[],areaName = [];//当日各区域交易量排行--区域编码，区域名称
+                var hover = [],//24小时
+                        dayTransactionData = [];//当日交易情况
+
+
+
+                //医院排行
+                $.each(MiVolumeStatisticsData.dayTransactionHospitalRank,function(i){
+                    $(".socialSecurityRight-hospital").eq(i).text(MiVolumeStatisticsData.dayTransactionHospitalRank[i].hospitalName);
+                });
+
+                //交易类型
+                $.each(MiVolumeStatisticsData.dayTransactionTypeData,function(i){
+                    dayTransactionTypeData.push({value:MiVolumeStatisticsData.dayTransactionTypeData[i], name:dayTransactionType[i]});
+
+                });
+
+                //交易排行
+                var len=MiVolumeStatisticsData.dayTransactionRankByRegion.length;
+                for(var i=0;i<len;i++){
+                    for(var k in MiVolumeStatisticsData.dayTransactionRankByRegion[i]){
+                    console.log(k);
+                        if(k == "003001001"){
+                            areaNum.push('南湖区');
+                        }else if(k == "003001002"){
+                            areaNum.push('秀洲区');
+                        }else if(k == "003001003"){
+                            areaNum.push('海宁市');
+                        }else if(k == "003001004"){
+                            areaNum.push('平湖市');
+                        }else if(k == "003001005"){
+                            areaNum.push('桐乡市');
+                        }else if(k == "003001006"){
+                            areaNum.push('嘉善县');
+                        }else if(k == "003001007"){
+                            areaNum.push('海盐县');
+                        }
+                        areaName.push(MiVolumeStatisticsData.dayTransactionRankByRegion[i][k]);
+//                    console.log();
+                    }
+                }
+                qyph(areaNum,areaName);//图表2--交易排行
+                jylx(dayTransactionTypeData);//图表1--交易类型
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

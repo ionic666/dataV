@@ -1,0 +1,95 @@
+package com.cetc28.PeopleBenefitService.model;
+
+import java.math.BigDecimal;
+
+public class JxEcoInternetIndexValue {
+    private BigDecimal id;
+
+    private String bh;
+
+    private String year;
+
+    private BigDecimal value;
+
+    private BigDecimal rank;
+
+    private String qhbh;
+
+    private String sjbh;
+
+    private String mc;
+
+    private String unit;
+
+    public BigDecimal getId() {
+        return id;
+    }
+
+    public void setId(BigDecimal id) {
+        this.id = id;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh == null ? null : bh.trim();
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year == null ? null : year.trim();
+    }
+
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
+    public BigDecimal getRank() {
+        return rank;
+    }
+
+    public void setRank(BigDecimal rank) {
+        this.rank = rank;
+    }
+
+    public String getQhbh() {
+        return qhbh;
+    }
+
+    public void setQhbh(String qhbh) {
+        this.qhbh = qhbh == null ? null : qhbh.trim();
+    }
+
+    public String getSjbh() {
+        return sjbh;
+    }
+
+    public void setSjbh(String sjbh) {
+        this.sjbh = sjbh == null ? null : sjbh.trim();
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc == null ? null : mc.trim();
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit == null ? null : unit.trim();
+    }
+}

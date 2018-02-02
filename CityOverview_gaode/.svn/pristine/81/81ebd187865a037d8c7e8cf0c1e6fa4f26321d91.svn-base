@@ -1,0 +1,65 @@
+package com.cetc28.idata.model;
+
+import java.util.Date;
+
+public class JxSsCorpPenaltyInfo {
+    private Short id;
+
+    private String regionCode;
+
+    private String corpName;
+
+    private String penaltyTime;
+
+    private String penaltyDepartment;
+
+    private String illegalDetail;
+
+    public Short getId() {
+        return id;
+    }
+
+    public void setId(Short id) {
+        this.id = id;
+    }
+
+    public String getRegionCode() {
+        return regionCode;
+    }
+
+    public void setRegionCode(String regionCode) {
+        this.regionCode = regionCode == null ? null : regionCode.trim();
+    }
+
+    public String getCorpName() {
+        return corpName;
+    }
+
+    public void setCorpName(String corpName) {
+        this.corpName = corpName == null ? null : corpName.trim();
+    }
+
+    public String getPenaltyTime() {
+        return penaltyTime;
+    }
+
+    public void setPenaltyTime(String penaltyTime) {
+        this.penaltyTime = penaltyTime;
+    }
+
+    public String getPenaltyDepartment() {
+        return penaltyDepartment;
+    }
+
+    public void setPenaltyDepartment(String penaltyDepartment) {
+        this.penaltyDepartment = penaltyDepartment == null ? null : penaltyDepartment.trim();
+    }
+
+    public String getIllegalDetail() {
+        return illegalDetail;
+    }
+
+    public void setIllegalDetail(String illegalDetail) {
+        this.illegalDetail = illegalDetail == null ? null : illegalDetail.trim();
+    }
+}

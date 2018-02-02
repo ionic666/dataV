@@ -1,0 +1,199 @@
+
+
+var locateSupport1 = [[118.93278449597956,31.893915172748684],[118.9405510567026,31.88355975845131],[118.94359676679007,31.874727199197668],
+[118.93780991762388,31.856300653168518],[118.92714993231776,31.859498648760354],[118.91572851948978,31.860716932795338],
+[118.91968794260347,31.8700063485621],[118.93278449597956,31.893915172748684]];
+
+var locateSupport2 = [[118.85832154774513,32.002612092270354],[118.85832154774513,32.0029166632791],[118.87796637780927,31.99652067209543],
+[118.87355009818245,31.985251544771817],[118.87415924019994,31.982129691932165],[118.87332166992589,31.979769266614383],[118.86913381855562,31.978855553588144],
+[118.8539814108705,31.9927135344861], [118.85832154774513,32.002612092270354]];
+
+var locateSupport3 = [[118.67976679386761,31.92250991697008],[118.71342189033408,31.899057949296612],[118.70748275566353,31.891748245086703],
+[118.68646735606004,31.896621381226645],[118.68799021110377,31.904387941949672],[118.67504594323205,31.914286499733926],[118.67976679386761,31.92250991697008]];
+
+var locateSupport4 = [[118.63529942659065,32.04895447481991],[118.65433511463729,32.03981734455752],[118.63331971503379,32.00387796552546],
+[118.61337031396091,32.01408109431846],[118.63529942659065,32.04895447481991]];
+
+var locateSupport5 = [[118.80941941022832,31.80524646777488],[118.81048540875892,31.808139892357968],[118.85068878191343,31.78834277678946],
+[118.84825221384347,31.781642214597042],[118.82952109680556,31.7830127841364],[118.81825196948195,31.779662503040193],[118.80256656253152,31.784078782667013],
+[118.80941941022832,31.80524646777488]];
+
+
+
+
+
+
+var fourcolor1 = [[118.9196260766173,31.87000384397041],[118.92316671459399,31.876399835154082],[118.93218963072809,31.871564770390233],
+[118.92720228045988,31.85945807279257],[118.9157808676319,31.860790570955835],[118.9196260766173,31.87000384397041]];
+
+var fourcolor2 = [[118.92720228045988,31.859496144168663],[118.93218963072809,31.871564770390233],[118.94163133199923,31.86851906030277],
+[118.93774805163771,31.85633621995292],[118.92720228045988,31.859496144168663]];
+
+var fourcolor3 = [[118.94163133199923,31.86859520305496],[118.93218963072809,31.871564770390236],[118.94052726209253,31.883595325235714],
+[118.94361104355607,31.874762765982073],[118.94163133199923,31.86859520305496]];
+
+var fourcolor4 = [[118.94052726209253,31.88355725385962],[118.93215155935201,31.87160284176633],[118.92324285734617,31.876514049282363],
+[118.93279877274558,31.893950739533086],[118.94052726209253,31.88355725385962]];
+
+var centerpt = [119.07524282639864,32.02735039554008];
+
+var xiaoqu = [[119.07623268217706,32.02826410856632],[119.07821239373392,32.0278453234293],[119.07779360859689,32.02594175462463],
+[119.07844082199047,32.02251533077624],[119.0748621126377,32.0227056876567],[119.07623268217706,32.02826410856632]];
+
+var txtsym = [119.0765372531858,32.0255610408637];
+
+var cross1 = [119.07368189997881,32.02137318949344];
+
+var cross2 = [119.07642303905753,32.0317666751669];
+
+
+
+
+
+function drawSurvaillance()
+{
+	require(["esri/geometry/Extent", "esri/geometry/Point", "esri/geometry/Polygon", "esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol", "esri/symbols/PictureMarkerSymbol",
+			"esri/symbols/TextSymbol", "esri/toolbars/draw", "dojo/on", "dojo/dom", 
+			"esri/SpatialReference","esri/graphic", "esri/Color"],
+	function(Extent, Point, Polygon, SimpleLineSymbol, SimpleFillSymbol, PictureMarkerSymbol, TextSymbol, Draw, on, dom, SpatialReference, Graphic, Color)
+	{
+		//绘制两个符号
+		var pic1 = new PictureMarkerSymbol("map/images/cross1.gif", 96, 96);
+		var pic2 = new PictureMarkerSymbol("map/images/cross2.gif", 96, 96);		
+		
+		var pt1 = new Point(cross1[0], cross1[1], new SpatialReference({wkid:4326}));
+		var pt2 = new Point(cross2[0], cross2[1], new SpatialReference({wkid:4326}));
+		
+		var ptg1 = new Graphic(pt1, pic1);
+		var ptg2 = new Graphic(pt2, pic2);
+		
+		map.graphics.add(ptg1);
+		map.graphics.add(ptg2);
+		
+		//地图居中和缩放
+		map.centerAt(new Point(119.07524282639864, 32.02735039554008));
+		map.setExtent(new Extent(119.04431048389313,32.00629664570719,119.10819425297765,32.0407893124477,new SpatialReference({wkid:4326})));
+		
+		
+		
+		//绘制小区多边形符号
+		var fillSymbol1 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([30,30,30]), 2), new Color([255,92,15,0.5]));
+		var xiaoquPoly = new Polygon(new SpatialReference({wkid:4326}));
+		xiaoquPoly.addRing(xiaoqu);
+		var xiaoquG = new Graphic(xiaoquPoly, fillSymbol1);
+		map.graphics.add(xiaoquG);
+		
+		
+		//绘制xxxx小区文字符号
+		var txtsymbol = new TextSymbol("安居苑");
+		var txtpt = new Point(txtsym[0], txtsym[1], new SpatialReference({wkid:4326}));
+		var txtg = new Graphic(txtpt, txtsymbol);
+		map.graphics.add(txtg);		
+		
+	});
+}
+
+
+
+
+function drawFourColor()
+{
+	require(["esri/geometry/Polygon", "esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol", "esri/toolbars/draw", "dojo/on", "dojo/dom", 
+			"esri/SpatialReference","esri/graphic", "esri/Color"],
+	function(Polygon, SimpleLineSymbol, SimpleFillSymbol, Draw, on, dom, SpatialReference, Graphic, Color)
+	{
+		var fillSymbol1 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([30,30,30]), 2), new Color([255,92,15,0.5]));
+		var fillSymbol2 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([30,30,30]), 2), new Color([0,122,204,0.5]));
+		var fillSymbol3 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([30,30,30]), 2), new Color([121,185,0,0.5]));
+		var fillSymbol4 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([30,30,30]), 2), new Color([184,71,255,0.5]));
+				
+		
+		var four1 = new Polygon(new SpatialReference({wkid:4326}));
+		four1.addRing(fourcolor1);
+		var four2 = new Polygon(new SpatialReference({wkid:4326}));
+		four2.addRing(fourcolor2);
+		var four3 = new Polygon(new SpatialReference({wkid:4326}));
+		four3.addRing(fourcolor3);
+		var four4 = new Polygon(new SpatialReference({wkid:4326}));
+		four4.addRing(fourcolor4);
+		
+		var fourg1 = new Graphic(four1, fillSymbol1);
+		var fourg2 = new Graphic(four2, fillSymbol2);
+		var fourg3 = new Graphic(four3, fillSymbol3);
+		var fourg4 = new Graphic(four4, fillSymbol4);
+		
+		map.graphics.add(fourg1);
+		map.graphics.add(fourg2);
+		map.graphics.add(fourg3);
+		map.graphics.add(fourg4);
+	});
+}
+
+
+
+
+
+function drawLocateSupport()
+{
+	require(["esri/geometry/Polygon", "esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol", "esri/toolbars/draw", "dojo/on", "dojo/dom", 
+			"esri/SpatialReference","esri/graphic", "esri/Color"],
+	function(Polygon, SimpleLineSymbol, SimpleFillSymbol, Draw, on, dom, SpatialReference, Graphic, Color)
+	{
+		var fillSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([30,30,30]), 2), new Color([255,92,15,0.5]));
+		
+		var locationPolygon1 = new Polygon(new SpatialReference({wkid:4326}));
+		locationPolygon1.addRing(locateSupport1);
+		var locationPolygon2 = new Polygon(new SpatialReference({wkid:4326}));
+		locationPolygon2.addRing(locateSupport2);
+		var locationPolygon3 = new Polygon(new SpatialReference({wkid:4326}));
+		locationPolygon3.addRing(locateSupport3);
+		var locationPolygon4 = new Polygon(new SpatialReference({wkid:4326}));
+		locationPolygon4.addRing(locateSupport4);
+		var locationPolygon5 = new Polygon(new SpatialReference({wkid:4326}));
+		locationPolygon5.addRing(locateSupport5);
+		
+		var locationGraphic1 = new Graphic(locationPolygon1, fillSymbol);
+		var locationGraphic2 = new Graphic(locationPolygon2, fillSymbol);
+		var locationGraphic3 = new Graphic(locationPolygon3, fillSymbol);
+		var locationGraphic4 = new Graphic(locationPolygon4, fillSymbol);
+		var locationGraphic5 = new Graphic(locationPolygon5, fillSymbol);
+		
+		map.graphics.add(locationGraphic1);
+		map.graphics.add(locationGraphic2);
+		map.graphics.add(locationGraphic3);
+		map.graphics.add(locationGraphic4);
+		map.graphics.add(locationGraphic5);
+	});
+}
+	
+function initToolbar()
+{
+	require(["esri/geometry/Polygon", "esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol", "esri/toolbars/draw", "dojo/on", "dojo/dom", 
+			"esri/SpatialReference","esri/graphic", "esri/Color"],
+	function(Polygon, SimpleLineSymbol, SimpleFillSymbol, Draw, on, dom, SpatialReference, Graphic, Color)
+	{
+		
+		var fillSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([30,30,30]), 2), new Color([255,92,15,0.6]));
+		var tb = new Draw(map);
+		tb.on("draw-end", addGraphic);
+		
+		map.disableMapNavigation();
+		tb.activate("polygon");
+		
+		function addGraphic(evt)
+		{
+			tb.deactivate();
+			map.enableMapNavigation();
+			map.graphics.add(new Graphic(evt.geometry, fillSymbol));
+			
+			//alert(evt.geometry.rings[0].toString());
+		}
+	});	
+}
+
+
+function clearLayer()
+{
+	map.graphics.clear();
+}
+

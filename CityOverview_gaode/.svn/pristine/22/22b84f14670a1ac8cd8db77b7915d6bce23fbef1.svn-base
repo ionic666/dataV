@@ -1,0 +1,487 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: TongHao
+  Date: 2017/8/21
+  Time: 13:43
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+        /*流动人口*/
+        div.ldrk{
+            width: 100%;
+            height: 29%;
+        }
+        ul.sjAndyj{
+            width: 100%;
+            height: 20%;
+        }
+        ul.sjAndyj li{
+            float: left;
+        }
+        ul.sjAndyj li.acount{
+            width: 62%;
+        }
+        ul.sjAndyj li.percent{
+            width: 38%;
+        }
+        div#ldrk{
+            height: 150px;
+            width: 450px;
+        }
+        /*人口老龄化*/
+        div.rkllh{
+            height: 34%;
+        }
+        div#rkllh{
+            height: 175px;
+            width: 450px;
+        }
+        /*出生性别比*/
+        div.csxbb{
+            width: 100%;
+            height: 36%;
+        }
+        div#csxbb{
+            height: 200px;
+            width: 450px;
+        }
+        .addGreen{
+            color:#00B050;
+        }
+    </style>
+</head>
+<body>
+<div class="modal fade"
+     style="width: 500px;right:0;display:none;"
+     id="population2" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="height: 870px">
+                <div class="mainLeft">
+                    <div class="ldrk">
+                        <p class="headerTitle">
+                            <span></span>流动人口
+                        </p>
+                        <ul class="sjAndyj">
+                            <li class="acount">
+                                <span class="addBold">2016年流动人口：</span>
+                                <span class="addYellow colorBold" id="liudongsjsl"></span>
+                            </li>
+                            <li class="percent">
+                                <span class="addBold">占户籍人口比：</span>
+                                <span class="addYellow colorBold" id="liudongsjbl"></span>
+                            </li>
+                            <li class="acount">
+                                <span class="addBold">2017年预计流动人口：</span>
+                                <span class="addRed colorBold" id="liudongyjsl">338.35万</span>
+                            </li>
+                            <li class="percent">
+                                <span class="addBold">占户籍人口比：</span>
+                                <span class="addRed colorBold" id="liudongyjbl"> 73.05%</span>
+                            </li>
+                        </ul>
+                        <div id="ldrk"></div>
+                    </div>
+
+                    <div class="rkllh">
+                        <p class="headerTitle">
+                            <span></span>人口老龄化
+                        </p>
+                        <ul class="sjAndyj">
+                            <li class="acount">
+                                <span class="addBold">2016年老年人口数量：</span>
+                                <span class="addYellow colorBold" id="lnrk"></span>
+                            </li>
+                            <li class="percent">
+                                <span class="addBold">占户籍人口比：</span>
+                                <span class="addYellow colorBold" id="lnrkbl"></span>
+                            </li>
+                            <li class="acount">
+                                <span class="addBold">2017年老年人口预计：</span>
+                                <span class="addRed colorBold" id="lnrkyj">338.35万</span>
+                            </li>
+                            <li class="percent">
+                                <span class="addBold">占户籍人口比：</span>
+                                <span class="addRed colorBold" id="lnrkblyj"> 73.05%</span>
+                            </li>
+                        </ul>
+                        <div id="rkllh">
+
+                        </div>
+                    </div>
+
+                    <div class="csxbb">
+                        <p class="headerTitle">
+                            <span></span>出生性别比
+                        </p>
+                        <ul class="sjAndyj">
+                            <li class="acount">
+                                <span class="addBold">2016年男女出生性别比：</span>
+                                <span class="addYellow colorBold" id="sjxbb">108:100</span>
+                            </li>
+                            <li class="percent">
+                                <span class="addBold">同比增长：</span>
+                                <span class="addGreen colorBold" id="sjzzl">2%</span>
+                            </li>
+                            <li class="acount">
+                                <span class="addBold">2017年男女出生性别比预计：</span>
+                                <span class="addYellow colorBold" id="yjxbb">109:100</span>
+                            </li>
+                            <li class="percent">
+                                <span class="addBold">同比增长：</span>
+                                <span class="addGreen colorBold" id="yjzzl"> 73.05%</span>
+                            </li>
+                        </ul>
+                        <div id="csxbb">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        var font_color = '#BFBFBF', font_family = '微软雅黑', font_size = 7;
+        var font_color_y = '#BFBFBF';
+        var text_style={
+            color:font_color,
+            fontSize:font_size,
+            fontFamily:font_family
+        };
+        var echartsPop2Obj= {
+        //流动人口
+            ldrk:function(data1){
+//            itemStyle.normal.label.formatter
+            var mycharts = echarts.init(document.getElementById('ldrk'));
+
+            var option = {
+                color: ['#5B9BD5', '#ED7D31', '#A5A5A5', '#FFC000', '#4472C4'],
+                tooltip: {
+                    trigger: 'axis'
+                },
+                grid: {
+                    x: '18%',
+                    y: '10%',
+                    x2: '15%',
+                    y2: '25%',
+                    containLabel: true,
+                    borderWidth: 0
+                },
+                legend: {
+                    x: 'right',
+                    y: 'center',
+                    itemWidth: 8,
+                    itemHeight: 8,
+                    orient: 'vertical',
+                    textStyle: text_style,
+                    data: ['top1', 'top2', 'top3', 'top4', 'top5']
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'value',
+                        min: 0,
+                        max: 8,
+                        splitNumber: 4,
+                        axisLabel: {show: true, textStyle: {color: '#BFBFBF', fontSize: '1px'}},
+                        axisLine: {show: true, lineStyle: {color: "#BFBFBF", width: 1}},
+                        axisTick: {show: true, lineStyle: {color: "#BFBFBF", width: 1}}
+
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'category',
+                        axisLabel: {show: true, textStyle: text_style},
+                        axisLine: {show: true, lineStyle: {color: "#BFBFBF", width: 1}},
+                        axisTick: {show: true, lineStyle: {color: "#BFBFBF", width: 1}},
+                        splitLine: {
+                            show: false
+                        },
+                        data: ['流出地排行榜']
+                    }
+                ],
+                series: [
+                    {
+                        name: 'top1',
+                        type: 'bar',
+                        barWidth: 15,
+                        data: [data1[0]]
+                    },
+                    {
+                        name: 'top2',
+                        type: 'bar',
+                        barWidth: 15,
+                        data: [data1[1]]
+                    },
+                    {
+                        name: 'top3',
+                        type: 'bar',
+                        barWidth: 15,
+                        data: [data1[2]]
+                    },
+                    {
+                        name: 'top4',
+                        type: 'bar',
+                        barWidth: 15,
+                        data: [data1[3]]
+                    },
+                    {
+                        name: 'top5',
+                        type: 'bar',
+                        barWidth: 15,
+                        data: [data1[4]]
+                    }
+                ]
+            };
+            mycharts.setOption(option);
+        },
+        //人口老龄化
+            rkllh:function(xAxisData,data1,data2){
+                data2 = data2 || [2.1, 3.2, 2.0, 1.6, 2.7];
+                var mycharts = echarts.init(document.getElementById('rkllh'));
+                var option = {
+                    color: ['#62993E','#A1C490'],
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    grid: {
+                        x: '5%',
+                        y: '10%',
+                        x2: '22%',
+                        y2: '15%',
+                        containLabel: true,
+                        borderWidth: 0
+                    },
+                    legend: {
+                        data: ['实际增长率', '预计增长率'],
+                        x: 'right',
+                        y: 'center',
+                        orient: 'vertical',
+                        textStyle: text_style
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: ['20%', '20%'],
+                        axisTick: {show: true, lineStyle: {color: font_color}},
+                        axisLine: {show: false},
+                        axisLabel: {show: true, textStyle: text_style},
+                        splitLine: {show: false},
+                        data: xAxisData
+                    },
+                    yAxis: {
+                        type: 'value',
+//                    min: 0, max: 0.006, splitNumber: 3,
+                        axisLine: {lineStyle: {color: font_color}},
+                        axisLabel: {show: true, textStyle: text_style},
+                        axisTick: {show: true, lineStyle: {color: font_color}},
+                        splitLine: {
+                            show: true,
+                            lineStyle: {color: font_color}
+                        }
+                    },
+                    series: [
+                        {
+                            name: '实际增长率',
+                            type: 'line',
+                            symbol: 'rectangle',
+                            symbolSize: 3,
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top',
+                                    textStyle: {
+                                        color: '#E86813'
+                                    }
+                                }
+                            },
+                            data: data1
+                        },
+                        {
+                            name: '预计增长率',
+                            type: 'line',
+                            symbol: 'triangle',
+                            symbolSize: 3,
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top',
+                                    textStyle: {
+                                        color: '#3C75E8'
+                                    }
+                                }
+                            },
+                            data: data2
+                        }
+                    ]
+                };
+                mycharts.setOption(option);
+            },
+        //出生性别比
+            csxbb:function(xAxisData,data1,data2){
+                data2 = data2 || [2.1, 3.2, 2.0, 1.6, 2.7];
+//            TODO
+                var mycharts = echarts.init(document.getElementById('csxbb'));
+                var option = {
+                    color:['#3B64AC','#8FA2D4'],
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    grid: {
+                        x: '5%',
+                        y: '10%',
+                        x2: '25%',
+                        y2: '18%',
+                        containLabel: true,
+                        borderWidth: 0
+                    },
+                    legend: {
+                        data: ['实际增长率', '预测增长率'],
+                        x: 'right',
+                        y: 'center',
+                        orient: 'vertical',
+                        textStyle: text_style
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: ['20%', '20%'],
+                        axisTick: {show: true, lineStyle: {color: font_color}},
+                        axisLine: {show: false},
+                        axisLabel: {show: true, textStyle: text_style},
+                        splitLine: {show: false},
+                        data: xAxisData
+                    },
+                    yAxis: {
+                        type: 'value',
+//                    min: 0, max: 0.006, splitNumber: 3,
+                        axisLine: {lineStyle: {color: font_color}},
+                        axisLabel: {show: true, textStyle: text_style},
+                        axisTick: {show: true, lineStyle: {color: font_color}},
+                        splitLine: {
+                            show: true,
+                            lineStyle: {color: font_color}
+                        }
+                    },
+                    series: [
+                        {
+                            name: '实际增长率',
+                            type: 'line',
+                            symbol: 'rectangle',
+                            symbolSize: 3,
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top',
+                                    textStyle: {
+                                        color: '#E86813'
+                                    }
+                                }
+                            },
+                            data: data1
+                        },
+                        {
+                            name: '预测增长率',
+                            type: 'line',
+                            symbol: 'triangle',
+                            symbolSize: 3,
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top',
+                                    textStyle: {
+                                        color: '#3C75E8'
+                                    }
+                                }
+                            },
+                            data: data2
+                        }
+                    ]
+                };
+                mycharts.setOption(option);
+            }
+        };
+
+        //流动人口
+        $.ajax({
+            type:"POST",
+            url:'jxpop/queryLdrk.do',
+            dataType:'json',
+            success:function(data) {
+//                console.log("流动人口");
+//                console.log(data);
+                $("#liudongsjsl").append(data['ldrk']+'万');
+                $("#liudongsjbl").append(data['percent']+'%');
+//                console.log(data['qcdTop5']);
+                var len=data['qcdTop5'].length;
+                var data1=[];
+                for(var i=0;i<len;i++){
+                    data1.push(data['qcdTop5'][i].num);
+
+                }
+
+                //调用，生成人口统计图
+                echartsPop2Obj.ldrk(data1);
+            }
+        });
+        //人口老龄化
+        $.ajax({
+            type:"POST",
+            url:'jxpop/queryLnrk.do',
+            dataType:'json',
+            success:function(data) {
+//                console.log("人口老龄化");
+//                console.log(data);
+                $("#lnrk").append(data['lnrk']+'万');
+                $("#lnrkbl").append(data['percent']+'%');
+                var len=data['lnrkTop3'].length;
+                var spans='';
+                for(var i=0;i<len;i++){
+                    spans+=data['lnrkTop3'][i].mc+'<span class="addYellow">'+data['lnrkTop3'][i].lnrk+'万'+'</span>';
+                }
+                $("#top3").append(spans);
+            }
+        });
+        //人口老龄化
+        $.ajax({
+            type:"POST",
+            url:'jxpop/queryRkzz.do',
+            dataType:'json',
+            success:function(data){
+//                console.log("城市自然增长势能");
+                var xAxisData=[];
+                var data1=[];
+                for(var key in data) {
+                    xAxisData.push(key);
+                    data1.push(parseFloat(data[key]));
+                }
+                //调用，生成人口自然生长势能图
+                echartsPop2Obj.rkllh(xAxisData,data1);
+            }
+        });
+        //出生性别比
+        $.ajax({
+            type:"POST",
+            url:'jxpop/queryRkzz.do',
+            dataType:'json',
+            success:function(data){
+//                console.log("城市自然增长势能");
+                var xAxisData=[];
+                var data1=[];
+                for(var key in data) {
+                    xAxisData.push(key);
+                    data1.push(parseFloat(data[key]));
+                }
+                //调用，生成人口自然生长势能图
+                echartsPop2Obj.csxbb(xAxisData,data1);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+package com.cetc28.EcoSuitableResidence.model;
+
+/**
+ * Created by LYLYC on 2017/9/21.
+ */
+public class JxNoise {
+    private double db;    //噪声值
+    private int year;   //年份
+    private String bh;  //编号
+    private String mc;  //名称
+    private String jd;  //经度
+    private String wd;  //纬度
+
+    public double getDb() {
+        return db;
+    }
+
+    public void setDb(double db) {
+        this.db = db;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getMc() {
+        return mc;
+    }
+
+    public void setMc(String mc) {
+        this.mc = mc;
+    }
+
+    public String getJd() {
+        return jd;
+    }
+
+    public void setJd(String jd) {
+        this.jd = jd;
+    }
+
+    public String getWd() {
+        return wd;
+    }
+
+    public void setWd(String wd) {
+        this.wd = wd;
+    }
+}

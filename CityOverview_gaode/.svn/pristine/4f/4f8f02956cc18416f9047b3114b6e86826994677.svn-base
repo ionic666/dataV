@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.IJxEcoIndexDao" >
+    <select id="queryIndication" resultType="com.cetc28.PeopleBenefitService.model.JxEcoYJZB">
+        select t.bh,t.mc from JX_ECO_INDEX t where t.sjbh is null
+    </select>
+
+    <select id="queryEcoIndex"  resultType="java.util.HashMap">
+        <![CDATA[SELECT * FROM (SELECT a.year,a.value,a.rank from Jx_Eco_Index_Value a WHERE a.bh=#{1} order by year desc) where rownum <= #{0} ORDER by year]]>
+    </select>
+
+    <select id="queryEcoSubIndex"  resultType="java.util.HashMap">
+        SELECT b.mc as submc,b.unit,a.value from Jx_Eco_Index_Value a left join JX_ECO_INDEX b on a.bh=b.bh  where a.year=#{year} and b.sjbh=#{bh}
+    </select>
+
+    <select id="queryInternetIndication" resultType="com.cetc28.PeopleBenefitService.model.JxEcoInternetIndexValue">
+        select a.year,a.bh,b.mc,a.rank from JX_ECO_INTERNET_INDEX_VALUE a LEFT JOIN JX_ECO_INTERNET_INDEX b ON a.bh=b.bh where b.sjbh is null and a.year=(select max(c.year) from JX_ECO_INTERNET_INDEX_VALUE c)
+    </select>
+
+    <select id="queryEcoSubInternetIndex" resultType="com.cetc28.PeopleBenefitService.model.JxEcoInternetIndexValue">
+       select t.bh,t.mc from JX_ECO_INTERNET_INDEX t where t.sjbh=#{bh}
+    </select>
+
+    <select id="queryEcoThirdInternetIndex" resultType="java.util.HashMap">
+        select a.mc as thirdmc,a.unit,t.value from JX_ECO_INTERNET_INDEX_VALUE t left join JX_ECO_INTERNET_INDEX a on t.bh=a.bh where a.sjbh=#{bh} and t.year=#{year}
+    </select>
+</mapper>

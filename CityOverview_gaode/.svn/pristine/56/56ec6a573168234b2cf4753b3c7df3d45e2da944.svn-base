@@ -1,0 +1,156 @@
+package com.cetc28.idata.dto;
+
+import java.math.BigDecimal;
+
+public class JxUtilityManteFaultDto {
+    private String id;
+
+    private String bH;
+
+    private String utilityType;
+
+    private BigDecimal lat;
+
+    private BigDecimal lon;
+
+    private String des;
+
+    private String loca;
+
+    private String dateYmd;
+
+    private String state;
+
+    private String admi;
+
+    private String tel;
+
+    private String faultTypeDes;
+
+    private String faultDiag;
+
+    private String faultFactDes;
+
+    private String faultRankDes;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
+
+    public String getbH() {
+        return bH;
+    }
+
+    public void setbH(String bH) {
+        this.bH = bH;
+    }
+
+    public String getUtilityType() {
+        return utilityType;
+    }
+
+    public void setUtilityType(String utilityType) {
+        this.utilityType = utilityType == null ? null : utilityType.trim();
+    }
+
+    public BigDecimal getLat() {
+        return lat;
+    }
+
+    public void setLat(BigDecimal lat) {
+        this.lat = lat;
+    }
+
+    public BigDecimal getLon() {
+        return lon;
+    }
+
+    public void setLon(BigDecimal lon) {
+        this.lon = lon;
+    }
+
+    public String getDes() {
+        return des;
+    }
+
+    public void setDes(String des) {
+        this.des = des == null ? null : des.trim();
+    }
+
+    public String getLoca() {
+        return loca;
+    }
+
+    public void setLoca(String loca) {
+        this.loca = loca == null ? null : loca.trim();
+    }
+
+    public String getDateYmd() {
+        return dateYmd;
+    }
+
+    public void setDateYmd(String dateYmd) {
+        this.dateYmd = dateYmd == null ? null : dateYmd.trim();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state == null ? null : state.trim();
+    }
+
+    public String getAdmi() {
+        return admi;
+    }
+
+    public void setAdmi(String admi) {
+        this.admi = admi == null ? null : admi.trim();
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel == null ? null : tel.trim();
+    }
+
+    public String getFaultTypeDes() {
+        return faultTypeDes;
+    }
+
+    public void setFaultTypeDes(String faultTypeDes) {
+        this.faultTypeDes = faultTypeDes;
+    }
+
+    public String getFaultFactDes() {
+        return faultFactDes;
+    }
+
+    public void setFaultFactDes(String faultFactDes) {
+        this.faultFactDes = faultFactDes;
+    }
+
+    public String getFaultDiag() {
+        return faultDiag;
+    }
+
+    public void setFaultDiag(String faultDiag) {
+        this.faultDiag = faultDiag == null ? null : faultDiag.trim();
+    }
+
+    public String getFaultRankDes() {
+        return faultRankDes;
+    }
+
+    public void setFaultRankDes(String faultRankDes) {
+        this.faultRankDes = faultRankDes;
+    }
+}

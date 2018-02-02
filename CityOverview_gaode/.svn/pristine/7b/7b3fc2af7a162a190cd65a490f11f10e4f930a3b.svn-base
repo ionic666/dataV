@@ -1,0 +1,947 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/19
+  Time: 15:21
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<%--<link rel="stylesheet" type="text/css" href="map/css/bootstrap.css"/>--%>
+	<%--<link rel="stylesheet" href="myCss/entironment.css"/>--%>
+	<style>
+
+		.modal-dialog,.modal-content{
+			width:100%;
+		}
+		#gwgzTest .modal-dialog{
+			margin: 0;
+			height: 100%;
+			width: 100%;
+		}
+		#gwgzTest .modal-content{
+			padding: 4% 2%;
+			border-top: 2px #0cdaf5 solid;
+			border-radius: 0;
+			width: 100%;
+			height: 100%;
+		}
+		#gwgzTest .modal-body{
+			padding: 0;
+			width: 100%;
+			height: 97%;
+		}
+		#gwgzTitle{
+			font-size: 1.5em;
+			width: 100%;
+			height: 4%;
+			line-height: 30px;
+			color: #fff;
+			padding-left: 5%;
+		}
+		div.bygwgz,div.gwgzyy,div.gwgzqstj{
+			width: 100%;
+			height: 33%;
+			padding: 5% 0 0 3%;
+		}
+		p.gwTitle{
+			height: 10%;
+			font-size: 1.1em;
+			margin-bottom: 10px;
+			color: #fff;
+		}
+		div.bygwgz ul{
+			width: 100%;
+			height: 80%;
+		}
+		div.bygwgz ul li{
+			width: 50%;
+			height: 50%;
+			float: left;
+			padding: 5% 0 0 5%;
+			vertical-align: middle;
+		}
+		div.bygwgz ul li div{
+			float: left;
+			width: 50%;
+			height: 100%;
+			text-align: center;
+		}
+		div.bygwgz img{
+			width: 40px;
+			margin-bottom: 10px;
+		}
+		div.bygwgz ul p{
+			width: 50%;
+			font-size: 14px;
+			height: 100%;
+			float: left;
+			line-height: 60px;
+		}
+		span.gwYellow{
+			color: #ffff00;
+		}
+		div#gwgzyy{
+			width: 100%;
+			height: 80%;
+		}
+		div#gwgzqstj{
+			width: 100%;
+			height: 80%;
+		}
+		#selectCorp{
+			margin-top: 1em;
+		}
+		#selectCorp>li{
+			display: inline-block;
+			color: #fff;
+			margin: 0 1em;
+		}
+		#selectCorp>li>span{
+			margin-right: 0.4em;
+		}
+		.selectCorp-regionCode{
+			margin-left:2em !important;
+		}
+		#selectCorp select,#selectCorp input{
+			padding: 0.2em 2em;
+			color: #fff;
+			border: 1px solid #383838;
+			background-color: rgba(4,4,4,0.9);
+		}
+		#selectCorp input{
+			line-height: inherit;
+		}
+		#stoppageTable{
+			border: 1px solid #15565D;
+		}
+		#stoppageTable > tbody{
+			display: block;
+			width: 100%;
+			height: 200px;
+			overflow-y: scroll;
+		}
+		#stoppageTable > tbody>tr>td,#stoppageTable > thead>tr>td{
+			width: 8.5%;
+			padding: 0.5em 1em;
+			text-align: center;
+		}
+		#stoppageTable > thead{
+			display: table;
+			width: calc(100% - 1.2em);
+		}
+		#stoppageTable > tbody > tr:nth-child(odd) {
+			background-color: rgba(95,93,93,0.6) !important;
+		}
+		#stoppageTable>thead{
+			color: #27D1E7;
+			font-size: 1.2em;
+		}
+		#stoppageSearch{
+			background-color: rgb(0,138,156);
+			padding: 0.2em 2em;
+			border: 1px solid #008A9C;
+		}
+		#reset{
+			margin-left: 1em;
+			background-color: #528EF7;
+			padding: 0.2em 2em;
+			border: 1px solid #528EF7;
+		}
+		#stoppageReorder{
+			float: right;
+			margin-right: 5em;
+		}
+		.search-content{
+			margin-bottom: 2em;
+			border: 1px solid #15565D;
+			padding-bottom: 10px;
+		}
+		.date-input{
+			padding: 0.2em 2em;
+			color: #fff;
+			border: 1px solid #383838;
+			background-color: rgba(4,4,4,0.9) !important;
+		}
+		::-webkit-scrollbar{
+			background-color: #1B1B1D;
+		}
+		::-webkit-scrollbar-thumb {
+			background-color: #303030;
+		}
+		#gwgzChoose{
+			background-color: transparent;
+		}
+		#gwgzChoose ul{
+			width: 100%;
+			height: 100%;
+		}
+		#gwgzChoose ul li{
+			text-align: center;
+			padding: 5px 15px;
+			line-height: 20px;
+			background-image:url("images/threeBG.png");
+			background-size: 100% 100%;
+			color:rgb(21,203,227);
+			cursor: pointer;
+			float: left;
+		}
+		#gwgzChoose ul li.active {
+			background-image: url("images/threeBGHover.png");
+			background-size: 100% 100%;
+			font-size: 18px;
+			color: rgb(2, 14, 16)
+		}
+		#jedatebox{
+			width:300px;
+		}
+		.jedateblue .jedaul li:hover{
+			cursor: pointer;
+		}
+		#startDate,#endDate{
+			cursor: pointer;
+		}
+
+		.gdgsgqps{
+			padding:5px 10px;
+			cursor: pointer;
+		}
+		.gdgsgqps .point{
+			display: inline-block;
+			width:15px;
+			height:15px;
+			border:1px solid #fff;
+			border-radius: 7px;
+			vertical-align:middle;
+			margin-right: 10px;
+		}
+		.gdgsgqps.active .point{
+			border:1px solid red;
+		}
+		.gdgsgqps.active span{
+			color:red;
+		}
+	</style>
+	<link rel="stylesheet" href="myCss/jedate.css"/>
+</head>
+<body>
+<div class=""
+	 style="height:89%;width: 21%;top:10%;left: 10px;display:none;position: absolute"
+	 id="gwgzTest">
+	<div class="modal-dialog">
+		<div class="modal-content" style="background-color: rgba(0, 0, 0,0.5)">
+			<p id="gwgzTitle">管网故障监测</p>
+			<div class="modal-body">
+				<%--本月管网故障--%>
+				<div class="bygwgz">
+					<p class="gwTitle">本月管网故障</p>
+					<ul>
+						<li>
+							<div>
+								<img src="images/utility/grbz.png" alt=""/>
+								<h6 id="gwgw"></h6>
+							</div>
+							<p><span class="gwYellow" id="gwgwText"></span>起</p>
+						</li>
+						<li>
+							<div>
+								<img src="images/utility/gsbz.png" alt=""/>
+								<h6 id="gdgw"></h6>
+							</div>
+							<p><span class="gwYellow" id="gdgwText"></span>起</p>
+						</li>
+						<li>
+							<div>
+								<img src="images/utility/gdbz.png" alt=""/>
+								<h6 id="rqgw"></h6>
+							</div>
+							<p><span class="gwYellow"  id="rqgwText"></span>起</p>
+						</li>
+						<li>
+							<div>
+								<img src="images/utility/gqbz.png" alt=""/>
+								<h6 id="pqgw"></h6>
+							</div>
+							<p><span class="gwYellow" id="pqgwText"></span>起</p>
+						</li>
+					</ul>
+				</div>
+				<%--管网故障原因--%>
+				<div class="gwgzyy">
+					<p class="gwTitle">管网故障原因</p>
+					<div id="gwgzyy"></div>
+				</div>
+				<%--管网故障趋势统计--%>
+				<div class="gwgzqstj">
+					<p class="gwTitle">管网故障趋势统计</p>
+					<div id="gwgzqstj"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<div id="dateSelect"></div>
+<div class=""
+	 style="height:35%;width: 75%;top:64%;left: 23%;display:none;position: absolute" id="stoppage">
+	<div class="modal-dialog" style="width: 100%;height: 100%;margin: 0">
+		<div class="modal-content" style="width: 100%;height: 100%;background-color: rgba(0, 0, 0,0.5)">
+			<%--条件搜索--%>
+			<div class="search-content">
+				<ul id="selectCorp">
+					<li>
+						<span>起始日期 </span>
+						<input id="startDate"type="text"name="start_date" readonly />
+					</li>
+					<li>
+						<span>截止日期 </span>
+						<input id="endDate"type="text" name="end_date" readonly/>
+					</li>
+					<li>
+						<span>状态 </span>
+						<select id="gwState" class="corpStatistics-select">
+							<option value ="">全部</option>
+							<option value ="已处理">已处理</option>
+							<option value ="未处理">未处理</option>
+							<option value ="处理中">处理中</option>
+						</select>
+					</li>
+
+					<%--<li>--%>
+						<%--<span>管网类别</span>--%>
+						<%--<select id="gwClass" class="corpStatistics-select">--%>
+							<%--<option value ="供电管网">供电管网</option>--%>
+							<%--<option value ="供水管网">供水管网</option>--%>
+							<%--<option value ="供热管网">供热管网</option>--%>
+							<%--<option value ="供气管网">供气管网</option>--%>
+							<%--<option value ="通信管网">通信管网</option>--%>
+							<%--<option value ="排水管网">排水管网</option>--%>
+							<%--<option value ="综合管网">综合管网</option>--%>
+						<%--</select>--%>
+					<%--</li>--%>
+					<li>
+						<button id="stoppageSearch" onclick="stoppageSearch()">查 询</button>
+						<button id="reset" onclick="reset()">重 置</button>
+					</li>
+					<li id="stoppageReorder">
+						<span>排序方式 </span>
+						<select id="gwReorder" class="corpStatistics-select">
+							<option value ="date">日期</option>
+							<option value ="rank">等级</option>
+						</select>
+					</li>
+				</ul>
+			</div>
+			<div>
+
+				<table class="table table-striped table-condensed scrolltable" id="stoppageTable" style="width: 100%">
+					<thead>
+					<tr>
+						<td>故障编号</td>
+						<td>故障描述</td>
+						<td>管网类型</td>
+						<td>上报时间</td>
+						<td>地点</td>
+						<td>故障定位</td>
+						<td>故障类别</td>
+						<td>故障原因</td>
+						<td>故障等级</td>
+						<td>抢修状态</td>
+						<td>责任单位</td>
+						<td>责任电话</td>
+					</tr>
+					</thead>
+					<tbody id="stoppageData">
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="" style="background-color: rgba(0,0,0,0.5); height: 60px; width: 120px; top: calc(100% - 420px); left: 88%; position: absolute; display: none;"id="gdgsgqpsChange">
+	<div>
+		<p class="gdgsgqps active"><span class="point"></span><span style="font-size: 14px">故障分布图</span></p>
+		<p class="gdgsgqps"><span class="point"></span><span style="font-size: 14px">故障热力图</span></p>
+	</div>
+
+</div>
+<%--nav--%>
+<div class="modal fade"
+	 style="height:7%;width: 30%;top:3%;left: 55%;display:none;position: absolute"
+	 id="gwgzChoose" tabindex="-1" role="dialog" aria-hidden="true"
+	 aria-labelledby="infoModalLabel" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<ul>
+				<li>全部</li>
+				<li>供电管网</li>
+				<li>供水管网</li>
+				<li>供气管网</li>
+				<li>排水管网</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<%--<script src="myjs/echarts3.4.0.min.js"></script>--%>
+<script type="text/javascript" src="map/js/jquery-1.11.3.js"></script>
+<script src="map/myjs/data.js" charset="utf-8"></script>
+<script type="text/javascript" src="map/js/bootstrap.js"></script>
+<script>
+	var startDate,endDate,gwState,gwClass,gwReorder;//定义查询条件变量：起始日期，截止日期，管网状态，管网类别，排序方式
+	//初始化页面调用左侧污染源监测
+	function gwgzTestAjax(){
+		$("#gwgzChoose").modal("show");
+		$("#gdgsgqpsChange").modal("show");
+		//初始化选中全部
+		$("#gwgzChoose ul li:eq(0)").click();
+		$("#gwgzChoose ul li:eq(0)").addClass("active");
+		$("#stoppage").modal("show");
+		stoppageAjax();
+		$.ajax({
+			type: 'post',
+			url: "jxutility/fault/faultNoByUtility.do",
+			success: function (data) {
+				$('#gwgw').html(data[0].utilityTypeDes);
+				$('#gdgw').html(data[1].utilityTypeDes);
+				$('#rqgw').html(data[2].utilityTypeDes);
+				$('#pqgw').html(data[3].utilityTypeDes);
+				$('#gwgwText').html(data[0].noFault);
+				$('#gdgwText').html(data[1].noFault);
+				$('#rqgwText').html(data[2].noFault);
+				$('#pqgwText').html(data[3].noFault);
+			}
+		});
+		$.ajax({
+			type: 'post',
+			url: "jxutility/fault/faultNoByFact.do",
+			success: function (data) {
+				var len=data.length;
+				var lengend=[];
+				var seriesData=[];
+				for(var i=0;i<len;i++){
+					lengend.push(data[i].faultFactDes);
+					var obj={};
+					obj.value=((data[i].perFaultFact*100).toFixed(2));
+					obj.name=data[i].faultFactDes;
+					seriesData.push(obj);
+				}
+				gwgzyy(lengend,seriesData);
+			}
+		});
+		$.ajax({
+			type:"POST",
+			url:'jxutility/fault/faultTendency.do',
+			dataType:'json',
+			data:{
+				"monthSize":4
+			},
+			success:function(data) {
+				var legend = [];
+				var axisData = [];
+				var ss=[];
+				for (var i=0;i<data.length;i++) {
+
+					var obj={};
+					var seriesData=[];
+					for (var j = 0; j < data[i].length; j++) {
+						if(legend.indexOf(data[i][j].utilityTypeDes)==-1) {
+							legend.push(data[i][j].utilityTypeDes)
+						}
+						seriesData.push(data[i][j].noFault);
+						obj.name=data[i][j].utilityTypeDes;
+						//如果数组中没有就追加
+						if(axisData.indexOf(data[i][j].dateYm)==-1) {
+							axisData.push(data[i][j].dateYm);
+						}
+
+					}
+					obj.type='line';
+					obj.data=seriesData;
+					ss.push(obj);
+				}
+				gwgzqstj(legend,axisData,ss);
+			}
+		});
+	}
+
+	//管网切换
+	$("#gwgzChoose ul").delegate('li','click',function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		$("#startDate").val("");
+		$("#endDate").val("");
+		var gdgsgqpsVal=$(".gdgsgqps.active").text();
+		if($(this).html()=="全部"){
+			if(gdgsgqpsVal=="态势图"){
+				//传入为空，显示全部
+				stoppageData("", "", "", "", "date");
+			}
+			if(gdgsgqpsVal=="热力图"){
+//				todo 绘制热力图
+				lifeHeatLayerDataDispose("", "", "", "", "date")
+			}
+		}
+		else {
+			if(gdgsgqpsVal=="态势图"){
+				//传入自己的内容作为管网类型
+				stoppageData("", "", "", $(this).html(), "date");
+			}
+			if(gdgsgqpsVal=="热力图"){
+				lifeHeatLayerDataDispose("", "", "", $(this).html(), "date")
+			}
+		}
+	});
+	//热力图 态势图切换
+	$(".gdgsgqps").click(function(){
+		$(this).siblings().removeClass("active");
+		$(this).addClass("active");
+		var gwgzChooseLiVal=$("#gwgzChoose li.active").text();
+		var gdgsgqpsVal=$(".gdgsgqps.active").text();
+		if(gwgzChooseLiVal=="全部"){
+			if(gdgsgqpsVal=="态势图"){
+				//传入为空，显示全部
+				stoppageData("", "", "", "", "date");
+			}
+			if(gdgsgqpsVal=="热力图"){
+//				todo 绘制热力图
+				lifeHeatLayerDataDispose("", "", "","", "date")
+			}
+		}
+		else {
+			if(gdgsgqpsVal=="态势图"){
+				//传入自己的内容作为管网类型
+				stoppageData("", "", "", gwgzChooseLiVal, "date");
+			}
+			if(gdgsgqpsVal=="热力图"){
+				lifeHeatLayerDataDispose("", "", "", gwgzChooseLiVal, "date")
+			}
+		}
+	})
+
+	//绘制热力图方法
+	function lifeHeatLayerDataDispose(startDate,endDate,gwState,gwClass,gwReorder) {
+		if(heatLayer != null){
+			map.removeLayer(heatLayer);
+		}
+		if(map){
+			map.infoWindow.hide();
+		}
+		map.removeLayer(smxLayer);
+		heatLayer = new  HeatmapLayer({//热力图
+			config: {
+				"useLocalMaximum": true,
+				"radius": 50,
+				"gradient": {
+					0.45: "rgb(000,000,255)",
+					0.55: "rgb(000,255,255)",
+					0.65: "rgb(000,255,000)",
+					0.95: "rgb(255,255,000)",
+					1.00: "rgb(255,000,000)"
+				}
+			},
+			"map": map,
+			"domNodeId": "heatLayer",
+			"opacity": 0.85
+		});
+		var points = [];
+		$.ajax({
+			type: 'post',
+			url: "jxutility/fault/findFault.do?dateBegin=" + startDate + "&dateEnd=" + endDate + "&faultStateDes=" + gwState + "&utilityTypeDes=" + gwClass + "&order=" + gwReorder + "",
+			dataType: 'json',
+			success: function (data) {
+				var data=data[0]
+				var len=data.length;
+				var pointArr = [];
+				for(var i=0;i<len;i++){
+					var obj = {};
+					var num=0;
+					if(data[i].faultRankDes=="生产一般"){
+						num=50;
+					}
+					if(data[i].faultRankDes=="生产紧急"){
+						num=100;
+					}
+					if(data[i].faultRankDes=="生产重大"){
+						num=150;
+					}
+					obj.attributes={count:num};
+					obj.geometry={
+						spatialReference: {wkid: map.spatialReference},
+						type: "point",
+						x: lonLat2Mercator(parseFloat(data[i].lon), parseFloat(data[i].lat))[0],
+						y: lonLat2Mercator(parseFloat(data[i].lon), parseFloat(data[i].lat))[1]
+					}
+					pointArr.push(obj)
+				}
+				heatLayer.setData(pointArr);
+				points.push(pointArr);
+			}
+		})
+		map.addLayer(heatLayer);
+	}
+
+//	管网故障原因
+	function gwgzyy(legend,seriesData) {
+		var myChart = echarts.init(document.getElementById("gwgzyy"));
+		var option = {
+			tooltip : {
+				trigger: 'item',
+				formatter: " {a} <br> {b}:{c}%"
+			},
+			legend: {
+				data:legend,
+				show: true,
+				x:'right',
+				y:'center',
+				orient:'vertical',
+				textStyle:text_style
+			},
+			grid: {
+				x: '2%',
+				y: '18%',
+				x2: '25%',
+				y2: '10%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			calculable : false,
+			series : [
+				{
+					name:'管网故障原因',
+					type:'pie',
+					radius : [50, 80],
+					center: ['35%','50%'],
+					startAngle: -80,
+					width: '35%',
+					funnelAlign: 'left',
+					itemStyle: {
+						normal:{
+							labelLine: {
+								show: false
+							},
+							label:{
+								show: true,
+								position: 'inside',
+								formatter: '{c}%',
+								textStyle:text_style
+							}
+						}
+					},
+					data:seriesData
+				}
+			]
+		};
+		myChart.setOption(option);
+	}
+//	管网故障趋势统计
+	function gwgzqstj(legend,axisData,ss) {
+		var myChart = echarts.init(document.getElementById("gwgzqstj"));
+		var option = {
+			color:['#FFC000','#A5A5A5','#ED7D31','#5B9BD5'],
+			legend: {
+				data: legend,
+				textStyle: text_style,
+				x:'right',
+				y:'center',
+				orient:'vertical'
+			},
+			calculable: true,
+			tooltip: {
+				trigger: 'axis',
+				formatter: " {b} <br> {a0}:{c0}%<br> {a1}:{c1}%<br> {a2}:{c2}%"
+			},
+			grid: {
+				x: '10%',
+				y: '10%',
+				x2: '28%',
+				y2: '14%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			xAxis: [
+				{
+					type: 'category',
+					axisLine: {lineStyle: {color: '#BFBFBF'}},
+					axisTick: {show: true,lineStyle:{color: '#bfbfbf'}},
+					axisLabel: {show: true, textStyle: text_style, interval: 0},
+					splitLine: {show: false},
+					data: axisData
+				}
+			],
+			yAxis: [
+				{
+					name:'(数量)个',
+					type: 'value',
+					splitLine: {show: true},
+					axisLine: {show: true,lineStyle:{color: '#bfbfbf'}},
+					axisTick: {show: false},
+					axisLabel: {show: true,textStyle:text_style}
+				}
+			],
+			series:ss
+//			series: [
+//				{
+//					name: '企业单位',
+//					type: 'line',
+//					smooth: true,
+//					itemStyle: {
+//						normal: {
+//							label: {
+//								show: true,
+//								position:'inside',
+//								formatter: '{c}%',
+//								textStyle: {
+//									color: '#fff'
+//								}
+//							},
+//							lineStyle:{
+//								shadowColor:'#E88535',
+//								shadowBlur: 35
+//							}
+//						}
+//					},
+//					data: qyData
+//				},
+//				{
+//					name: '事业单位',
+//					type: 'line',
+//					smooth: true,
+//					itemStyle: {
+//						normal: {
+//							label: {
+//								show: true,
+//								position:'inside',
+//								formatter: '{c}%',
+//								textStyle: {
+//									color: '#fff'
+//								}
+//							},
+//							lineStyle:{
+//								shadowColor:'#7AC826',
+//								shadowBlur: 35
+//							}
+//						}
+//					},
+//					data: syData
+//				},
+//				{
+//					name: '企事业单位',
+//					type: 'line',
+//					smooth: true,
+//					itemStyle: {
+//						normal: {
+//							label: {
+//								show: true,
+//								position:'inside',
+//								formatter: '{c}%',
+//								textStyle: {
+//									color: '#fff'
+//								}
+//							},
+//							lineStyle:{
+//								shadowColor:'#43CED0',
+//								shadowBlur: 35
+//							}
+//						}
+//					},
+//					data: qsyData
+//				}
+//			]
+
+		};
+		myChart.setOption(option);
+	}
+
+	//开始查询
+
+	function stoppageSearchCondition(){
+		startDate=$("#startDate").val();//起始日期
+		endDate=$("#endDate").val();//截止日期
+		gwState=$("#gwState").val();//管网状态
+		//获取当前选中的li
+		if($("#gwgzChoose ul li.active").text()=="全部"){
+			gwClass="";
+		}else{
+			gwClass=$("#gwgzChoose ul li.active").text();
+		}
+		gwReorder=$("#gwReorder").val();//排序方式
+	}
+	function stoppageSearch(){
+		stoppageSearchCondition();//获取查询条件
+		stoppageData(startDate,endDate,gwState,gwClass,gwReorder);//发送请求调取数据
+	}
+	//重置
+	function reset(){
+		startDate=$("#startDate").val("");//起始日期
+		endDate=$("#endDate").val("");//截止日期
+		gwState=$("#gwState").val("");//管网状态
+//		$('#gwState option').removeClass('active');
+//		$('#gwState option:eq(0)').addClass('active');
+		stoppageSearchCondition();//获取查询条件
+		stoppageData(startDate,endDate,gwState,gwClass,gwReorder);//发送请求调取数据
+	}
+	function stoppageData(startDate,endDate,gwState,gwClass,gwReorder){
+		if(heatLayer != null){
+			map.removeLayer(heatLayer);
+		}
+		if(map){
+			map.infoWindow.hide();
+		}
+		$.ajax({
+			type: 'post',
+			url: "jxutility/fault/findFault.do?dateBegin="+startDate+"&dateEnd="+endDate+"&faultStateDes="+gwState+"&utilityTypeDes="+gwClass+"&order="+gwReorder+"",
+//      url:"jxutility/fault/findFault.do?dateBegin=2017-08-01&dateEnd=2017-10-01&faultStateDes=已处理&utilityTypeDes=供水管网&order=date",
+			dataType:'json',
+//      data:"{'dateBegin':"+dateBegin+",'dateEnd ':"+dateEnd+",'faultStateDes':"+faultStateDes+",'utilityTypeDes':"+utilityTypeDes+",'order':"+order+"}",
+			success: function (data) {
+				var myData = data[0];
+				if(myData.length!=0){
+					$("#stoppageData").html("");//清空表格
+					$.each(myData,function(i){//遍历数据
+						$("#stoppageData").append("<tr>" +
+						"<td>"+myData[i].id+"</td>" +
+						"<td>"+myData[i].des+"</td>" +
+						"<td>"+myData[i].utilityType+"</td> " +
+						"<td>"+myData[i].dateYmd+"</td> " +
+						"<td>"+myData[i].loca+"</td> " +
+						"<td>"+myData[i].faultDiag+"</td> " +
+						"<td>"+myData[i].faultTypeDes+"</td>" +
+						"<td>"+myData[i].faultFactDes+"</td> " +
+						"<td>"+myData[i].faultRankDes+"</td>" +
+						"<td>"+myData[i].state+"</td>" +
+						"<td>"+myData[i].admi+"</td> " +
+						"<td>"+myData[i].tel+"</td>" +
+						"</tr>");
+					});
+					//调用画点方法
+					drawMapPointGM(data,gwClass);
+
+				}else{
+					$("#stoppageData").html("<h1 style='text-align:center;'>未查询到相关信息</h1>");//
+				}
+			}
+		});
+
+	}
+    //判断为哪种图片
+	function getImg(type){
+		var img = "";
+		switch(type){
+			//供电
+			case '供电管网':img="images/utility/gd.gif";
+				break;
+			//供气管网
+			case '供气管网':img="images/utility/gq.gif";
+				break;
+			//供水管网
+			case '供水管网':img="images/utility/gs.gif";
+				break;
+			//排水管网
+			case '排水管网':img="images/utility/ps.gif";
+				break;
+		}
+		return img;
+	}
+
+	//根据初始化数据，绘制地图上的点（重点污染源）
+	  function drawMapPointGM(data,gwClass){
+	    //map.removeLayer(polluteLayer);
+	    //清空图层
+	    smxLayer.clear();
+		//判断类型,如果为空旧为全部数据
+	    var res=gwClass ? data[1][gwClass] : data[0];
+	    var len=res.length;
+	    var pointArr=[];
+	    for(var i=0;i<len;i++){
+	      res[i].jd = res[i].lon;
+	      res[i].wd = res[i].lat;
+	      //经纬度纠偏方法
+	      var XY=bd09towgs84(parseFloat(res[i].jd),parseFloat(res[i].wd));
+	      var jd=XY[0];
+	      var wd=XY[1];
+	      pointArr.push({jd:jd,wd:wd,details:res[i]});
+
+	    }
+	    gwshowLayers(pointArr,smxLayer);
+	    map.addLayer(smxLayer);
+	    var point=esri.geometry.Point(jd, wd, map.spatialReference);
+		  //以point为原点调整
+	    map.centerAt(point);
+	  }
+	  //数据 图层 图片
+	  function gwshowLayers(data,layer) {
+	    var pointSymobol = new Array(data.length);
+	    var pointGraphic = new Array(data.length);
+	    for (var j = 0; j < data.length; j++) {
+	      var x = data[j].jd, y = data[j].wd;
+	//      data[j].jd = data[j].lon;
+	//      data[j].wd = data[j].lat;
+	      var z = lonLat2Mercator(x,y);
+	//      这边做判断 选择放在地图上的是哪种图标
+	//      imageSoure 为默认传入的图片
+	      pointSymobol[j] = new esri.symbol.PictureMarkerSymbol(getImg(data[j].details.utilityType), 30, 35);
+	      var planePoint = new esri.geometry.Point(z[0], z[1], map.spatialReference);
+	      pointGraphic[j] = new esri.Graphic(planePoint, pointSymobol[j]);
+	      pointGraphic[j].setAttributes =data[j];
+	      layer.add(pointGraphic[j]);
+	      layer.refresh();
+	    }
+	  }
+
+	//初始化页面
+	function stoppageAjax() {
+		stoppageSearchCondition();//获取查询条件
+		setTimeout('stoppageData(startDate,endDate,gwState,"",gwReorder);',1200);//默认发送请求调取数据
+
+	}
+	$("#gwReorder").change(function(){
+//  console.log($(this).children('option:selected').val());
+		stoppageSearchCondition();//获取查询条件
+		stoppageData(startDate,endDate,gwState,gwClass,gwReorder);//默认发送请求调取数据
+	});
+
+
+	//日期插件封装方法
+	function jeDateselectDate(data){
+		var start=  {
+			dateCell:data.start,
+			format: "YYYY-MM-DD",
+			minDate: '1900-01-01',
+			maxDate: '2099-01-01',
+			festival: true,//是否显示节假日
+			choosefun: function (datas) {//选择时间之后的回调函数
+				end.minDate = $(datas).val();//将结束日期的初始值设定为开始日期的最大值
+			}
+		}
+		var end= {
+			dateCell:data.end ,
+			format: "YYYY-MM-DD",
+			minDate:'1900-01-01',
+			maxDate: '2099-01-01',
+			choosefun: function (datas) {//选择时间之后的回调函数
+				start.maxDate = $(datas).val();//开始日期选好后，重置结束日期的最小值
+			}
+		}
+		$(data.start).click(function(){
+			jeDate(start)
+		})
+		$(data.end).click(function(){
+			jeDate(end)
+		})
+	}
+
+	//日期插件使用方法
+	//使用方法
+	jeDateselectDate({
+		start:"#startDate",
+		end:"#endDate"
+	})
+</script>
+</body>
+</html>

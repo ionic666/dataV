@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.JxSchoolStatisticInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.cetc28.idata.model.JxSchoolStatisticInfo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="QHBH" property="qhbh" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="YEAR" property="year" jdbcType="VARCHAR" />
+    <result column="SCHOOL_NUM" property="schoolNum" jdbcType="DECIMAL" />
+    <result column="STUDENT_NUM" property="studentNum" jdbcType="DECIMAL" />
+    <result column="ENROLL_NUM" property="enrollNum" jdbcType="DECIMAL" />
+    <result column="TEACHER_NUM" property="teacherNum" jdbcType="DECIMAL" />
+    <result column="GRADUATE_NUM" property="graduateNum" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, QHBH, TYPE, YEAR, SCHOOL_NUM, STUDENT_NUM, ENROLL_NUM, TEACHER_NUM, GRADUATE_NUM
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cetc28.idata.model.JxSchoolStatisticInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from JX_EDU_SCHOOLINFO_STATISTICS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.cetc28.idata.model.JxSchoolStatisticInfo" >
+    insert into JX_EDU_SCHOOLINFO_STATISTICS (ID, QHBH, TYPE, 
+      YEAR, SCHOOL_NUM, STUDENT_NUM, 
+      ENROLL_NUM, TEACHER_NUM, GRADUATE_NUM
+      )
+    values (#{id,jdbcType=VARCHAR}, #{qhbh,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{year,jdbcType=VARCHAR}, #{schoolNum,jdbcType=DECIMAL}, #{studentNum,jdbcType=DECIMAL}, 
+      #{enrollNum,jdbcType=DECIMAL}, #{teacherNum,jdbcType=DECIMAL}, #{graduateNum,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.idata.model.JxSchoolStatisticInfo" >
+    insert into JX_EDU_SCHOOLINFO_STATISTICS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="qhbh != null" >
+        QHBH,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="year != null" >
+        YEAR,
+      </if>
+      <if test="schoolNum != null" >
+        SCHOOL_NUM,
+      </if>
+      <if test="studentNum != null" >
+        STUDENT_NUM,
+      </if>
+      <if test="enrollNum != null" >
+        ENROLL_NUM,
+      </if>
+      <if test="teacherNum != null" >
+        TEACHER_NUM,
+      </if>
+      <if test="graduateNum != null" >
+        GRADUATE_NUM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="qhbh != null" >
+        #{qhbh,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolNum != null" >
+        #{schoolNum,jdbcType=DECIMAL},
+      </if>
+      <if test="studentNum != null" >
+        #{studentNum,jdbcType=DECIMAL},
+      </if>
+      <if test="enrollNum != null" >
+        #{enrollNum,jdbcType=DECIMAL},
+      </if>
+      <if test="teacherNum != null" >
+        #{teacherNum,jdbcType=DECIMAL},
+      </if>
+      <if test="graduateNum != null" >
+        #{graduateNum,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="queryMaxYear" parameterType="java.lang.String" resultType="java.lang.String">
+    select max(year) from JX_EDU_SCHOOLINFO_STATISTICS where qhbh like #{qhbh}||'%'
+  </select>
+
+  <select id="queryStatisticInfoByYear" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select  a.year, a.SCHOOL_NUM, a.STUDENT_NUM, a.ENROLL_NUM, a.TEACHER_NUM, a.GRADUATE_NUM, b.value as TYPE from JX_EDU_SCHOOLINFO_STATISTICS a left join JX_SYS_DICT b on a.type = b.key where qhbh like #{qhbh}||'%' and a.year = #{year}
+  </select>
+</mapper>

@@ -1,0 +1,12 @@
+package com.cetc28.ConfigurationManagement.service;
+
+import com.cetc28.ConfigurationManagement.model.PageResult;
+
+/**
+ * Created by FangYan on 2017/9/27.
+ */
+public interface IJxLogService {
+    PageResult queryLogInoByTime(Integer pageNumber, Integer pageSize, String startTime, String endTime);
+
+    PageResult queryOperInoByTime(Integer pageNumber, Integer pageSize, String startTime, String endTime);
+}

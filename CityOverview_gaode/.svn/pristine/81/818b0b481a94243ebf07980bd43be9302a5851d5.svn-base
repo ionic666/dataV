@@ -1,0 +1,38 @@
+import com.cetc28.idata.dao.IjxUserDao;
+/*import com.cetc28.idata.dto.SeckillStatEnum;*/
+import com.cetc28.idata.service.IJxUserManageService;
+import com.cetc28.idata.service.IjxRoleManageService;
+import com.cetc28.util.DateUtil;
+import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+
+/**
+ * Created by FangYan on 2017/9/23.
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext-icity.xml")
+public class Test {
+    @Autowired private IJxUserManageService iJxUserService;
+    @Autowired private  IjxRoleManageService ijxRoleManageService;
+
+    @org.junit.Test
+    public void del(){
+        iJxUserService.delUser(3);
+    }
+
+    @org.junit.Test
+    public void  add(){
+       /* Integer a = iJxUserService.updateRolePermission(7, 1);
+        System.out.println(a);*/
+        /*SeckillStatEnum success = SeckillStatEnum.SUCCESS;
+        System.out.println(SeckillStatEnum.stateOf(0));*/
+    }
+
+}

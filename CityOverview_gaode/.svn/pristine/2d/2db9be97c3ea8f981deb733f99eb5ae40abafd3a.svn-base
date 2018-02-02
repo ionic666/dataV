@@ -1,0 +1,21 @@
+package com.cetc28.idata.service;
+
+import com.cetc28.idata.dto.CompanyDto;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/11/20.
+ */
+public interface IJxEcoClusterjService {
+
+    List findClusterType();
+
+    List findCompanyInfo(String clusterType,String companyName);
+
+    List searchCluserCompanyInfo(String companyName);
+
+    List findClusterInfoByType(String clusterType);
+
+
+}

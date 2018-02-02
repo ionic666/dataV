@@ -1,0 +1,210 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.Constant.SeckillStatEnum;
+import com.cetc28.idata.dao.IJxEduDao;
+import com.cetc28.idata.dao.JxEduInformazationMapper;
+import com.cetc28.idata.dao.JxSchoolStatisticInfoMapper;
+import com.cetc28.idata.dto.EduStatisticDto;
+import com.cetc28.idata.dto.SchoolResourceDto;
+import com.cetc28.idata.model.*;
+import com.cetc28.idata.service.IJxEduService;
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+/**
+ * 嘉兴教育Service实现类
+ * Created by linyu on 2017/8/28.
+ */
+@Service
+public class JxEduServiceImpl implements IJxEduService {
+
+    @Autowired
+    private IJxEduDao jxEduDao;
+
+    @Autowired
+    private JxSchoolStatisticInfoMapper jxSchoolStatisticInfoMapper;
+
+    @Autowired
+    private JxEduInformazationMapper jxEduInformazationMapper;
+
+
+    @Override
+    public List<JxSchoolInfo> querySchoolInfoByCondition() {
+        JxSchoolInfoExample example = new JxSchoolInfoExample();
+        //多个条件之间以or相连接
+        //等价于 where (schoolcode = "ps0010" and addr is not null)
+        example.or().andSchoolCodeEqualTo("ps0010").andAddrIsNotNull();
+        example.or().andSchoolCodeEqualTo("ps0002").andAddrIsNotNull();
+        //等价于 where schoolcode in ("ps0001", "ps0003" , "ps0004")
+        List<String> test = new ArrayList<String>();
+        test.add("ps0001");
+        test.add("ps0003");
+        test.add("ps0004");
+        example.or().andSchoolCodeIn(test);
+        //等价于 where shcoolCode between "ps0012" and "ps0015"
+        example.or().andSchoolCodeBetween("ps0012", "ps0015");
+        return jxEduDao.selectByExample(example);
+    }
+
+    @Override
+    public List querySchoolMapInfo(String qhbh) {
+        List< HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
+        List<HashMap<String, String>> schoolType = jxEduDao.listSchooType(qhbh);
+        for(HashMap<String, String> type : schoolType){
+            //获取学校类型编码
+            String typeCode =  type.get("TYPE");
+            //获取学校名称
+            String typeName = type.get("VALUE");
+            //查询该类型的学校信息
+            JxSchoolInfoExample example = new JxSchoolInfoExample();
+            example.or().andTypeEqualTo(typeCode).andQhbhLike(qhbh+"%");
+            List<JxSchoolInfo> schoolInfos = jxEduDao.selectByExample(example);
+            HashMap<String, Object> info = new HashMap<String, Object>();
+            info.put("type", typeName);
+            info.put("schoolInfos", schoolInfos);
+            result.add(info);
+        }
+        return  result;
+    }
+
+    @Override
+    public List querySchoolStatisticInfo(String qhbh, int num) {
+        List< HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
+        //查询数据库中最新记录时间
+        String maxYear = jxSchoolStatisticInfoMapper.queryMaxYear(qhbh);
+        for(int i = num - 1; i >= 0; i--){
+            HashMap<String, Object> statisticInfo = new HashMap<String, Object>();
+            String temp = String.valueOf(Integer.parseInt(maxYear)-i);
+            statisticInfo.put("year", temp);
+            List<JxSchoolStatisticInfo> statistics = jxSchoolStatisticInfoMapper.queryStatisticInfoByYear(qhbh,temp);
+            statisticInfo.put("statisticInfo", statistics);
+            result.add(statisticInfo);
+
+        }
+        return result;
+    }
+
+    @Override
+    public Map listOverloadSchoolInfo(String qhbh) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        //查询数据库中最新记录时间
+        String maxYear = jxEduDao.queryMaxYear();
+        result.put("year", maxYear);
+        //查询超载小学信息
+        List<SchoolResourceDto> overload = jxEduDao.listOverloadSchoolInfo(qhbh, maxYear, 0);
+        //查询空载小学信息
+        List<SchoolResourceDto>  idle = jxEduDao.listOverloadSchoolInfo(qhbh, maxYear, 1);
+        result.put("overload", overload);
+        result.put("idle", idle);
+        return result;
+
+    }
+
+    @Override
+    public Map getEduResourceInfo(String qhbh) {
+        Map<String, Integer> result = new HashedMap();
+        //查询教育资源超载、空载情况
+        Map temp = listOverloadSchoolInfo(qhbh);
+        int overNum = ((List)temp.get("overload")).size();
+        int idleNum = ((List)temp.get("idle")).size();
+        result.put("overNum", overNum);
+        result.put("idleNum", idleNum);
+        return result;
+    }
+
+    @Override
+    public List listEduStatisticInfo(String qhbh, int length) {
+        List<EduStatisticDto> list = new ArrayList<EduStatisticDto>();
+        String maxYear = jxEduDao.queryMaxYear();
+        for(int i=0; i<length; ++i){
+            Integer overNum = 0;
+            Integer idleNum = 0;
+            String tempYear = String.valueOf(Integer.parseInt(maxYear)-i);
+            EduStatisticDto eduStatisticDto = new EduStatisticDto();
+            eduStatisticDto.setYear(tempYear);
+            for(SchoolResourceDto dto : jxEduDao.listOverloadSchoolInfo(qhbh,tempYear, 0)){
+                overNum +=  Math.abs(dto.getEnrollmentDifference());
+            }
+            for(SchoolResourceDto dto : jxEduDao.listOverloadSchoolInfo(qhbh,tempYear, 1)){
+                idleNum += Math.abs(dto.getEnrollmentDifference());
+            }
+            eduStatisticDto.setOverloadNum(overNum);
+            eduStatisticDto.setIdleloadNum(idleNum);
+            list.add(eduStatisticDto);
+        }
+        return list;
+    }
+
+    @Override
+    public JxEduInformazation queryInformazationInfo(String qhbh) {
+        JxEduInformazationExample example = new JxEduInformazationExample();
+        example.or().andQhbhEqualTo(qhbh);
+        example.setOrderByClause("year desc");
+        return jxEduInformazationMapper.selectByExample(example).get(0);
+    }
+
+    @Override
+    public List<JxEduMediaEdu> selectJxEduMediaRoom(Integer count)
+    {
+        List<JxEduMediaEdu> list=jxEduDao.selectJxEduMediaRoom(count);
+        return list;
+    }
+    @Override
+    public Map selectJxEduNetworkLearn(Integer count)
+    {
+        Map<String,List> map = new HashMap<String, List>();
+        List<JxEduMediaEdu> list=jxEduDao.selectJxEduNetworkLearn(count);
+        for (int i = 0; i < list.size(); i++) {
+           String name = SeckillStatEnum.stateOf(Integer.valueOf(list.get(i).getSCHOOLTYPE())).getStateInfo();
+            if(list.get(i).getSCHOOLTYPE().equals(String.valueOf(SeckillStatEnum.stateOf(Integer.valueOf(list.get(i).getSCHOOLTYPE())).getState()))){
+                JxEduMediaEdu jxEduMediaEdu = new JxEduMediaEdu();
+                if(map.get(name)==null){
+                    List<JxEduMediaEdu> list1 = new ArrayList<JxEduMediaEdu>();
+                    jxEduMediaEdu.setNETWORKLEARN(list.get(i).getNETWORKLEARN());
+                    jxEduMediaEdu.setYear(list.get(i).getYear());
+                    list1.add(jxEduMediaEdu);
+                    map.put(name, list1);
+                }else{
+                    jxEduMediaEdu.setNETWORKLEARN(list.get(i).getNETWORKLEARN());
+                    jxEduMediaEdu.setYear(list.get(i).getYear());
+                    map.get(name).add(jxEduMediaEdu);
+                    map.put(name,map.get(name));
+                }
+            }
+        }
+        return map;
+    }
+    @Override
+    public List<JxEduMediaEdu> selectJxEduWireless()
+    {
+        List<JxEduMediaEdu> list=jxEduDao.selectJxEduWireless();
+        return list;
+    }
+
+    @Override
+    public List listSchoolStatisticInfo(Integer count) {
+        List result = new ArrayList();
+        //获取统计类型信息
+        List<HashMap<String, String>> schoolType = jxEduDao.listSchoolType();
+        //遍历各类学校
+        for(int i = 0; i < schoolType.size(); ++i){
+            Map info = new HashMap();
+            String type = schoolType.get(i).get("SCHOOLTYPE");
+            String name = schoolType.get(i).get("SCHOOLNAME");
+            List<JxEduMediaEdu> statistics = jxEduDao.listSchoolStatisticInfo(type, count);
+            info.put("mc", name);
+            info.put("info",statistics);
+            result.add(info);
+        }
+        return result;
+    }
+
+    @Override
+    public Map queryBasicEduInfo() {
+        Map result = jxEduDao.queryBasicEduInfo();
+        return result;
+    }
+}

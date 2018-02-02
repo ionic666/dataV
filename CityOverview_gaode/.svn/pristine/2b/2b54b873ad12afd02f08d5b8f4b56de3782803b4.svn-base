@@ -1,0 +1,333 @@
+﻿<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<html>
+<head>
+    <base href="<%=basePath%>">
+    <title></title>
+    <%--<link rel="stylesheet" type="text/css" href="map/css/easyui.css"/>--%>
+    <%--<link rel="stylesheet" type="text/css" href="map/css/icon.css"/>--%>
+    <%--<link rel="stylesheet" type="text/css" href="map/css/mycss/myuitree.css"/>--%>
+    <script type="text/javascript" src="map/modalPages/toolPages/js/WdatePicker.js"></script>
+    <script type="text/javascript" src="map/js/jquery-1.11.3.js"></script>
+    <%--<script type="text/javascript" src="map/js/jquery.easyui.min.js"></script>--%>
+    <%--<script type="text/javascript" src="map/js/jquery-ui.js"></script>--%>
+    <script type="text/javascript">
+	//获取浏览器版本
+         function getBrowserInfo(){
+             var Sys = {};
+             var ua = navigator.userAgent.toLowerCase();
+             var re = /(msie|firefox|chrome|opera|version).*?([\d.]+)/;
+             var m = ua.match(re);
+			 if(m==null)
+				Sys.browser='ie';
+			 else
+			 {
+			    Sys.browser = m[1].replace(/version/, "'safari");
+				Sys.ver = m[2];
+			 }
+				
+             return Sys;
+         }
+		 var player;
+		function checkocx()
+		{
+			var sys=getBrowserInfo();
+			//alert(sys.browser);
+			 if(sys.browser=='firefox'||sys.browser=='chrome'){
+			   player=player2;
+			 }else{
+			   player=player1;
+			 }
+
+			 try{
+				player.style.display = "block";
+			    player.GetVersion();
+				player.SetWndArrayType(0);
+			 }
+			 catch(e){
+			    alert(e.message);
+			    player.style.display = "none";
+			    installOcx.style.display = "block";
+				alert("需要安装OCX控件！");
+			 }
+		}
+
+        var userId=-1;
+        var playHandle = -1;
+        /*
+        //宇视平台
+        var ip = "192.168.97.102";
+        var port = 8800;
+        var user = "loadmin";
+        var pwd = "loadmin";
+        var pid = 26;
+        var camId = "192_168_99_233";
+        */
+        //四创流媒体
+        /*var ip = "192.168.97.145";
+        var port = 3334;
+        var user = "admin";
+        var pwd = "123456";
+        var pid = 25;
+        var camId = "42b75225-3f28-3068-b2a1-c50fd104624b";*/
+        var startYear = "", startMonth = "", startDay = "", startHour = "", startMinute = "",startSecond="";
+        var endYear = "", endMonth = "", endDay = "", endHour = "", endMinute = "", endSecond = "";
+        function StartTimePicked()
+        {
+            startYear = $dp.cal.getP('y');
+            startMonth = $dp.cal.getP('M');
+            startDay = $dp.cal.getP('d');
+            startHour = $dp.cal.getP('H');
+            startMinute = $dp.cal.getP('m');
+            startSecond = $dp.cal.getP('s');
+        }
+        function EndTimePicked()
+        {
+            endYear = $dp.cal.getP('y');
+            endMonth = $dp.cal.getP('M');
+            endDay = $dp.cal.getP('d');
+            endHour = $dp.cal.getP('H');
+            endMinute = $dp.cal.getP('m');
+            endSecond = $dp.cal.getP('s');
+        }
+        function Login(url)
+        {
+            checkocx();
+            var ip=url.ip;
+            var port=url.port;
+            var user=url.user;
+            var pwd=url.pwd;
+            var productId=url.productId;
+
+            //视屏编号
+            var tbCameraNo=url.tbCameraNo;
+            userId = player.Login(ip, port, user, pwd, productId);
+            if (userId >= 0) {
+                Play(tbCameraNo);
+            }
+            else
+            {
+                alert("登陆失败！");
+            }
+        }
+        function Logout()
+        {
+            if (userId >= 0) {
+                player.Logout(userId);
+                userId = -1;
+            }
+        }
+        function Play(tbCameraNo)
+        {
+            if (userId >= 0) {
+                var camId = tbCameraNo;
+                if (camId == "") {
+                    alert("请输入摄像头编号！")
+                    return;
+                }
+                playHandle = player.RealPlay(userId, camId, -1, 0, 0);
+                if (playHandle<0) {
+                    alert("播放失败！");
+                }
+            }
+            else
+            {
+                alert("请登录！");
+            }
+        }
+        function PlayRecord(url)
+        {
+            checkocx();
+            var ip=url.ip;
+            var port=url.port;
+            var user=url.user;
+            var pwd=url.pwd;
+            var productId=url.productId;
+            var tbCameraNo=url.tbCameraNo;
+
+            var userId = player.Login(ip, port, user, pwd, productId);
+
+            if (userId >= 0) {
+                var camId = tbCameraNo;
+                if (camId == "") {
+                    alert("请输入摄像头编号！")
+                    return;
+                }
+                playHandle = player.RecordPlay(userId, camId, -1, '2016-09-26 10:20:49', '2016-09-27 10:20:49');
+                if (playHandle < 0) {
+                    alert("播放失败！");
+                }
+            }
+            else {
+                alert("请登录！");
+            }
+        }
+        function Stop()
+        {
+            player.StopPlay(-1);
+        }
+		
+        function PTZControl(cmd)
+        {
+            player.PTZControlX(-1, cmd, 0.4);
+        }
+		function getRecordTime()
+		{
+			if(playHandle>=0)
+			{
+			    document.getElementById("getRecordTime").value=player.GetRecordPlayTime(userId,playHandle);
+				
+			}
+		}
+		function setRecordTime()
+		{
+			if(playHandle>=0)
+			{
+			    //document.getElementById("getRecordTime").value=player.GetRecordPlayTime(userId,playHandle);
+				player.SetRecordPlayTime(userId,playHandle,document.getElementById("setRecordTime").value);
+			}
+		}
+        function TestAll()
+        {
+            try {
+                player.Login("", 0, "", "", 26);
+                player.Logout(0);
+                //实时预览，返回-1代表失败
+                player.RealPlay(0, "", -1, 0, 0);
+                player.RealStop(0, 0);
+                player.PTZControl(0, "", 0, 0);
+                player.SetWndArrayType(0);
+                player.StopPlay(-1);
+                player.RecordStop(0, 1);
+                player.SetRecordPlayTime(0, 1, "");
+                player.SetRecordPlayTimeX(-1, "");
+                player.GetRecordPlayTime(0, 1);
+                player.GetRecordPlayTimeX(-1);
+                player.SetRecordPlaySpeed(0, 0, 1);
+                player.SetRecordPlaySpeedX(-1, 1);
+                player.GetRecordPlaySpeed(-1, 0);
+                player.GetRecordPlaySpeedX(-1);
+                player.RecordPlay(0, "", -1, "", "");
+                player.GetVersion();
+                player.PTZControlX(-1, 0, 0);
+                alert("成功！");
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+    </script>
+    <style type="text/css">
+        
+		#tb tr{height:30px}
+    </style>
+		<script type="text/javascript">
+	   if(document.attachEvent){  
+         window.attachEvent("onbeforeunload",Logout);  
+       } else {  
+         window.addEventListener("beforeunload",Logout,false);
+       }
+	</script>
+</head>
+<body>
+    <%--<div style="top:40px;left:30px;width:300px;height:100%;float:left">--%>
+		<%--<table id='tb'>--%>
+			<%--<tr style="height:20px"></tr>--%>
+			<%--<tr>--%>
+				<%--<td style="width:45%">摄像头编码</td>--%>
+				<%--<td style="width:55%"><input id="tbCameraNo" type="text" value="192_168_99_233" /></td>--%>
+			<%--</tr>--%>
+
+			<%--<tr>--%>
+				<%--<td style="width:45%">开始时间</td>--%>
+				<%--<td style="width:55%"><input id="dpStartTime" type="text" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'dpEndTime\',{s:-1})||\'%y-%M-%d %H:%m:%s\'}',onpicked:StartTimePicked})"/></td>--%>
+			<%--</tr>--%>
+			<%--<tr>--%>
+				<%--<td style="width:45%">结束时间</td>--%>
+				<%--<td style="width:55%"><input id="dpEndTime" type="text" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'dpStartTime\',{s:1})}',maxDate:'%y-%M-%d %H:%m:%s',onpicked:EndTimePicked})"/></td>--%>
+			<%--</tr>--%>
+			<%--<tr><td style="width:50%;">--%>
+				<%--<input id="btnPlay" style="width:120px" type="button"  value="实时预览"  onclick="Play()" /></td>--%>
+				<%--<td><input id="btnPlay0" style="width:120px" type="button" value="播放录像"  onclick="PlayRecord()" /></td>--%>
+			<%--</tr>--%>
+			<%--<tr><td style="width:100%;" colspan=2>--%>
+				<%--<input id="btnStop" style="width:270px" type="button" value="停止" onclick="Stop()" /></td>--%>
+			<%--</tr>--%>
+			<%--<tr>--%>
+				<%--<td style="width:45%"><input id="getRecordTimeBut" style="width:100px" type="button" value="获取录像时间"  onclick="getRecordTime()" /></td>--%>
+                <%--<td style="width:55%"><input id="getRecordTime" type="text" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'dpStartTime\',{s:1})}',maxDate:'%y-%M-%d %H:%m:%s',onpicked:EndTimePicked})"/></td>--%>
+			<%--</tr>--%>
+			<%--<tr>--%>
+				<%--<td style="width:45%"><input id="setRecordTimeBut" style="width:100px" type="button" value="设置录像时间"  onclick="setRecordTime()" /></td>--%>
+				<%--<td style="width:55%"><input id="setRecordTime" type="text" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'dpStartTime\',{s:1})}',maxDate:'%y-%M-%d %H:%m:%s',onpicked:EndTimePicked})"/></td>--%>
+			<%--</tr>--%>
+		<%--</table>--%>
+	<%--</div>--%>
+	<div style="top:10px;height:100%;float:left;width:640px;">
+		<a href="#" style="width: 100%; height: 20px;display:none;text-align:center;vertical-align:middle;line-height:20px;" id="installOcx">点击安装OCX控件</a>
+                <object classid="clsid:46418E65-2131-49E7-AB2B-44E5BE6D2027" id="player1" style="width:100%; height: 100%; margin-left: 0px; margin-top: 0px;display:none;" ></object>
+				<object CLSID="{46418E65-2131-49E7-AB2B-44E5BE6D2027}" id="player2" style="width:100%; height: 100%; margin-left: 0px; margin-top: 0px;display:none;" TYPE="application/x-itst-activex"></object>
+	</div>
+	<%--<div  style="top:40px;right:10px;height:100%;float:right;width:100px">--%>
+		<%--<div style="height:35px;"><input id="Button1" type="button"  style="width:100px" value="一画面" onclick="SetArray(0)" /></div>--%>
+		<%--<div style="height:35px;"><input id="Button2" type="button" style="width:100px" value="水平二分屏" onclick="SetArray(1)" /></div>--%>
+		<%--<div style="height:35px;"><input id="Button3" type="button" style="width:100px" value="垂直二分屏" onclick="SetArray(2)" /></div>--%>
+		<%--<div style="height:35px;"><input id="Button4" type="button" style="width:100px" value="四分屏" onclick="SetArray(3)" /></div>--%>
+		<%--<div style="height:35px;"><input id="Button5" type="button" style="width:100px" value="2X3分屏" onclick="SetArray(5)" /></div>--%>
+		<%--<div style="height:35px;"><input id="Button6" type="button" style="width:100px" value="3X2分屏" onclick="SetArray(6)" /></div>--%>
+		<%--<div style="height:35px;"><input id="Button7" type="button" style="width:100px" value="九分屏" onclick="SetArray(8)" /></div>--%>
+	<%--</div>--%>
+    <script type="text/javascript">
+      /*  Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份 
+                "d+": this.getDate(), //日 
+                "h+": this.getHours(), //小时 
+                "m+": this.getMinutes(), //分 
+                "s+": this.getSeconds(), //秒 
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+                "S": this.getMilliseconds() //毫秒 
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+        Date.prototype.Format = function(fmt)
+        {
+            //author: meizz
+            var o =
+             {
+                 "M+" : this.getMonth() + 1, //月份
+                 "d+" : this.getDate(), //日
+                 "h+" : this.getHours(), //小时
+                 "m+" : this.getMinutes(), //分
+                 "s+" : this.getSeconds(), //秒
+                 "q+" : Math.floor((this.getMonth() + 3) / 3), //季度
+                 "S" : this.getMilliseconds() //毫秒
+             };
+            if (/(y+)/.test(fmt))
+                fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+
+
+        Date.prototype.addDays = function(d)
+        {
+            this.setDate(this.getDate() + d);
+        };
+
+        
+        var date = new Date();
+        dpEndTime.value = date.Format("yyyy-MM-dd hh:mm:ss");
+        date.addDays(-1);
+        dpStartTime.value=date.Format("yyyy-MM-dd hh:mm:ss");*/
+    </script>
+</body>
+</html>

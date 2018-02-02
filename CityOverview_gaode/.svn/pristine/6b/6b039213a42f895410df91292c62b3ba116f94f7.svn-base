@@ -1,0 +1,103 @@
+package com.cetc28.idata.model;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所十三部
+ * 项目名称：CityOverview
+ * 设计人员：linyu
+ * 创建日期：2017/9/21 16:59
+ * 描述信息：
+ * ***************************************************************
+ */
+public class JxEcoBillionIndustry {
+    private Integer id;
+    private Integer year;
+    private Integer month;
+    private Double equip;     //装备制造业工业总产值
+    private Double equipIncrease; //装备制造同比增长率
+    private Double electron;     //电子信息产业工业总产值
+    private Double electronIncrease; //电子信息产业同比增长率
+    private Double fashion;     //时尚制造业工业总产值
+    private Double fashionIncrease; //时尚制造同比增长率
+    private Double newMaterial;     //新材料产业工业总产值
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Double getEquip() {
+        return equip;
+    }
+
+    public void setEquip(Double equip) {
+        this.equip = equip;
+    }
+
+    public Double getElectron() {
+        return electron;
+    }
+
+    public void setElectron(Double electron) {
+        this.electron = electron;
+    }
+
+    public Double getFashion() {
+        return fashion;
+    }
+
+    public void setFashion(Double fashion) {
+        this.fashion = fashion;
+    }
+
+    public Double getNewMaterial() {
+        return newMaterial;
+    }
+
+    public void setNewMaterial(Double newMaterial) {
+        this.newMaterial = newMaterial;
+    }
+
+    public Double getEquipIncrease() {
+        return equipIncrease;
+    }
+
+    public void setEquipIncrease(Double equipIncrease) {
+        this.equipIncrease = equipIncrease;
+    }
+
+    public Double getElectronIncrease() {
+        return electronIncrease;
+    }
+
+    public void setElectronIncrease(Double electronIncrease) {
+        this.electronIncrease = electronIncrease;
+    }
+
+    public Double getFashionIncrease() {
+        return fashionIncrease;
+    }
+
+    public void setFashionIncrease(Double fashionIncrease) {
+        this.fashionIncrease = fashionIncrease;
+    }
+}

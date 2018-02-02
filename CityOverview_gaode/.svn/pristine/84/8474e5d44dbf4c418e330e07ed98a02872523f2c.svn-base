@@ -1,0 +1,274 @@
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.dto.Fdckftz;
+import com.cetc28.idata.dto.HgJjDto;
+import com.cetc28.idata.model.JxNetEcoStatistics;
+import com.cetc28.idata.service.IJxEcoService;
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.text.Format;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * 嘉兴经济
+ * Created by Fang on 2017/9/7.
+ */
+@Controller
+@RequestMapping("/jxeco")
+public class JxEcoController {
+    @Autowired
+    private IJxEcoService iJxJjService;
+
+    @RequestMapping("/hgjj/gyzz.do")
+    @ResponseBody
+    public List queryGyzz(Integer monthSize){
+        List<HgJjDto> hgjj = iJxJjService.queryGyzz(monthSize,String.valueOf(getCurrentYear()));
+        //没有当前年数据
+        if(hgjj==null||hgjj.size()==0){
+            hgjj=new ArrayList<>();
+            for (int i=0;i<monthSize;i++){
+                HgJjDto h=new HgJjDto();
+                hgjj.add(h);
+            }
+            return hgjj;
+        }
+        String endMonth = hgjj.get(hgjj.size() - 1).getSj().substring(5);
+        String prTime = hgjj.get(hgjj.size() - 2).getSj();
+        List<HgJjDto> prehgjj = iJxJjService.queryPreGyzz(monthSize, String.valueOf(getCurrentYear() - 1), String.valueOf(getCurrentYear() - 1) + "-" + endMonth);
+        List<HgJjDto> hbhgjj = iJxJjService.queryPreGyzz(monthSize, String.valueOf(getCurrentYear()), prTime);
+        for (int i = 0; i < hgjj.size(); i++) {
+            double tbpercent = (hgjj.get(i).getGyzz() - prehgjj.get(i).getGyzz())*100/ prehgjj.get(i).getGyzz();
+            double hbpercent = (hgjj.get(i).getGyzz() - hbhgjj.get(i).getGyzz())*100/ hbhgjj.get(i).getGyzz();
+            hgjj.get(i).setTbzz(Double.valueOf(getFormat(2).format(tbpercent)));
+            hgjj.get(i).setHbzz(Double.valueOf(getFormat(2).format(hbpercent)));
+        }
+        return hgjj;
+    }
+
+    @RequestMapping("/hgjj/fwysczs.do")
+    @ResponseBody
+    public List queryFwysczs(Integer monthSize){
+        List<HgJjDto> hgjj = iJxJjService.queryFwysczs(monthSize,String.valueOf(getCurrentYear()));
+        return hgjj;
+    }
+
+    @RequestMapping("/hgjj/gdzctz.do")
+    @ResponseBody
+    public  List queryGdzctz(Integer monthSize){
+        List<HgJjDto> gdzctz = iJxJjService.queryGdzctz(monthSize,String.valueOf(getCurrentYear()));
+        //没有当前年数据
+        if(gdzctz==null||gdzctz.size()==0){
+            gdzctz=new ArrayList<>();
+            for (int i=0;i<monthSize;i++){
+                HgJjDto h=new HgJjDto();
+                gdzctz.add(h);
+            }
+            return gdzctz;
+        }
+        String endMonth = gdzctz.get(gdzctz.size() - 1).getSj().substring(5);
+        String prTime = gdzctz.get(gdzctz.size() - 2).getSj();
+        List<HgJjDto> pregdzctz = iJxJjService.queryPreGdzctz(monthSize, String.valueOf(getCurrentYear() - 1), String.valueOf(getCurrentYear() - 1) + "-" + endMonth);
+        List<HgJjDto> hbgdzctz = iJxJjService.queryPreGdzctz(monthSize, String.valueOf(getCurrentYear()), prTime);
+        for (int i = 0; i < gdzctz.size(); i++) {
+            double tbpercent = (gdzctz.get(i).getGdzctz() - pregdzctz.get(i).getGdzctz())*100 / gdzctz.get(i).getGdzctz();
+            double hbpercent = (gdzctz.get(i).getGdzctz() - hbgdzctz.get(i).getGdzctz())*100 / gdzctz.get(i).getGdzctz();
+            gdzctz.get(i).setTbzz(Double.valueOf(getFormat(2).format(tbpercent)));
+            gdzctz.get(i).setHbzz(Double.valueOf(getFormat(2).format(hbpercent)));
+        }
+        return gdzctz;
+    }
+
+    @RequestMapping("/hgjj/fdckftz.do")
+    @ResponseBody
+    public Map<String, String> queryFdckftz(){
+        Map<String,String> map = new HashedMap();
+        Fdckftz fdckftz = iJxJjService.queryFdckftz(String.valueOf(getCurrentYear()));
+        double preFdckftz = iJxJjService.queryPreFdckftz(String.valueOf(getCurrentYear() - 1),fdckftz.getMonthSize());
+        double percent = (fdckftz.getKftz()-preFdckftz)/preFdckftz;
+        map.put("fdckftz",String.valueOf(fdckftz.getKftz()));
+        map.put("percent",getFormat(2).format(percent));
+        map.put("time", fdckftz.getMaxSj());
+        return map;
+    }
+
+    @RequestMapping("/hgjj/shxfplsze.do")
+    @ResponseBody
+    public  List queryShxfplsze(Integer monthSize){
+        List<HgJjDto> shxfplsze = iJxJjService.queryShxfplsze(monthSize,String.valueOf(getCurrentYear()));
+        String endMonth = shxfplsze.get(shxfplsze.size() - 1).getSj().substring(5);
+        List<HgJjDto> preShxfplsze = iJxJjService.queryShxfplszePrevious(monthSize,String.valueOf(getCurrentYear()-1), String.valueOf(getCurrentYear()-1)+"-"+endMonth);
+        for (int i = 0; i < shxfplsze.size(); i++) {
+            double percent = (shxfplsze.get(i).getShxfplsze() - preShxfplsze.get(i).getShxfplsze())*100/ preShxfplsze.get(i).getShxfplsze();
+            shxfplsze.get(i).setTbzz(Double.valueOf(getFormat(2).format(percent)));
+        }
+        return  shxfplsze;
+    }
+
+    @RequestMapping("/hgjj/jck.do")
+    @ResponseBody
+    public  List queryJck(Integer monthSize){
+        List<HgJjDto> jck = iJxJjService.queryJck(monthSize,String.valueOf(getCurrentYear()));
+        String endMonth = jck.get(jck.size() - 1).getSj().substring(5);
+        List<HgJjDto> preJck = iJxJjService.queryPreJck(monthSize, String.valueOf(getCurrentYear() - 1), String.valueOf(getCurrentYear() - 1) + "-" + endMonth);
+        for (int i = 0; i < jck.size(); i++) {
+                double percent = (jck.get(i).getJck() - preJck.get(i).getJck()) / preJck.get(i).getJck();
+                jck.get(i).setTbzz(Double.valueOf(getFormat(2).format(percent)));
+        }
+        return  jck;
+    }
+
+
+    //获取当前年份
+    private  Integer getCurrentYear(){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String year = sdf.format(date);
+        return  Integer.valueOf(year);
+    }
+
+    //处理百分数
+    private Format getFormat(Integer num){
+        NumberFormat format = NumberFormat.getNumberInstance();
+        format.setMaximumFractionDigits(num);
+        return  format;
+    }
+
+    /*******************互联网经济 added by linyu************************/
+    /**
+     * 获取最新的互联网经济指数
+     * @return
+     */
+    @RequestMapping("/netEco/getEcoInternetIndex.do")
+    @ResponseBody
+    public Map getEcoInternetIndex(){
+        Map result = new HashMap();
+        result = iJxJjService.getEcoInternetIndex();
+        return result;
+    }
+
+    /**
+     * 查询电子商务信息
+     * @param year
+     * @param month
+     * @return
+     */
+    @RequestMapping("/netEco/queryNetBusiness.do")
+    @ResponseBody
+    public Map queryNetBusiness(Integer year, Integer month){
+        return iJxJjService.queryNetBusiness(year, month);
+    }
+
+    /**
+     * 查询最新季度的互联网经济统计信息
+     * @return
+     */
+    @RequestMapping("/netEco/queryNetStatistics.do")
+    @ResponseBody
+    public JxNetEcoStatistics queryNetStatistics(){
+        JxNetEcoStatistics result = new JxNetEcoStatistics();
+        result = iJxJjService.queryNetStatistics();
+        //数据截位
+        result.setIncreasement(Double.valueOf(getFormat(2).format(result.getIncreasement())));
+        return result;
+    }
+
+    /**
+     * 查询最近几年的信息经济指数
+     * @param length 年份数
+     * @return
+     */
+    @RequestMapping("/netEco/listEcoIndex.do")
+    @ResponseBody
+    public List listEcoIndex(int length){
+        List list = new ArrayList();
+        list = iJxJjService.listEcoIndex(length);
+        return list;
+    }
+
+    /**
+     * 查询最近几年的信息经济主要指标值
+     * @param length 年份数
+     * @return
+     */
+    @RequestMapping("/netEco/queryEcoIndex.do")
+    @ResponseBody
+    public List queryEcoIndex(int length){
+        Map map = new HashMap();
+        List list = new ArrayList();
+        list = iJxJjService.queryEcoIndex(length);
+        return list;
+    }
+
+    /**
+     * 输入年份查询该年嘉兴的信息经济主要指标的二级指标的单位及值
+     * @param year 年份
+     * @return
+     */
+    @RequestMapping("/netEco/queryEcoSubIndex.do")
+    @ResponseBody
+    public List queryEcoSubIndex(String year){
+        List list = new ArrayList();
+        list = iJxJjService.queryEcoSubIndex(year);
+        return list;
+    }
+
+    /**
+     * 获取乌镇互联网综合实验区信息
+    * @return
+     */
+    @RequestMapping("/netEco/queryIndustrialSite.do")
+    @ResponseBody
+    public List queryIndustrialSite(Integer status, Integer type){
+        List list = new ArrayList();
+        list = iJxJjService.queryIndustrialSite(status, type);
+        return list;
+    }
+
+    /**
+     * 查询最近一年的信息化指数 一级指标值
+     * @return
+     */
+    @RequestMapping("/netEco/queryEcoInternetIndex.do")
+    @ResponseBody
+    public List queryEcoInternetIndex(){
+        List list = new ArrayList();
+        list = iJxJjService.queryEcoInternetIndex();
+        return list;
+    }
+
+    /**
+     * 查询最近一年的信息化指数 三级指标的单位及值
+     * @return
+     */
+    @RequestMapping("/netEco/queryEcoSubInternetIndex.do")
+    @ResponseBody
+    public List queryEcoInternetSubIndex(){
+        List list = new ArrayList();
+        list = iJxJjService.queryEcoSubInternetIndex();
+        return list;
+    }
+
+    @RequestMapping("/netEco/queryEcoLhrh.do")
+    @ResponseBody
+    public List queryEcoLhrh(Integer length){
+        return iJxJjService.queryEcoLhrh(length);
+    }
+
+    /**
+     * 输入年份查询该年嘉兴的信息经济主要指标的二级指标的单位及值
+     * @param year 年份
+     * @return
+     */
+    @RequestMapping("/netEco/queryEcoLhrhSubIndex.do")
+    @ResponseBody
+    public List queryEcoLhrhSubIndex(String year){
+        return  iJxJjService.queryEcoLhrhSubIndex(year);
+    }
+
+}

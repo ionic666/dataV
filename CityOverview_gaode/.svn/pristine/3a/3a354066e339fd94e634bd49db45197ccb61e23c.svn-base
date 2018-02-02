@@ -1,0 +1,104 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Jessica
+  Date: 2017/9/18
+  Time: 19:00
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.satisfaction{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 250px;
+        }
+        div#satisfaction{
+            height: 83%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="satisfaction">
+    <p class="headerTitle">
+        行政服务满意度
+    </p>
+    <%--行政服务满意度雷达图--%>
+    <div id="satisfaction"></div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function satisfaction(){
+        var myChart = echarts.init(document.getElementById("satisfaction"));
+        var option = {
+            color: ['#5B9BD5'],
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['行政服务满意度'],
+                show: false
+            },
+            calculable : false,
+//            grid: {
+//                x: '5%',
+//                y: '20%',
+//                x2: '5%',
+//                y2: '5%',
+//                containLabel: true,
+//                borderWidth: 0
+//            },
+            polar : [
+                {
+                    indicator : [
+                        {text : '服务满意度', max  : 100},
+                        {text : '处理满意度', max  : 100},
+                        {text : '反馈满意度', max  : 100},
+                        {text : '跟踪满意度', max  : 100},
+                        {text : '咨询满意度', max  : 100}
+                    ],
+                    radius : 90,
+                    name : {
+                        textStyle:text_style
+                    }
+                }
+            ],
+            series : [
+                {
+                    name: '满意度',
+                    type: 'radar',
+                    itemStyle: {
+                        normal: {
+                            areaStyle: {
+                                type: 'default'
+                            }
+                        }
+                    },
+                    data : [
+                        {
+                            value : [97, 50, 88, 94, 80, 60],
+                            name : '行政服务满意度'
+                        }
+                    ]
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    satisfaction();
+
+
+</script>
+</body>
+</html>

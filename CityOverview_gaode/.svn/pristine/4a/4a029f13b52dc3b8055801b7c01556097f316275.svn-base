@@ -1,0 +1,110 @@
+/**
+ * Created by LiBin on 2017/11/6.
+ */
+hgjj={
+    lunbo1:"",
+    ll:"",
+    hgjjAjax:function() {
+
+        var len;
+        var showerObj;
+        var listObj;
+        var showerWidth = 800;
+        var showerHeight = 400;
+        var r;
+        var cR = 0;
+        var ccR = 0;
+        var lb = 0;
+        showerObj = document.getElementById("show");
+        listObj = document.getElementsByClassName("pic");
+        len = listObj.length;
+        r = Math.PI / 180 * 360 / len;
+        for (var i = 0; i < len; i++) {
+            var item = listObj[i];
+            //计算定位位置
+            item.style.top = showerHeight / 2 + Math.sin(r * i) * showerWidth / 2 - 60 + "px";
+            item.style.left = showerWidth / 2 + Math.cos(r * i) * showerWidth / 2 - 80 + "px";
+            item.rotate = (r * i + 2 * Math.PI) % (2 * Math.PI);
+            item.onclick = function () {
+                var len=$('.pic').length;
+                for(var i=0;i<len;i++){
+                    console.log($('.pic').eq(i).height())
+                    if($('.pic').eq(i).height()>=220){
+                        $('.pic').eq(i).css("transform", "scale(1)");
+                    }
+                }
+                $(this).css("transform", "scale(2)")
+                cR = Math.PI / 2 - this.rotate;
+                //定时器产生停顿效果
+                lb || (lb = setInterval(rotate, 10));
+                clearInterval(hgjj.lunbo1)
+            };
+
+        }
+        //鼠标进入，图片放大两倍
+      /*  $('.pic').mouseenter(function () {
+            clearInterval(hgjj.lunbo1);
+            hgjj.lunbo1 = 0;
+            $(this).css("transform", "scale(2)");
+        });*/
+        //鼠标移开，图片恢复原来大小，重启定时器
+        //$('.pic').mouseout(function () {
+        //    setTimeout(function(){
+        //        hgjj.fun();
+        //    },5000)
+        //    //$(this).css("transform", "scale(1)");
+        //});
+        var rX = showerObj.offsetLeft + showerWidth / 2;
+        var ry = showerObj.offsetTop + showerHeight / 2;
+        //旋转功能
+        var rotate = function () {
+            ccR = (ccR + 2 * Math.PI) % (2 * Math.PI);
+            if (cR - ccR < 0) cR = cR + 2 * Math.PI;
+            if (cR - ccR < Math.PI) {
+                ccR = ccR + (cR - ccR) / 19;
+            } else {
+                ccR = ccR - (2 * Math.PI + ccR - cR) / 19;
+
+            }
+            if (Math.abs((cR + 2 * Math.PI) % (2 * Math.PI) - (ccR + 2 * Math.PI) % (2 * Math.PI)) < Math.PI / 720) {
+                ccR = cR;
+                clearInterval(lb);
+                lb = 0;
+            }
+            //计算位置
+            for (var i = 0; i < len; i++) {
+                var item = listObj[i];
+                var w, h;
+                var sinR = Math.sin(r * i + ccR);
+                var cosR = Math.cos(r * i + ccR);
+                w = 160 + 0.6 * 240 * sinR;
+                h = (120 + 0.6 * 180 * sinR);
+                item.style.cssText += ";width:" + w + "px;height:" + h + "px;top:" + parseInt(showerHeight / 2 + sinR * showerWidth / 2 / 3 - w / 2) + "px;left:" + parseInt(showerWidth / 2 + cosR * showerWidth / 2 - h / 2) + "px;z-index:" + parseInt(showerHeight / 2 + sinR * showerWidth / 2 / 3 - w / 2) + ";";
+            }
+
+        };
+
+        $('#l').click(function () {
+            cR = (cR + r + 2 * Math.PI) % (2 * Math.PI);
+            lb || (lb = setInterval(rotate, 10));
+            //var lll=setInterval(function(){
+            //    hgjj.show();
+            //},2000)
+            //$(".pic:eq(0)").css("transform", "scale(2)");
+        });
+        rotate();
+    },
+    fun:function(){
+        $("#show .pic:eq(0)").click();
+        hgjj.lunbo1=setInterval(function(){
+        $("#l").click();
+            var len=$('.pic').length;
+            for(var i=0;i<len;i++){
+                if($('.pic').eq(i).height()==228){
+                    $('.pic').eq(i-1).css("transform", "scale(2)");
+                    $('.pic').eq(i).css("transform", "scale(1)");
+                }
+            }
+        },5000)
+    }
+}

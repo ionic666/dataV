@@ -1,0 +1,180 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #virescenceWindow .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #virescenceWindow .modal-title{
+      margin-top: -5px;
+    }
+    #virescenceWindow .modal-body{
+      padding: 0px;
+    }
+    #virescenceWindow .nav .list-group li{
+      width: 117px;height: 32px;line-height: 32px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+    }
+
+    /*.lisoft{*/
+        /*color: white;*/
+      /*-webkit-background-size: 100% 100%;*/
+      /*background-size: 100% 100%;*/
+      /*background-image: url("map/images/Layer24.png");*/
+    /*}*/
+
+    /*.actsoft{*/
+        /*color: #000000;*/
+      /*background-image: url("map/images/Layer24copy2.png");*/
+      /*-webkit-background-size: 100% 100%;*/
+      /*background-size: 100% 100%;*/
+    /*}*/
+
+    #virescenceWindow .nav li a:hover{
+      color: #000;
+      text-decoration: none;
+    }
+    #virescenceWindow{
+      color: #000000;
+      background-color:white ;
+    }
+
+  </style>
+</head>
+<body>
+<div class="modal fade" style="overflow: hidden;width: 580px;height: 400px;top: 10px;left: 70px;background-color: transparent" id="virescenceWindow" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog" style="width: 580px">
+    <div class="modal-content" style="height: 380px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+          <img src="map/images/economicModel/close.png">
+        </button>
+          <h5 class="modal-title" style="margin-top: -2px;">近五年城市绿化覆盖率</h5>
+        <div class="nav" style=" height:32px;margin-top: -10px;">
+          <ul class="list-group" style="margin-top: 4px">
+            <%--<li id="lisoft1_4" class="list-unstyled actsoft">概况</li>--%>
+            <%--<li onclick="toUrlenvir3(this,'2')" id="lisoft2_2" class="list-unstyled lisoft">变化趋势</li>--%>
+            <%--<li onclick="toUrlenvir3(this,'3')" id="lisoft3_2" class="list-unstyled lisoft">历史数据</li>--%>
+          </ul>
+        </div>
+        <%--<h4 class="modal-title ecoWindowTitle" id="infoModalLabel">社会经济</h4>--%>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content" style="height: 330px">
+          <div id="envir1_4" class="tab-pane active"><!--第一页产品规模这个图表-->
+              <div id="virescenceWindow_chart1" style="width: 560px;height: 290px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    function initEnvironment1_4(url){
+        $.ajax({
+            type:'post',
+            url:url,
+            dataType:'JSON',
+            success:function(data){
+                if(data){
+//                    console.log(data);
+                    var Xdata=new Array();
+                    var Ydata=new Array();
+                    for(var i=0;i<data.length;i++) {
+                        Xdata.push(data[i].sj);
+                        Ydata.push(data[i].value*100);
+                    }
+                    initEnvirChart_4(Xdata,Ydata);
+                }
+            }
+        })
+    }
+//  function initEnvironment2_4(url,layers,imgSource){
+//      $.ajax({
+//          type:'post',
+//          url:url,
+//          dataType:'JSON',
+//          success:function(data){
+//              if(data){
+//                  console.log(data);
+////                  $("#evidata1_3").html("");
+////                  var str="<thead><tr><td>名称</td><td>区域</td><td>面积</td></tr></thead><tbody>";
+////                  for(var i=0;i<data.length;i++){
+////                      str+='<tr><td>'+data[i].mc+'</td><td>'+data[i].ssqy+'</td><td>'+data[i].mj+'</td></tr>';
+////                  }
+////                  str+="</tbody>";
+////                  $("#evidata1_3").append(str);
+////                  showLayers(data,layers,imgSource);
+//              }
+//          }
+//      })
+//  }
+    function initEnvirChart_4(xdata,ydata1){
+        var myechart = echarts.init(document.getElementById("virescenceWindow_chart1"));
+
+        var option = {
+//            tooltip : {
+//                trigger: 'axis'
+//            },
+            legend: {
+                data:[
+                    '城市绿化覆盖率'
+                ],
+                x:'right'
+            },
+            calculable : true,
+            grid: {y: 50, y2:30, x2:20,x:40},
+            xAxis : [
+                {
+                    type : 'category',
+                    data : xdata
+                },
+                {
+                    type : 'category',
+                    axisLine: {show:false},
+                    axisTick: {show:false},
+                    axisLabel: {show:false},
+                    splitArea: {show:false},
+                    splitLine: {show:false},
+                    data : xdata
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel:{formatter:'{value}%'}
+                }
+            ],
+            series : [
+                {
+                    name:'城市绿化覆盖率',
+                    type:'bar',
+                    itemStyle: {normal: {color:'#CBD570', label:{show:true, formatter : function (params){
+                        return  Math.floor(params.value)+"%"
+                    }}}},
+                    data:ydata1
+                }
+            ]
+        };
+        myechart.setOption(option);
+    }
+</script>
+</body>
+</html>

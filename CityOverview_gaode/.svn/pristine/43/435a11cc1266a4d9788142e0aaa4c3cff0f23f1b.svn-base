@@ -1,0 +1,666 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Jessica
+  Date: 2017/9/23
+  Time: 10:38
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../../myCss/iframe.css"/>
+  <link rel="stylesheet" href="../../myCss/bootstrap.min.css"/>
+  <title>办件详情</title>
+  <script src="../../map/js/jquery-1.11.3.js"></script>
+  <script src="../../myjs/echarts-all.js"></script>
+  <script type="text/javascript" src="../../myjs/myEcharts.js"></script>
+  <style>
+      html{
+        padding:0;
+        margin:0;
+        width:100%;
+        height:100%;
+      }
+      body{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        background-image: url('../../images/adminService/adminbg.png');
+        position: relative;
+      }
+      div,h2{
+        margin: 0;
+      }
+      li{
+        list-style: none;
+      }
+      .floatLeft{
+        /*display: inline-block;*/
+        float: left;
+      }
+      .floatRight{
+        /*display: inline-block;*/
+        float: right;
+      }
+      p.headerTitle {
+        padding-left: 1%;
+        font-size: 20px;
+        font-weight: bold;
+        color: #B4B4B4;
+        height: 10%;
+        width: 50%;
+        line-height: 35px;
+        margin: 4px 4px;
+      }
+      p.headerTitle2 {
+        padding-left: 1%;
+        font-size: 20px;
+        font-weight: bold;
+        color: #B4B4B4;
+        height: 8%;
+        width: 10%;
+        line-height: 35px;
+        margin: 4px 4px;
+      }
+
+      .header{
+        width: 100%;
+        height: 9%;
+        position: relative;
+        /*border: 1px solid red;*/
+      }
+      .main{
+        width: 100%;
+        height: 87%;
+        margin-top: 1%;
+        /*border: 1px solid blue;*/
+      }
+      div.itemTop10,div.praise,div.itemDetails {
+        height: 88%;
+        width: 95%;
+      }
+      #bigLogo{
+        position: absolute;
+      }
+      #bigLogo #cetc{
+        float: left;
+        width: 190px;
+      }
+      #bigLogo #logo{
+        float: left;
+        /*width: 250px;*/
+        width: 100%;
+      }
+      #bigLogo{
+        /*width:510px;*/
+        position: absolute;
+        left:0px;
+        top:0px;
+        /*height:20px;*/
+        width: 20%;
+        height:95%;
+        border-left: 0.3em solid #0CDAF5;
+        padding-left: 0.4em;
+        margin-left: 1em;
+        z-index:66;
+      }
+      div#right{
+        float: left;
+        /*width: 250px;*/
+        width: 100%;
+        height: 100%;
+        padding-top: 10px;
+        padding-left: 10px;
+      }
+      .timer{
+        position: absolute;
+        height: 30px;
+        line-height: 30px;
+        /*width: 250px;*/
+        width: 100%;
+        background-color: #0CDAF5;
+        color: #02282D;
+        margin-top: 1em;
+        padding-left: 10px;
+        top: 35px;
+        z-index: 77;
+        font-size: 1.2em;
+      }
+     /* .header>.log{
+        width: 33%;
+        height: 100%;
+      }
+      .header>.log>.logoLeft{
+        width: 30%;
+        height: 90%;
+        margin-right: 1%;
+      }
+      .header>.log>.logoRight{
+        width: 40%;
+        height: 100%;
+      }
+      .header>.log>.logoRight>img{
+        width: 100%;
+        height: 33%;
+        margin-top: 10px;
+      }
+      .header>.log>.logoRight>.time{
+        width: 100%;
+        height: 43%;
+        line-height: 30px;
+        text-align: center;
+        background: #0CDAF5;
+      }*/
+      #title{
+        width: 20%;
+        height: 130%;
+        position: absolute;
+        left: 40%;
+        top: 10%;
+        z-index: 200;
+        /*background-image: url(../../images/publicServe/zdpyc.png);background-size: 100%,100%;background-repeat: no-repeat;*/
+      }
+      #title>h1{
+        color: #0CDAF5;
+        font-weight: bold;
+        text-align: center;
+        line-height: 100%;
+        margin-top: 10%;
+      }
+      #top{
+        width: 100%;
+        height: 48%;
+      }
+
+      /*主体内容*/
+      #top .mainLeft,#top .mainRight{
+        margin-left: 0.5%;
+        margin-right: 0.5%;
+        width: 49%;
+        height: 100%;
+
+      }
+      #top .mainLeft>div,#top .mainRight>div{
+        width: 100%;
+        height: 99%;
+        margin-top: 1%;
+        background-color: rgba(23,33,34,0.6);
+        border-top: 2px #0CDAF5 solid;
+        border-bottom: 1px #12363A solid;
+      }
+
+      .main>.mainMiddle{
+        margin-left: 0.5%;
+        margin-right: 0.5%;
+        margin-top: 1%;
+        width: 99%;
+        height: 52%;
+      }
+      .mainMiddle-bottom{
+        width: 100%;
+        height: 100%;
+      }
+      .main>.mainMiddle>.mainMiddle-bottom>div{
+        width: 100%;
+        height: 95%;
+        background-color: rgba(23,33,34,0.6);
+        border-top: 2px #0CDAF5 solid;
+        border-bottom: 1px #12363A solid;
+      }
+
+      .mainLeft-top>div{
+        background-size: 100%,100%;background-repeat: no-repeat;
+      }
+      table{
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        text-align: center;
+        font-size: 14px;
+      }
+      #itemDetails>table > tbody > tr:nth-of-type(even), #itemDetails>table > thead > tr > th {
+        background-color: #1B1B1B;
+      }
+      /*table thead tr{
+        text-align: center;
+        color: #0CDAF5;
+        font-size: 16px;
+        font-weight: normal;
+      }*/
+    #tableBody td{
+      margin-top: -2px;
+    }
+      #itemDetails thead td{
+        height: 25px;
+        text-align: center;
+        color: #3686D1;
+        font-size: 16px;
+        font-weight: normal;
+      }
+      #itemDetails thead tr,#tableBody tr:nth-of-type(even) td{
+        background-color: #303030;
+      }
+  </style>
+  <script>
+    var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+    var cityId='<%=Web_srcUtil.getString("cityId")%>';
+    var mapHost='<%=Web_srcUtil.getString("mapHost")%>';
+    var mapPort='<%=Web_srcUtil.getString("mapPort")%>';
+    var arcgisServiceUrl='<%=Web_srcUtil.getString("arcgisServiceUrl")%>';
+    var jiaxingJtSslkServiceUrl='<%=Web_srcUtil.getString("jiaxingJtSslkServiceUrl")%>';
+    var mapServiceTpye='<%=Web_srcUtil.getString("mapServiceTpye")%>';
+    var xmin=120.302546;
+    var ymin=30.25204;
+    var xmax=121.547912;
+    var ymax=31.036507;
+    var hostUrl = mapHost+":"+mapPort+"/CityOverview/map";
+    var url = location.search;
+    if (url.indexOf("?") != -1) {
+      var str = url.substr(1);
+      var strs = new Array();
+      strs = str.split('&');
+//      model = strs[0].slice(strs[0].indexOf("=")+1);
+      mainWin = strs[0].slice(strs[0].indexOf("=")+1);
+    }
+    function returnMainPage(){
+      location.href = "http://"+ mapHost+":" +mapPort+ "/CityOverview/main.jsp?bh="+mainWin;
+    }
+  </script>
+</head>
+
+<body>
+<%--返回上一页--%>
+<a href="javascript:void(0);" onclick="returnMainPage()" style="max-width:3%;position: fixed;left:97%;top: 2%;z-index: 1000"><img src="../../images/returnUp.png" alt=""></a>
+
+<!-- 头部logo主题 -->
+<div class="header">
+  <div id="bigLogo">
+    <%--<img src="../../images/cetc.png" alt="" id="cetc"/>--%>
+    <div id="right">
+      <img src="../../images/logo.png" alt="" id="logo"/>
+      <div class="timer">
+      </div>
+    </div>
+  </div>
+  <div id="title"><h1>"办件详情"</h1></div>
+</div>
+
+<!-- 页面主体部分 -->
+<div class="main">
+  <!-- 左侧上方模块 -->
+  <div id="top">
+  <div class="mainLeft floatLeft">
+    <!-- 服务大厅进驻单位业务受理前十名-->
+    <div class="mainLeft-top">
+      <p class="headerTitle">服务大厅进驻单位业务受理前十名</p>
+      <div id="itemTop10" class="itemTop10"></div>
+    </div>
+  </div>
+  <div class="mainRight floatRight">
+    <!-- 各窗口单位受表扬情况统计-->
+    <div class="mainRight-top">
+      <p class="headerTitle">各窗口单位受表扬情况统计</p>
+      <div id="praise" class="praise"></div>
+    </div>
+  </div>
+  </div>
+  <!-- 最下面一个模块 -->
+  <div class="mainMiddle">
+    <div class="mainMiddle-bottom">
+      <!-- 办件公示 -->
+      <div  class="mainMiddle-bottom-b floatLeft">
+        <p class="headerTitle2">办件公示</p>
+        <div id="itemDetails" class="itemDetails">
+          <table>
+            <tr>
+              <td width="100%">
+                <table>
+                  <thead>
+                    <tr>
+                      <td style="width: 20%">事项编号</td>
+                      <td style="width: 20%">申报事项</td>
+                      <td style="width: 20%">申请单位/申请人</td>
+                      <td style="width: 10%">受理日期</td>
+                      <td style="width: 10%">办理状态</td>
+                      <td style="width: 10%">办理状态变更时间</td>
+                      <td style="width: 10%">办理部门</td>
+                    </tr>
+                  </thead>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td width="100%">
+                <div id="A1">
+                  <div id="A2">
+                    <table>
+                      <tbody id = "tableBody">
+                        <tr style="width: 100%;height: 10%;"></tr>
+                        <tr style="width: 100%;height: 10%;"></tr>
+                        <tr style="width: 100%;height: 10%;"></tr>
+                        <tr style="width: 100%;height: 10%;"></tr>
+                        <tr style="width: 100%;height: 10%;"></tr>
+                        <tr style="width: 100%;height: 10%;"></tr>
+                        <tr style="width: 100%;height: 10%;"></tr>
+                        <tr style="width: 100%;height: 10%;"></tr>
+                        <tr style="width: 100%;height: 10%;"></tr>
+                        <tr style="width: 100%;height: 10%;"></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+
+
+          <%--<table>
+            <thead>
+              <tr>
+                <th style="width: 20%">事项编号</th>
+                <th style="width: 20%">申报事项</th>
+                <th style="width: 20%">申请单位/申请人</th>
+                <th style="width: 10%">受理日期</th>
+                <th style="width: 10%">办理状态</th>
+                <th style="width: 10%">办理状态变更时间</th>
+                <th style="width: 10%">办理部门</th>
+              </tr>
+            </thead>
+            <tbody id = "tableBody">
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr style="width: 100%;height: 10%;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>--%>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右侧一个模块 -->
+
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+  function itemTop10(){
+    var myChart1=echarts.init(document.getElementById("itemTop10"));
+    var option1 = {
+      color: ['#3686D1'],
+      tooltip : {
+        trigger: 'axis'
+      },
+      calculable : false,
+      grid: {
+        x: '25%',
+        y: '5%',
+        x2: '3%',
+        y2: '5%',
+        containLabel: false,
+        borderWidth: 0
+      },
+      legend: {
+        data: ['业务受理件数'],
+        show: false
+      },
+      xAxis : [
+        {
+          type : 'value',
+          //axisLine: {lineStyle: {color: '#676767'}},
+          splitLine: {show: false},
+          axisLine: {show: false},
+          axisTick: {show: false},
+          axisLabel: {show: false,textStyle: text_style},
+          boundaryGap : [0, 0.01]
+        }
+      ],
+      yAxis : [
+        {
+          type : 'category',
+          //axisLine: {lineStyle: {color: '#676767'}},
+          splitLine: {show: false},
+          axisTick: {show: false},
+          axisLabel: {show: true,textStyle: text_style},
+          data : ['出入境检疫局','市海关','电子口岸','市经贸信息委','市市场监管局','市人力资源保障局','市贸促局','市地税局','市公安交通警察局','市国税局']
+        }
+      ],
+      series : [
+        {
+          name: '业务受理件数',
+          type:'bar',
+          barWidth: 15,
+//          itemStyle: {
+//            normal: {
+//              label: {
+//                show: true,
+//                textStyle: text_style
+//              }
+//            }
+//          },
+          data:[18203, 19325, 23436, 23489, 29034, 31000, 59674, 60328, 77456, 83200]
+        }
+      ]
+    };
+    myChart1.setOption(option1);
+  }
+  itemTop10();
+
+  function praise(){
+    var myChart2=echarts.init(document.getElementById("praise"));
+    var placeHoledStyle = {
+      normal:{
+        barBorderColor:'rgba(0,0,0,0)',
+        color:'rgba(0,0,0,0)'
+      },
+      emphasis:{
+        barBorderColor:'rgba(0,0,0,0)',
+        color:'rgba(0,0,0,0)'
+      }
+    };
+    var dataStyle = {
+      normal: {
+        label : {
+          show: true,
+          position: 'insideLeft',
+          formatter: '{c}%'
+        }
+      }
+    };
+    var option2 = {
+      color: ['#4AB15E','#CDD23E','#C43D3D'],
+      tooltip : {
+        trigger: 'axis',
+        formatter: "{b} <br/>{a0} : {c0}% <br/>{a1} : {c1}% <br/>{a2} : {c2}%",
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      calculable : false,
+      grid: {
+        x: '25%',
+        y: '5%',
+        x2: '15%',
+        y2: '5%',
+        containLabel: false,
+        borderWidth: 0
+      },
+      legend: {
+        data: ['满意','一般','不满意'],
+        color:['#C46627','#ED7D31','#F4B9A4'],
+        orient : 'vertical',
+        x: 'right',
+        y:'9%',
+        textStyle: text_style
+      },
+      xAxis : [
+        {
+          type : 'value',
+          //axisLine: {lineStyle: {color: '#676767'}},
+          splitLine: {show: false},
+          axisLine: {show: false},
+          axisTick: {show: false},
+          axisLabel: {show: false,textStyle: text_style}
+        }
+      ],
+      yAxis : [
+        {
+          type : 'category',
+          splitLine: {show: false},
+          axisTick: {show: false},
+          axisLabel: {show: true,textStyle: text_style},
+          data : ['市卫生计生委','市税务局','市人居环境局','出入境检验检疫局','市住房建设局','市气象局','市海关']
+        }
+      ],
+      series : [
+        {
+          name: '满意',
+          type:'bar',
+          color: ['#C46627'],
+          stack: '总量',
+          barWidth: 15,
+//          itemStyle: dataStyle,
+          data:[83, 85, 75, 65, 55, 86, 90]
+        },
+        {
+          name: '一般',
+          type:'bar',
+          color: ['#ED7D31'],
+          stack: '总量',
+//          itemStyle: dataStyle,
+          data:[14, 14, 18, 28, 40, 10, 8]
+        },
+        {
+          name: '不满意',
+          type:'bar',
+          color: ['#F4B9A4'],
+          stack: '总量',
+//          itemStyle: dataStyle,
+          data:[3, 1, 7, 7, 5, 4, 2]
+        }
+      ]
+    };
+    myChart2.setOption(option2);
+  }
+  praise();
+
+</script>
+<script>
+  var dataArray=[];
+  $.ajax({
+    type:"POST",
+    url:'../../jxaddmin/queryAllIterms.do',
+    dataType:'json',
+    async: false,
+    success:function(data){
+//      var str="";
+//      for(var i=0;i<data.length;i++){
+//        str+='<tr>'+
+//        '<td>'+data[i].icode+'</td>'+
+//        '<td>'+data[i].iname+'</td>'+
+//        '<td>'+data[i].applicant+'</td>'+
+//        '<td>'+data[i].starttime+'</td>'+
+//        '<td>'+data[i].state+'</td>'+
+//        '<td>'+data[i].changetime+'</td>'+
+//        '<td>'+data[i].depart+'</td>'+
+//        '</tr>';
+//      }
+//      $("table tbody").html(str);
+      dataArray = data;
+      //setShowInfos();
+      var str="";
+      for(var i=0;i<data.length;i++){
+        str+="<tr><td style='width: 20%'>"+dataArray[i].icode+"</td><td style='width: 20%'>"+dataArray[i].iname+"</td><td style='width: 20%'>"+dataArray[i].applicant+"</td><td style='width: 10%'>"+dataArray[i].starttime+"</td><td style='width: 10%'>"+dataArray[i].state+"</td><td style='width: 10%'>"+dataArray[i].changetime+"</td><td style='width: 10%'>"+dataArray[i].depart+"</td></tr>"
+      }
+      $("#tableBody").html(str);
+    }
+
+  })
+  //消息动态展示
+  /*window.setInterval(function(){
+    setShowInfos();
+  },2000)*/
+
+  /*function setShowInfos(){
+    var tr=$("#tableBody").find("tr");
+    for(var i=0;i<tr.length;i++){
+      $($(tr[i]).find("td")[0]).text(dataArray[i].icode);
+      $($(tr[i]).find("td")[1]).text(dataArray[i].iname);
+      $($(tr[i]).find("td")[2]).text(dataArray[i].applicant);
+      $($(tr[i]).find("td")[3]).text(dataArray[i].starttime);
+      $($(tr[i]).find("td")[4]).text(dataArray[i].state);
+      $($(tr[i]).find("td")[5]).text(dataArray[i].changetime);
+      $($(tr[i]).find("td")[6]).text(dataArray[i].depart);
+    }
+    var newArray=new Array();
+    for(var i=0;i<dataArray.length;i++){
+      if(i-1>=0){
+        newArray.push(dataArray[i]);
+      }
+    }
+    newArray.push(dataArray[0]);
+    dataArray=newArray;
+  }*/
+  function _InitScroll(_S1,_S2,_W,_H,_T){
+    return "var marqueesHeight"+_S1+"="+_H+";var stopscroll"+_S1+"=false;var scrollElem"+_S1+"=document.getElementById('"+_S1+"');with(scrollElem"+_S1+"){style.width="+_W+";style.height=marqueesHeight"+_S1+";style.overflow='hidden';noWrap=true;}scrollElem"+_S1+".onmouseover=new Function('stopscroll"+_S1+"=true');scrollElem"+_S1+".onmouseout=new Function('stopscroll"+_S1+"=false');var preTop"+_S1+"=0; var currentTop"+_S1+"=0; var stoptime"+_S1+"=0;var leftElem"+_S2+"=document.getElementById('"+_S2+"');scrollElem"+_S1+".appendChild(leftElem"+_S2+".cloneNode(true));setTimeout('init_srolltext"+_S1+"()',"+_T+");function init_srolltext"+_S1+"(){scrollElem"+_S1+".scrollTop=0;setInterval('scrollUp"+_S1+"()',50);}function scrollUp"+_S1+"(){if(stopscroll"+_S1+"){return;}currentTop"+_S1+"+=1;if(currentTop"+_S1+"==(marqueesHeight"+_S1+"+1)) {stoptime"+_S1+"+=1;currentTop"+_S1+"-=1;if(stoptime"+_S1+"=="+_T/50+") {currentTop"+_S1+"=0;stoptime"+_S1+"=0;}}else{preTop"+_S1+"=scrollElem"+_S1+".scrollTop;scrollElem"+_S1+".scrollTop +=1;if(preTop"+_S1+"==scrollElem"+_S1+".scrollTop){scrollElem"+_S1+".scrollTop=0;scrollElem"+_S1+".scrollTop +=1;}}}";
+  }
+
+  eval(_InitScroll("A1","A2",1805,360,1000));
+</script>
+<script>
+  $(function(){
+    var timer={
+      date:"",
+      timeAjax:function(){
+        var me=this;
+        $.ajax({
+          url:'../../jxsys/getCurrentTime.do',
+          type:'POST',
+          dataType:'json',
+          success:function(date) {
+            me.date=date;
+            me.showCurDate();
+          }
+        });
+        return this
+      },
+      showCurDate:function(){
+        var me=this;
+        function changeNumber(num){
+          if(num<10){
+            return '0'+num;
+          }else{
+            return ''+num;
+          }
+        }
+        setInterval(function(){
+          var T=new Date(me.date)
+          newDate = changeNumber(T.getFullYear())+"年"+
+          changeNumber((parseInt(T.getMonth())+1))+"月"+
+          changeNumber(T.getDate())+"日  "+
+          changeNumber(T.getHours())+":"+
+          changeNumber(T.getMinutes())+":"+
+          changeNumber(T.getSeconds())+""
+          me.date+=1000;
+          $(".timer").html(newDate)
+        },1000)
+        return this
+      }
+    }
+    timer.timeAjax();
+  })
+</script>
+<script language="JavaScript">
+
+</script>
+</body>
+</html>
+

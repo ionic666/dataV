@@ -1,0 +1,68 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: NJ
+  Date: 2016/4/27
+  Time: 11:23
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div class="modal fade" id="allCity" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static" style="width: 40%;height: 500px;overflow-y: hidden;top: 50px;right: 25%;left: auto">
+  <div class="modal-dialog" style="z-index: 9000;width: 98%">
+    <input id="datalength" type="hidden" value="111"/>
+    <div class="modal-content" style="overflow: hidden;height: 500px">
+      <div class="modal-header" style="padding: 10px 15px;height: auto;background: url('map/icons/-1.png') center center no-repeat">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close" style="margin-top: 3px">
+          <img src="map/images/economicModel/close.png" alt=""/>
+        </button>
+        <h4 class="modal-title " id="infoModalLabel" style="font-size: 20px;text-align: left;color: #000">城乡总体规划统计分析</h4>
+      </div>
+      <div class="modal-body" style="overflow: hidden;padding: 0">
+        <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div id="main1" style="height:500px;width:600px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var myChart = echarts.init(document.getElementById('main1'));
+  var option = {
+    title : {
+      text: '',
+      subtext: '',
+      x:'center'
+    },
+    tooltip : {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    calculable : true,
+    series : [
+      {
+        name:'规划用地',
+        type:'pie',
+        radius : '55%',
+        center: ['50%', '50%'],
+        data:[
+          {value:104.82, name:'耕地'},
+          {value:267.27, name:'园地'},
+          {value:55.33, name:'林地'},
+          {value:14.25, name:'其他农用地'},
+          {value:1780, name:'城乡建设用地'},
+          {value:295.3, name:'交通水利用地'},
+          {value:10.74, name:'其他建设用地'},
+          {value:2710, name:'水壤'}
+        ]
+      }
+    ]
+  };
+  // 为echarts对象加载数据
+  myChart.setOption(option);
+</script>
+</body>
+</html>

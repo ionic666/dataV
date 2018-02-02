@@ -1,0 +1,779 @@
+package com.cetc28.util;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class DateTimeUtil {
+
+    private final static SimpleDateFormat dfYyyy = new SimpleDateFormat("yyyy");
+    private final static SimpleDateFormat dfMM = new SimpleDateFormat("MM");
+    private final static SimpleDateFormat dfDd = new SimpleDateFormat("dd");
+    private final static SimpleDateFormat dfMmmYyyy = new SimpleDateFormat("MMM yyyy");
+    private final static SimpleDateFormat dfDdMMMYYYY = new SimpleDateFormat("dd MMM yyyy");
+    private final static SimpleDateFormat dfMmDdYYYY = new SimpleDateFormat("MM/dd/yyyy");
+    private final static SimpleDateFormat dfyyyyMMddHHMMSS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final static SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
+    private final static SimpleDateFormat hhmm = new SimpleDateFormat("HH:mm"); // 24 Hours
+    private final static SimpleDateFormat yyyymmdd = new SimpleDateFormat("yyyyMMdd");
+    private final static SimpleDateFormat yyyymm = new SimpleDateFormat("yyyyMM");
+    private final static SimpleDateFormat yyyymm2 = new SimpleDateFormat("yyyy-MM");
+    private final static SimpleDateFormat yyyyMMddHHmmss = new SimpleDateFormat("yyyyMMddHHmmss");
+    private final static SimpleDateFormat yyyyMMddHmmss = new SimpleDateFormat("yyyyMMddHmmss");
+    private final static SimpleDateFormat yyyyMMddmmss = new SimpleDateFormat("yyyyMMddmmss");
+    private final static SimpleDateFormat dfyyyyMMddHHMMSSSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+
+    private final static String twentyFourHourRegExp = "^(([0-1][0-9])|(2[0-3])):([0-5][0-9])$";
+
+    /**
+     * 获取系统当前时间
+     * @return
+     */
+    public static Date currentDate() {
+        return new Date();
+    }
+
+    /**
+     * 将日期转换为参数传入的格式字符串
+     * @param sdf
+     * @param date
+     * @return
+     */
+    public static String formatDateToString(SimpleDateFormat sdf,Date date){
+        if(date==null) return null;
+
+        return sdf.format(date);
+    }
+
+    /**
+     * 根据参数字符串返回简单日期格式对象
+     * @param sdf
+     * @return
+     */
+    public static SimpleDateFormat getSdfFromString(String sdf){
+        return new SimpleDateFormat(sdf);
+    }
+
+    public static String curDateTimeStr23() {
+        return formatDateToString(dfyyyyMMddHHMMSSSSS,currentDate());
+    }
+
+    public static String curDateTimeStr19() {
+        return formatDateToString(dfyyyyMMddHHMMSS,currentDate());
+    }
+
+    public static Date putTimeStr19ToDate(String dateTimeStr19) {
+
+        Date date = null;
+        try {
+            date = dfyyyyMMddHHMMSS.parse(dateTimeStr19);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public static Date putTimeStr14ToDate(String dateTimeStr) {
+
+        Date date = null;
+        try {
+            switch (dateTimeStr.length()) {
+                case 12:
+                    date = yyyyMMddmmss.parse(dateTimeStr);
+                    break;
+                case 13:
+                    ;
+                    date = yyyyMMddHmmss.parse(dateTimeStr);
+                    break;
+                case 14:
+                    ;
+                    date = yyyyMMddHHmmss.parse(dateTimeStr);
+                    break;
+                default:
+                    break;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+
+    public static String putDateToTimeHhMm(Date date) {
+        String dateStr = "";
+        if(date != null)
+            hhmm.format(date);
+        return dateStr;
+    }
+
+    /**
+     * @param date
+     * @return 日期字符串，格式‘yyyyMM’
+     */
+    public static String putDateToYmStr(Date date) {
+        String dateStr = "";
+        if (date != null)
+            dateStr = yyyymm.format(date);
+        return dateStr;
+    }
+
+    /**
+     * @param date
+     * @return 日期字符串，格式‘yyyyMMdd’
+     */
+    public static String putDateToYmdStr(Date date) {
+        String dateStr = "";
+        if (date != null)
+            dateStr = yyyymmdd.format(date);
+        return dateStr;
+    }
+
+    /**
+     * 获取当前年度
+     * @return
+     */
+    public static Integer currentYear() {
+        return Integer.valueOf(dfYyyy.format(currentDate()));
+    }
+
+    public static Integer currentTopupYear(String topupSeq) {
+        if ("3".equals(topupSeq) || "4".equals(topupSeq))
+            return currentYear() - 1;
+        else
+            return currentYear();
+    }
+
+    /**
+     * 获取当前月份
+     * @return
+     */
+    public static Integer currentMonth() {
+        return Integer.valueOf(dfMM.format(currentDate()));
+    }
+
+    /**
+     * 获取当前天号数
+     * @return
+     */
+    public static Integer currentNumDate() {
+        return Integer.valueOf(dfDd.format(currentDate()));
+    }
+
+    /**
+     * 获取当前日期前n天
+     * @return
+     */
+    public static Date preDate(int n) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -n);
+        return cal.getTime();
+    }
+
+    /**
+     * 获取当前日期前n天String
+     * @return
+     */
+    public static String preStringDate(int n) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -n);
+        return String.valueOf(yyyyMMdd.format(cal.getTime()));
+    }
+
+    /**
+     * 将String转换成Date
+     * @return
+     */
+    public static Date StringToDate(String date) {
+        Date d = new Date();
+        try {
+            d = yyyyMMdd.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+
+    /**
+     * @param date
+     * @return 日期字符串，格式‘yyyy-MM-dd’
+     */
+    public static String putDateToStr(Date date) {
+        String dateStr = "";
+        if (date != null)
+            dateStr = yyyyMMdd.format(date);
+        return dateStr;
+    }
+
+    /**
+     * 获取当前时间往前推一个月的时间
+     * @return
+     */
+    public static Date preMonthDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        return cal.getTime();
+    }
+
+    /**
+     * 获取上个月("MMM yyyy")
+     * @return
+     */
+    public static String preMonth() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        return String.valueOf(dfMmmYyyy.format(cal.getTime()));
+    }
+    /**
+     * 获取上个月("yyyymm")
+     * @return
+     */
+    public static String yyyyMMPreMonth() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        return String.valueOf(yyyymm.format(cal.getTime()));
+    }
+
+    /**
+     * 获取上个月("yyyy-mm")
+     * @return
+     */
+    public static String yyyyMM2PreMonth() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        return String.valueOf(yyyymm2.format(cal.getTime()));
+    }
+
+    /**
+     * 获取中文月份的当前日期
+     * @return
+     */
+    public static String letterDate() {
+        return String.valueOf(dfDdMMMYYYY.format(currentDate()));
+    }
+
+    public static String letterDate(Date dt) {
+        if (dt != null)
+            return String.valueOf(dfDdMMMYYYY.format(dt));
+        else
+            return "";
+    }
+
+    public static Date getDateDdMmmYyyy(String ddMmmYyyy) {
+        try {
+            return dfDdMMMYYYY.parse(ddMmmYyyy);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static String dateMmmYyyy(Date dt) {
+        if (dt != null)
+            return String.valueOf(dfMmmYyyy.format(dt));
+        else
+            return "";
+    }
+
+    public static String dateYyyyMmDd(Date dt) {
+        if (dt != null)
+            return String.valueOf(yyyyMMdd.format(dt));
+        else
+            return "";
+    }
+
+    public static String dateYyyymmdd(Date dt){
+        if (dt != null)
+            return String.valueOf(yyyymmdd.format(dt));
+        else
+            return "";
+    }
+
+    public static String dateYyyyMmDdHhMmSs(Date dt) {
+        if (dt != null)
+            return String.valueOf(dfyyyyMMddHHMMSS.format(dt));
+        else
+            return "";
+    }
+
+    public static String currentDateYyyyMmDdHhMmSs(Date dt) {
+        if (dt != null)
+            return String.valueOf(yyyyMMddHHmmss.format(dt));
+        else
+            return "";
+    }
+
+    public static String dateMmDdYyyy(Date dt) {
+        if (dt != null)
+            return String.valueOf(dfMmDdYYYY.format(dt));
+        else
+            return "";
+    }
+
+    // Maybe need to change the algorithm, depends on the requirment
+    public static int age(Date dob) {
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        from.setTime(dob);
+        to.setTime(new Date());
+        int birthYYYY = from.get(Calendar.YEAR);
+        int curYYYY = to.get(Calendar.YEAR);
+
+        int ageInYears = curYYYY - birthYYYY;
+
+        if (ageInYears < 0)
+            ageInYears = 0;
+
+        return ageInYears;
+    }
+
+    public static int dayBetweenTwoDates(Date beginDate, Date endDate) {
+        int days;
+        int pnMark = 1;
+        if (endDate != null && beginDate != null) {
+
+            Calendar bCalendar = Calendar.getInstance();
+            Calendar eCalendar = Calendar.getInstance();
+            if (beginDate.after(endDate)) {
+                pnMark = -1;
+                bCalendar.setTime(endDate);
+                eCalendar.setTime(beginDate);
+            } else {
+                bCalendar.setTime(beginDate);
+                eCalendar.setTime(endDate);
+            }
+            int dayBegin = bCalendar.get(Calendar.DAY_OF_YEAR);
+            int dayEnd = eCalendar.get(Calendar.DAY_OF_YEAR);
+            days = dayEnd - dayBegin;
+            int endYear = eCalendar.get(Calendar.YEAR);
+            if (bCalendar.get(Calendar.YEAR) != endYear) {
+                bCalendar = (Calendar) bCalendar.clone();
+            }
+            while (bCalendar.get(Calendar.YEAR) != endYear) {
+                days += bCalendar.getActualMaximum(Calendar.DAY_OF_YEAR);
+                bCalendar.add(Calendar.YEAR, 1);
+            }
+        } else
+            days = 0;
+
+        return days * pnMark;
+    }
+
+    public static Date dateAfterNDays(Date dt, int n) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dt);
+        cal.add(Calendar.DATE, n);
+        return cal.getTime();
+    }
+
+    public static Date dateAfterNMonths(Date dt, int n) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dt);
+        cal.add(Calendar.MONTH, n);
+        return cal.getTime();
+    }
+
+    public static Date dateAfterNYears(Date dt, int n) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dt);
+        cal.add(Calendar.YEAR, n);
+        return cal.getTime();
+    }
+
+    public static String getDateFormatStr(String formart) {
+        return new SimpleDateFormat(formart).format(new Date());
+    }
+
+    public static int getIntervalDays(Date startDay, Date endDay) {
+        if (startDay.after(endDay)) {
+            Date cal = startDay;
+            startDay = endDay;
+            endDay = cal;
+        }
+
+        long startl = startDay.getTime();
+        long endl = endDay.getTime();
+        long ei = endl - startl;
+        return (int) (ei / (1000 * 60 * 60 * 24));
+    }
+
+    public static String getCurrentDateStr() {
+        Date now = new Date();
+
+        return yyyyMMdd.format(now);
+    }
+
+    /**
+     * 获取当前日期减去参数天数之后的日期
+     * @param days
+     * @return
+     */
+    public static String getBookInfoDate(int days) {
+        Date now = new Date();
+        return yyyyMMdd.format(new Date(now.getTime() - (long) days * 24 * 60
+                * 60 * 1000));
+    }
+
+    /**
+     * check if the string is one valid time, it should be hh:mm
+     * @param timeStr
+     * @return
+     */
+    public static boolean isValidTimeHHMM(String timeStr) {
+        if (ConditionValidate.isEmpty(timeStr)) {
+            Pattern p = Pattern.compile(twentyFourHourRegExp);
+            Matcher m = p.matcher(timeStr);
+            return m.matches();
+        } else
+            return false;
+    }
+
+    /**
+     * get format string Current Year
+     * @return
+     */
+    public static String getFormatCurYearAsYYYY() {
+        return dfYyyy.format(currentDate());
+    }
+
+    /**
+     * get format string Previous Year
+     * @return
+     */
+    public static String getFormatPreYearAsYYYY() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.YEAR, -1);
+        return dfYyyy.format(cal.getTime());
+    }
+
+    /**
+     * get format string current month "YYYYMM"
+     * @return
+     */
+    public static String getFormatCurMonthAsYYYYMM() {
+        //Calendar.getInstance().getTime()
+        return yyyymm.format(currentDate());
+    }
+
+    /**
+     * get format string previous month "YYYYMM"
+     * @return
+     */
+    public static String getFormatPreMonthAsYYYYMM() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        return yyyymm.format(cal.getTime());
+    }
+
+    /**
+     * 判断传入年份是否为闰年
+     * @param year 年
+     * @return
+     */
+    public static boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+
+    /**
+     * 获得日期所在季度第一个月或最后一个月
+     * @param date
+     * @param firstOrLast
+     * @return
+     */
+    public static String getMonthOfSeason(Date date, boolean firstOrLast) {
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");//可以方便地修改日期格式
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        String yearStr = yearFormat.format(date);
+        String monthStr = monthFormat.format(date);
+        int month = Integer.parseInt(monthStr);
+
+        String array[][] = { { "01", "02", "03" }, { "04", "05", "06" },
+                { "07", "08", "09" }, { "10", "11", "12" } };
+
+        int season = 1;
+
+        if (month >= 1 && month <= 3) {
+            season = 1;
+        }
+        if (month >= 4 && month <= 6) {
+            season = 2;
+        }
+        if (month >= 7 && month <= 9) {
+            season = 3;
+        }
+        if (month >= 10 && month <= 12) {
+            season = 4;
+        }
+
+        String start_month = array[season - 1][0];
+        String end_month = array[season - 1][2];
+
+        if (firstOrLast) {
+            return yearStr + start_month;
+        } else {
+            return yearStr + end_month;
+        }
+    }
+
+    /**
+     * 在当前日期的基础上增加传入参数的天数
+     * @param i
+     * @return
+     */
+    public static Date addSomeDays(int i) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.add(Calendar.DATE, i);
+        Date date = cal.getTime();
+        return date;
+    }
+
+    /**
+     * 在当前日期的基础上增加传入参数的月数
+     * @param i
+     * @return
+     */
+    public static Date addSomeMonths(int i) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.add(Calendar.MONTH, i);
+        Date date = cal.getTime();
+        return date;
+    }
+
+    /**
+     * 在当前日期的基础上增加传入参数的年数
+     * @param i
+     * @return
+     */
+    public static Date addSomeYears(int i) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.add(Calendar.YEAR, i);
+        Date date = cal.getTime();
+        return date;
+    }
+
+    /**
+     * 计算传入的两个日期之间相差的天数
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    public static long subDate(Date beginTime, Date endTime) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(beginTime);
+        Long time1 = cal.getTimeInMillis();
+
+        cal.setTime(endTime);
+        Long time2 = cal.getTimeInMillis();
+
+        long theday = (time2 - time1) / (1000 * 60 * 60 * 24);
+        return theday;
+    }
+
+    /**
+     * 根据传入的年月返回该月的第一天
+     * @param year
+     * @param month
+     * @return
+     */
+    public static Date getFirstMonthDay(int year, int month) {
+
+        Calendar cal = Calendar.getInstance();
+        //1号。这里要注意：month要减去1
+        cal.set(year, month - 1, 1);
+
+        return cal.getTime();
+    }
+
+    /**
+     * 根据传入的年月返回该月最后的一天
+     * @param year
+     * @param month
+     * @return
+     */
+    public static Date getLastMonthDay(int year, int month) {
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month - 1, 1);
+        //该月的最大的天数
+        int maxDayNo = cal.getActualMaximum(Calendar.DATE);
+
+        cal.set(Calendar.DATE, maxDayNo);
+        return cal.getTime();
+    }
+
+    /**
+     * 获得当前月份的第一天
+     * @return
+     */
+    public static Date getFirthDayOfCurrentMonth() {
+        String currentMonth = getFormatCurMonthAsYYYYMM();
+        int year = Integer.valueOf(currentMonth.substring(0,4));
+        int month  = Integer.valueOf(currentMonth.substring(4,6));
+        getLastMonthDay(year, month);
+
+        return  getFirstMonthDay(year, month);
+    }
+
+    /**
+     * 获得当前月份的最后一天
+     * @return
+     */
+    public static Date getLastDayOfCurrentMonth() {
+        String currentMonth = getFormatCurMonthAsYYYYMM();
+        int year = Integer.valueOf(currentMonth.substring(0,4));
+        int month  = Integer.valueOf(currentMonth.substring(4,6));
+        return  getLastMonthDay(year, month);
+    }
+
+    /**
+     * 获取上月的第一天
+     * @return
+     */
+    public static String firstDayOfLastMonth() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        cal.set(Calendar.DATE, 1);
+        return String.valueOf(dfDdMMMYYYY.format(cal.getTime()));
+    }
+
+    /**
+     * 获取上月的最后一天
+     * @return
+     */
+    public static String lastDayOfLastMonth() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DATE, 1);
+        cal.add(Calendar.DATE, -1);
+        return String.valueOf(dfDdMMMYYYY.format(cal.getTime()));
+    }
+    /**
+     * 根据传入的日期返回前一季度字符串
+     * @param date
+     * @return char(5):YYYYQ
+     */
+    public static String getPreQuarterFromDate(Date date){
+        if (date == null) {
+            date = new Date();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.MONTH, -3);
+
+        return getQuarterFromDate(cal.getTime());
+    }
+    /**
+     * 根据传入的日期返回相应的季度
+     * @param date
+     * @return char(5):YYYYQ
+     */
+    public static String getQuarterFromDate(Date date) {
+        String result = "";
+
+        if (date == null) {
+            date = new Date();
+        }
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        String yearStr = yearFormat.format(date);
+        int month = Integer.parseInt(monthFormat.format(date));
+        switch (month) {
+            case 1:
+                result = yearStr + "1";
+                break;
+            case 2:
+                result = yearStr + "1";
+                break;
+            case 3:
+                result = yearStr + "1";
+                break;
+            case 4:
+                result = yearStr + "2";
+                break;
+            case 5:
+                result = yearStr + "2";
+                break;
+            case 6:
+                result = yearStr + "2";
+                break;
+            case 7:
+                result = yearStr + "3";
+                break;
+            case 8:
+                result = yearStr + "3";
+                break;
+            case 9:
+                result = yearStr + "3";
+                break;
+            case 10:
+                result = yearStr + "4";
+                break;
+            case 11:
+                result = yearStr + "4";
+                break;
+            case 12:
+                result = yearStr + "4";
+                break;
+
+            default:
+                break;
+        }
+
+        return result;
+    }
+
+    public static String getMonthFromDate(Date date) {
+        String result = "";
+        if (date == null) {
+            date = new Date();
+        }
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        String yearStr = yearFormat.format(date);
+        int month = Integer.parseInt(monthFormat.format(date));
+        switch (month) {
+            case 1:
+                result = yearStr + "01";
+                break;
+            case 2:
+                result = yearStr + "02";
+                break;
+            case 3:
+                result = yearStr + "03";
+                break;
+            case 4:
+                result = yearStr + "04";
+                break;
+            case 5:
+                result = yearStr + "05";
+                break;
+            case 6:
+                result = yearStr + "06";
+                break;
+            case 7:
+                result = yearStr + "07";
+                break;
+            case 8:
+                result = yearStr + "08";
+                break;
+            case 9:
+                result = yearStr + "09";
+                break;
+            case 10:
+                result = yearStr + "10";
+                break;
+            case 11:
+                result = yearStr + "11";
+                break;
+            case 12:
+                result = yearStr + "12";
+                break;
+
+            default:
+                break;
+        }
+        return result;
+    }
+
+}

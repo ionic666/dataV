@@ -1,0 +1,143 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/19
+  Time: 13:38
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="../../myCss/iframe.css"/>
+	<style type="text/css">
+		body{
+			padding: 10px 0 0 10px;
+		}
+		div.announcement{
+			width: 100%;
+			height: 100%;
+		}
+		div#announcement{
+			height: 85%;
+			width: 98%;
+			padding: 3% 0 0 2%;
+			overflow: hidden;
+		}
+		table{
+			width: 100%;
+			height: 100%;
+			text-align: left;
+			font-size: 14px;
+
+		}
+		table thead td{
+			color: #2E75B6;
+			font-size: 14px;
+			font-weight: normal;
+			text-align: center;
+		}
+		#tableBody tr{
+			height: 40px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<div class="announcement">
+	<p class="headerTitle">
+		办件公示
+	</p>
+	<%--办件公示--%>
+	<div id="announcement">
+		<table>
+			<tr>
+				<td width="100%">
+					<table>
+						<thead>
+							<tr>
+								<td style="width: 27%">事项编号</td>
+								<td style="width: 40%">申报事项</td>
+								<td style="width: 15%">受限日期</td>
+								<td style="width: 18%">办理部门</td>
+							</tr>
+						</thead>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td width="100%">
+					<div id="A1">
+						<div id="A2">
+							<table>
+								<tbody id = "tableBody">
+									<tr style="width: 100%;height: 16.7%;"></tr>
+									<tr style="width: 100%;height: 16.7%;"></tr>
+									<tr style="width: 100%;height: 16.7%;"></tr>
+									<tr style="width: 100%;height: 16.7%;"></tr>
+									<tr style="width: 100%;height: 16.7%;"></tr>
+									<tr style="width: 100%;height: 16.7%;"></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    var dataArray=[];
+	$.ajax({
+		type:"POST",
+		url:'../../jxaddmin/queryServIterms.do',
+		dataType:'json',
+		async: false,
+		success:function(data){
+		    dataArray = data;
+            //setShowInfos();
+			var str="";
+			for(var i=0;i<data.length;i++){
+				str+="<tr><td style='width: 27%'>"+dataArray[i].icode+"</td><td style='width: 40%'>"+dataArray[i].iname+"</td><td style='width: 15%'>"+dataArray[i].starttime+"</td><td style='width: 18%'>"+dataArray[i].depart+"</td></tr>"
+			}
+			$("#tableBody").html(str);
+		}
+	});
+//    window.setInterval(function(){
+//		console.log($("#tableBody tr").css("margin-top"))
+//	},1000)
+
+    //消息动态展示
+    /*window.setInterval(function(){
+        setShowInfos();
+    },1000);*/
+
+    /*function setShowInfos(){
+        var tr=$("#tableBody").find("tr");
+        for(var i=0;i<tr.length;i++){
+            $($(tr[i]).find("td")[0]).text(dataArray[i].icode);
+            $($(tr[i]).find("td")[1]).text(dataArray[i].iname);
+            $($(tr[i]).find("td")[2]).text(dataArray[i].starttime);
+            $($(tr[i]).find("td")[3]).text(dataArray[i].depart);
+        }
+        var newArray=new Array();
+        for(var i=0;i<dataArray.length;i++){
+            if(i-1>=0){
+                newArray.push(dataArray[i]);
+            }
+        }
+        newArray.push(dataArray[0]);
+        dataArray=newArray;
+    }*/
+
+</script>
+<script language="JavaScript">
+	function _InitScroll(_S1,_S2,_W,_H,_T){
+		return "var marqueesHeight"+_S1+"="+_H+";var stopscroll"+_S1+"=false;var scrollElem"+_S1+"=document.getElementById('"+_S1+"');with(scrollElem"+_S1+"){style.width="+_W+";style.height=marqueesHeight"+_S1+";style.overflow='hidden';noWrap=true;}scrollElem"+_S1+".onmouseover=new Function('stopscroll"+_S1+"=true');scrollElem"+_S1+".onmouseout=new Function('stopscroll"+_S1+"=false');var preTop"+_S1+"=0; var currentTop"+_S1+"=0; var stoptime"+_S1+"=0;var leftElem"+_S2+"=document.getElementById('"+_S2+"');scrollElem"+_S1+".appendChild(leftElem"+_S2+".cloneNode(true));setTimeout('init_srolltext"+_S1+"()',"+_T+");function init_srolltext"+_S1+"(){scrollElem"+_S1+".scrollTop=0;setInterval('scrollUp"+_S1+"()',50);}function scrollUp"+_S1+"(){if(stopscroll"+_S1+"){return;}currentTop"+_S1+"+=1;if(currentTop"+_S1+"==(marqueesHeight"+_S1+"+1)) {stoptime"+_S1+"+=1;currentTop"+_S1+"-=1;if(stoptime"+_S1+"=="+_T/50+") {currentTop"+_S1+"=0;stoptime"+_S1+"=0;}}else{preTop"+_S1+"=scrollElem"+_S1+".scrollTop;scrollElem"+_S1+".scrollTop +=1;if(preTop"+_S1+"==scrollElem"+_S1+".scrollTop){scrollElem"+_S1+".scrollTop=0;scrollElem"+_S1+".scrollTop +=1;}}}";
+	}
+	eval(_InitScroll("A1","A2",451,192,1000));
+</script>
+</body>
+</html>

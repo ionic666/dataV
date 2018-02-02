@@ -1,0 +1,15 @@
+package com.cetc28.ConfigurationManagement.service;
+
+import com.cetc28.ConfigurationManagement.model.PageResult;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/9/23.
+ */
+
+public interface IJxModuleManageService {
+    public PageResult queryModuleInfo(Integer pageNumber, Integer pageSize);
+
+    List<String> queryModuleName();
+}

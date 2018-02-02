@@ -1,0 +1,75 @@
+package com.cetc28.idata.model;
+
+import java.math.BigDecimal;
+
+public class JxNetEcoStatistics extends JxNetEcoStatisticsKey {
+    private BigDecimal coreproduction;
+
+    private BigDecimal coreRank;
+
+    private BigDecimal storeNum;
+
+    private BigDecimal sale;
+
+    private BigDecimal employernum;
+
+    private BigDecimal consumption;
+
+    private Double increasement; //同比增长率
+
+    public Double getIncreasement() {
+        return increasement;
+    }
+
+    public void setIncreasement(Double increasement) {
+        this.increasement = increasement;
+    }
+
+    public BigDecimal getCoreproduction() {
+        return coreproduction;
+    }
+
+    public void setCoreproduction(BigDecimal coreproduction) {
+        this.coreproduction = coreproduction;
+    }
+
+    public BigDecimal getCoreRank() {
+        return coreRank;
+    }
+
+    public void setCoreRank(BigDecimal coreRank) {
+        this.coreRank = coreRank;
+    }
+
+    public BigDecimal getStoreNum() {
+        return storeNum;
+    }
+
+    public void setStoreNum(BigDecimal storeNum) {
+        this.storeNum = storeNum;
+    }
+
+    public BigDecimal getSale() {
+        return sale;
+    }
+
+    public void setSale(BigDecimal sale) {
+        this.sale = sale;
+    }
+
+    public BigDecimal getEmployernum() {
+        return employernum;
+    }
+
+    public void setEmployernum(BigDecimal employernum) {
+        this.employernum = employernum;
+    }
+
+    public BigDecimal getConsumption() {
+        return consumption;
+    }
+
+    public void setConsumption(BigDecimal consumption) {
+        this.consumption = consumption;
+    }
+}

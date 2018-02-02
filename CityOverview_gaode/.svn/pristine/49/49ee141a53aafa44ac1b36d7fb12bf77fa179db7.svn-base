@@ -1,0 +1,24 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.IJxEcoClusterDao;
+import com.cetc28.idata.dto.CompanyDto;
+import com.cetc28.idata.service.IJxEcoClusterjService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/11/20.
+ */
+public class IJxEcoClusterjServiceImpl implements IJxEcoClusterjService {
+    @Autowired private IJxEcoClusterDao iJxEcoClusterDao;
+    @Override
+    public List findClusterType() {
+        return iJxEcoClusterDao.findClusterType();
+    }
+
+    @Override
+    public List<CompanyDto> findCompanyInfo(String clusterType) {
+        return iJxEcoClusterDao.findCompanyInfo(clusterType);
+    }
+}

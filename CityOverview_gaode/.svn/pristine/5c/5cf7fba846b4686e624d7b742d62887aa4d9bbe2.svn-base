@@ -1,0 +1,167 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/4
+  Time: 15:07
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.ldrk{
+            width: 100%;
+            height: 100%;
+        }
+        div.ldrkText{
+            height: 20%;
+        }
+        div.ldrk ul{
+            padding-top: 10px;
+            padding-left: 10px;
+            height: 100%;
+        }
+        div.ldrk ul li{
+            width: 50%;
+            float: left;
+        }
+        div#ldrk{
+            height: 63%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="ldrk">
+    <p class="headerTitle">
+        流动人口
+    </p>
+    <div class="ldrkText">
+        <ul>
+            <li>
+                <span class="addBold">2016年流动人口：</span>
+                <span class="addYellow counter" id="liudongsjsl"></span><span class="addYellow">万</span>
+            </li>
+            <li>
+                <span class="addBold">占户籍人口比：</span>
+                <span class="addYellow counter" id="liudongsjbl"></span><span class="addYellow">%</span>
+            </li>
+            <li>
+                <span class="addBold">2017年预计流动人口：</span>
+                <span class="addRed counter" id="liudongyjsl"></span><span class="addRed">万</span>
+            </li>
+            <li>
+                <span class="addBold">占户籍人口比：</span>
+                <span class="addRed counter" id="liudongyjbl"></span><span class="addRed">%</span>
+            </li>
+        </ul>
+    </div>
+    <%--流动人口柱状图图--%>
+    <div id="ldrk">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script>
+    var font_color = '#BFBFBF', font_family = '微软雅黑', font_size = 7;
+    var font_color_y = '#BFBFBF';
+    var text_style={
+        color:font_color,
+        fontSize:font_size,
+        fontFamily:font_family
+    };
+    function ldrk(legend,seriesData){
+//            itemStyle.normal.label.formatter
+        var mycharts = echarts.init(document.getElementById('ldrk'));
+
+        var option = {
+            color: ['#5B9BD5', '#ED7D31', '#A5A5A5','#FFC000','#4472C4'],
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '18%',
+                y: '10%',
+                x2: '16%',
+                y2: '13%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                x: 'right',
+                y: 'center',
+                itemWidth: 8,
+                itemHeight: 8,
+                orient: 'vertical',
+                textStyle: text_style,
+                data: legend
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'value',
+                    min: 0,
+                    max: 8,
+                    splitNumber: 4,
+                    axisLabel: {show: true, textStyle: {color: '#BFBFBF', fontSize: '1px'}},
+                    axisLine: {show: true, lineStyle: {color: "#BFBFBF", width: 1}},
+                    axisTick: {show: true, lineStyle: {color: "#BFBFBF", width: 1}}
+
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'category',
+                    axisLabel: {show: true, textStyle: text_style},
+                    axisLine: {show: true, lineStyle: {color: "#BFBFBF", width: 1}},
+                    axisTick: {show: true, lineStyle: {color: "#BFBFBF", width: 1}},
+                    splitLine: {
+                        show: false
+                    },
+                    data: ['流出地排行榜']
+                }
+            ],
+            series: seriesData
+        };
+        mycharts.setOption(option);
+    }
+    //流动人口
+    $.ajax({
+        type:"POST",
+        url:'../../jxpop/queryLdrk.do',
+        dataType:'json',
+        success:function(data) {
+                console.log("流动人口");
+                console.log(data);
+            $("#liudongsjsl").append(data['ldrk']);
+            $("#liudongsjbl").append(data['percent']);
+            var len=data['qcdTop5'].length;
+            var legend=[];
+            var seriesData=[];
+            for(var i=0;i<len;i++){
+                legend.push(data['qcdTop5'][i].qrd);
+                var obj={};
+                obj.name=data['qcdTop5'][i].qrd;
+                obj.type="bar";
+                obj.barWidth=21;
+                obj.data=[data['qcdTop5'][i].num];
+                seriesData.push(obj)
+            }
+            //调用，生成劳动人口图
+            ldrk(legend,seriesData);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+package com.cetc28.EcoSuitableResidence.model;
+
+/**
+ * Created by LYLYC on 2017/8/15.
+ */
+public class JxWaterInfo {
+    public String jcdbh;   //监测点编号
+    public String nf;      //年份
+    public String yf;      //月份
+    public String ph;      //PH值
+    public String rjy;    //溶解氧
+    public String zd;     //浊度
+    public String ddl;    //电导率
+    public String codmn; //codmn
+    public String zl;    //总磷
+    public String zd1;   //总氮
+    public String toc;   //TOC
+    public String ad;    //氨氮
+
+    public String getJcdbh() {
+        return jcdbh;
+    }
+
+    public void setJcdbh(String jcdbh) {
+        this.jcdbh = jcdbh;
+    }
+
+    public String getNf() {
+        return nf;
+    }
+
+    public void setNf(String nf) {
+        this.nf = nf;
+    }
+
+    public String getYf() {
+        return yf;
+    }
+
+    public void setYf(String yf) {
+        this.yf = yf;
+    }
+
+    public String getPh() {
+        return ph;
+    }
+
+    public void setPh(String ph) {
+        this.ph = ph;
+    }
+
+    public String getRjy() {
+        return rjy;
+    }
+
+    public void setRjy(String rjy) {
+        this.rjy = rjy;
+    }
+
+    public String getZd() {
+        return zd;
+    }
+
+    public void setZd(String zd) {
+        this.zd = zd;
+    }
+
+    public String getDdl() {
+        return ddl;
+    }
+
+    public void setDdl(String ddl) {
+        this.ddl = ddl;
+    }
+
+    public String getCodmn() {
+        return codmn;
+    }
+
+    public void setCodmn(String codmn) {
+        this.codmn = codmn;
+    }
+
+    public String getZl() {
+        return zl;
+    }
+
+    public void setZl(String zl) {
+        this.zl = zl;
+    }
+
+    public String getZd1() {
+        return zd1;
+    }
+
+    public void setZd1(String zd1) {
+        this.zd1 = zd1;
+    }
+
+    public String getToc() {
+        return toc;
+    }
+
+    public void setToc(String toc) {
+        this.toc = toc;
+    }
+
+    public String getAd() {
+        return ad;
+    }
+
+    public void setAd(String ad) {
+        this.ad = ad;
+    }
+}

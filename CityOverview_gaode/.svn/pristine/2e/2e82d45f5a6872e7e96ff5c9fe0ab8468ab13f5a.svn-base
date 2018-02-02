@@ -1,0 +1,166 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.IJxModuleDao;
+import com.cetc28.idata.dao.IJxRoleDao;
+import com.cetc28.idata.dto.Jsqx;
+import com.cetc28.idata.model.PageResult;
+import com.cetc28.idata.model.Role;
+import com.cetc28.idata.service.IjxRoleManageService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+/**
+ * Created by FangYan on 2017/9/21.
+ */
+@Service
+public class IjxRoleManageServiceImpl implements IjxRoleManageService {
+    @Autowired
+    private IJxRoleDao ijxRoleDao;
+
+    @Autowired
+    private IJxModuleDao iJxModuleDao;
+
+    @Override
+    public PageResult queryRoleInfo(Integer pageNumber, Integer pageSize) {
+        //设置分页信息
+        PageHelper.startPage(pageNumber,pageSize);
+        //执行查询
+        List<Role> list = ijxRoleDao.queryRoleInfo(pageNumber, pageSize);
+        //取查询结果
+        PageInfo<Role> pageInfo = new PageInfo<Role>(list);
+        PageResult result = new PageResult();
+        result.setRows(list);  //设置表格每行内容
+        result.setTotal(pageInfo.getTotal());
+        //返回结果
+        return result;
+    }
+
+   /* @Override
+    public Map queryRoleName() {
+        List<Jsqx> jsqxes = ijxRoleDao.queryRoleName();
+        Map<String,List> map = new HashMap<String, List>();
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < jsqxes.size(); i++) {
+            String rolename = jsqxes.get(i).getRolename();
+            String modulename = jsqxes.get(i).getModulename();
+            if(i>0) {
+                if(map.get(rolename)==null){
+                        List<String> list2 = new ArrayList<String>();
+                        list2.add(modulename);
+                        map.put(rolename, list2);
+                }else{
+                    map.get(jsqxes.get(i).getRolename()).add(modulename);
+                }
+            }else{
+                list.add(modulename);
+                map.put(rolename,list);
+            }
+        }
+        return map;
+    }*/
+
+    @Override
+    public List<String> queryRoleName(Integer userid) {
+        return ijxRoleDao.queryRoleNameEx(userid);
+    }
+
+    @Override
+    public void addRole(Map map) {
+        ijxRoleDao.addRole(map);
+    }
+
+    @Override
+    public void addRoleAndP(Map map, String[] permision) {
+        ijxRoleDao.addRole(map);
+        String rolename= (String) map.get("rolename");
+        Integer roleid=ijxRoleDao.queryRoleIdByName(rolename);
+        Map param=new HashMap();
+        param.put("roleid",roleid);
+        if(permision!=null&&permision.length>0){
+            for (String modulename:permision){
+                System.out.println(modulename);
+                Integer moduleid=ijxRoleDao.queryModuleidByName(modulename);
+                param.put("moduleid",String.valueOf(moduleid));
+                ijxRoleDao.addPermision(param);
+            }
+        }
+    }
+
+    @Override
+    public void delRoel(Integer roleid) {
+        String roid=String.valueOf(roleid);
+        ijxRoleDao.delRoleMoule(roid);
+        ijxRoleDao.delRole(roleid);
+        ijxRoleDao.delUserRole(roleid);
+    }
+
+    @Override
+    public void updateRole(Map map,String[] permision) {
+        ijxRoleDao.updateRoleP(map);
+        Integer roleid= (Integer) map.get("roleid");
+        ijxRoleDao.delPermision(String.valueOf(roleid));
+        for (String modulename:permision){
+            System.out.println(modulename);
+            Integer moduleid=ijxRoleDao.queryModuleidByName(modulename);
+            map.put("moduleid",String.valueOf(moduleid));
+            ijxRoleDao.addPermision(map);
+        }
+    }
+
+    @Override
+    public boolean isExistRole(String rolename) {
+        List roleList= ijxRoleDao.queryisExeitRole(rolename);
+        if(roleList==null||roleList.size()==0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isChangeRoleName(String rolename, Integer roleid) {
+        List<Role> roleList= ijxRoleDao.queryisExeitRole(rolename);
+        if(roleList==null||roleList.size()==0){
+            return true;
+        }
+        Integer roid=roleList.get(0).getRoleid();
+        if(roid==roleid){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Map getPermision(Integer roleid) {
+        Map result=new HashMap();
+        List<String> allModule=iJxModuleDao.queryModuleName();
+        List<String> havModule=ijxRoleDao.queryModuleNamebyRoleid(roleid);
+        result.put("allMoudule",allModule);
+        result.put("havMoudule", havModule);
+        return result;
+    }
+
+    @Override
+    public List gethavPermision(Integer roleid) {
+        return ijxRoleDao.queryModuleNamebyRoleid(roleid);
+    }
+
+    @Override
+    public void updateRoleStatus(Integer status, Integer roleid) {
+        Map param=new HashMap();
+        if(roleid==0){
+            status=1;
+        }
+        param.put("status",status);
+        param.put("roleid",roleid);
+        ijxRoleDao.updateRoleStatus(param);
+    }
+
+    @Override
+    public List<String> queryAllRoleName() {
+        return ijxRoleDao.queryAllRoleName();
+    }
+}

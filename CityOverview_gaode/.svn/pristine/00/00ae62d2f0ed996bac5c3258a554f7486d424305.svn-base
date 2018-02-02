@@ -1,0 +1,39 @@
+package com.cetc28.idata.Constant;
+
+/**
+ * 使用枚举表述常量数据字段
+ * Created by zhangyijun on 15/10/16.
+ */
+public enum  SeckillStatEnum {
+    primary(1,"小学"),
+    middle(2,"中学"),
+    profession(3,"职业院校"),
+    colleage(4,"高等院校");
+
+    private int state;
+
+    private String stateInfo;
+
+    SeckillStatEnum(int state, String stateInfo) {
+        this.state = state;
+        this.stateInfo = stateInfo;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public String getStateInfo() {
+        return stateInfo;
+    }
+
+    public static SeckillStatEnum stateOf(int index) {
+        for (SeckillStatEnum state : values()) {
+            if (state.getState() == index) {
+                return state;
+            }
+        }
+        return null;
+    }
+}
+

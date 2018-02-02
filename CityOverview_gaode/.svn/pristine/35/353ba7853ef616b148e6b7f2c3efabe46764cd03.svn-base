@@ -1,0 +1,25 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.*;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+public interface IJxAddminServDao {
+    List<JxAddminServ> selectOnestopAndOnline();//查询一站式办理率以及网上统一入口率
+
+    List<JxAddminCert> selectCertFrequency();//查询电子证照使用频率
+
+    List<JxAddminItems> selectItems();//查询办件事项6条，用于一级页面显示
+
+    List<JxAddminItems> selectAllItems();//查询所有的办件事项及详情
+
+    List<JxAddminPicture> selectPictureData();//查询嘉兴各区市县的当月的申请量及办结量
+
+    List<Map> selectYearAreaItems();//查询嘉兴各区市县当年的累计办件量
+
+    Integer selectYearAllItems();
+
+}

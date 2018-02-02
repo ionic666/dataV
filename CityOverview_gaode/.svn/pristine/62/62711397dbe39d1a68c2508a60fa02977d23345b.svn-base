@@ -1,0 +1,25 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxMapService;
+import com.cetc28.idata.model.JxMapServiceExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+
+public interface JxMapServiceMapper {
+
+    List<JxMapService> selectByExample(JxMapServiceExample example);
+
+    JxMapService selectByPrimaryKey(String id);
+
+    int updateByExampleSelective(@Param("record") JxMapService record, @Param("example") JxMapServiceExample example);
+
+    int updateByExample(@Param("record") JxMapService record, @Param("example") JxMapServiceExample example);
+
+    int updateByPrimaryKeySelective(JxMapService record);
+
+    int updateByPrimaryKey(JxMapService record);
+
+    List queryMapServiceByIndicator(String bh);
+
+    List listIndicatorIndex();
+}

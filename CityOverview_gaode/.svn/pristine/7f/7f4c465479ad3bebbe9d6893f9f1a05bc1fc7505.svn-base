@@ -1,0 +1,152 @@
+package com.cetc28.util;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
+import javax.lang.model.util.Elements;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import com.cetc28.ConfigurationManagement.dao.SpiderDao;
+import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.DomSerializer;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.TagNode;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+@Service
+public  class Spider {
+        @Autowired
+        private SpiderDao spiderDao;
+        public void test() throws ParserConfigurationException, XPathExpressionException {
+
+            //获取数据库中的url
+            List<String> originData = spiderDao.getURL();
+            for (int j = 0; j < originData.size(); j++){
+                String url = originData.get(j);
+
+               /* String exp0 = "//*[@id=\"barrierfree_container\"]/table[3]/tbody/tr/td/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[1]/div/script";
+                String exp1 = "//*[@id=\"barrierfree_container\"]/table[3]/tbody/tr/td/table[4]/tbody/tr/td[1]/table[3]/tbody/tr[2]/td/table[2]/tbody/tr/td[2]";
+                //String exp2 = "//*[@id=\"barrierfree_container\"]/table[3]/tbody/tr/td/table[4]/tbody/tr/td[1]/table[2]/tbody/tr/td/table[2]/tbody/tr/td[2]/div/a";
+                String exp2 = "//*[@id=\"barrierfree_container\"]/table[3]/tbody/tr/td/table[4]/tbody/tr/td[1]/table[2]/tbody/tr/td/div/ul/table/tbody/tr/td[1]/li/a";*/
+
+                String html = null;
+                try {
+                    Connection connect = Jsoup.connect(url);
+                    html = connect.get().body().html();
+                    //System.out.println(html);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                HtmlCleaner hc = new HtmlCleaner();
+                TagNode tn = hc.clean(html);
+                Document dom = new DomSerializer(new CleanerProperties()).createDOM(tn);
+
+                /*Object result0;
+                XPath xPath0 = XPathFactory.newInstance().newXPath();
+                result0 = xPath0.evaluate(exp0, dom, XPathConstants.NODESET);
+
+                Object result;Object result2;
+                XPath xPath = XPathFactory.newInstance().newXPath();
+                result = xPath.evaluate(exp1, dom, XPathConstants.NODESET);
+
+                XPath xPath2 = XPathFactory.newInstance().newXPath();
+                result2= xPath2.evaluate(exp2, dom, XPathConstants.NODESET);*/
+
+                /*String szz = null;
+                String szqx = null;
+                if (result0 instanceof NodeList) {
+                    NodeList nodeList = (NodeList) result0;
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Node node = nodeList.item(i);
+                        String jdmc = node.getTextContent();
+                        String[] str = jdmc.split("\"");
+                        szqx = str[1].substring(11,14);
+                        szz = str[1].substring(14,str[1].length()-1);
+                    }
+                }
+
+                if (result instanceof NodeList) {
+                    NodeList nodeList = (NodeList) result;
+                    String[] baseInfo = new String[5];
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Node node = nodeList.item(i);
+                        baseInfo[i] = node.getTextContent();
+//                 * Node.getTextContent() 此属性返回此节点及其后代的文本内容。
+//                 * Node.getFirstChild()  此节点的第一个子节点。
+//                 * Node.getAttributes() 包含此节点的属性的 NamedNodeMap（如果它是 Element）；否则为 null
+//                 * 如果想获取相应对象的相关属性，可以调用  getAttributes().getNamedItem("属性名") 方法
+//                System.out.println(
+//                        node.getNodeValue() == null ? node.getFirstChild().getAttributes().getNamedItem("href") : node.getNodeValue());
+                    }
+                    //spiderDao.insertBaseInfo(baseInfo[0],baseInfo[1],baseInfo[3],url,"嘉兴市",szqx,szz,"镇（街道）级");
+                    System.out.println(Arrays.toString(baseInfo)+"=="+nodeList.getLength());
+                }
+
+                if (result2 instanceof NodeList) {
+                    NodeList nodeList = (NodeList) result2;
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Node node = nodeList.item(i);
+                        String str = node.getAttributes().getNamedItem("href").toString();
+                        str = url + str.substring(7,str.length()-1);
+                        spiderDao.insertURL("嘉兴市",szqx,szz,"村（社区）级",str);
+                        System.out.println(szqx+"==="+szz+"==="+str);
+
+//                 * Node.getTextContent() 此属性返回此节点及其后代的文本内容。
+//                 * Node.getFirstChild()  此节点的第一个子节点。
+//                 * Node.getAttributes() 包含此节点的属性的 NamedNodeMap（如果它是 Element）；否则为 null
+//                 * 如果想获取相应对象的相关属性，可以调用  getAttributes().getNamedItem("属性名") 方法
+//                System.out.println(
+//                        node.getNodeValue() == null ? node.getFirstChild().getAttributes().getNamedItem("href") : node.getNodeValue());
+                    }
+                }*/
+
+                String exp1 = "//*[@id=\"barrierfree_container\"]/table[3]/tbody/tr/td/table[5]/tbody/tr/td[3]/table[3]/tbody/tr/td[2]";
+                String exp2 = "//*[@id=\"barrierfree_container\"]/table[3]/tbody/tr/td/table[2]/tbody/tr/td/table/tbody/tr/td[5]";
+                /*String exp3 = "//*[@id=\"barrierfree_container\"]/table[3]/tbody/tr/td/table[4]/tbody/tr/td[1]/table[2]/tbody/tr/td/div/ul/table/tbody/tr/td[1]/li/a";*/
+                Object result1;Object result2;
+                XPath xPath1 = XPathFactory.newInstance().newXPath();
+                result1 = xPath1.evaluate(exp1, dom, XPathConstants.NODESET);
+                XPath xPath2 = XPathFactory.newInstance().newXPath();
+                result2= xPath2.evaluate(exp2, dom, XPathConstants.NODESET);
+                if (result1 instanceof NodeList) {
+                    NodeList nodeList = (NodeList) result1;
+                    String[] baseInfo = new String[5];
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Node node = nodeList.item(i);
+                        baseInfo[i] = node.getTextContent();
+                    }
+                    if(baseInfo[0]!=null){
+                        //spiderDao.insertShequBaseInfo(baseInfo[0],baseInfo[1],baseInfo[3],url);
+                        //System.out.println(baseInfo[0]+"==="+baseInfo[1]+"==="+baseInfo[3]+"==="+url);
+                    }
+
+                }
+                String szz= null;
+                if (result2 instanceof NodeList) {
+                    NodeList nodeList = (NodeList) result2;
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Node node = nodeList.item(i);
+                        String jdmc = node.getTextContent();
+                        /*String[] str = jdmc.split("\"");
+                        szz = str[1].substring(14,str[1].length()-1);*/
+                        System.out.println(jdmc);
+                        spiderDao.checkbug(jdmc,url);
+                    }
+
+                }
+
+            }
+        }
+}

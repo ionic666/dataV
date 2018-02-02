@@ -1,0 +1,1065 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    <title>嘉兴城市运行全景特征图分系统</title>
+    <!--<link rel="stylesheet" type="text/css" href="myCss/indexAndMain.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/main_modal.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/toastr.css">-->
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+    <!--<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>-->
+    <!--<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>-->
+    <script type="text/javascript" src="myjs/jquery-2.1.4.js"></script>
+    <!--<script type="text/javascript" src="myjs/toastr.min.js"></script>-->
+    <!--<script type="text/javascript" src="myjs/jquery.cookie.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/bootstrap.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.dataTables.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.easyui.min.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery-ui.js"></script>-->
+    <script type="text/javascript" src="map/js/echarts-all.js"></script>
+    <!--<%--<script type="text/javascript" src="myjs/loadMapService.js"></script>--%>-->
+
+    <style>
+        body{
+            box-sizing: border-box;
+            overflow: hidden !important;
+        }
+        ::-webkit-scrollbar{
+            background-color: #1B1B1D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+        .modelBox{
+            height:90%;
+            width:25%;
+            position: absolute;
+            z-index:101;
+        }
+        .modelBoxL{
+            top:10%;
+            left:0
+        }
+        .modelBoxC{
+            display: none;
+            height:10%;
+            width: 50%;
+            bottom:2%;
+            right:25%;
+        }
+        .modelBoxC>div{
+            height:100%;
+            width: 35%;
+        }
+        .modelBoxC-a{
+            float: left;
+        }
+        .modelBoxC-b{
+            float: right;
+        }
+        .modelBoxR{
+            top:10%;
+            right:0
+        }
+        .modelBox .model{
+            height:32.8%;
+            width:100%;
+            margin-bottom:1%;
+            border-top: 2px #0cdaf5 solid;
+            position: relative;
+        }
+        .modelBox .model{ /*iframe*/
+            /*width:100%;*/
+            /*height:100%;*/
+            background: rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        .more{
+            position: absolute;
+            top:2%;
+            right:2%;
+            color: #0DD4EE;
+            cursor: pointer;
+        }
+        #changeImg img{
+            width:120px;
+            height:87px;
+        }
+        #login>button{
+            width: auto;
+            height: auto;
+            font-size: 1.5em;
+            color: #12C6D8;
+            background-color: #1E2222;
+            border: 0;
+            padding:0 0.2em;
+            float: right;
+            margin-right: 0.1em;
+        }
+        #login>button:hover{
+            color: #fff;
+        }
+        #login>h4{
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0.2em 0;
+            text-align: center;
+            color: #0CD9F4;
+
+        }
+        #login>form{
+            width: 100%;
+            height: 80%;
+
+        }
+        #login>form>input{
+            border-size: 0;
+            background-color: #00191C !important;
+        }
+        #login>form>input,#login>form>button{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+            line-height: 10%;
+        }
+        #login>form>button{
+            border-color: #e9ca3d;
+            border-color: #e9ca3d;
+            border-color: #0096AA;
+            background-color: #0096AA;
+        }
+        #login>form>label{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+        }
+
+        #legend div{
+            display: none;
+        }
+        #legend div p{
+            float: left;
+            display:block;
+            padding:10px;
+        }
+        #legend div p span{
+            margin:0px 3px;
+        }
+
+        /*地图infowindow样式表*/
+        .tundra{
+            position: relative;
+        }
+        #settingModal td{
+            border:0;
+            font-size: 1.3em;
+            color: #0a36e9;
+        }
+        a:hover{
+            color: #c74072;
+            text-decoration:none;
+        }
+        body{
+            width: 100%;
+        }
+
+        /*头部logo*/
+        .header {
+            width: 60%;
+            height: 7.8%;
+            margin: 0 auto;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: absolute;
+            z-index: 999;
+            top: 2%;
+            margin-left:50%;
+        }
+        .header>div{
+            display: inline-block;
+        }
+
+
+        /*高德地图info窗口样式开始*/
+        .amap-toolbar{
+            display:none;
+        }
+        .info {
+            border: solid 1px #7A9095 !important;
+            border-radius: 5px;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 14px;
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        /*高德地图info窗口样式开结束*/
+
+        .modelBox>.model>div:first-child{
+            padding-top:10px;
+            height:15%;
+            width:100%;
+        }
+        .modelBox>.model>div:last-child{
+            height:80%;
+            width:100%;
+        }
+        p.headerTitle{
+            padding-left: 3%;
+            font-size: 20px;
+            font-weight: bold;
+            color:#F2F2F2;
+            width: 40%;
+            font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+            margin:0;
+            float: left;
+            height: 100%;
+            position: relative;
+        }
+        .details{
+            /*margin-left:40%;*/
+        }
+        .details p{
+            font-size: 10px;
+            color:#fff;
+            margin:0px;
+        }
+        .details img{
+            width: 34px;
+        }
+        .details img,.details div,.detail span{
+            float: left;
+            margin-left: 15px;
+            text-align: center;
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 18px;
+            margin:0px;
+        }
+        #wrType{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            margin-left: 15px;
+        }
+        /*教育信息化 非公共样式*/
+        /*添加动画效果*/
+        .school{
+            width: 64%;
+            height: 18px;
+            margin-top: 1%;
+            background-color: #D7D7D7;
+            text-align: center;
+            /* border: 1px solid #41719C; */
+            margin-left: 30%;
+        }
+        .school span{
+            font-size: 14px;
+            color:#fff;
+            font-weight: 600;
+        }
+        .bar_pro{
+            width: 0;
+            height: 100%;
+            background-color: #53A6E2;
+            /*box-shadow: -2px 0 6px 9px #204079;*/
+        }
+        div.multiMediaRoom{
+            width: 100%;
+            height: 100%;
+        }
+        div#multiMediaRoom{
+            height: 100%;
+            width: 100%;
+            padding-left: 3%;
+        }
+        div#multiMediaRoom p{
+            font-size: 1em;
+            width: 30%;
+            float: left;
+            color:#fff;
+            padding:0;
+            margin:0;
+        }
+        ul#informCount{
+            width: 100%;
+            height: 75%;
+            color:#fff;
+            padding:0;
+            margin:0;
+        }
+        ul#informCount li{
+            float: left;
+            height: 50%;
+            width: 50%;
+            list-style: none;
+            padding:0;
+            margin:0;
+        }
+        ul#informCount div{
+            padding: 2% 5%;
+        }
+        ul#informCount img{
+            width: 40px;
+            height: 40px;
+            float: left;
+            vertical-align: middle;
+        }
+        ul#informCount span{
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            color: #0CDAF5;
+            margin-left: 10%;
+            font-size: 20px;
+        }
+        h5{
+            font-size: 1em;
+        }
+        #informCount h5{
+            margin:0;
+        }
+
+
+    </style>
+</head>
+<body class="tundra">
+<div id="map" style="width:100%; height:100%;background-color: black">
+</div>
+
+<div class="header"></div>
+
+<div class="modelBox modelBoxL">
+    <div class="model model1" >
+        <!--<span class="more">更多▶</span>-->
+        <!--<iframe id="iframe1" src="" frameborder="0"></iframe>-->
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">多媒体教室普及率</p>
+        </div>
+        <div id="model"></div>
+    </div>
+    <div class="model model2">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">网络学习空间覆盖率</p>
+        </div>
+        <div id="model2"></div>
+    </div>
+    <div class="model model3">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">无线网络覆盖率</p>
+        </div>
+        <div id="model3">
+        </div>
+    </div>
+</div>
+<div class="modelBox modelBoxC">
+    <div class="modelBoxC-a"><img src="images/air.png" alt=""></div>
+    <div class="modelBoxC-b"><img src="images/water.png" alt=""></div>
+</div>
+<div class="modelBox modelBoxR">
+    <div class="model model4">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">教育资源分布情况</p>
+        </div>
+        <div id="model4"></div>
+    </div>
+    <div class="model model5">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">教育资源承载情况</p>
+        </div>
+        <div id="model5">
+        </div>
+    </div>
+    <div class="model model6">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">教育信息化</p>
+        </div>
+        <div id="model6">
+            <div id="multiMediaRoom">
+                <div style="margin:10px 0px">
+                    <p>校园网建设比例</p>
+                    <div class="school">
+                        <div class="bar_pro" id="internetNum"><span id="internet"></span></div>
+                    </div>
+                </div>
+                <div style="margin:10px 0px">
+                    <p>网络课程比例</p>
+                    <div class="school">
+                        <div class="bar_pro" id="classNum"><span id="interClass"></span></div>
+                    </div>
+                </div>
+                <ul id="informCount">
+                    <li>
+                        <h5>百名学生拥有终端台数</h5>
+                        <div>
+                            <img src="images/education/computer.png" alt=""/>
+                            <span id="computerNum" class="counter"></span>台
+                        </div>
+                    </li>
+                    <li>
+                        <h5>百名学生拥有多媒体教室座位数</h5>
+                        <div>
+                            <img src="images/education/seat.png" alt=""/>
+                            <span id="multimediaNum" class="counter"></span>个
+                        </div>
+                    </li>
+                    <li>
+                        <h5>百名学生拥有数字资源量</h5>
+                        <div>
+                            <img src="images/education/digital.png" alt=""/>
+                            <span id="digitalResource" class="counter"></span>G
+                        </div>
+                    </li>
+                    <li>
+                        <h5>教师教育信息化应用水平</h5>
+                        <div>
+                            <img src="images/education/level.png" alt=""/>
+                            <span id="teacherLevel"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="myjs/myEcharts.js"></script>
+<script src="myjs/map/edu.js"></script>
+<script src="myjs/index.js"></script>
+<script src="map/js/jquery.waypoints.min.js"></script>
+<script src="map/js/jquery.countup.js"></script>
+
+<script>
+    var headerWidth=$(".header").width();	//获取头部标题的宽度
+    $(".header").css("left",-headerWidth/2-6+"px");//让头部标题居中
+    $(".header").css("background-image"," url(images/edu_title.png)");
+//多媒体教室普及率
+    function model1echartDataSet(xAxis,legend,series) {
+        var myChart = echarts.init(document.getElementById("model"));
+        var option = {
+            color: ['#E88535', '#7AC826', '#6691FF','#43CED0'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                /*采用回调函数*/
+                formatter: function (params) {
+                    if(params.length == 0){
+                        return null;
+                    }
+                    else{
+                        var str=params[0].name+"<br />";
+                        for(var i = 0; i< params.length; i++){
+                            str+=params[i].seriesName+"："+params[i].value+"%<br/>";
+                        }
+                    }
+                    return str;
+                }
+            },
+            legend: {
+                data: legend/* ['小学','中学', '职业院校','高等院校']*/,
+                x: 'center',
+                y: 20,
+                textStyle: text_style
+            },
+            grid: {
+                x: '12%',
+                y: '20%',
+                x2: '5%',
+                y2: '25%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: {
+                type: 'category',
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: true},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxis
+            },
+            yAxis: {
+                type: 'value',
+                min:0,
+                max:100,
+                splitNumber:4,
+                splitLine: {
+                    show: true,
+                    lineStyle:{
+                        color: ['#8D8C8C'],
+                        width: 1,
+                        type: 'dotted'
+                    }
+                },
+                axisLine: { lineStyle: {
+                    color: '#8D8C8C'
+                }},
+                axisTick: {show: false},
+                axisLabel: {
+                    show: true,
+                    textStyle: text_style,
+                    formatter: '{value} %'}
+            },
+            series:series /*[
+             {
+             name: '小学',
+             type: 'bar',
+             barGap:'20%',
+             barCategoryGap:'37%',
+             itemStyle: {
+             normal: {
+
+             }
+             },
+             data: [70,75,80,84,89,95]
+             },
+             {
+             name: '中学',
+             type: 'bar',
+             barGap: '20%',
+             barCategoryGap:'37%',
+             itemStyle: {
+             normal: {
+
+             }
+             },
+             data: [80,84,86,90,92,96]
+             },
+             {
+             name: '职业院校',
+             type: 'bar',
+             barGap: '20%',
+             barCategoryGap:'37%',
+             itemStyle: {
+             normal: {
+             }
+             },
+             data: [75,78,82,85,87,90]
+             },
+             {
+             name: '高等院校',
+             type: 'bar',
+             barGap:'20%',
+             barCategoryGap:'37%',
+             itemStyle: {
+             normal: {
+
+             }
+             },
+             data: [80,86,90,94,96,96]
+             }
+             ]*/
+        };
+        myChart.setOption(option);
+    }
+    //多媒体教室普及率请求
+    $.ajax({
+        type:"POST",
+        url:'jxedu/listSchoolStatisticInfo.do',
+        data:{"count":6},
+        dataType:'json',
+        success:function(data){
+            var schoolType = [];
+            var series = [];
+            var xAxis = [];
+            $.each(data, function (i) {
+                schoolType.push(data[i].mc);
+                var value = [];
+                $.each(data[i].info, function (j) {
+                    if(i==0){
+                        xAxis.push(data[i].info[j].year+'年');
+                    }
+                    value.push(data[i].info[j].mediaroom);
+                })
+                series.push({
+                    name:data[i].mc,
+                    type: 'bar',
+                    barGap: '20%',
+                    barCategoryGap:'37%',
+                    itemStyle: {
+                        normal: {
+                        }
+                    },
+                    data: value
+                });
+            });
+            model1echartDataSet(xAxis,schoolType, series);
+        }
+    });
+
+    //网络学习空间覆盖率
+    function model2echartDataSet(xAxis,legend,series) {
+        var mycharts = echarts.init(document.getElementById('model2'));
+        option = {
+            color: ['#559BDB', '#F67B28', '#9F9F9F','#FFC600'],
+            tooltip : {
+                trigger: 'axis',
+                /*采用回调函数*/
+                formatter: function (params) {
+                    if(params.length == 0){
+                        return null;
+                    }
+                    else{
+                        var str=params[0].name+"<br />";
+                        for(var i = 0; i< params.length; i++){
+                            str+=params[i].seriesName+"："+params[i].value+"%<br/>";
+                        }
+                    }
+                    return str;
+                }
+            },
+            grid: {
+                x: '12%',
+                y: '20%',
+                x2: '5%',
+                y2: '25%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                y:20,
+                data:legend/*['小学','中学','职业院校','高等院校']*/,
+                textStyle: text_style
+            },
+            calculable : false,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap: ['20%', '20%'],
+                    axisLine: {lineStyle: {color: '#BFBFBF'}},
+                    splitLine: {show: false},
+                    axisLabel: {show: true, textStyle: text_style},
+                    axisTick: {show: false},
+                    data : xAxis/*['2012年','2013年','2014年','2015年','2016年','2017年']*/
+                }
+            ],
+            yAxis : [
+                {
+                    type: 'value',
+                    min:0,
+                    max:100,
+                    splitNumber:4,
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#8D8C8C'],
+                            width: 1,
+                            type: 'dotted'
+                        }
+                    },
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    axisTick: {show: false},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: '{value} %'}
+                }
+            ],
+            series : series
+            /*[
+             {
+             name:'小学',
+             type:'line',
+             data:[50, 60, 63, 74, 76, 82],
+             itemStyle:{
+             normal:{
+             lineStyle:{
+             color:'#5B9BD5',
+             shadowColor:'#5B9BD5',
+             shadowBlur:40
+
+             }
+             }
+             }
+             },
+             {
+             name:'中学',
+             type:'line',
+             data:[52, 59, 64, 72, 75, 80],
+             itemStyle:{
+             normal:{
+             lineStyle:{
+             color:'#ED7D31',
+             shadowColor:'#ED7D31',
+             shadowBlur:40
+
+             }
+             }
+             }
+             },
+             {
+             name:'职业院校',
+             type:'line',
+             data:[40, 55, 60, 65, 72, 74],
+             itemStyle:{
+             normal:{
+             lineStyle:{
+             color:'#A5A5A5',
+             shadowColor:'#A5A5A5',
+             shadowBlur:40
+
+             }
+             }
+             }
+             },
+             {
+             name:'高等院校',
+             type:'line',
+             data:[50, 62, 70, 75, 81, 86],
+             itemStyle:{
+             normal:{
+             lineStyle:{
+             color:'#FFC000',
+             shadowColor:'#FFC000',
+             shadowBlur:40
+
+             }
+             }
+             }
+             }
+             ]*/
+        };
+        mycharts.setOption(option);
+    }
+    //网络学习空间覆盖率请求
+    $.ajax({
+        type:"POST",
+        url:'jxedu/listSchoolStatisticInfo.do',
+        data:{"count":6},
+        dataType:'json',
+        success:function(data){
+            var schoolType = [];
+            var series = [];
+            var xAxis = [];
+            $.each(data, function (i) {
+                schoolType.push(data[i].mc);
+                var value = [];
+                $.each(data[i].info, function (j) {
+                    if(i==0){
+                        xAxis.push(data[i].info[j].year+'年');
+                    }
+                    value.push(data[i].info[j].networklearn);
+                })
+                series.push({
+                    name:data[i].mc,
+                    type:'line',
+                    data:value,
+                    itemStyle:{
+                        normal:{
+                            lineStyle:{
+                                shadowColor:'#FFC000',
+                                shadowBlur:40
+
+                            }
+                        }
+                    }
+                });
+            });
+            model2echartDataSet(xAxis,schoolType, series);
+        }
+    });
+    //无线网络覆盖率
+    function echartPlot (schoolType, data) {
+        var mycharts = echarts.init(document.getElementById('model3'));
+        option = {
+            tooltip : {
+                trigger: 'axis',
+                formatter: "{d} : {c}%"
+            },
+            polar : [
+                {
+                    indicator : schoolType,
+                    /*[
+                     {text: '小学', max: 100},
+                     {text: '中学', max: 100},
+                     {text: '职业院校', max: 100},
+                     {text: '高等院校', max: 100},
+                     ],*/
+                    name : {
+                        textStyle:text_style
+                    }
+                }
+            ],
+            calculable : false,
+            series : [
+                {
+                    name: '无线网络覆盖率',
+                    type: 'radar',
+                    data : [
+                        {
+                            value : data,
+                            name : '无线网络覆盖率',
+                            symbol: 'diamond',
+                            symbolSize: 5,
+                            itemStyle:{
+                                normal:{
+                                    color:'blue',
+                                    label:{
+                                        show:true,
+                                        textStyle:text_style,
+                                        formatter: '{c}%',
+                                        position:'inside'}
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //无线网络覆盖率请求
+    $.ajax({
+        type:"POST",
+        url:'jxedu/listSchoolStatisticInfo.do',
+        data:{"count":1},
+        dataType:'json',
+        success:function(data){
+            var schoolType = [];
+            var value = [];
+            $.each(data, function (i) {
+                schoolType.push({text:data[i].mc, max: 120});
+                value.push(data[i].info[0].wireless);
+
+            })
+            echartPlot(schoolType, value);
+        }
+    });
+
+    //教育资源分布情况
+    function resourceMonitor(xAxisData,data){
+        var mycharts = echarts.init(document.getElementById('model4'));
+        var option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '5%',
+                y: '10%',
+                x2: '5%',
+                y2: '40%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['学校数'],
+                x: 'center',
+                y: 'bottom',
+                orient: 'vertical',
+                textStyle: text_style
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: ['20%', '20%'],
+                axisTick: {show: false, lineStyle: {color: font_color}},
+                axisLine: {show: false},
+                axisLabel: {show: true, textStyle: text_style, interval: 0, rotate: 40},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: {
+                type: 'value',
+//                    min: 0, max: 0.006, splitNumber: 3,
+                axisLine: {show: false,lineStyle: {color: font_color}},
+                axisLabel: {show: false, textStyle: text_style},
+                axisTick: {show: false, lineStyle: {color: font_color}},
+                splitLine: {
+                    show: false,
+                    lineStyle: {color: font_color}
+                }
+            },
+            series: [
+                {
+                    name: '学校数',
+                    type: 'line',
+                    symbol: 'rectangle',
+                    symbolSize: 3,
+                    data: data,
+                    itemStyle : {
+                        normal: {
+                            label : {show: true, position: 'top', color:'#fff',textStyle:text_style},
+                            lineStyle:{ color:'#FFE699',shadowColor:'#FFE699', shadowBlur:40}
+                        }
+                    }
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //教育资源分布情况请求
+    $.ajax({
+        type:"POST",
+        url:'jxedu/querySchoolStatisticInfo.do',
+        dataType:'json',
+        data:{"qhbh":'003001', "num":1},
+        success:function(data){
+            var statisticInfo = data[0].statisticInfo;
+            var xAxisData=[];
+            var data=[];
+            for(var key in statisticInfo) {
+                xAxisData.push(statisticInfo[key].type);
+                data.push(statisticInfo[key].schoolNum);
+            }
+            resourceMonitor(xAxisData,data);
+        }
+    });
+    //教育资源承载情况
+    function resourceBearing(data0,data1){
+        var mycharts = echarts.init(document.getElementById('model5'));
+        option = {
+            color:['#E88535','#43CED0'],
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} 个"
+            },
+            calculable : false,
+            series : [
+                {
+                    name:'教育资源承载',
+                    type:'pie',
+                    radius : ['50%', '70%'],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : true,
+                                formatter:"{b}：{c}个",
+                                textStyle:text_style
+                            }
+                        },
+                        emphasis : {
+                            label : {
+                                show : true,
+                                position : 'center',
+                                textStyle : {
+                                    fontSize : '15',
+                                    fontWeight : 'bold'
+                                }
+                            }
+                        }
+                    },
+                    data:[
+                        {value:data0, name:'超载'},
+                        {value:data1, name:'空载'}
+                    ],
+                    labelLine : {
+                        normal:{
+                            show: true,
+                            length:8,
+                            length2:2
+                        }
+                    }
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //教育资源承载情况请求
+    $.ajax({
+        type:"POST",
+        url:'jxedu/getEduResourceInfo.do',
+        data:{"qhbh":'003001'},
+        dataType:'json',
+        success:function(data){
+            resourceBearing(data.overNum, data.idleNum);
+        }
+    });
+//    教育信息化数据请求
+    $.ajax({
+        type:"POST",
+        url:'jxedu/queryInformazationInfo.do',
+        dataType:'json',
+        data:{qhbh:'003001'},
+        success:function(data){
+            // $('#cardHolderSum').html(cardHolderSum);
+            var internetNum=data.internetNum+'%';
+            var classNum=data.classNum+'%';
+            $("#internet").html(internetNum);
+            $("#interClass").html(classNum);
+            // $('#insuredPercent').html(insuredPercent.toFixed(2));
+            $("#internetNum").animate({
+                width: internetNum
+            },2000);
+            $("#classNum").animate({
+                width: classNum
+            },2000);
+            $('#computerNum').html(data.compuiterNum);
+            $('#multimediaNum').html(data.multimediaNum);
+            $('#digitalResource').html(data.digitalResource);
+            $('#teacherLevel').html(data.teacherLevel);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+        }
+    });
+
+
+
+    window.onload=function(){
+        //加载地图的方法
+        map = new AMap.Map('map', {
+            mapStyle: 'amap://styles/e08db8ed18c196aa387f5352644fe504'//样式URL
+        });
+        AMap.event.addListener(map,'click',function(e){
+            map.clearInfoWindow();
+            console.log("666")
+        });
+        edu.eduAjax();
+        map.panTo([120.751,30.722]);//默认移到南湖区
+        map.setZoom(12)
+    }
+</script>
+</html>

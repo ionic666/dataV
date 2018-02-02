@@ -1,0 +1,151 @@
+<%--
+  Create By FangYan On 2017/09/13
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>进出口</title>
+    <link rel="stylesheet" href="../../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.jck{
+            width: 100%;
+            height: 100%;
+        }
+        div#jck{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="jck">
+    <p class="headerTitle">
+        进出口
+    </p>
+    <div id="jck">
+    </div>
+</div>
+<script src="../../../map/js/jquery-1.11.3.js"></script>
+<script src="../../../myjs/echarts-all.js"></script>
+<script src="../../../myjs/myEcharts.js"></script>
+<script>
+    function jck(xAxisData,data1,data2){
+        var mycharts = echarts.init(document.getElementById('jck'));
+        var option = {
+            color: ['#E46100','#009CFF'],
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '8%',
+                y: '20%',
+                x2: '10%',
+                y2: '12%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['进出口累计总额(亿元)', '同比增长率(%)'],
+                textStyle: text_style
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: ['20%', '20%'],
+                axisTick: {show: false},
+                axisLine: {
+                    show: true,
+                    lineStyle:{
+                        color:'white'
+                    }
+                },
+                axisLabel: {show: true, textStyle: text_style},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: [
+                {
+                type: 'value',
+                name:'亿元',
+                    nameTextStyle:text_style,      //设置y轴上单位的字体大小
+                min:0,
+                max:250,
+                splitLine: {show: true, lineStyle: {type: 'dashed',color: '#2D2D2D'}},
+                axisLine: {show: true, lineStyle: {color:'#B6B6B6'}},
+                axisTick: {show: false},
+                axisLabel: {show: true, textStyle: text_style}
+            },
+                {
+                type: 'value',
+                name:'%',
+                    nameTextStyle:text_style,        //设置y轴上单位的字体大小
+                min:0,
+                max:25,
+                splitLine: {show: true, lineStyle: {type: 'dashed',color: '#2D2D2D'}},
+                axisLine: {show: true, lineStyle: {color:'#B6B6B6'}},
+                axisTick: {show: false},
+                axisLabel: {show: true, textStyle: text_style}
+            }
+            ],
+            series: [
+                {
+                    name: '进出口累计总额(亿元)',
+                    type: 'bar',
+                    barWidth: 22,
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:false,
+                                position:'top',
+                                textStyle:text_style,
+                                formatter:'{c}亿元'
+                            }
+                        }
+                    },
+                    data: data1
+                },
+                {
+                    yAxisIndex:1,
+                    name: '同比增长率(%)',
+                    type: 'line',
+                    symbol: 'triangle',
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:false,
+                                position: 'top',
+                                formatter:'{c}%',
+                                textStyle: text_style
+                            }
+                        }
+                    },
+                    data: data2
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    $.ajax({
+            type:"POST",
+            url:'../../../jxeco/hgjj/jck.do',
+            dataType:'json',
+            data:{"monthSize":5},
+            success:function(data){
+            var xAxisData=[];
+            var data1=[];
+            var data2=[];
+                for(var i=0;i<data.length;i++) {
+                    var sj = String(data[i].sj);
+                    xAxisData.push(sj.substring(5)+"月");
+                    data1.push(parseFloat(data[i].jck));
+                    data2.push(parseFloat(data[i].tbzz*100));
+                }
+            jck(xAxisData,data1,data2);
+        }
+    });
+</script>
+</body>
+</html>

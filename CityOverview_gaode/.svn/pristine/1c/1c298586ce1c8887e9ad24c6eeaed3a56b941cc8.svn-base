@@ -1,0 +1,14 @@
+package com.cetc28.idata.dao;
+
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * Created by jianglulu on 2017/11/20.
+ */
+public interface JxEcoIndustrialPlatform {
+    List<HashMap<String,String>> queryindustrialplatform();
+    List<HashMap<String,String>> queryindustrialplatformbyid(String id);
+    List<HashMap<String,String>> queryindustrialplatformbyname(String name);
+    List<HashMap<String,String>> queryindustrialplatformsec(String id);
+}

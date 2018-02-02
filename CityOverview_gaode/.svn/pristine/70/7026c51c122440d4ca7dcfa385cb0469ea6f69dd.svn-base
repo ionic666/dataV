@@ -1,0 +1,104 @@
+package com.cetc28.ConfigurationManagement.service.impl;
+
+import com.cetc28.ConfigurationManagement.dao.IJxSysDao;
+import com.cetc28.ConfigurationManagement.model.JxIndicator;
+import com.cetc28.ConfigurationManagement.model.JxIndicatorsUser;
+import com.cetc28.ConfigurationManagement.model.JxJczb;
+import com.cetc28.ConfigurationManagement.model.Xzqh;
+import com.cetc28.ConfigurationManagement.service.IJxSysManageService;
+import com.cetc28.util.ConditionValidate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by linyu on 2017/8/17.
+ */
+@Service
+public class JxSysManageServiceImpl implements IJxSysManageService {
+    @Autowired
+    private IJxSysDao jxSysDao;
+
+    @Override
+    public List<JxIndicator> listIndicators() {
+        return  jxSysDao.listIndicators();
+    }
+
+    @Override
+    public List<JxJczb> listSysIndicators(String bh) {
+        return  jxSysDao.listSysIndicators(bh);
+    }
+
+    @Override
+    public List<JxJczb> listAllSysIndicators(String bh) {
+        return jxSysDao.listAllSysIndicators(bh);
+    }
+
+    @Override
+    public String addSysIndicators(JxJczb indicator) {
+        try{
+            /*先生成指标编号*/
+            String maxNo = jxSysDao.getMaxIndicatorNo(indicator.getSjbh());
+            Integer num = 0;
+            if(ConditionValidate.isEmpty(maxNo)){
+                num = Integer.parseInt(maxNo) + 1;
+            }else {
+                num = Integer.parseInt(indicator.getSjbh())*1000+1;
+            }
+            indicator.setBh(String.format("%06d", num));
+            jxSysDao.addSysIndicators(indicator);
+        }catch(Exception e){
+            return "failed";
+        }
+        return "success";
+    }
+
+    @Override
+    public String updateSysIndicators(JxJczb indicator) {
+        try{
+            jxSysDao.updateSysIndicators(indicator);
+        }catch(Exception e){
+            return "failed";
+        }
+        return "success";
+    }
+
+    @Override
+    public String deleteSysIndicators(String indicatorId) {
+        try{
+            jxSysDao.deleteSysIndicators(indicatorId);
+        }catch(Exception e){
+            return "failed";
+        }
+        return "success";
+    }
+
+    @Override
+    public List<Xzqh> listJxXzqh(String qhxh) {
+        return  jxSysDao.listJxXzqh(qhxh);
+    }
+
+    @Override
+    public List<JxJczb> listIndicatorsShown(String userId, String bh) {
+        return jxSysDao.listIndicatorsShown(userId, bh);
+    }
+
+    @Override
+    public String updateIndicatorsShown(List<JxIndicatorsUser> indicatorsUser, String userId, String sjbh) {
+        try{
+            if(ConditionValidate.isEmpty(userId) && ConditionValidate.isEmpty(sjbh)){
+                jxSysDao.deleteIndicatorByUseridAndBh(userId, sjbh);
+            }
+            //删除指定用户id及一级指标下的监测指标信息
+            if(indicatorsUser.size()>0){
+                for(JxIndicatorsUser indicator : indicatorsUser){
+                    jxSysDao.saveIndicatorsShown(indicator);
+                }
+            }
+        }catch (Exception e){
+            return "failed";
+        }
+        return "success";
+    }
+}

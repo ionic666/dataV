@@ -1,0 +1,60 @@
+package com.cetc28.idata.service;
+
+/**
+ * Created by Jessica on 2017/9/13.
+ */
+
+import com.cetc28.idata.model.JxAddminCert;
+import com.cetc28.idata.model.JxAddminItems;
+import com.cetc28.idata.model.JxAddminPicture;
+import com.cetc28.idata.model.JxAddminServ;
+
+import java.util.List;
+
+/**
+ * 嘉兴行政服务Service层接口
+ * Created by Jessica on 2017/9/13.
+ */
+public interface IJxAddminService {
+    /**
+     * 查询嘉兴所有区市县的一站式办理率以及网上统一入口率
+     * @return
+     */
+    List<JxAddminServ> queryOnestopAndOnline();
+
+    /**
+     * 查询嘉兴一年的电子证照使用频次
+     * @return
+     */
+    List<JxAddminCert> queryCertFreq();
+
+    /**
+     * 查询嘉兴行政服务事项
+     * @return
+     */
+    List<JxAddminItems> queryServIterms();
+
+    /**
+     * 查询嘉兴行政服务事项(全部)
+     * @return
+     */
+    List<JxAddminItems> queryAllIterms();
+
+    /**
+     *  查询嘉兴各区市县的当月的申请量及办结量
+     * @return
+     */
+    List<JxAddminPicture> queryPictureData();
+    /**
+     * 查询嘉兴各区市县当年的累计办件量
+     * @return
+     */
+    List queryYearAreaItems();
+    /**
+     * 查询嘉兴市所有区域当年的累计办件量
+     * @return
+     */
+    int queryYearAllItems();
+
+    List queryConvenientCenter(Integer qylx);
+}

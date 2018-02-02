@@ -1,0 +1,125 @@
+package com.cetc28.IntelligentInfrastructure.dto;
+
+import java.math.BigDecimal;
+
+public class JxUtilityManteAlarmPointDto {
+    private String id;
+
+    private String deviceNo;
+
+    private String alarmDes;
+
+    private String alarmTypeDes;
+
+    private String dateYmdhm;
+
+    private String state;
+
+    private String utilityTypeDes;
+
+    private BigDecimal lat;
+
+    private BigDecimal lon;
+
+    private String deviceTypeDes;
+
+    private String deviceLoca;
+
+    private String admi;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
+
+    public String getDeviceNo() {
+        return deviceNo;
+    }
+
+    public void setDeviceNo(String deviceNo) {
+        this.deviceNo = deviceNo == null ? null : deviceNo.trim();
+    }
+
+    public String getAlarmDes() {
+        return alarmDes;
+    }
+
+    public void setAlarmDes(String alarmDes) {
+        this.alarmDes = alarmDes == null ? null : alarmDes.trim();
+    }
+
+    public String getAlarmTypeDes() {
+        return alarmTypeDes;
+    }
+
+    public void setAlarmTypeDes(String alarmTypeDes) {
+        this.alarmTypeDes = alarmTypeDes;
+    }
+
+    public String getDateYmdhm() {
+        return dateYmdhm;
+    }
+
+    public void setDateYmdhm(String dateYmdhm) {
+        this.dateYmdhm = dateYmdhm == null ? null : dateYmdhm.trim();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state == null ? null : state.trim();
+    }
+
+    public String getUtilityTypeDes() {
+        return utilityTypeDes;
+    }
+
+    public void setUtilityTypeDes(String utilityTypeDes) {
+        this.utilityTypeDes = utilityTypeDes;
+    }
+
+    public BigDecimal getLat() {
+        return lat;
+    }
+
+    public void setLat(BigDecimal lat) {
+        this.lat = lat;
+    }
+
+    public BigDecimal getLon() {
+        return lon;
+    }
+
+    public void setLon(BigDecimal lon) {
+        this.lon = lon;
+    }
+
+    public String getDeviceTypeDes() {
+        return deviceTypeDes;
+    }
+
+    public void setDeviceTypeDes(String deviceTypeDes) {
+        this.deviceTypeDes = deviceTypeDes;
+    }
+
+    public String getDeviceLoca() {
+        return deviceLoca;
+    }
+
+    public void setDeviceLoca(String deviceLoca) {
+        this.deviceLoca = deviceLoca;
+    }
+
+    public String getAdmi() {
+        return admi;
+    }
+
+    public void setAdmi(String admi) {
+        this.admi = admi;
+    }
+}

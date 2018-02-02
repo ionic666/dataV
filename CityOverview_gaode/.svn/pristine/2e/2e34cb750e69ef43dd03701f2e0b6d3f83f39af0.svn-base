@@ -1,0 +1,126 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="../../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    .main{
+      width: 95%;
+      height: 87%;
+      padding-top: 5%;
+    }
+    .main h1{
+      color: #0CFF00;
+    }
+    .main h1 span{
+      color: #0CDAF5;
+    }
+    .main>.main-content{
+      width: 97%;
+      height: 46%;
+    }
+    .main-content>div{
+      width: 35%;
+      height: 90%;
+      margin-left: 3%;
+      float: left;
+    }
+    .main-content .infoTitle{
+      width: 50%;
+    }
+    .infoLogo1>img,.infoLogo2>img{
+      width: 4em;
+      height: 4em;
+      float: right;
+    }
+    .infoTitle{
+      vertical-align: middle;
+    }
+    .infoTitle>h1{
+      color: #00FF00;
+      text-align: center;
+    }
+    .infoTitle>p{
+      font-size: 1em;
+      line-height: 24px;
+      text-align: center;
+    }
+    .headerLittleTitle{
+      position: absolute;
+      font-weight: bold;
+    }
+    p.headerTitle{
+      width: 45%;
+    }
+    .dw{
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<div class="gsbz">
+  <p class="headerTitle">
+    信息经济核心产业
+  </p>
+
+  <%--<div class="main">
+    <div class="main-content main-top">
+      <div class="infoLogo1"><img src="../../../images/information/info3_1.png" alt=""/></div>
+      <div class="infoTitle"><h1 id="informationIndex"></h1><p>两化融合指数</p></div>
+    </div>
+    <div class="main-content main-bottom">
+      <div class="infoLogo2"><img src="../../../images/information/info3_2.png" alt=""/></div>
+      <div class="infoTitle"><h1 id="provinceNum"></h1><p>全省排名</p></div>
+    </div>
+  </div>--%>
+  <div class="main">
+    <div class="main-content main-top">
+      <div class="infoLogo1"><img src="../../../images/information/info4_1.png" alt=""/></div>
+      <div class="infoTitle"><h1><span id="informationIndex" class="counter"></span><span class="dw">亿元</span></h1><p>信息经济核心产业营业收入</p></div>
+    </div>
+    <div class="main-content main-middle">
+      <div class="infoLogo2"><img src="../../../images/information/info4_2.png" alt=""/></div>
+      <div class="infoTitle"><h1><span id="increasement" class="counter"></span><span class="dw">%</span></h1><p>同比增长</p></div>
+    </div>
+    <%--<div class="main-content main-bottom">
+      <div class="infoLogo2"><img src="../../../images/information/info4_3.png" alt=""/></div>
+      <div class="infoTitle"><h1 id="provinceNum"></h1><p>全省排名</p></div>
+    </div>--%>
+  </div>
+</div>
+<script src="../../../map/js/jquery-1.11.3.js"></script>
+<script src="../../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../../map/js/jquery.countup.js"></script>
+<script>
+  $(document).ready(function(){
+    $.ajax({
+      type: 'post',
+      url: "../../../jxeco/netEco/queryNetStatistics.do",
+      dataType: 'JSON',
+      success: function (data) {
+        var infoIndex = data.coreproduction,
+                increasement= data.increasement,
+                provinceNum = data.coreRank;
+        $("#informationIndex").html(infoIndex);
+        $("#increasement").html(increasement);
+        /* $("#provinceNum").html(provinceNum);*/
+        $('.counter').countUp({
+          delay: 2,
+          time: 200
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>

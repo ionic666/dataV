@@ -1,0 +1,60 @@
+package com.cetc28.util;
+
+import java.io.*;
+
+/**
+ * 文件操作操作类
+ */
+public class FileOperate {
+    /**
+     * 得到上传文件的文件名，格式：aa.war
+     * @param fullName
+     * @return
+     */
+    public static String getUploadFileSampleName(String fullName){
+        int s1 = fullName.lastIndexOf("\\");
+        int s2 = fullName.lastIndexOf("/");
+        int start = s1 > s2 ? s1 : s2;
+        String fileSampleName = fullName.substring(start+1);
+        return fileSampleName;
+    }
+
+    /**
+     * 上传文件到指定路径下
+     * @param filePath
+     * @param uploadFile
+     * @return
+     */
+    public static String uploadFile(String filePath, File uploadFile) throws Exception {
+        boolean flag = true;
+        String msg ;
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(uploadFile));  //输入流
+        BufferedOutputStream bos = null;
+        try {
+            bos = new BufferedOutputStream(new FileOutputStream(filePath)); //输出流 ,将上传的文件保存到realPath
+            byte[] buff = new byte[1024*1024*5];
+            for (int len; (len = bis.read(buff)) != -1;) {
+                bos.write(buff, 0, len);
+            }
+            bos.flush();
+        } catch (FileNotFoundException e) {
+            flag = false;
+            e.printStackTrace();
+        } catch (IOException ie) {
+            flag = false;
+            ie.printStackTrace();
+        } finally {
+            if (flag) {
+                msg = "success";
+            } else {
+                msg = "false";
+            }
+            if (bis != null) {
+                bis.close();
+            }
+            if (bos != null)
+                bos.close();
+        }
+        return msg;
+    }
+}

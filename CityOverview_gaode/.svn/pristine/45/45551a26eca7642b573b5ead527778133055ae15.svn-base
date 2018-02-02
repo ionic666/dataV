@@ -1,0 +1,1363 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    <title>嘉兴城市运行全景特征图分系统</title>
+    <!--<link rel="stylesheet" type="text/css" href="myCss/indexAndMain.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/main_modal.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="myCss/toastr.css">-->
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script type="text/javascript" src=" http://webapi.amap.com/maps?v=1.4.0&key=966008e8aaafb827acaa2f1bea731a60"></script>
+    <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <!--<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>-->
+    <!--<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>-->
+    <script type="text/javascript" src="myjs/jquery-2.1.4.js"></script>
+    <!--<script type="text/javascript" src="myjs/toastr.min.js"></script>-->
+    <!--<script type="text/javascript" src="myjs/jquery.cookie.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/bootstrap.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.dataTables.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery.easyui.min.js"></script>-->
+    <!--<script type="text/javascript" src="map/js/jquery-ui.js"></script>-->
+    <script type="text/javascript" src="map/js/echarts-all.js"></script>
+    <!--<%--<script type="text/javascript" src="myjs/loadMapService.js"></script>--%>-->
+
+    <style>
+        body{
+            box-sizing: border-box;
+            overflow: hidden !important;
+        }
+        ::-webkit-scrollbar{
+            background-color: #1B1B1D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #303030;
+        }
+        .modelBox{
+            height:90%;
+            width:25%;
+            position: absolute;
+            z-index:101;
+        }
+        .modelBoxL{
+            top:10%;
+            left:0
+        }
+        .modelBoxC{
+            height:10%;
+            width: 50%;
+            bottom:2%;
+            right:25%;
+        }
+        .modelBoxC>div{
+            height:100%;
+            width: 35%;
+        }
+        .modelBoxC-a{
+            float: left;
+        }
+        .modelBoxC-b{
+            float: right;
+        }
+        .modelBoxR{
+            top:10%;
+            right:0
+        }
+        .modelBox .model{
+            height:32.8%;
+            width:100%;
+            margin-bottom:1%;
+            border-top: 2px #0cdaf5 solid;
+            position: relative;
+        }
+        .modelBox .model{ /*iframe*/
+            /*width:100%;*/
+            /*height:100%;*/
+            background: rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        .more{
+            position: absolute;
+            top:2%;
+            right:2%;
+            color: #0DD4EE;
+            cursor: pointer;
+        }
+        #changeImg img{
+            width:120px;
+            height:87px;
+        }
+        #login>button{
+            width: auto;
+            height: auto;
+            font-size: 1.5em;
+            color: #12C6D8;
+            background-color: #1E2222;
+            border: 0;
+            padding:0 0.2em;
+            float: right;
+            margin-right: 0.1em;
+        }
+        #login>button:hover{
+            color: #fff;
+        }
+        #login>h4{
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0.2em 0;
+            text-align: center;
+            color: #0CD9F4;
+
+        }
+        #login>form{
+            width: 100%;
+            height: 80%;
+
+        }
+        #login>form>input{
+            border-size: 0;
+            background-color: #00191C !important;
+        }
+        #login>form>input,#login>form>button{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+            line-height: 10%;
+        }
+        #login>form>button{
+            border-color: #e9ca3d;
+            border-color: #e9ca3d;
+            border-color: #0096AA;
+            background-color: #0096AA;
+        }
+        #login>form>label{
+            width: 70%;
+            height: 15%;
+            margin:5% 0 0 15%;
+        }
+
+        #legend div{
+            display: none;
+        }
+        #legend div p{
+            float: left;
+            display:block;
+            padding:10px;
+        }
+        #legend div p span{
+            margin:0px 3px;
+        }
+
+        /*地图infowindow样式表*/
+        .tundra{
+            position: relative;
+        }
+        #settingModal td{
+            border:0;
+            font-size: 1.3em;
+            color: #0a36e9;
+        }
+        a:hover{
+            color: #c74072;
+            text-decoration:none;
+        }
+        body{
+            width: 100%;
+        }
+    ul,li{
+        margin: 0;
+        list-style-type:none;
+    }
+    p{
+        margin: 0;
+    }
+        /*头部logo*/
+        .header {
+            width: 60%;
+            height: 7.8%;
+            margin: 0 auto;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: absolute;
+            z-index: 999;
+            top: 2%;
+            margin-left:50%;
+        }
+        .header>div{
+            display: inline-block;
+        }
+
+
+        /*高德地图info窗口样式开始*/
+        .amap-toolbar{
+            display:none;
+        }
+        .info {
+            border: solid 1px #7A9095 !important;
+            border-radius: 5px;
+        }
+        div.info-top {
+            position: relative;
+            background-color:rgba(0,29,36,0.8);
+            border-bottom: 1px solid #7A9095;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 14px;
+            padding: 6px;
+            line-height: 20px;
+            background-color:rgba(0,29,36,0.8) !important;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        .info span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        .amap-icon img{
+            width:100%;
+            height:100%;
+        }
+        /*高德地图info窗口样式开结束*/
+
+        .modelBox>.model>div:first-child{
+            padding-top:10px;
+            height:15%;
+            width:100%;
+        }
+        .modelBox>.model>div:last-child{
+            height:85%;
+            width:100%;
+        }
+        p.headerTitle{
+            padding-left: 3%;
+            font-size: 20px;
+            /*font-weight: bold;*/
+            color:#F2F2F2;
+            width: 40%;
+            font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+            margin:0;
+            float: left;
+            height: 100%;
+            position: relative;
+        }
+        .details{
+            /*margin-left:40%;*/
+        }
+        .details p{
+            font-size: 10px;
+            color:#fff;
+            margin:0px;
+        }
+        .details img{
+            width: 34px;
+        }
+        .details img,.details div,.detail span{
+            float: left;
+            margin-left: 15px;
+            text-align: center;
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 18px;
+            margin:0px;
+        }
+        #wrType{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            margin-left: 15px;
+        }
+
+        /*非公共样式 -* "河长制"--治水*/
+        div.model6{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 240px;
+        }
+        div#model6{
+            height: 85%;
+            width: 95%;
+        }
+        div#model6 ul{
+            width: 100%;
+            height: 20%;
+            color: #fff;
+        }
+        div#model6 ul li{
+            float: left;
+            width: 49%;
+            height: 100%;
+            /*padding-top: 10px;*/
+            /*padding-left:50px;*/
+        }
+        div#model6 ul li img{
+            float: left;
+        }
+        div#model6 ul .right{
+            float: left;
+            margin-left: 5%;
+        }
+        span.right{
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+        }
+        div#ybjjsyl{
+            width: 100%;
+            height: 75%;
+        }
+        div.cardHolder{
+            width: 100%;
+            height: 100%;
+        }
+        div.cardHolderText{
+            height: 23%;
+            font-size: 16px;
+        }
+        div.cardHolderText span{
+            font-size: 1.2em;
+        }
+        div.growPercentText{
+            height: 23%;
+            font-size: 1em;
+        }
+        div.insuredPercentText{
+            height: 23%;
+            font-size: 16px;
+            padding-top: 1%;
+        }
+        div.cardHolder ul{
+            padding-top: 20px;
+            padding-left: 10px;
+            height: 100%;
+        }
+        div.cardHolder ul li{
+            width: 100%;
+            float: left;
+        }
+        /*div#cardHolderBar{*/
+        /*height: 15%;*/
+        /*width: 100%;*/
+        /*}*/
+        #townspeople{
+            width: 400px;
+            height: 15px;
+            margin-left: 5%;
+            margin-top: 2%;
+            background-color: #314B5D;
+            /*border: 1px solid #41719C;*/
+        }
+        .bar_pro{
+            width: 0;
+            height: 100%;
+            background-color: #53A6E2;
+            /*box-shadow: -2px 0 6px 9px #204079;*/
+        }
+        .BlueFont{
+            color: #1296FF;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        #cardHolderSum{
+            padding-left: 15%;
+            font-size: 1.5em;
+        }
+        #growPercent{
+            padding-left: 32%;
+        }
+        #insuredPercent{
+            padding-left: 28%;
+        }
+        #model4{
+            color: #fff;
+        }
+        div.netPointCount{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 240px;
+            cursor: pointer;
+        }
+        div#netPointCount{
+            height: 85%;
+            width: 100%;
+        }
+        div#netPointCount span{
+            font-size: 1em;
+        }
+        div#netPointCount>ul#acount{
+            height: 50%;
+            width: 100%;
+        }
+        div#netPointCount span.addBigBlue{
+            font-size: 26px;
+            font-weight: bold;
+            color: #119EE8;
+        }
+        div#netPointCount span.addBigRed{
+            font-size: 26px;
+            font-weight: bold;
+            color: #1297e4;
+        }
+        div#netPointCount>ul#acount li{
+            float: left;
+            width: 50%;
+            height: 100%;
+            /*padding-top: 5%;*/
+            /*padding-left: 5%;*/
+        }
+        div#netPointCount ul#acount li img{
+            float: left;
+            padding-top: 5%;
+        }
+        div#netPointCount ul#acount .right{
+            float: left;
+            margin-left: 5%;
+        }
+        ul#top3{
+            float: right;
+            width: 65%;
+            height: 50%;
+            padding: 1px 0 0 1%;
+        }
+        ul#top3 li{
+            width: 33.3%;
+            height: 100%;
+            float: left;
+        }
+        #top3 .blueP{
+            color: #E3CD55;
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 10px 0 0 10px;
+        }
+        .blueP b{
+            color: #E3CD55;
+        }
+        #netPointCount .blueP span{
+            color: #FFC000;
+            vertical-align: top;
+            font-size: 14px;
+        }
+        .centerP span{
+            width:97px;
+            text-align: center;
+            display:block;
+        }
+        .model2{
+            color: #fff;
+        }
+        /*非公共样式--重点污染源在线监测--结束*/
+    </style>
+</head>
+<body class="tundra">
+<div id="map" style="width:100%; height:100%;background-color: black">
+</div>
+
+<div class="header"></div>
+
+<div class="modelBox modelBoxL">
+    <div class="model model1" >
+        <!--<span class="more">更多▶</span>-->
+        <!--<iframe id="iframe1" src="" frameborder="0"></iframe>-->
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">社保服务在线办理情况</p>
+        </div>
+        <div id="model"></div>
+    </div>
+
+    <div class="model model3">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">社保异地业务联网办理</p>
+        </div>
+        <div id="model3">
+
+        </div>
+    </div>
+    <div class="model model2">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">社保经办网点服务量</p>
+        </div>
+        <div id="netPointCount">
+            <ul id="acount">
+                <li>
+                    <img src="images/socialSecurity/todayCount.png" alt=""/>
+                    <div class="right">
+                        <p class="centerP"><span class="addBigBlue counter">6,580</span></p>
+                        <p class="centerP"><span>当日社保业务</span></p>
+                        <p class="centerP"><span>服务量</span></p>
+                    </div>
+                </li>
+                <li>
+                    <img src="images/socialSecurity/averageCount.png" alt=""/>
+                    <div class="right">
+                        <p class="centerP"><span class="addBigRed counter">363</span></p>
+                        <p class="centerP"><span>社保经办网点</span></p>
+                        <p class="centerP"><span>平均服务量</span></p>
+                    </div>
+                </li>
+            </ul>
+            <div style="float: left;padding-left: 5%">
+                <div class="centerP">
+                    <span>
+                     <img src="images/socialSecurity/buest.png" alt=""/>
+                    </span>
+                </div>
+                <p class="centerP"><span>最忙经办点</span></p>
+            </div>
+            <ul id="top3">
+                <li>
+                    <p class="centerP"><span>1.新嘉街道</span></p>
+                    <p class="centerP"><span>社会事业所</span></p>
+                    <p class="blueP"><b class="counter">1,040</b><span>+10</span></p>
+                </li>
+                <li>
+                    <p class="centerP"><span>2.解放街道</span></p>
+                    <p class="centerP"><span>社会事业所</span></p>
+                    <p class="blueP"><b class="counter">832</b><span>+6</span></p>
+                </li>
+                <li>
+                    <p class="centerP"><span>3.建设街道</span></p>
+                    <p class="centerP"><span>社会事业所</span></p>
+                    <p class="blueP"><b class="counter">671</b><span>+3</span></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modelBox modelBoxR">
+    <!--<div class="model model4">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">市民卡持卡人群</p>
+        </div>
+        <div id="model4">
+            <div class="cardHolderText">
+                <ul>
+                    <li>
+                        <span>市民卡持卡人数</span>
+                        <span class="BlueFont counter" id="cardHolderSum"></span>
+                        <span>万人</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="growPercentText">
+                <ul>
+                    <li>
+                        <span>同比增长</span>
+                        <span class="BlueFont counter" id="growPercent"></span>%
+                    </li>
+                </ul>
+            </div>
+            <div class="insuredPercentText">
+                <ul>
+                    <li>
+                        <span>占参保人数</span>
+                        <span class="BlueFont counter" id="insuredPercent"></span>%
+                    </li>
+                </ul>
+            </div>
+            <div id="townspeople">
+                <div class="bar_pro"></div>
+            </div>
+        </div>
+    </div>-->
+    <div class="model model4">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle">五险覆盖情况</p>
+        </div>
+        <div id="model4">
+
+        </div>
+    </div>
+    <div class="model model5">
+        <div class="modelBoxHasHead">
+            <p class="headerTitle" onclick="qycb()">企业参保情况</p>
+        </div>
+        <div id="model5">
+        </div>
+    </div>
+    <div class="model model6">
+        <div class="modelBoxHasHead">
+            <!--<p class="headerTitle">医保基金使用量</p>-->
+            <p class="headerTitle" onclick="ygyb()">阳光医保</p>
+        </div>
+        <div id="model6">
+            <!--<ul>-->
+                <!--<li>-->
+                    <!--<img src="images/socialSecurity/trend.png" alt=""/>-->
+                    <!--<span class="right">趋势统计</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<img src="images/socialSecurity/thisMonth.png" alt=""/>-->
+                    <!--<div class="right">-->
+                        <!--<p><span class="BlueFont counter">1,045</span>万</p>-->
+                        <!--<span>本月使用</span>-->
+                    <!--</div>-->
+                <!--</li>-->
+            <!--</ul>-->
+            <div id="ybjjsyl">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="myjs/myEcharts.js"></script>
+<script src="myjs/map/shbz.js"></script>
+<script src="myjs/index.js"></script>
+<script src="map/js/jquery.waypoints.min.js"></script>
+<script src="map/js/jquery.countup.js"></script>
+
+<script>
+    function ygyb(){
+        top.location.href="iframeSecond/secondBox/sunPublicServe.jsp";
+    }
+    function qycb(){
+        top.location.href="iframeSecond/secondBox/qycb.jsp";
+    }
+    var headerWidth=$(".header").width();	//获取头部标题的宽度
+    $(".header").css("left",-headerWidth/2-6+"px");//让头部标题居中
+    $(".header").css("background-image"," url(images/environment_title.png)");
+    //社保服务在线办理
+    function CreatSsServiceChart1(xAxisYear,onlineServiceData,selfServiceData,appServiceData,messageServiceData){
+        var mycharts = echarts.init(document.getElementById('model'));
+        var option = {
+            grid: {
+                x: '15%',
+                y: '15%',
+                x2: '3%',
+                y2: '16%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            color: ['#cc7a29','#bfbf39','#13bfbf'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data:['短信服务','电话服务','网上办理或手机APP'],
+                itemWidth: 10,
+                itemHeight:10,
+                itemGap:30,
+                textStyle: text_style
+            },
+            calculable : false,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['5月','6月','7月','8月','9月','10月','11月'],
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    splitLine: {show: false},
+                    axisLabel: {show: true, textStyle: text_style}}
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#8D8C8C'],
+                            width: 1,
+                            type: 'dashed'}},
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    axisTick: {show: false},
+                    axisLabel: {
+                        show: true,
+                        textStyle:text_style
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'短信服务',
+                    type:'bar',
+                    barWidth:'20',
+                    stack: '社保服务在线办理情况',
+                    data:[2000, 2000, 2000, 3000, 1800, 3200, 4200]
+                },
+                {
+                    name:'电话服务',
+                    type:'bar',
+                    stack: '社保服务在线办理情况',
+                    data:[2000, 2500, 1800, 3000, 6500, 3200, 4200]
+                },
+                {
+                    name:'网上办理或手机APP',
+                    type:'bar',
+                    stack: '社保服务在线办理情况',
+                    data:[2000, 2000, 2000, 3000, 2200, 4200, 5000]
+                }
+            ]
+        };
+//        var option = {
+//            color: ['#EA6060','#E3CD55','#47D881','#53A6E2'],
+//            tooltip : {
+//                trigger: 'axis',
+//                formatter: function (params,ticket,callback) {
+//                    var res =params[0].name+'年';
+//                    for (var i = 0, l = params.length; i < l; i++) {
+//                        var rate = 100*params[i].value;
+//                        res += '<br/>' + params[i].seriesName + ' : ' + parseFloat(rate.toFixed(2))+'%';
+//                    }
+//                    setTimeout(function (){
+//                        // 仅为了模拟异步回调
+//                        callback(ticket, res);
+//                    }, 100)
+//                }
+//            },
+//            grid: {
+//                x: '10%',
+//                y: '25%',
+//                x2: '3%',
+//                y2: '16%',
+//                containLabel: true,
+//                borderWidth: 0
+//            },
+//            legend: {
+//                data:['自助服务一体机','手机APP','电话及短信服务','网上办理'],
+//                itemWidth: 10,
+//                itemHeight:10,
+//                itemGap:20,
+//                textStyle: text_style,
+//                x:'left',
+//                y:'8%'
+//            },
+//            xAxis : [
+//                {
+//                    type : 'category',
+//                    data : xAxisYear,
+//                    axisLine: { lineStyle: {
+//                        color: '#8D8C8C'
+//                    }},
+//                    splitLine: {show: false},
+//                    axisLabel: {show: true,
+//                        textStyle: text_style,
+//                        formatter: '{value} 年'}
+//                }
+//            ],
+//            yAxis : [
+//                {
+//                    type : 'value',
+//                    splitLine: {
+//                        show: true,
+//                        lineStyle:{
+//                            color: ['#8D8C8C'],
+//                            width: 1,
+//                            type: 'dashed'}},
+//                    axisLine: { lineStyle: {
+//                        color: '#8D8C8C'
+//                    }},
+//                    axisTick: {show: false},
+//                    axisLabel: {
+//                        show: true,
+//                        formatter: function (value){
+//                            return value*100+'%';
+//                        },
+//                        textStyle:text_style
+//                    }
+//                }
+//            ],
+//            series : [
+//                {
+//                    name:'自助服务一体机',
+//                    type:'bar',
+//                    data:selfServiceData
+//                },
+//                {
+//                    name:'手机APP',
+//                    type:'bar',
+//                    data:appServiceData
+//                },
+//                {
+//                    name:'电话及短信服务',
+//                    type:'bar',
+//                    data:messageServiceData
+//                },
+//                {
+//                    name:'网上办理',
+//                    type:'bar',
+//                    data:onlineServiceData
+//                }
+//            ]
+//        };
+        mycharts.setOption(option);
+    }
+    //查询社保服务网上办理情况近5年的数据
+    $.ajax({
+        type:"POST",
+        url:'jxSocialSecurity/getSsOnlineServiceInFiveY.do',
+        dataType:'json',
+        success:function(data){
+            var xAxisYear=data.xAxisYear;
+            var onlineServiceData=data.onlineServiceData;
+            var selfServiceData=data.selfServiceData;
+            var appServiceData=data.appServiceData;
+            var messageServiceData=data.messageServiceData;
+            CreatSsServiceChart1(xAxisYear,onlineServiceData,selfServiceData,appServiceData,messageServiceData);
+        }
+    });
+    //社保异地业务联网办理情况
+    function CreatSsServiceChart2(xAxisYear,relationTransferData,benefitsQaData,medicalSettlementData,piBenefitsComparisonData){
+        var mycharts = echarts.init(document.getElementById('model3'));
+        var option = {
+//            color: ['#E88535','#7AC826','#43CED0','#6691FF'],
+            color: ['#E88535','#7AC826','#43CED0'],
+            tooltip : {
+                trigger: 'axis',
+                formatter: function (params,ticket,callback) {
+                    var res =params[0].name+'年';
+                    for (var i = 0, l = params.length; i < l; i++) {
+                        var rate = 100*params[i].value;
+                        res += '<br/>' + params[i].seriesName + ' : ' + parseFloat(rate.toFixed(2))+'%';
+                    }
+                    setTimeout(function (){
+                        // 仅为了模拟异步回调
+                        callback(ticket, res);
+                    }, 10)
+                }
+            },
+            grid: {
+                x: '10%',
+                y: '15%',
+                x2: '3%',
+                y2: '16%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+//                data:['异地社保关系转移','异地社保资格待遇认证','','国家异地就医结算','养老保险待遇状态对比'],
+                data:['异地社保关系转移','异地社保资格待遇认证','国家异地就医结算'],
+                orient:'horizontal',
+                itemWidth: 10,
+                itemHeight:10,
+                // itemGap:30,
+                //x: 'right',
+                y:'top',
+                textStyle: text_style
+            },
+            calculable : false,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : xAxisYear,
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    splitLine: {show: false},
+                    axisLabel: {show: true, textStyle: text_style,formatter: '{value} 年'}
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#8D8C8C'],
+                            width: 1,
+                            type: 'dashed'}},
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    axisTick: {show: false},
+                    axisLabel: {
+                        show: true,
+                        formatter: function (value){
+                            return value*100+'%';
+                        },
+                        textStyle:text_style
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'异地社保关系转移',
+                    type:'bar',
+                    data:relationTransferData
+                },
+                {
+                    name:'异地社保资格待遇认证',
+                    type:'bar',
+                    data:benefitsQaData
+                },
+                {
+                    name:'国家异地就医结算',
+                    type:'bar',
+                    data:medicalSettlementData
+                }
+//                , {
+//                    name:'养老保险待遇状态对比',
+//                    type:'bar',
+//                    data:piBenefitsComparisonData
+//                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //查询社保异地业务联网办理情况近5年的数据
+    $.ajax({
+        type:"POST",
+        url:'jxSocialSecurity/getSsRemoteServiceInFiveY.do',
+        dataType:'json',
+        success:function(data){
+            var xAxisYear=data.xAxisYear;
+            var relationTransferData=data.relationTransferData;
+            var benefitsQaData=data.benefitsQaData;
+            var medicalSettlementData=data.medicalSettlementData;
+            var piBenefitsComparisonData=data.piBenefitsComparisonData;
+            CreatSsServiceChart2(xAxisYear,relationTransferData,benefitsQaData,medicalSettlementData,piBenefitsComparisonData);
+        }
+    });
+    //社保卡覆盖情况
+    var mycharts4 = echarts.init(document.getElementById('model4'));
+    var option = {
+        tooltip: {
+            trigger: 'axis',
+            formatter: '{b}覆盖率 : {c}%'
+        },
+        grid: {
+            x: '20%',
+            y: '5%',
+            x2: '5%',
+            y2: '10%',
+            containLabel: true,
+            borderWidth: 0
+        },
+        legend: {
+            data: ['社保覆盖率'],
+            show: false
+        },
+        xAxis: {
+            type: 'value',
+            splitLine: {show: false},
+            axisTick: {show: false},
+            axisLabel: {show: false},
+            splitLine: {
+                show: true,
+                lineStyle:{
+                    color: ['#8D8C8C'],
+                    width: 1,
+                    type: 'dashed'
+                }
+            },
+            axisLine: {show:false}
+        },
+        yAxis: {
+            type: 'category',
+            axisLine: {lineStyle: {color: '#BFBFBF'}},
+            axisTick: {show: true},
+            axisLabel: {show: true, textStyle: text_style, interval: 0},
+            splitLine: {show: false},
+            data: ['养老保险','失业保险','生育保险','工伤保险','医疗保险']
+        },
+        series: [
+            {
+                name: '社保覆盖率',
+                type: 'bar',
+                barWidth: 18,
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            position: 'right',
+                            textStyle: text_style,
+                            formatter: '{c}%'
+                        }
+                    }
+                },
+                data: [77.90, 83.70, 74.30, 86.40, 69.70]
+            }
+        ]
+    };
+    mycharts4.setOption(option);
+    //企业参保情况
+    function CreatSsServiceChart3(xAxisYear,corpInsuredSumData,averageInsuredAgeData){
+        //生成男女数据
+        var corpInsuredSumDataM=[];
+        var corpInsuredSumDataF=[];
+        $.each(corpInsuredSumData,function(i){
+            corpInsuredSumDataM.push((corpInsuredSumData[i]*0.51).toFixed(2));
+            corpInsuredSumDataF.push((corpInsuredSumData[i]*0.49).toFixed(2));
+        });
+        var mycharts = echarts.init(document.getElementById('model5'));
+        var option = {
+            color: ['#CC9949','#00A6A6','#CE463B'],
+            tooltip : {
+                trigger: 'axis',
+                formatter:'{b}年<br/>{a}:{c}万人<br/>{a1}:{c1}万人<br/>{a2}:{c2}岁'
+            },
+            grid: {
+                x: '10%',
+                y: '20%',
+                x2: '8%',
+                y2: '13%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data:['企业参保人数(女)','企业参保人数(男)','参保人平均年龄'],
+                textStyle: text_style,
+                itemWidth: 10,
+                itemHeight:10,
+                itemGap:10,
+                y:'1%'
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    splitLine:false,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#8D8C8C'
+                        }
+                    },
+                    axisLabel: {show: true, textStyle: text_style,formatter: '{value} 年'},
+                    data : xAxisYear
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    name:'人数（万人）',
+                    nameTextStyle:text_style,
+                    max:250,
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#8D8C8C'],
+                            width: 1,
+                            type: 'dashed'}},
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: '{value} '
+                    }
+                },
+                {
+                    type : 'value',
+                    name:'年龄（岁）',
+                    nameTextStyle:text_style,
+                    max:45,
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    splitLine:false,
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: '{value} '}
+                }
+            ],
+            series : [
+                {
+                    name:'企业参保人数(女)',
+                    type:'bar',
+                    barWidth:30,
+                    stack: '企业参保人数',
+                    data:corpInsuredSumDataF
+                },
+                {
+                    name:'企业参保人数(男)',
+                    type:'bar',
+                    barWidth:30,
+                    stack: '企业参保人数',
+                    data:corpInsuredSumDataM
+                },
+                {
+                    name:'参保人平均年龄',
+                    type:'line',
+                    symbol:'rectangle',
+                    yAxisIndex: 1,
+                    data:averageInsuredAgeData
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //查询嘉兴市企业参保情况近3年的数据
+    //医保基金使用情况
+    function ybjj(){
+        var mycharts = echarts.init(document.getElementById('ybjjsyl'));
+        var option = {
+            tooltip: {
+                show: true
+            },
+            series: [{
+                name: '违规单据初审',
+                type: 'wordCloud',
+                size: ['100%', '100%'],
+                textRotation : [0, 0, 0, 0],
+                textPadding: 0,
+                autoSize: {
+                    enable: true,
+                    minSize: 18
+                },
+                data: [
+                    {
+                        name: "超剂量用药",
+                        value: 115936,
+                        itemStyle: {
+                            normal: {
+                                color: '#13bfbf'
+                            }
+                        }
+                    },
+                    {
+                        name: "项目匹配",
+                        value: 29161,
+                        itemStyle: {
+                            normal: {
+                                color: '#66bf39'
+                            }
+                        }
+                    },
+                    {
+                        name: "事后人工审核",
+                        value: 7949,
+                        itemStyle: {
+                            normal: {
+                                color: '#bfbf39'
+                            }
+                        }
+                    },
+                    {
+                        name: "医院等级限制",
+                        value: 3037,
+                        itemStyle: {
+                            normal: {
+                                color: '#cc7a29'
+                            }
+                        }
+                    },
+                    {
+                        name: "项目内涵重复收费",
+                        value: 3227,
+                        itemStyle: {
+                            normal: {
+                                color: '#d94436'
+                            }
+                        }
+                    },
+                    {
+                        name: "事后直接扣款",
+                        value: 490,
+                        itemStyle:{
+                            normal: {
+                                color: '#106abf'
+                            }
+                        }
+                    },
+                    {
+                        name: "诊疗限价",
+                        value: 464,
+                        itemStyle: {
+                            normal: {
+                                color: '#5b66d3'
+                            }
+                        }
+                    },
+                    {
+                        name: "性别限用",
+                        value:200,
+                        itemStyle: {
+                            normal: {
+                                color: '#8d36ca'
+                            }
+                        }
+                    },
+                    {
+                        name: "收费次数限制",
+                        value: 100,
+                        itemStyle: {
+                            normal: {
+                                color: '#d03a88'
+                            }
+                        }
+                    }
+                ]
+            }]
+        };
+//        var option = {
+//            color: ['#6691FF','#FFD700'],
+//            tooltip : {
+//                trigger: 'axis',
+//                formatter:'{b}<br/>{a}:{c}万元<br/>{a1}:{c1}%'
+//            },
+//            grid: {
+//                x: '15%',
+//                y: '20%',
+//                x2: '15%',
+//                y2: '15%',
+//                containLabel: true,
+//                borderWidth: 0
+//            },
+//            legend: {
+//                data:['医保使用量','医保使用率'],
+//                show: false
+//            },
+//            xAxis : [
+//                {
+//                    type : 'category',
+//                    splitLine:false,
+//                    axisLine: { lineStyle: {
+//                        color: '#8D8C8C'
+//                    }},
+//                    axisTick: {show:false},
+//                    axisLabel: {show: true, textStyle: text_style},
+//                    data : ['5月','6月','7月','8月']
+//                }
+//            ],
+//            yAxis : [
+//                {
+//                    name:'医保使用量（万元）',
+//                    nameTextStyle:text_style,
+//                    type : 'value',
+//                    axisLine: { lineStyle: {
+//                        color: '#8D8C8C'
+//                    }},
+//                    splitNumber:3,
+//                    splitLine: {
+//                        show: true,
+//                        lineStyle:{
+//                            color: ['#8D8C8C'],
+//                            width: 1,
+//                            type: 'dashed'}},
+//                    axisLabel: {
+//                        show: true,
+//                        textStyle: text_style,
+//                        formatter: '{value} '
+//                    }
+//                },
+//                {
+////				name:'医保使用率',
+////				nameTextStyle:text_style,
+//                    type : 'value',
+//                    axisLine: { lineStyle: {
+//                        color: '#8D8C8C'
+//                    }},
+//                    splitLine:{show:false},
+////				axisTick: {show: true,lineStyle:{color: '#bfbfbf'}},
+//                    axisLabel: {
+//                        show: true,
+//                        textStyle: text_style,
+//                        formatter: '{value} %'}
+//                }
+//            ],
+//            series : [
+//                {
+//                    name:'医保使用量',
+//                    type:'bar',
+//                    barWidth:30,
+//                    data:[600,700,900,1300]
+//                },
+//                {
+//                    name:'医保使用率',
+//                    type:'line',
+//                    symbol:'rectangle',
+//                    yAxisIndex: 1,
+//                    data:[15,18,20,32]
+//                }
+//            ]
+//        };
+        mycharts.setOption(option);
+    }
+    ybjj();
+    //shi
+    //查询市民卡持卡人群最近一年的统计数据
+    $.ajax({
+        type:"POST",
+        url:'jxSocialSecurity/getSsCardHolderLatestY.do',
+        dataType:'json',
+        success:function(data){
+            /*console.log("11111111111");*/
+            var xAxisYear=data.xAxisYear;
+            var cardHolderSum=data.cardHolderSum;
+            var insuredSum=data.insuredSum;
+            var noCardSum = insuredSum - cardHolderSum;
+            $('#cardHolderSum').html(cardHolderSum);
+            var growPercent = data.growPercent*100;
+            $('#growPercent').html(growPercent.toFixed(2));
+            var insuredPercent = cardHolderSum/insuredSum*100;
+            var cusWidth=insuredPercent.toFixed(2)+'%';
+            $('#insuredPercent').html(insuredPercent.toFixed(2));
+            $(".bar_pro").animate({
+                width: cusWidth
+            },2000);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+            //CreatSsServiceChart(xAxisYear,cardHolderSum,noCardSum);
+        }
+    });
+    $.ajax({
+        type:"POST",
+        url:'jxSocialSecurity/getSsCorporationInThreeY.do',
+        dataType:'json',
+        success:function(data){
+            var xAxisYear=data.xAxisYear;
+            var corpInsuredSumData=data.corpInsuredSumData;
+            var averageInsuredAgeData=data.averageInsuredAgeData;
+            CreatSsServiceChart3(xAxisYear,corpInsuredSumData,averageInsuredAgeData);
+        }
+    });
+
+
+    window.onload=function(){
+        //加载地图的方法
+        map = new AMap.Map('map', {
+            mapStyle: 'amap://styles/e08db8ed18c196aa387f5352644fe504'//样式URL
+        });
+        AMap.event.addListener(map,'click',function(e){
+            map.clearInfoWindow();
+            console.log("666")
+        });
+        shbz.shbzAjax();
+    }
+</script>
+</html>

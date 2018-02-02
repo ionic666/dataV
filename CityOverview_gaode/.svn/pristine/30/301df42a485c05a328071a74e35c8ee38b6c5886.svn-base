@@ -1,0 +1,19 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+import com.cetc28.PeopleBenefitService.model.JxSsMiVolumeStatistics;
+
+public interface JxSsMiVolumeStatisticsMapper {
+    int deleteByPrimaryKey(Short id);
+
+    int insert(JxSsMiVolumeStatistics record);
+
+    int insertSelective(JxSsMiVolumeStatistics record);
+
+    JxSsMiVolumeStatistics selectByPrimaryKey(Short id);
+
+    int updateByPrimaryKeySelective(JxSsMiVolumeStatistics record);
+
+    int updateByPrimaryKey(JxSsMiVolumeStatistics record);
+
+    JxSsMiVolumeStatistics selectSsMiVolumeStatisticsLatestDay();
+}

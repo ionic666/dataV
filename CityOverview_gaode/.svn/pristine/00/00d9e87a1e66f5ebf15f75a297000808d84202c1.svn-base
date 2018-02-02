@@ -1,0 +1,88 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #measureTool table tr{
+      height: 40px;
+      line-height: 40px;
+    }
+    #measureTool table tr td input{
+     width: 80px;
+      height: 30px;
+      line-height: 30px;
+    }
+  </style>
+</head>
+<body>
+<div class="modal fade" style="width: 260px;height: 420px;top: 50px;left:auto;right: 110px;" id="measureTool" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 240px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close" style="margin-top: -2px">
+          <img src="map/images/economicModel/close.png" onclick="closeInfoWindow(this,1);">
+        </button>
+        <h4 class="modal-title" style="font-size:14px;">测量</h4>
+      </div>
+      <div class="modal-body" style="width: 240px">
+        <table style="width: 100%">
+          <tr>
+            <td><input type="button" value="测面" onclick="measureSquare()"/></td><td><input type="button" value="测距" onclick="measureDistanse()"/></td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <select id="measureSelect" name=""  style="width: 90%">
+              <option value="select1">平方米</option>
+              <option value="select2">平方千米</option>
+            </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="color: #dcdcdc">
+             测量数据
+            </td>
+          </tr>
+          <tr>
+            <td id="measureResult" colspan="2">
+
+            </td>
+          </tr>
+        </table>
+        </div>
+       </div>
+    </div>
+</div>
+<script>
+  function measureSquare(){
+    $("#measureSelect").html("")
+    var str='<option value="select1">平方米</option><option value="select2">平方千米</option>';
+    $("#measureSelect").html(str);
+
+
+
+    $("#measureResult").html("100平方米")
+  }
+  function measureDistanse(){
+    $("#measureSelect").html("")
+    var str='<option value="select1">米</option><option value="select2">千米</option>';
+    $("#measureSelect").html(str);
+
+
+    $("#measureResult").html("100米")
+  }
+</script>
+</body>
+</html>

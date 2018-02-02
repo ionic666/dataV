@@ -1,0 +1,26 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxSsCorpAnalysis;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface JxSsCorpAnalysisMapper {
+    int deleteByPrimaryKey(Short id);
+
+    int insert(JxSsCorpAnalysis record);
+
+    int insertSelective(JxSsCorpAnalysis record);
+
+    JxSsCorpAnalysis selectByPrimaryKey(Short id);
+
+    int updateByPrimaryKeySelective(JxSsCorpAnalysis record);
+
+    int updateByPrimaryKey(JxSsCorpAnalysis record);
+
+    JxSsCorpAnalysis selectSsCorpAnalysisLatestY(String regionCode, String corpName);
+
+    List<JxSsCorpAnalysis> selectSsCorpAnalysisInFiveY(String regionCode, String corpName);
+
+    List<JxSsCorpAnalysis> selectCorpAnalysisTooltipLatestY(@Param("regionCode") String regionCode);
+}

@@ -1,0 +1,185 @@
+package com.cetc28.IntelligentInfrastructure.dto;
+
+/****************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所民品部
+ * 项目名称：CityOverview
+ * 设计人员：LiuDefeng
+ * 创建日期：2017/9/13 19:16
+ * 描述信息：数据类，按月统计的城市生命线宏观数据
+ *****************************************************************/
+public class JxUtilityStatisByMonth {
+    private String bh;                            //区划编号
+    private String dateYm;                            //统计日期（YYYY-MM）
+    private double waterSupplyAll;                             //供水量（万立方米）
+    private double tapWaterSupply;                             //自来水供水量（万立方米）
+    private double tapWaterStsRate;                            //自来水产销差率
+    private double elecSupplyAll;                           //供电量(万千瓦时)
+    private double elecResi;                            //城乡居民生活供电量(万千瓦时)
+    private double elecIndu;                               //城乡居民生活供电量(万千瓦时)
+    private double elecPowerLoadingRate;                            //电网负荷率
+    private double ngSupply;                            //供天然气量（万立方米）
+    private double ngStsRate;                            //天然气供销差率
+    private double heatingSupplyAll;                            //供热量（百万千焦）
+    private double waterDischargeAll;                            //总排水量（万立方米）
+    private double rainDischargeAll;                            //雨水排放量（万立方米）
+    private double wasteResiAll;                            //生活污水总排放量（万立方米）
+    private double wasteResiStandard;                            //生活污水达标排放量（万立方米）
+    private double wasteInduAll;                            //工业废水总排放量（万立方米）
+    private double wasteInduStandard;                            //工业废水达标排放量（万立方米）
+    private double noAlarm;                            //管网报警次数
+    private double noFault;                            //管网故障次数
+    private double noComplaint;                            //居民投诉次数
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public String getDateYm() {
+        return dateYm;
+    }
+
+    public void setDateYm(String dateYm) {
+        this.dateYm = dateYm;
+    }
+
+    public double getWaterSupplyAll() {
+        return waterSupplyAll;
+    }
+
+    public void setWaterSupplyAll(double waterSupplyAll) {
+        this.waterSupplyAll = waterSupplyAll;
+    }
+
+    public double getTapWaterSupply() {
+        return tapWaterSupply;
+    }
+
+    public void setTapWaterSupply(double tapWaterSupply) {
+        this.tapWaterSupply = tapWaterSupply;
+    }
+
+    public double getTapWaterStsRate() {
+        return tapWaterStsRate;
+    }
+
+    public void setTapWaterStsRate(double tapWaterStsRate) {
+        this.tapWaterStsRate = tapWaterStsRate;
+    }
+
+    public double getElecSupplyAll() {
+        return elecSupplyAll;
+    }
+
+    public void setElecSupplyAll(double elecSupplyAll) {
+        this.elecSupplyAll = elecSupplyAll;
+    }
+
+    public double getElecPowerLoadingRate() {
+        return elecPowerLoadingRate;
+    }
+
+    public void setElecPowerLoadingRate(double elecPowerLoadingRate) {
+        this.elecPowerLoadingRate = elecPowerLoadingRate;
+    }
+
+    public double getNgSupply() {
+        return ngSupply;
+    }
+
+    public void setNgSupply(double ngSupply) {
+        this.ngSupply = ngSupply;
+    }
+
+    public double getNgStsRate() {
+        return ngStsRate;
+    }
+
+    public void setNgStsRate(double ngStsRate) {
+        this.ngStsRate = ngStsRate;
+    }
+
+    public double getHeatingSupplyAll() {
+        return heatingSupplyAll;
+    }
+
+    public void setHeatingSupplyAll(double heatingSupplyAll) {
+        this.heatingSupplyAll = heatingSupplyAll;
+    }
+
+    public double getWaterDischargeAll() {
+        return waterDischargeAll;
+    }
+
+    public void setWaterDischargeAll(double waterDischargeAll) {
+        this.waterDischargeAll = waterDischargeAll;
+    }
+
+    public double getRainDischargeAll() {
+        return rainDischargeAll;
+    }
+
+    public void setRainDischargeAll(double rainDischargeAll) {
+        this.rainDischargeAll = rainDischargeAll;
+    }
+
+    public double getWasteResiAll() {
+        return wasteResiAll;
+    }
+
+    public void setWasteResiAll(double wasteResiAll) {
+        this.wasteResiAll = wasteResiAll;
+    }
+
+    public double getWasteResiStandard() {
+        return wasteResiStandard;
+    }
+
+    public void setWasteResiStandard(double wasteResiStandard) {
+        this.wasteResiStandard = wasteResiStandard;
+    }
+
+    public double getWasteInduAll() {
+        return wasteInduAll;
+    }
+
+    public void setWasteInduAll(double wasteInduAll) {
+        this.wasteInduAll = wasteInduAll;
+    }
+
+    public double getWasteInduStandard() {
+        return wasteInduStandard;
+    }
+
+    public void setWasteInduStandard(double wasteInduStandard) {
+        this.wasteInduStandard = wasteInduStandard;
+    }
+
+    public double getNoAlarm() {
+        return noAlarm;
+    }
+
+    public void setNoAlarm(double noAlarm) {
+        this.noAlarm = noAlarm;
+    }
+
+    public double getNoFault() {
+        return noFault;
+    }
+
+    public void setNoFault(double noFault) {
+        this.noFault = noFault;
+    }
+
+    public double getNoComplaint() {
+        return noComplaint;
+    }
+
+    public void setNoComplaint(double noComplaint) {
+        this.noComplaint = noComplaint;
+    }
+}
+

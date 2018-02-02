@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.ConfigurationManagement.dao.IJxLogDao">
+    <insert id="add" parameterType="com.cetc28.ConfigurationManagement.model.Log">
+        INSERT INTO JX_MANAGE_OPERATION_LOG (logid,username,modulename,action,userip,actiontime,opertime)
+        VALUES (seq_operation_log.nextval,#{username},#{modulename},#{action},#{userip},#{actiontime},#{opertime})
+    </insert>
+
+    <select id="queryLogList" parameterType="Integer" resultType="com.cetc28.ConfigurationManagement.model.Log">
+        SELECT * from JX_MANAGE_OPERATION_LOG ORDER BY opertime DESC
+    </select>
+
+    <select id="queryLogInoByTime" resultType="com.cetc28.ConfigurationManagement.model.UserLoginList">
+        SELECT * FROM JX_MANAGE_LOGIN_LIST t WHERE  1=1
+        <if test="startTime!=''">
+            AND  t.logintime >= #{startTime}
+        </if>
+        <if test="endTime!=''">
+            <![CDATA[AND  t.logintime <=#{endTime}]]>
+        </if>
+        ORDER  BY t.logintime DESC
+    </select>
+
+    <select id="queryOperInoByTime" resultType="com.cetc28.ConfigurationManagement.model.Log">
+        SELECT * FROM JX_MANAGE_OPERATION_LOG t WHERE  1=1
+        <if test="startTime!=''">
+            AND  t.opertime >= #{startTime}
+        </if>
+        <if test="endTime!=''">
+            <![CDATA[AND  t.opertime <=#{endTime}]]>
+        </if>
+        ORDER  BY t.opertime DESC
+    </select>
+</mapper>

@@ -1,0 +1,90 @@
+div.modal {
+    background-color: rgba(0, 0, 0,0.5);
+}
+.modal .modal-dialog .modal-content{
+    background-color: transparent;
+}
+/*.modal{*/
+    /*background-color: rgba(0,40,45,0.75);*/
+    /*border:1px solid #00bbd4;*/
+/*}*/
+.headerTitles{
+    font-size: 20px;
+    font-weight: bold;
+    color: #F2F2F2;
+    height: 35px;
+    line-height: 35px;
+    width: 220px;
+    background-color: #656565;
+}
+.echartsHeight33{
+    width:100%;
+    height:33%;
+    margin:2% 0;
+    position: relative;
+}
+/*.echartsHeight33 div{*/
+    /*height:100%;*/
+/*}*/
+.echartsHeight33 p{
+    color:#fff;
+    font-size: 16px;
+}
+.echartsHeightP{
+    position:absolute;
+    top:10px;
+    left:10px;
+    color:#fff;
+    font-size: 16px;
+}
+.echartsHeight50{
+    width:100%;
+    height:49%;
+    margin:5% 0;
+    position: relative;
+}
+
+.echartsHeight50 div{
+    height:90%;
+    padding-top:20px;
+    /*overflow: hidden;*/
+}
+.echartsHeight50 div table{
+    width:100%;
+    /*height:100%;*/
+}
+.echartsHeight50 div table thead{
+    background-color:#000000;
+    font-size: 16px;
+    font-weight: bolder;
+}
+.echartsHeight50 div table tbody tr{
+    border-bottom: 2px solid #000000;
+}
+.echartsHeight50 #czqyph table tbody tr td:last-child{
+    color:red;
+}
+.echartsHeight50 #kzqyph table tbody tr td:last-child{
+    color:green;
+}
+.echartsHeight50 div table tr td,.echartsHeight50 div table tr th{
+    padding:5px;
+}
+.echartsHeight50P{
+    height:10%;
+    position:relative;
+    top:10px;
+    left:10px;
+    color:#fff;
+    font-size: 16px;
+}
+.echartsHeight10{
+    width:100%;
+    height:10%;
+    padding:10px;
+    position: relative;
+}
+#jyzyczQkDiv{
+    width:100%;
+    height:90%;
+}

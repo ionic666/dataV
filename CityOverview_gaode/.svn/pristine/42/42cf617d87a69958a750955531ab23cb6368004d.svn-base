@@ -1,0 +1,93 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/14
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="../../../myCss/iframe.css"/>
+  <style type="text/css">
+    body{
+      padding: 10px 0 0 10px;
+    }
+    .main{
+      width: 95%;
+      height: 75%;
+      margin-top: 5%;
+    }
+    .main>.main-content{
+      width: 97%;
+      height: 45%;
+    }
+    .main-content>div{
+      width: 35%;
+      height: 90%;
+      margin-left: 3%;
+      float: left;
+    }
+    .infoLogo1>img,.infoLogo2>img{
+      width: 4em;
+      height: 4em;
+      float: right;
+    }
+    .infoTitle{
+      vertical-align: middle;
+    }
+    .infoTitle>h1{
+      color: #0CDAF5;
+      text-align: center;
+    }
+    .infoTitle>p{
+      font-size: 14px;
+      line-height: 24px;
+      text-align: center;
+    }
+    p.headerTitle{
+      width: 45%;
+    }
+  </style>
+</head>
+<body>
+<div class="gsbz">
+  <p class="headerTitle">
+    “两化”融合指数
+  </p>
+  <div class="main">
+    <div class="main-content main-top">
+      <div class="infoLogo1"><img src="../../../images/information/info3_1.png" alt=""/></div>
+      <div class="infoTitle"><h1 id="informationIndex" class="counter"></h1><p>两化融合指数</p></div>
+    </div>
+    <div class="main-content main-bottom">
+      <div class="infoLogo2"><img src="../../../images/information/info3_2.png" alt=""/></div>
+      <div class="infoTitle"><h1 id="provinceNum" class="counter"></h1><p>全省排名</p></div>
+    </div>
+  </div>
+</div>
+<script src="../../../map/js/jquery-1.11.3.js"></script>
+<script src="../../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../../map/js/jquery.countup.js"></script>
+<script>
+  $(document).ready(function(){
+    $.ajax({
+      type: 'post',
+      url: "../../../jxeco/netEco/getEcoInternetIndex.do",
+      dataType: 'JSON',
+      success: function (data) {
+        var infoIndex = data.MIX_INDEX,
+                provinceNum = data.MIX_RANK;
+        $("#informationIndex").html(infoIndex);
+        $("#provinceNum").html(provinceNum);
+        $('.counter').countUp({
+          delay: 2,
+          time: 200
+        });
+      }
+    })
+  });
+</script>
+</body>
+</html>

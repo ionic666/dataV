@@ -1,0 +1,53 @@
+package com.cetc28.PeopleBenefitService.dao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/20.
+ */
+public interface JxEcoCoreComDao {
+
+    List<HashMap<String,String>> queryCoreCom(Map map);
+
+    /**
+     * 查询饼图信息
+     * @param map
+     * @return
+     */
+    List<HashMap<String,String>> queryCoreComPie(Map map);
+
+    /**
+     * 查询区号范围
+     * @return
+     */
+    List queryBhRange();
+
+    /**
+     * 根据区号值查询对应名称
+     * @param bhValue
+     * @return
+     */
+    String queryMcByBh(String bhValue);
+
+    /**
+     * 根据名称查询核心产业id
+     * @param name
+     * @return
+     */
+    String queryCoreID(String name);
+
+    /**
+     * 查询核心企业的描述
+     * @param id
+     * @return
+     */
+    String queryCoredes(String id);
+    Integer queryType(Map map);
+    Integer queryAge(Map map);
+    Integer queryValue(Map map);
+
+    List<HashMap<String,String>> serchCorecom(String name);
+
+}

@@ -1,0 +1,18 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxEcoKeycomsj;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/18.
+ */
+public interface JxEcoKeycomDao {
+    List<JxEcoKeycomsj> querykeycomsj();
+    List querykeycomsec(String id);
+
+    String queryMcByBh(String bhValue);
+    List<String> queryBhRange();
+    List queryComByCondition(Map map);
+}

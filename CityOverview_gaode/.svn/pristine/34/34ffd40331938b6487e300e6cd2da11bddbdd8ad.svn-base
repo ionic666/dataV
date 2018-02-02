@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.JxEcoCoreInformationDao">
+    <select id="queryFirstIndex" resultType="com.cetc28.idata.model.JxEcoCoreIndustry">
+        select bh,mc from JX_ECO_CORE_INDUSTRY WHERE sjbh IS  NULL
+    </select>
+
+    <select id="querySecondIndex" parameterType="java.lang.String" resultType="com.cetc28.idata.model.JxEcoCoreIndustry">
+        select * from JX_ECO_CORE_INDUSTRY WHERE sjbh =  #{sjbh}
+    </select>
+
+    <select id="queryCoreIndustry" parameterType="java.util.HashMap" resultType="com.cetc28.idata.model.JxEcoCoreInformation">
+        select * from JX_ECO_CORE_INFROMATIONVALUE WHERE bh = #{bh} and year=#{year}
+    </select>
+
+    <select id="queryYearRange" parameterType="java.lang.String" resultType="java.lang.String">
+        select DISTINCT year from JX_ECO_CORE_INFROMATIONVALUE order by year
+    </select>
+
+</mapper>

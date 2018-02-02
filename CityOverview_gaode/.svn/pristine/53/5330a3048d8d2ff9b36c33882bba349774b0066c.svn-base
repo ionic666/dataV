@@ -1,0 +1,501 @@
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.dto.WaterMacro;
+import com.cetc28.idata.model.JxEnvirWater;
+import com.cetc28.idata.model.JxNoise;
+import com.cetc28.idata.model.JxPollution;
+import com.cetc28.idata.model.JxWaterManage;
+import com.cetc28.idata.service.IJxEnvirService;
+import com.cetc28.system.controller.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.w3c.dom.ls.LSException;
+
+import java.text.Format;
+import java.text.NumberFormat;
+import java.util.*;
+
+/**
+ * 嘉兴运行全景图--产业经济Controller
+ * Created by IntelliJ IDEA.
+ * User: LYLYC
+ * Date: 17-8-10
+ * Time: 下午2:34
+ */
+@Controller
+@RequestMapping("/jxenvir")
+public class JxEnvirController extends BaseController {
+    @Autowired
+    private IJxEnvirService jxEnvirService;
+
+    /**
+     * 查询全部空气质量数据
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("queryAll.do")
+    @ResponseBody
+    public List queryAll() {
+        List list = new ArrayList();
+        list = jxEnvirService.queryAllEnvirAir();
+        return list;
+    }
+
+    /**
+     * 查询某监测点空气质量信息（暂时没用）
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("selectEnvirInfo.do")
+    @ResponseBody
+    public List selectEnvirInfo(@RequestParam("jcdbh") String jcdbh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectEnvirInfo(jcdbh);
+        return list;
+    }
+
+
+    //改写为24小时最近的监测点时间。。。
+    //*****0901*****完成lyc
+    @RequestMapping("Kqzljc24Hour.do")
+    @ResponseBody
+    public List Kqzljc24Hour(@RequestParam("bh") String bh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectKqzljc24Hour(bh);
+        return list;
+    }
+
+    //改写为30天最近的监测点时间。。。
+    //*****0901*****完成lyc
+    @RequestMapping("Kqzljc30Day.do")
+    @ResponseBody
+    public List Kqzljc30Day(@RequestParam("bh") String bh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectKqzljc30Day(bh);
+        return list;
+    }
+
+    //获取按日进行预测所得到的预测数据
+    @RequestMapping("queryPreData.do")
+    @ResponseBody
+    public List queryPreData( String bh, Integer gap, Integer preNum) {
+        return jxEnvirService.queryPreData(bh,gap,2);
+    }
+
+    //获取按小时进行预测所得到的预测数据
+    @RequestMapping("queryPre24HourData.do")
+    @ResponseBody
+    public List queryPre24HourData( String bh, Integer gap, Integer preNum) {
+        return jxEnvirService.queryPre24HourData(bh,gap,2);
+    }
+
+    /**
+     * 查询某监测点噪声污染信息
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("JxMapZsJcd.do")
+    @ResponseBody
+    public Map JxMapZsJcdInfo(String jcdbh, String zstype, String time_start, String time_end) {
+        Map map = new HashMap();
+        map = jxEnvirService.selectZsJcdInfo(jcdbh, zstype, time_start, time_end);
+        return map;
+    }
+
+    /**
+     * 嘉兴环境P2图层空气监测点信息（最近的时间段）
+     * 0827
+     */
+    @RequestMapping("queryEnvirMapAirJcdInfo.do")
+    @ResponseBody
+    public List JxEnvirMapAirJcd(@RequestParam("qhbh") String qhbh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectEnvirAirJcd(qhbh);
+        return list;
+    }
+
+    /**
+     * 嘉兴环境左边栏区县AQI最近30天 监测数值
+     * 0904
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("AirQXMonitor.do")
+    @ResponseBody
+    public List AirQXMonitor(@RequestParam("qhbh") String bh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectAirQXMonitor(bh);
+        return list;
+    }
+
+    /**
+     * 嘉兴空气AQI优良天数及比例，前后年增长率
+     * 0906lyc
+     */
+    @RequestMapping("AirQualityLv.do")
+    @ResponseBody
+    public Map<String, Object> QueryAQIGrowthRate(Integer count) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Map map1 = queryEnvirZzl("airEqualLv", count);
+        map.put("airEqualLv", map1);
+        return map;
+    }
+
+
+    /**
+     * 处理百分数函数
+     * 0906lyc
+     */
+    public Format getEnvirFormat(Integer num) {
+        NumberFormat format = NumberFormat.getPercentInstance();
+        format.setMaximumFractionDigits(num);
+        return format;
+    }
+
+    /**
+     * 处理近2年增长率，标签flag，count计数年份
+     * 标签为处理类型，count计算年份
+     * 0906lyc
+     */
+    public Map queryEnvirZzl(String flag, Integer count) {
+        Map<String, String> map = new HashMap<String, String>();
+        Integer AircurrentYear = jxEnvirService.AirCurrentYear();
+
+        for (int i = 0; i < count; i++) {
+            double NowTotalLv = jxEnvirService.queryEnvirTotal(AircurrentYear, flag);//用于计算当年数据
+            int preyear = AircurrentYear - 1;
+            double preTotalLv = jxEnvirService.queryEnvirTotal(preyear, flag);//用于计算前年数据，总接口，不同功能用flag区分
+            double percent = (NowTotalLv - preTotalLv) / preTotalLv;
+            map.put(AircurrentYear.toString(), getEnvirFormat(2).format(percent));//存入
+            AircurrentYear--;
+        }
+        return map;
+    }
+
+    /**
+     * *******************************************************************************************
+     * 嘉兴环境P2图层空气监测点实时监测
+     * ***********暂时不用*************
+     * 因为上面那个函数已经将上图功能做好了
+     * ***********暂时不用*************************************************************************
+     */
+    @RequestMapping("EnvirMapAirJcd.do")
+    @ResponseBody
+    public List JxEnvirMapAirInfo(@RequestParam("bh") String bh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectEnvirAirJcdInfo(bh);
+        return list;
+    }
+
+    /**
+     * 嘉兴首页空气质量达标率
+     * 0907lyc
+     */
+    @RequestMapping("AirQuality.do")
+    @ResponseBody
+    public List AirQuality() {
+        List list = new ArrayList();
+        list = jxEnvirService.selectAirQuality();
+        return list;
+    }
+
+    /**
+     * 嘉兴首页水环境达标率，改善率
+     * 0907lyc
+     */
+    @RequestMapping("WaterEnvir.do")
+    @ResponseBody
+    public List WaterEnvirLv() {
+        List list = new ArrayList();
+        list = jxEnvirService.selectWaterEnvirLv();
+        return list;
+    }
+
+    /**
+     * 嘉兴首页噪声超标率
+     * 0908lyc
+     */
+    @RequestMapping("NoiseOverproof.do")
+    @ResponseBody
+    public List NoiseOverproof() {
+        List list = new ArrayList();
+        list = jxEnvirService.selectNoiseOverproof();
+        return list;
+    }
+
+    /**
+     * ******************************************************
+     * 嘉兴首页企事业单位信息公开
+     * 0908lyc
+     */
+    @RequestMapping("CompanyEnvir.do")
+    @ResponseBody
+    public List CompanyEnvir() {
+        List list = new ArrayList();
+        list = jxEnvirService.selectCompanyEnvir();
+        return list;
+    }
+
+    /**
+     * 嘉兴首页重点污染源监测
+     * 0908lyc
+     */
+    @RequestMapping("PolluteMonitor.do")
+    @ResponseBody
+    public List PolluteMonitor() {
+        List list = new ArrayList();
+        list = jxEnvirService.selectPolluteMonitor();
+        return list;
+    }
+
+    /**
+     * 嘉兴首页城市问题处置
+     * 0908lyc
+     */
+    @RequestMapping("CityProblem.do")
+    @ResponseBody
+    public List CityProblem() {
+        List list = new ArrayList();
+        list = jxEnvirService.selectCityProblem();
+        return list;
+    }
+//*******************************************************************************水环境全景图*********************************************************************
+
+    /**
+     * 嘉兴全景图-饮用水水质监测30天
+     * 0912lyc
+     */
+    @RequestMapping("WaterMonitorDay.do")
+    @ResponseBody
+    public List WaterMonitor30Day(@RequestParam("bh") String bh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectWaterMonitor30Day(bh);
+        return list;
+    }
+
+    /**
+     * 嘉兴全景图-饮用水水质获取按日进行预测所得到的30天预测数据
+     */
+    @RequestMapping("WaterPre30Day.do")
+    @ResponseBody
+    public List WaterPre30Day(String bh, Integer gap, Integer preNum) {
+        return jxEnvirService.queryWaterPre30Day(bh, gap, 2);
+    }
+
+    /**
+     * 嘉兴全景图-饮用水水质监测24小时
+     * 0912lyc
+     */
+    @RequestMapping("WaterMonitorHour.do")
+    @ResponseBody
+    public List WaterMonitor24Hour(@RequestParam("bh") String bh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectWaterMonitor24Hour(bh);
+        return list;
+    }
+    /**
+     * 嘉兴全景图-饮用水水质获取按小时进行预测所得到的24小时预测数据
+     */
+    @RequestMapping("WaterPre24Hour.do")
+    @ResponseBody
+    public List WaterPre24Hour(String bh, Integer gap, Integer preNum) {
+        return jxEnvirService.queryWaterPre24Hour(bh, gap, 2);
+    }
+
+    /**
+     * 嘉兴全景图-饮用水水质监测区县左边栏
+     * 0912lyc
+     */
+    @RequestMapping("WaterMonitorQX.do")
+    @ResponseBody
+    public List WaterMonitorQH(@RequestParam("qhbh") String bh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectWaterMonitorQX(bh);
+        return list;
+    }
+
+    /**
+     * 嘉兴全景图-饮用水水质监测点监测信息（最近的时间段）
+     * 0912lyc
+     */
+    @RequestMapping("MapWaterMonitorJcd.do")
+    @ResponseBody
+    public List WaterMonitorJcd(@RequestParam("qhbh") String qhbh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectWaterMonitorJcd(qhbh);
+        return list;
+    }
+
+    /**
+     * *********************************************************地表水***************************************
+     * 嘉兴全景图-地表水水质监测月统计
+     * 0914lyc
+     */
+    @RequestMapping("MapWaterDmsMonth.do")
+    @ResponseBody
+    public List WaterDmsMonth(@RequestParam("bh") String bh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectWaterDmsMonth(bh);
+        return list;
+    }
+    /**
+     * 嘉兴全景图-地表水水质预测按月显示
+     */
+    @RequestMapping("queryDmsPre12Month.do")
+    @ResponseBody
+    public List queryDmsPre12Month(String bh, Integer gap, Integer preNum) {
+        return jxEnvirService.queryDmsPre12Month(bh,gap,2);
+    }
+
+    /**
+     * 嘉兴全景图-地表水水质监测日统计
+     * 0914lyc
+     */
+    @RequestMapping("MapWaterDmsDay.do")
+    @ResponseBody
+    public List WaterDmsDay(@RequestParam("bh") String bh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectWaterDmsDay(bh);
+        return list;
+    }
+
+    /**
+     * 嘉兴全景图-地表水水质预测按日显示
+     */
+    @RequestMapping("queryDmsPre30Day.do")
+    @ResponseBody
+    public List queryDmsPre30Day(String bh, Integer gap, Integer preNum) {
+        return jxEnvirService.queryDmsPre30Day(bh,gap,2);
+    }
+
+    /**
+     * 嘉兴全景图-地表水水质监测点监测信息（最近的时间段）
+     * 0914lyc
+     */
+    @RequestMapping("MapWaterDmsJcd.do")
+    @ResponseBody
+    public List WaterDmsJcd(@RequestParam("qhbh") String qhbh) {
+        List list = new ArrayList();
+        list = jxEnvirService.selectWaterDmsJcd(qhbh);
+        return list;
+    }
+
+    /**
+     * 嘉兴全景图-水环境类型等级比率，一条SQL解决问题了
+     * 0919lyc
+     */
+    @RequestMapping("WaterMacro.do")
+    @ResponseBody
+    public List WaterMacro() {
+        List<WaterMacro> waterMacros = jxEnvirService.selectWaterMacro();
+        return waterMacros;
+    }
+
+    /**
+     * 嘉兴全景图-水环境类型等级比率，得到不同年份的sum值，在service层做计算处理
+     * 0919lyc
+     */
+  /*  @RequestMapping("WaterMacroByYear.do")
+      @ResponseBody
+      public Map WaterMacro(Integer count){
+        Map<String,Object> map = new HashMap<String, Object>();
+        int maxYear = jxEnvirService.selectMaxYear();//后台取出这个max，当做下一个操作函数的参数
+        for(int i=0;i<count;i++)
+        {
+            List<WaterMacro> waterMacros = jxEnvirService.selectWaterMacroByYear(maxYear);
+            map.put(String.valueOf(maxYear), waterMacros);//key不可以重复。不然会被覆盖。
+            maxYear--;
+        }
+        return  map;
+    }
+*/
+    @RequestMapping("WaterMacroByYear.do")
+    @ResponseBody
+    public List WaterMacro(Integer count) {
+        List<List> list = new ArrayList<List>();
+        int maxYear = jxEnvirService.selectMaxYear();//后台取出这个max，当做下一个操作函数的参数
+        for (int i = 0; i < count; i++) {
+            List<WaterMacro> waterMacros = jxEnvirService.selectWaterMacroByYear(maxYear);
+            list.add(waterMacros);//key不可以重复。不然会被覆盖。
+            maxYear--;
+        }
+        Collections.reverse(list);
+        return list;
+    }
+
+
+    /**
+     * 嘉兴全景图-首页噪声上图
+     * 0921lyc
+     */
+    @RequestMapping("NoiseMapJcd.do")
+    @ResponseBody
+    public List NoiseMapJcd(@RequestParam("qhbh") String bh) {
+        List<JxNoise> list = jxEnvirService.selectNoiseMapJcd(bh);
+        return list;
+    }
+    /**
+     * 嘉兴全景图-污染源微观监测侧边栏
+     * 0923lyc
+     */
+    @RequestMapping("Pollution.do")
+    @ResponseBody
+    public List pollution()
+    {
+        List<JxPollution> list =jxEnvirService.selectMapPollution();
+        return list;
+    }
+    /**
+     * 嘉兴全景图-污染原微观监测上图
+     * 0923lyc
+     */
+    @RequestMapping("PollutionJcd.do")
+    @ResponseBody
+    public List pollutionJcd(@RequestParam("type")String type)
+    {
+        List<JxPollution> list=jxEnvirService.selectMapPollutionJcd(type);
+        return list;
+    }
+    /**
+     * 嘉兴全景图-微观污染源合格率
+     * 0923lyc
+     */
+    @RequestMapping("PollutionHG.do")
+    @ResponseBody
+    public List pollutionWGHG()
+    {
+        List <JxPollution> list=jxEnvirService.selectPollutionHG();
+        return list;
+    }
+    @RequestMapping("WaterManage.do")
+    @ResponseBody
+    public JxWaterManage WaterManage()
+    {
+        return jxEnvirService.selectWaterManage();
+    }
+
+    @RequestMapping("polluateDis.do")
+    @ResponseBody
+    public List selectPolluteDisplay()
+    {
+        List<JxPollution> list= jxEnvirService.selectPolluteDisplay();
+        return list;
+    }
+
+    @RequestMapping("QYInfomaion.do")
+    @ResponseBody
+    public List QYInfomation(@RequestParam("mc")String mc,@RequestParam("type")int type)
+    {
+        List<JxPollution> list=jxEnvirService.displayQYInfo(mc,type);
+        return list;
+    }
+
+}

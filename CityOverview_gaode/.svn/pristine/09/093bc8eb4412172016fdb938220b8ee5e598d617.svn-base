@@ -1,0 +1,162 @@
+package com.cetc28.idata.dto;
+
+import oracle.sql.NUMBER;
+
+/**
+ * Created by FangYan on 2017/11/20.
+ */
+public class CompanyDto {
+    private int COMPANY_ID;
+    private String COMPANY_NAME;
+    private String COMPANY_LOCATION;
+    private String DISTRICT;
+    private String COMPANY_CONTACT;
+    private String COMPANY_SCALE;
+    private String EMPLOYEE_NUM;
+    private String ESTABLISH_DATE;
+    private String OUTPUT_VALUE;
+    private String COMPANY_TYPE;
+    private String BUSINESS_SCOPE;
+    private String OCCUPIED_AREA;
+    private String COMPANY_DESCRIBE;
+    private String EMPLOYEE_COMPOSITION;
+    private String jd;
+    private String wd;
+    private String company_age;
+
+    public String getCompany_age() {
+        return company_age;
+    }
+
+    public void setCompany_age(String company_age) {
+        this.company_age = company_age;
+    }
+
+    public String getJd() {
+        return jd;
+    }
+
+    public void setJd(String jd) {
+        this.jd = jd;
+    }
+
+    public String getWd() {
+        return wd;
+    }
+
+    public void setWd(String wd) {
+        this.wd = wd;
+    }
+
+    public int getCOMPANY_ID() {
+        return COMPANY_ID;
+    }
+
+    public void setCOMPANY_ID(int COMPANY_ID) {
+        this.COMPANY_ID = COMPANY_ID;
+    }
+
+    public String getCOMPANY_NAME() {
+        return COMPANY_NAME;
+    }
+
+    public void setCOMPANY_NAME(String COMPANY_NAME) {
+        this.COMPANY_NAME = COMPANY_NAME;
+    }
+
+    public String getCOMPANY_LOCATION() {
+        return COMPANY_LOCATION;
+    }
+
+    public void setCOMPANY_LOCATION(String COMPANY_LOCATION) {
+        this.COMPANY_LOCATION = COMPANY_LOCATION;
+    }
+
+    public String getDISTRICT() {
+        return DISTRICT;
+    }
+
+    public void setDISTRICT(String DISTRICT) {
+        this.DISTRICT = DISTRICT;
+    }
+
+    public String getCOMPANY_CONTACT() {
+        return COMPANY_CONTACT;
+    }
+
+    public void setCOMPANY_CONTACT(String COMPANY_CONTACT) {
+        this.COMPANY_CONTACT = COMPANY_CONTACT;
+    }
+
+    public String getCOMPANY_SCALE() {
+        return COMPANY_SCALE;
+    }
+
+    public void setCOMPANY_SCALE(String COMPANY_SCALE) {
+        this.COMPANY_SCALE = COMPANY_SCALE;
+    }
+
+    public String getEMPLOYEE_NUM() {
+        return EMPLOYEE_NUM;
+    }
+
+    public void setEMPLOYEE_NUM(String EMPLOYEE_NUM) {
+        this.EMPLOYEE_NUM = EMPLOYEE_NUM;
+    }
+
+    public String getESTABLISH_DATE() {
+        return ESTABLISH_DATE;
+    }
+
+    public void setESTABLISH_DATE(String ESTABLISH_DATE) {
+        this.ESTABLISH_DATE = ESTABLISH_DATE;
+    }
+
+    public String getOUTPUT_VALUE() {
+        return OUTPUT_VALUE;
+    }
+
+    public void setOUTPUT_VALUE(String OUTPUT_VALUE) {
+        this.OUTPUT_VALUE = OUTPUT_VALUE;
+    }
+
+    public String getCOMPANY_TYPE() {
+        return COMPANY_TYPE;
+    }
+
+    public void setCOMPANY_TYPE(String COMPANY_TYPE) {
+        this.COMPANY_TYPE = COMPANY_TYPE;
+    }
+
+    public String getBUSINESS_SCOPE() {
+        return BUSINESS_SCOPE;
+    }
+
+    public void setBUSINESS_SCOPE(String BUSINESS_SCOPE) {
+        this.BUSINESS_SCOPE = BUSINESS_SCOPE;
+    }
+
+    public String getOCCUPIED_AREA() {
+        return OCCUPIED_AREA;
+    }
+
+    public void setOCCUPIED_AREA(String OCCUPIED_AREA) {
+        this.OCCUPIED_AREA = OCCUPIED_AREA;
+    }
+
+    public String getCOMPANY_DESCRIBE() {
+        return COMPANY_DESCRIBE;
+    }
+
+    public void setCOMPANY_DESCRIBE(String COMPANY_DESCRIBE) {
+        this.COMPANY_DESCRIBE = COMPANY_DESCRIBE;
+    }
+
+    public String getEMPLOYEE_COMPOSITION() {
+        return EMPLOYEE_COMPOSITION;
+    }
+
+    public void setEMPLOYEE_COMPOSITION(String EMPLOYEE_COMPOSITION) {
+        this.EMPLOYEE_COMPOSITION = EMPLOYEE_COMPOSITION;
+    }
+}

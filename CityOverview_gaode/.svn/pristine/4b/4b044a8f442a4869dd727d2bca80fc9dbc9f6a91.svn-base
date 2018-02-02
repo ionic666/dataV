@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.PeopleBenefitService.dao.JxSsMiHospitalVolumeMapper" >
+  <resultMap id="BaseResultMap" type="com.cetc28.PeopleBenefitService.model.JxSsMiHospitalVolume" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="HOSPITAL_CODE" property="hospitalCode" jdbcType="DECIMAL" />
+    <result column="VOLUME_DATE" property="volumeDate" jdbcType="TIMESTAMP" />
+    <result column="VOLUME" property="volume" jdbcType="DECIMAL" />
+    <result column="SUM_VOLUME" property="sumVolume" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, HOSPITAL_CODE, VOLUME_DATE, VOLUME, SUM_VOLUME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from JX_SS_MI_HOSPITAL_VOLUME
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from JX_SS_MI_HOSPITAL_VOLUME
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.cetc28.PeopleBenefitService.model.JxSsMiHospitalVolume" >
+    insert into JX_SS_MI_HOSPITAL_VOLUME (ID, HOSPITAL_CODE, VOLUME_DATE, 
+      VOLUME, SUM_VOLUME)
+    values (#{id,jdbcType=DECIMAL}, #{hospitalCode,jdbcType=DECIMAL}, #{volumeDate,jdbcType=TIMESTAMP}, 
+      #{volume,jdbcType=DECIMAL}, #{sumVolume,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsMiHospitalVolume" >
+    insert into JX_SS_MI_HOSPITAL_VOLUME
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="hospitalCode != null" >
+        HOSPITAL_CODE,
+      </if>
+      <if test="volumeDate != null" >
+        VOLUME_DATE,
+      </if>
+      <if test="volume != null" >
+        VOLUME,
+      </if>
+      <if test="sumVolume != null" >
+        SUM_VOLUME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="hospitalCode != null" >
+        #{hospitalCode,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeDate != null" >
+        #{volumeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=DECIMAL},
+      </if>
+      <if test="sumVolume != null" >
+        #{sumVolume,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cetc28.PeopleBenefitService.model.JxSsMiHospitalVolume" >
+    update JX_SS_MI_HOSPITAL_VOLUME
+    <set >
+      <if test="hospitalCode != null" >
+        HOSPITAL_CODE = #{hospitalCode,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeDate != null" >
+        VOLUME_DATE = #{volumeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="volume != null" >
+        VOLUME = #{volume,jdbcType=DECIMAL},
+      </if>
+      <if test="sumVolume != null" >
+        SUM_VOLUME = #{sumVolume,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cetc28.PeopleBenefitService.model.JxSsMiHospitalVolume" >
+    update JX_SS_MI_HOSPITAL_VOLUME
+    set HOSPITAL_CODE = #{hospitalCode,jdbcType=DECIMAL},
+      VOLUME_DATE = #{volumeDate,jdbcType=TIMESTAMP},
+      VOLUME = #{volume,jdbcType=DECIMAL},
+      SUM_VOLUME = #{sumVolume,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <resultMap id="RankResultMap" type="com.cetc28.PeopleBenefitService.model.JxSsMiHospitalVolume" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="HOSPITAL_CODE" property="hospitalCode" jdbcType="DECIMAL" />
+    <result column="VOLUME_DATE" property="volumeDate" jdbcType="TIMESTAMP" />
+    <result column="VOLUME" property="volume" jdbcType="DECIMAL" />
+    <result column="SUM_VOLUME" property="sumVolume" jdbcType="DECIMAL" />
+    <result column="HOSPITAL_NAME" property="hospitalName" jdbcType="DECIMAL" />
+  </resultMap>
+  <select id="selectSsMiHospitalVolumeRank5" resultMap="RankResultMap">
+    <![CDATA[select t.* from(select st.*,h.hospital_name, row_number() over (order by st.volume desc)rn
+    from JX_SS_MI_HOSPITAL_VOLUME st inner join JX_SS_MI_D_HOSPITAL h on
+    st.volume_date=(select max(volume_date) from JX_SS_MI_HOSPITAL_VOLUME) and st.hospital_code=h.hospital_code)t
+    where rn<=5 order by t.volume desc]]>
+  </select>
+  <resultMap id="TooltipResultMap" type="com.cetc28.PeopleBenefitService.dto.MiHospitalVolumeStatisticsDto" >
+    <result column="HOSPITAL_NAME" property="hospitalName" jdbcType="DECIMAL" />
+    <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
+    <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
+    <result column="VOLUME" property="volume" jdbcType="DECIMAL" />
+    <result column="SUM_VOLUME" property="sumVolume" jdbcType="DECIMAL" />
+  </resultMap>
+  <select id="selectHospitalStatisticsTooltipData" resultMap="TooltipResultMap">
+    select t.*,h.* from JX_SS_MI_HOSPITAL_VOLUME t inner join JX_SS_MI_D_HOSPITAL h on
+    t.volume_date=(select max(volume_date) from JX_SS_MI_HOSPITAL_VOLUME) and t.hospital_code=h.hospital_code
+  </select>
+</mapper>

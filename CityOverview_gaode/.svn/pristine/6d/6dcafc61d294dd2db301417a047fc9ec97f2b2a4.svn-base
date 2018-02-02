@@ -1,0 +1,150 @@
+package com.cetc28.util;
+
+import java.text.NumberFormat;
+
+/**
+ * 1024之间的转换
+ */
+public class Converters {
+    /**
+     * 根据不同类型转换
+     */
+	public static String convertByType(int type, Double value){
+        switch (type) {
+            case 0:
+                return convertBytes(true,value);
+            case 1:
+                return convertHz(value);
+            case 2:
+                return convertBytes(true,value);
+            case 3:
+                return convertBytes(true,value);
+            case 6:
+                return convertBytes(true,value);
+            case 9:
+                return convertBytes(true,value);
+            case 11:
+                return convertBytes(true,value);
+        }
+        return value.toString();
+    }
+    /**
+     * 根据不同类型转换
+     */
+    public static String convertNoUnitByType(int type, Double value){
+        switch (type) {
+            case 0:
+                return convertBytes(false,value);
+            case 1:
+                return convertHz(value);
+            case 2:
+                return convertBytes(false,value);
+            case 3:
+                return convertBytes(false,value);
+            case 6:
+                return convertBytes(false,value);
+            case 9:
+                return convertBytes(false,value);
+            case 11:
+                return convertBytes(false,value);
+        }
+        return value.toString();
+    }
+
+    /**
+     * 1024转换
+     */
+    public static String convertBytes(Boolean ifunit,Double bytes){
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
+        Double  value1 = 1024 * 1024.0;
+        Double value2 = 1024 * 1024 * 1024.0;
+        Double  value3 = 1024 * 1024 * 1024 * 1024.0;
+        if(ifunit){
+            if (bytes < value1) {
+                return (nf.format(bytes / 1024)) + " KB";
+            }
+            else if (bytes < value2) {
+                return (nf.format(bytes / 1024 / 1024)) + " MB";
+            }
+            else if (bytes < value3) {
+                return (nf.format(bytes / 1024 / 1024 / 1024)) + " GB";
+            }
+            else {
+                return (nf.format(bytes / 1024 / 1024 / 1024 / 1024)) + " TB";
+            }
+        }
+        else{
+            if (bytes < value1) {
+                return (nf.format(bytes / 1024));
+            }
+            else if (bytes < value2) {
+                return (nf.format(bytes / 1024 / 1024));
+            }
+            else if (bytes < value3) {
+                return (nf.format(bytes / 1024 / 1024 / 1024));
+            }
+            else {
+                return (nf.format(bytes / 1024 / 1024 / 1024 / 1024));
+            }
+        }
+
+    }
+
+    /**
+     * GHZ转换
+     */
+    public static String convertHz(Double hz){
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
+        if (hz == null)
+            return "";
+
+        if (hz < 1000) {
+            return nf.format(hz) + " MHz";
+        }
+        else {
+            return (nf.format(hz / 1000)) + " GHz";
+        }
+    }
+
+    /**
+     * 1024转换
+     */
+    public static String convertBytesForTraffic(Boolean ifunit,Double bytes){
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
+        Double  value1 = 1024 * 1024.0;
+        Double value2 = 1024 * 1024 * 1024.0;
+        Double  value3 = 1024 * 1024 * 1024 * 1024.0;
+        if(ifunit){
+            if (bytes < value1) {
+                return (nf.format(bytes / 1024)) + " Kbps";
+            }
+            else if (bytes < value2) {
+                return (nf.format(bytes / 1024 / 1024)) + " Mbps";
+            }
+            else if (bytes < value3) {
+                return (nf.format(bytes / 1024 / 1024 / 1024)) + " Gbps";
+            }
+            else {
+                return (nf.format(bytes / 1024 / 1024 / 1024 / 1024)) + " Tbps";
+            }
+        }
+        else{
+            if (bytes < value1) {
+                return (nf.format(bytes / 1024));
+            }
+            else if (bytes < value2) {
+                return (nf.format(bytes / 1024 / 1024));
+            }
+            else if (bytes < value3) {
+                return (nf.format(bytes / 1024 / 1024 / 1024));
+            }
+            else {
+                return (nf.format(bytes / 1024 / 1024 / 1024 / 1024));
+            }
+        }
+
+    }
+}

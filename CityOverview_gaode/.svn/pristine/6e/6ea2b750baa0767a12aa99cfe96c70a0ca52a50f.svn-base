@@ -1,0 +1,141 @@
+package com.cetc28.PeopleBenefitService.controller;
+
+import com.cetc28.PeopleBenefitService.dto.CsrkDto;
+import com.cetc28.PeopleBenefitService.dto.RkqrqcDto;
+import com.cetc28.PeopleBenefitService.service.IJxPopService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.text.Format;
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 嘉兴人口统计
+ * Created by Fang on 2017/8/23.
+ */
+
+@Controller
+@RequestMapping("/jxpop")
+public class JxPopController {
+    @Autowired
+    private IJxPopService IJxPopService;
+
+    @RequestMapping("queryCsrk.do")
+    @ResponseBody
+    public  Map<String,Object> queryCsrk(){
+        Map<String,Object> map = new HashMap<String, Object>();
+        CsrkDto csrkDto = IJxPopService.queryAllCsrktj();
+        List<CsrkDto> csrkDtos = IJxPopService.queryTotalAndNyrk();
+        map.put("Csrk", csrkDto);    //城市常驻人口，农业人口，户籍人口
+        map.put("Qyrk", csrkDtos); //区域农业人口及总人口
+        return map;
+    }
+
+    @RequestMapping("queryRkzz.do")
+         @ResponseBody
+         public  Map<String,Object> queryRkzz(Integer count){
+        Map<String,Object> map = new HashMap<String, Object>();
+        Map map1 = queryZzl("rkzzsn", count);
+        map.put("rkzzsn",map1);   //近4年的人口增长势能
+        return  map;
+    }
+
+    @RequestMapping("queryLdnlrk.do")
+    @ResponseBody
+    public Map<String,Object> queryLdnlrk(Integer count) {
+        Map<String, Object> map = new HashMap<String,Object>();
+        Integer currentYear = IJxPopService.queryCurrentYear();
+        double ldnlrk = IJxPopService.queryAllLdnlrk(currentYear);
+        double totalRk = IJxPopService.queryTotalrk(currentYear);
+        double percent = ldnlrk/totalRk;
+        map.put("Ldnl",String.valueOf(ldnlrk));                     //劳动年龄人口
+        map.put("percent",getFormat(2).format(percent*100));     //占总人口的比例
+        Map map1 = queryZzl("ldnlrk", count);
+        map.put("ldnlzzl",map1);                               //近4年的劳动年龄人口增长率
+        return  map;
+    }
+
+    @RequestMapping("queryLdrk.do")
+    @ResponseBody
+    public  Map<String,Object> queryLdrk() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Integer currentYear = IJxPopService.queryCurrentYear();
+        double ldrk = IJxPopService.queryLdrk(currentYear);
+        double hjrk = IJxPopService.queryHjrk(currentYear);
+        List<RkqrqcDto> qcdTop5 = IJxPopService.queryQcdTop5(currentYear);
+        double percent = ldrk/hjrk;
+        map.put("ldrk",String.valueOf(ldrk));                  //流动人口
+        map.put("percent",getFormat(2).format(percent*100));//占户籍人口比例
+        map.put("qcdTop5", qcdTop5);                      //迁出地TOP5
+        return  map;
+    }
+
+    @RequestMapping("queryLnrk.do")
+    @ResponseBody
+    public Map<String,Object> queryLnrk(Integer count){
+        Map<String, Object> map = new HashMap<String, Object>();
+        Integer currentYear = IJxPopService.queryCurrentYear();
+        double lnrk = IJxPopService.queryLnrk(currentYear);
+        double hjrk = IJxPopService.queryHjrk(currentYear);
+        List<CsrkDto> lnrkTop3 = IJxPopService.queryLnrkTop3(currentYear);
+        double percent = lnrk/hjrk;
+        map.put("lnrk",String.valueOf(lnrk));                          //老年人口
+        map.put("percent",getFormat(2).format(percent*100));        //占户籍人口比例
+        Map map1 = queryZzl("lnrk", count);
+        map.put("zzl",map1);                                      //老年人口增长率
+        return map;
+    }
+
+    @RequestMapping("queryCsxbb.do")
+    @ResponseBody
+    public Map<String,Object> queryCsxbb(Integer count){
+        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        Map<String, Object> map2 = new HashMap<String, Object>();
+        Integer currentYear = IJxPopService.queryCurrentYear();
+        for (int i = 0; i<count; i++){
+            CsrkDto current = IJxPopService.queryMaleAndFemale(currentYear);
+            if(i==0){
+                map1.put("male",current.getCsMale());
+                map1.put("female",current.getCsFemale());
+                map.put("xbb",map1);
+            }
+            int preyear = currentYear - 1;
+            double xbb = current.getCsMale()/current.getCsFemale();
+            CsrkDto pre = IJxPopService.queryMaleAndFemale(preyear);
+            double preXbb = pre.getCsMale() / pre.getCsFemale();
+            double percent = (xbb-preXbb) / preXbb;
+            map2.put(currentYear.toString(),getFormat(3).format(percent));
+            currentYear--;
+        }
+        map.put("csxbbZzl",map2);
+        return  map;
+    }
+
+    //处理百分数
+    public Format getFormat(Integer num){
+        NumberFormat format = NumberFormat.getNumberInstance();
+        format.setMaximumFractionDigits(num);
+        return  format;
+    }
+
+    //处理最近年增长率
+    public Map queryZzl(String flag,Integer count){
+        Map<String,String> map =new HashMap<String, String>();
+        Integer currentYear = IJxPopService.queryCurrentYear();
+        for (int i = 0;i<count;i++){
+            double totalrk = IJxPopService.queryTotal(currentYear,flag);
+            int preyear = currentYear - 1;
+            double preTotalrk = IJxPopService.queryTotal(preyear, flag);
+            double percent = (totalrk - preTotalrk) / preTotalrk;
+            map.put(currentYear.toString(), getFormat(3).format(percent));
+            currentYear--;
+        }
+        return map;
+    }
+}

@@ -1,0 +1,93 @@
+package com.cetc28.PeopleBenefitService.service.impl;
+
+import com.cetc28.PeopleBenefitService.service.IJxPopService;
+import com.cetc28.PeopleBenefitService.dao.IJxPopDao;
+import com.cetc28.PeopleBenefitService.dto.CsrkDto;
+import com.cetc28.PeopleBenefitService.dto.RkqrqcDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by Fang on 2017/8/24.
+ */
+@Service
+public class IJxPopServiceImpl implements IJxPopService {
+    @Autowired
+    private IJxPopDao IJxPopDao;
+
+    @Override
+    public CsrkDto queryAllCsrktj() {
+        return IJxPopDao.queryAllCsrktj();
+    }
+
+    @Override
+    public Double queryLdrk(Integer year) {
+        return IJxPopDao.queryLdrk(year);
+    }
+
+    @Override
+    public List<RkqrqcDto> queryQcdTop5(Integer year) {
+        return IJxPopDao.queryQcdTop5(year);
+    }
+
+    @Override
+    public Double queryHjrk(Integer year) {
+        return IJxPopDao.queryHjrk(year);
+    }
+
+    @Override
+    public List<CsrkDto> queryTotalAndNyrk() {
+        return IJxPopDao.queryTotalAndNyrk();
+    }
+
+    @Override
+    public Double queryAllLdnlrk(Integer year) {
+        return IJxPopDao.queryAllLdnlrk(year);
+    }
+
+    @Override
+    public Double queryTotalrk(Integer year) {
+            return  IJxPopDao.queryTotalrk(year);
+    }
+
+    @Override
+    public Double queryLnrk(Integer year) {
+        return IJxPopDao.queryLnrk(year);
+    }
+
+    @Override
+    public List<CsrkDto> queryLnrkTop3(Integer year) {
+        return IJxPopDao.queryLnrkTop3(year);
+    }
+
+    @Override
+    public Integer queryCurrentYear() {
+        return IJxPopDao.queryCurrentYear();
+    }
+
+    @Override
+    public Double queryTotal(Integer year, String flag) {
+        if(flag.equals("rkzzsn")){
+            return  IJxPopDao.queryTotalrk(year);
+        }
+        else if(flag.equals("ldnlrk")){
+            return  IJxPopDao.queryAllLdnlrk(year);
+        }
+        else if(flag.equals("lnrk")){
+            return  IJxPopDao.queryLnrk(year);
+        }
+        else if(flag.equals("ldrk")){
+            return  IJxPopDao.queryLdrk(year);
+        }
+        else {
+            return null;
+        }
+    }
+
+    @Override
+    public CsrkDto queryMaleAndFemale(Integer year) {
+        return IJxPopDao.queryMaleAndFemale(year);
+    }
+}

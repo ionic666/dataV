@@ -1,0 +1,26 @@
+package com.cetc28.ConfigurationManagement.dto;
+
+/**
+ * 查看角色的权限
+ * Created by FangYan on 2017/9/26.
+ */
+public class Jsqx {
+    private  String rolename;
+    private  String modulename;
+
+    public String getRolename() {
+        return rolename;
+    }
+
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
+    }
+
+    public String getModulename() {
+        return modulename;
+    }
+
+    public void setModulename(String modulename) {
+        this.modulename = modulename;
+    }
+}

@@ -1,0 +1,823 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tonghao
+  Date: 2017/11/21
+  Time: 15:14
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>企业参保情况</title>
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+  <link rel="stylesheet" href="../../myCss/headTitle.css"/>
+  <style>
+    body{
+      width: 100%;
+      height: 100%;
+      background:url(" ../../images/ygyb-bg.png")no-repeat;
+      background-size:100% 100%;
+    }
+    *{
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+    li{
+      list-style: none;
+    }
+    .main-left,.main-right{
+      width: 49%;
+      height: 85%;
+      display: inline-block;
+      margin: 6% 0 0 1%;
+      float: left;
+    }
+    .main-left{
+      background: #000;
+    }
+    .main-left>div{
+      width: 100%;
+    }
+    .main-right>div{
+      width: 98%;
+      margin-left: 1%;
+    }
+    .main-left-a{
+      position: relative;
+      height: 10%;
+      margin-bottom: 2%;
+      background: #161719;
+      border-top: 1px solid #077285;
+      border-bottom: 1px solid #27292A;
+    }
+    .main-left-b{
+      height: 90%;
+      background: #161719;
+      border: 1px solid #0CDAF4;
+    }
+    .main-right-a{
+      height: 43%;
+
+      margin-bottom: 2%;
+      background: rgba(2,11,22,0.7) !important;
+      border-top: 1px solid #0CDAF4;
+    }
+    .main-right-b{
+      height: 55%;
+      margin-bottom: 2%;
+      background: rgba(2,11,22,0.8);
+      border-top: 1px solid #0CDAF4;
+    }
+    .main-left-a>ul{
+      width: 60%;
+      /*height: 1.6em;*/
+      position: absolute;
+      top: 50%;
+      margin-top: -0.65em;
+    }
+    #searchInfo{
+      width: 45%;
+      height: auto;
+      position: absolute;
+      color: #fff;
+      background: rgba(0,0,0,0.7);
+      top: 50%;
+      margin-top: 0.85em;
+      z-index: 800;
+      display: none;
+    }
+    #searchInfo>ul>li{
+      font-size: 0.8em;
+      padding: 0.2em 1em;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    #searchInfo>ul>li:hover{
+      color: #0CDAF5;
+      background-color: #10485D;
+    }
+    .main-left-a>ul>li{
+      width: 20%;
+      color: #fff;
+      float: left;
+    }
+    .main-left-a>ul span{
+      font-size: 0.9em;
+      padding: 0.2em 0.6em;
+      display: block;
+      text-align: right;
+    }
+    .main-left-a>ul input{
+      width: 100%;
+      font-size: 0.9em;
+      padding: 0.2em;
+    }
+    .main-left-a>ul button{
+      color: #fff;
+      font-size: 0.9em;
+      border: 1px solid #CC7A29;
+      border-radius: 0.2em;
+      margin-left: 1em;
+      padding: 0.2em 1.2em;
+      background: #CC7A29;
+      cursor: pointer;
+    }
+    .li-input{
+      width: 45% !important;
+    }
+    .li-input>input{
+      color: #fff;
+      border:1px solid #272A2D;
+      background: #161718 !important;
+    }
+    .main-right-a>p,.main-right-b>p{
+      width: 98%;
+      height: 10%;
+      padding-top: 0.5em;
+      margin-left: 2%;
+      color: #fff;
+      font-size: 24px;
+    }
+    .main-right-a>div{
+      width: 100%;
+      height: 90%;
+    }
+    .main-right-b-div-2{
+      width: 100%;
+      height: 70%;
+    }
+    /*高德地图样式表*/
+    .amap-toolbar{
+      display:none;
+    }
+    .info {
+      border: solid 1px #889DA2;
+      border-radius: 2px;
+      box-shadow: 0px 0px 8px #60d8ef;
+      background: #001D24;
+    }
+    div.info-top {
+      position: relative;
+      background-color:rgba(0,29,36,0.8);
+      border-bottom: 1px solid #7A9095;
+      border-radius: 5px 5px 0 0;
+    }
+    div.info-top div {
+      display: inline-block;
+      color: #333333;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 31px;
+      padding: 0 10px;
+    }
+    div.info-top img {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      transition-duration: 0.25s;
+      cursor: pointer;
+    }
+    div.info-top img:hover {
+      box-shadow: 0px 0px 5px #60d8ef;
+    }
+    div.info-middle {
+      font-size: 14px;
+      padding: 6px;
+      line-height: 20px;
+      /*background-color:rgba(0,29,36,0.8) !important;*/
+      background: #001D24 !important;
+    }
+    div.info-bottom {
+      height: 0px;
+      width: 100%;
+      clear: both;
+      text-align: center;
+    }
+    div.info-bottom img {
+      position: relative;
+      z-index: 104;
+    }
+    .info-top span,.info-middle span{
+      margin-left: 5px;
+      font-size: 18px !important;
+    }
+    .info-middle img {
+      float: left;
+      margin-right: 6px;
+    }
+    .amap-icon img{
+      width:100%;
+      height:100%;
+    }
+
+    #industrials table{
+      width: 100%;
+      height: 100%;
+      text-align: left;
+    }
+    #tableBody tr{
+      /*height: 40px;*/
+    }
+    .info-middle>div{
+      position: relative;
+      overflow: hidden;
+      padding: 23px 1px 7px 38px;
+    }
+    .info-middle .left-content {
+      float: left;
+      width: 35%;
+      display: inline-block;
+      text-align: left;
+      color: #32DDE7;
+      margin: 8px 0;
+      font-size: 18px;
+    }
+    .info-middle .right-content {
+      float: left;
+      width: 65%;
+      display: inline-block;
+      text-align: left;
+      color: #fff;
+      margin: 8px 0;
+      font-size: 18px;
+    }
+    /*高德地图样式结束*/
+    /*左侧工具条*/
+    .main-right-b-div-1 {
+      text-align: center;
+      margin-top: 3%;
+      height: 13%;
+      width: 60%;
+      margin-left: 15%;
+      position: relative;
+      padding: 0 40px;
+    }
+    .cb-icon{
+      width:6em;
+      color: #fff;
+      text-align: center;
+      float: left;
+    }
+    .main-right-b-div-1 div.tool{
+      width:calc(100% - 12em);
+      width:-moz-calc(100% - 38px);
+      height:100%;
+      float:left;
+    }
+
+
+    .main-right-b-div-1 div.tool .tool-man{
+      width:60%;
+      height:100%;
+      float:left;
+      background: url(../../images/m-3.png) repeat-x;
+    }
+
+    .main-right-b-div-1 div.tool .tool-woman{
+      width:40%;
+      height:100%;
+      float:left;
+      background: url(../../images/m-4.png) repeat-x;
+    }
+    /*页面导航*/
+
+  </style>
+</head>
+<body>
+<div id="pageNav">
+  <span>当前页面</span>
+  <select id="chooseNav">
+    <option value="001">首页</option>
+    <option value="002" selected="selected">企业参保</option>
+    <option value="003">五险覆盖</option>
+    <option value="004">异地社保</option>
+    <option value="005">阳光医保</option>
+  </select>
+</div>
+<%--<a href="#" onclick="returnMainPage()" style="max-width:3%;position: fixed;left:97%;top: 2%;z-index: 999;display: none"><img src="../../images/returnUp.png" alt=""></a>--%>
+<div class="_header">
+  <img src="../../images/btz.png" alt=""/>
+  <h1>企业参保情况</h1>  <%-- 主标题--%>
+  <%--<span>智慧结算</span>--%>  <%--副标题--%>
+  <img src="../../images/bty.png" alt=""/>
+</div>
+  <div class="main main-left">
+    <div class="main-left-a" id="searchArea">
+      <ul>
+        <li><span>企业检索</span></li>
+        <li class="li-input" class="search">
+          <input type="text" placeholder="企业检索" id="searchQY"/>
+          <div id="searchInfo">
+          <ul>
+          </ul>
+          </div>
+        </li>
+        <li><button type="button" class="search" id="searchQYBtn">搜&nbsp;索</button></li>
+      </ul>
+    </div>
+    <div class="main-left-b" id="map">
+
+    </div>
+  </div>
+  <div class="main main-right">
+    <div class="main-right-a">
+      <p>企业平均参保金额和平均参保年龄</p>
+      <div id="echarts1"></div>
+    </div>
+    <div class="main-right-b">
+      <p>企业参保人年龄结构和性别比例</p>
+      <div class="main-right-b-div-1">
+
+        <div class="cb-icon">
+          <%--<span class="man"></span>--%>
+            <img src="../../images/nan.png" alt="" class="man">
+          <p id="malePercent"></p>
+        </div>
+        <div class="tool">
+          <div class="tool-man"></div>
+          <div class="tool-woman"></div>
+        </div>
+        <div class="cb-icon">
+          <%--<span class="woman"></span>--%>
+          <img src="../../images/nv.png" alt="" class="man">
+          <p id="femalePercent"></p>
+        </div>
+
+      </div>
+      <div class="main-right-b-div-2" id="echarts2"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.1&key=966008e8aaafb827acaa2f1bea731a60"></script>
+  <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+  <%--<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>--%>
+
+  <script type="text/javascript" src="../../myjs/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+  <script type="text/javascript" src="../../map/js/echarts-all.js"></script>
+  <script type="text/javascript" src="../../myjs/index.js"></script>
+  <script type="text/javascript" src="../../myjs/jquery.dataStatistics.js"></script>
+  <script src="../../myjs/myEcharts.js"></script>
+  <script>
+    //    导航切换
+    $('#chooseNav').change(function(){
+      var navText=$('#chooseNav').val();
+      console.log(navText)
+      switch(navText){
+        case '001':shouye();break;
+        case '002':qycb();break;
+        case '003':wxfg();break;
+        case '004':ydcb();break;
+        case '005':ygyb();break;
+
+      }
+    });
+    function shouye(){
+      top.location.href="../../shbz1.html";
+    }
+    function qycb(){
+      top.location.href="qycb.jsp";
+    }
+    function wxfg(){
+      top.location.href="wxfgqk.jsp";
+    }
+    function ydcb(){
+      top.location.href="ywbl.jsp";
+    }
+    function ygyb(){
+      top.location.href="sunPublicServe.jsp";
+    }
+    var headerWidth=$("._header").width();	//获取头部标题的宽度
+    $("._header").css("left",-headerWidth/2+"px");//让头部标题居中
+    var map = new AMap.Map('map', {
+      mapStyle: 'amap://styles/16e4e3ccd1f66f229a6276fe149db8df',//样式URL
+      zoom: 11
+    });
+    searchQY("浙江",001);//001代表页面初始化，002代表其它
+    var initName=$("#searchInfo ul li").eq(0).text();
+    $("#searchQY").val(initName);
+    $("#searchInfo").hide();
+    //搜索---开始
+    function searchQY(name,state){
+      $("#searchInfo").show();
+
+      $.ajax({
+        type: 'post',
+        url: "../../jxSocialSecurity/serchSocailSecurityInfo.do",
+        dataType: 'JSON',
+        data:{name:name},
+        success: function (data) {
+//          console.log(data)
+          map.clearMap();
+          if(data.length>0){
+            if(state=="002"){
+              for(var i=0;i<data.length;i++){
+                var jwd = [data[i].JD,data[i].WD];//经纬度纠偏
+                addPoint(jwd,30,30,data[i]);
+              }
+              infoWindow(data[0]);
+
+              $("#searchInfo ul").html("");
+              for(var i=0;i<data.length;i++){
+                $("#searchInfo ul").append('<li title='+data[i].NAME+'>'+data[i].NAME+'</li>');
+              }
+            }else if(state=="003"){
+              $("#searchInfo ul").html("");
+              for(var i=0;i<data.length;i++){
+                $("#searchInfo ul").append('<li title='+data[i].NAME+'>'+data[i].NAME+'</li>');
+              }
+            }else{
+              var jwd = [data[0].JD,data[0].WD];//经纬度纠偏
+              addPoint(jwd,30,30,data[0]);
+              infoWindow(data[0]);
+              $("#searchQY").val(data[0].NAME);
+            }
+          }
+        }
+
+      })
+    }
+    $("#searchInfo ul").delegate('li','click',function(){
+
+      var newName=$(this).text();
+      searchQY(newName,002);
+      $("#searchQY").val(newName);
+
+      $("#searchInfo").hide();
+
+    })
+    function qyInfoAjax(newName){
+      $.ajax({
+        type: 'post',
+        url: "../../jxSocialSecurity/queryCorpInfo.do",
+        dataType: 'JSON',
+        data:{companyName:newName},
+        success: function (data) {
+          console.log(data)
+          if(data){
+            var echarts1DateA=[],echarts1DateB=[];
+            var echarts2DateA=[],echarts2DateB=[];
+            for(var i=0;i<data.countAndAge.length;i++){
+              echarts1DateA.push(data.countAndAge[i].AVERAGE_INSURED_AMOUNT);
+              echarts1DateB.push(data.countAndAge[i].AVERAGE_INSURED_AGE );
+            }
+            var a1=data.male[0].EIGHTEEN,
+                    b1=data.male[0].THIRTY,
+                    c1=data.male[0].FIFTY,
+                    d1=data.male[0].SIXTY_FIVE;
+            var a2=data.female[0].EIGHTEEN,
+                    b2=data.female[0].THIRTY,
+                    c2=data.female[0].FIFTY,
+                    d2=data.female[0].SIXTY_FIVE;
+            var sum1=a1+b1+c1+d1,
+                    sum2=a2+b2+c2+d2,
+                    per1=(sum1/(sum1+sum2)).toFixed(4)*100,
+            percent1=per1.toFixed(2)+"%",
+                    percent2=(100-per1).toFixed(2)+"%";
+                    percent2
+            echarts2DateA.push(-a2,-b2,-c2,-d2);
+            echarts2DateB.push(a1,b1,c1,d1);
+            echartsQY1(echarts1DateA,echarts1DateB);
+            echartsQY2(echarts2DateA,echarts2DateB);
+            $("#malePercent").html(percent2);
+            $("#femalePercent").html(percent1);
+            $(".tool-man").width(percent2);
+            $(".tool-woman").width(percent1);
+          }
+        }
+
+      })
+    }
+    $(document).bind('click', function(e) {
+      var e = e || window.event; //浏览器兼容性
+      var elem = e.target || e.srcElement;
+      while (elem) { //循环判断至跟节点，防止点击的是div子元素
+        if (elem.id && elem.id == 'searchArea') {
+          return;
+        }
+        elem = elem.parentNode;
+      }
+      $("#searchInfo").hide(); //
+    });
+    document.onkeydown = function(e){
+      var ev = document.all ? window.event : e;
+      if(ev.keyCode==13) {
+        searchQY($("#searchQY").val(),002);
+        $("#searchInfo").hide();
+      var name=$("#searchInfo ul li").eq(0).text();
+        $("#searchQY").val(name);
+      }
+    }
+    $("#searchQYBtn").click(function(){
+      searchQY($("#searchQY").val(),002);
+      $("#searchInfo").hide();
+    })
+    //搜索---结束
+//    搜索框change事件---开始
+    $("#searchQY").bind('input','change',function(){
+      var name=$(this).val();
+      searchQY(name,003);//003代表change事件状态
+    })
+    //搜索框change事件---结束
+
+    //echarts--开始
+    function echartsQY1(data1,data2){
+      var mycharts1 = echarts.init(document.getElementById('echarts1'));
+      var option1 = {
+        color: ['#13BFBF','#CC7A29'],
+        tooltip : {
+          trigger: 'axis',
+          formatter:'{b}<br/>{a}:{c}万元<br/>{a1}:{c1}岁'
+        },
+        grid: {
+          x: '15%',
+          y: '15%',
+          x2: '15%',
+          y2: '20%',
+          containLabel: true,
+          borderWidth: 0
+        },
+        legend: {
+          data:['平均参保金额','平均参保年龄'],
+          show: true,
+          y:'top',
+          textStyle:text_style
+        },
+        xAxis : [
+          {
+
+            type : 'category',
+            splitLine:false,
+            axisLine: { lineStyle: {
+              color: '#fff'
+            }},
+            axisTick: {show:false},
+            axisLabel: {show: true, textStyle: text_style},
+            data : ['2012年','2013年','2014年','2015年','2016年']
+          }
+        ],
+        yAxis : [
+          {
+            name:'金额(万元)',
+            nameTextStyle:text_style,
+            type : 'value',
+            axisLine: { lineStyle: {
+              color: '#fff'
+            }},
+            splitNumber:3,
+            splitLine: {
+              show: true,
+              lineStyle:{
+                color: ['#8D8C8C'],
+                width: 1,
+                type: 'dashed'}},
+            axisLabel: {
+              show: true,
+              textStyle: text_style,
+              formatter: '{value} '
+            }
+          },
+          {
+            name:'年龄(岁)',
+            nameTextStyle:text_style,
+//				name:'医保使用率',
+//				nameTextStyle:text_style,
+            type : 'value',
+            axisLine: { lineStyle: {
+              color: '#fff'
+            }},
+            splitLine:{show:false},
+//				axisTick: {show: true,lineStyle:{color: '#bfbfbf'}},
+            axisLabel: {
+              show: true,
+              textStyle: text_style,
+              formatter: '{value} '}
+          }
+        ],
+        series : [
+
+          {
+            name:'平均参保金额',
+            type:'bar',
+            barWidth:30,
+            data:data1
+//            data:[600,700,900,1300]
+          },
+          {
+            name:'平均参保年龄',
+            type:'line',
+            symbol:'rectangle',
+            yAxisIndex: 1,
+            data:data2
+//            data:[15,18,20,32]
+          }
+        ]
+      };
+      mycharts1.setOption(option1);
+    }
+
+    function echartsQY2(data1,data2){
+      var myChart_rqnl = echarts.init(document.getElementById("echarts2"));
+      var option_rqnl = {
+        color:['#CC9949','#00A6A6'],
+        calculable : false,
+        grid: {
+          x: '25%',
+          y: '10%',
+          x2: '30%',
+          y2: '20%',
+          containLabel: true,
+          borderWidth: 0
+        },
+        tooltip : {
+          trigger: 'axis',
+          formatter: function (params,ticket,callback) {
+            var res = '人群年龄分布('+params[0].name+')';
+            for (var i = 0, l = params.length; i < l; i++) {
+              if(params[i].value<0){
+                params[i].value = -params[i].value;
+              }
+              res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%';
+            }
+            setTimeout(function (){
+              // 仅为了模拟异步回调
+              callback(ticket, res);
+            }, 100)
+          }
+        },
+        xAxis : [
+          {
+            type : 'value',
+            splitLine: {show: false},
+            axisLine: {show: false},
+            axisTick: {show: false},
+            axisLabel: {
+              show: true,
+              textStyle: text_style,
+              formatter:function (value){
+                if(value<0){
+                  return (-value+"%");
+                }else{
+                  return (value+'%');
+                }
+              }
+            }
+          }
+        ],
+        yAxis : [
+          {
+            type: 'category',
+            splitLine: {show: false},
+            axisLine: {show: false},
+            axisLabel: {show: true, textStyle: text_style},
+            axisTick : {show: false},
+            data : ['18-30岁','30-50岁','50-65岁','65岁以上']
+          }
+        ],
+        series : [
+
+          {
+            name:'男性',
+            type:'bar',
+            stack: '总量',
+            barWidth : 15,
+            itemStyle: {normal: {
+              label : {show: false
+              }
+            }},
+            data:data1
+//            data: [-4, -18, -11, -15, -10]
+
+          },
+          {
+            name:'女性',
+            type:'bar',
+            stack: '总量',
+            barWidth : 15,
+            data:data2
+//            data:[3, 15, 7, 10, 7]
+          }
+        ]
+      };
+      myChart_rqnl.setOption(option_rqnl);
+    }
+
+    //echarts--结束
+    //高德地图---开始
+    ////关闭信息窗体
+    function closeInfoWindow() {
+      map.clearInfoWindow();
+    }
+    //实例化信息窗体
+    //构建自定义信息窗体
+    function createInfoWindow(title, content) {
+      var info = document.createElement("div");
+      info.className = "info";
+
+      //可以通过下面的方式修改自定义窗体的宽高
+      info.style.width = "360px";
+      // 定义顶部标题
+      var top = document.createElement("div");
+      var titleD = document.createElement("div");
+      var closeX = document.createElement("img");
+      top.className = "info-top";
+      titleD.innerHTML = title;
+      closeX.src = "../../images/gaode-close.png";
+      closeX.onclick = closeInfoWindow;
+
+      top.appendChild(titleD);
+      top.appendChild(closeX);
+      info.appendChild(top);
+
+      // 定义中部内容
+      var middle = document.createElement("div");
+      middle.className = "info-middle";
+      middle.style.backgroundColor = 'white';
+      middle.innerHTML = content;
+      info.appendChild(middle);
+
+      // 定义底部内容   //下方的小箭头
+      var bottom = document.createElement("div");
+      bottom.className = "info-bottom";
+      bottom.style.position = 'relative';
+      bottom.style.top = '0px';
+      bottom.style.margin = '0 auto';
+      var sharp = document.createElement("img");
+      sharp.src = "../../images/hlw-sj.png";
+      bottom.appendChild(sharp);
+      info.appendChild(bottom);
+      return info;
+    }
+    function infoWindow(details){
+//  console.log(details)
+      qyInfoAjax(details.NAME);
+//      console.log("infowindow")
+      if(details){
+        var title = '<span style="font-size:11px;color:#0CDAF5;">'+details.NAME+'</span>';
+        content = [];
+
+        content.push("<span class='left-content'>企业地址</span><span class='right-content'>"+details.COMPANY_LOCATION+"</span>");
+        content.push("<span class='left-content'>企业类型</span><span class='right-content'>"+details.COMPANY_TYPE+"</span>");
+        content.push("<span class='left-content'>行业类别</span><span class='right-content'>"+details.BUSINESS_TYPE+"</span>");
+        content.push("<span class='left-content'>经营范围</span><span class='right-content''>"+details.BUSINESS_SCOPE+"</span>");
+        content.push("<span class='left-content'>法定代表</span><span class='right-content'>"+details.PRESIDENT+"</span>");
+        content.push("<span class='left-content'>参保人数</span><span class='right-content'>"+details.ENSURED_NUM+"<span>人</span></span>");
+        var infoWindow = new AMap.InfoWindow({
+          isCustom: true,  //使用自定义窗体
+          content: createInfoWindow(title, content.join("")),
+          offset: new AMap.Pixel(10, -30)
+        });
+        var jw =[details.JD,details.WD];
+        map.setCenter(jw);
+        //setTimeout(function(){
+        infoWindow.open(map, jw);
+        //},500)
+      }
+    }
+    function addPoint(arr,h,w,details){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+
+      var _marker=new AMap.Marker({
+        map: map,
+        position: arr,        //经纬度
+        icon: new AMap.Icon({
+          size: new AMap.Size(h, w),  //图标大小
+          image: "../../images/qy.png"       //自定义图片
+        })
+      });
+      map.setCenter(arr);
+      AMap.event.addListener(_marker, 'click', function (e) {
+        infoWindow(details)
+        echartsQY1();
+        echartsQY2();
+        //infoWindow.open(map, _marker.getPosition());
+      });
+    }
+//    function addPoint(arr,h,w,details){//arr =[经度,纬度]；h=图片高度，w=图片宽	度；img=图片路径
+//      map.clearMap();
+//      var _marker=new AMap.Marker({
+//        map: map,
+//        position: arr,        //经纬度
+//        icon: new AMap.Icon({
+//          size: new AMap.Size(h, w),  //图标大小
+//          image: "../../images/information/hlwcyhx2.png"       //自定义图片
+//        })
+//      });
+//      map.setCenter(arr);
+//      AMap.event.addListener(_marker, 'click', function (e) {
+//        infoWindow(details)
+//        echartsQY1();
+//        echartsQY2();
+////        infoWindow.open(map, _marker.getPosition());
+//      });
+//    }
+    //高德地图---结束
+    function returnMainPage(){
+      top.location.href="../../shbz1.html";
+    }
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+package com.cetc28.idata.service;
+
+import com.cetc28.idata.model.JxEduInformazation;
+import com.cetc28.idata.model.JxEduMediaEdu;
+import com.cetc28.idata.model.JxSchoolInfo;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 嘉兴教育Service层接口
+ * Created by linyu on 2017/8/28.
+ */
+public interface IJxEduService {
+    /**
+     * 根据条件查询学校信息
+     * @return
+     */
+    List<JxSchoolInfo> querySchoolInfoByCondition();
+
+    /**
+     * 查询嘉兴各类学校信息
+     * @param qhbh 区划编号
+     * @return
+     */
+    List querySchoolMapInfo(String qhbh);
+
+    /**
+     * 查询各类学校的统计信息
+     * @param qhbh 区划编号
+     * @param num 年份数
+     * @return
+     */
+    List querySchoolStatisticInfo(String qhbh, int num);
+
+
+    /**
+     * 获取学区超载、空载信息
+     * @param qhbh 区划编号
+     * @return
+     */
+    Map listOverloadSchoolInfo(String qhbh);
+
+    /**
+     * 获取指定区域的教育资源承载情况
+     * @param qhbh 区划编号
+     * @return
+     */
+    Map getEduResourceInfo(String qhbh);
+
+    /**
+     * 获取教育资源承载力的分区统计信息
+     * @param qhbh 区划编号
+     * @param length 年份数
+     * @return
+     */
+    List listEduStatisticInfo(String qhbh, int length);
+
+    /**
+     * 查询指定区域教育的信息化指数
+     * @param qhbh 区划编号
+     * @return
+     */
+    JxEduInformazation queryInformazationInfo(String qhbh);
+
+    /**
+     * 获取多媒体教室普及率
+     * @param count 年份数
+     * @return
+     */
+    public List<JxEduMediaEdu> selectJxEduMediaRoom(Integer count);
+
+    /**
+     * 获取网络学校空间覆盖率
+     * @param count 年份数
+     * @return
+     */
+    public Map selectJxEduNetworkLearn(Integer count);
+
+    public List<JxEduMediaEdu> selectJxEduWireless();
+
+    /**
+     * 获取智慧教育指标统计信息
+     * @param count 年份数
+     * @return
+     */
+    public abstract List listSchoolStatisticInfo(Integer count);
+
+    /**
+     * 查询城市基础教育信息
+     * @return
+     */
+    public abstract Map queryBasicEduInfo();
+}

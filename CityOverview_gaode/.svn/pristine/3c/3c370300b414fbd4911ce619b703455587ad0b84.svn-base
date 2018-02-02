@@ -1,0 +1,133 @@
+var hlwjj = {
+    hlwjjAjax: function () {
+        $('#hlwjjTopMessage').css('display', 'block');
+        map.setZoom(11);
+        var marker = [];
+        var infoWindow = '';//定义信息窗体
+        var jumpUrl = 'iframeSecond/secondBox/hlwjjqsThird.jsp?type='
+
+        //设置infoWin
+        function setInfoWin(CLUSTER_NAME,CLUSTER_TYPE,CLUSTER_LOCATION,URL) {
+            //实例化信息窗体
+            var title = '<span style="font-size:15px;font-weight:bolder;color:#85ECFF;">'+CLUSTER_NAME+'</span>',
+                content = [];
+            content.push("<div id='hlwjjContent'>" +
+                "<span class='left-content'>产业集群类型</span>" +
+                "<span class='right-content'>"+CLUSTER_TYPE+"</span>" +
+                "<span class='left-content'>所属区域</span>" +
+                "<span class='right-content'>"+CLUSTER_LOCATION+"</span>" +
+                "</div>" +
+                "<div class='hlw-xq'><a href='"+URL+"'>详情</a></div>");
+
+            infoWindow = new AMap.InfoWindow({
+                isCustom: true,  //使用自定义窗体
+                content: createInfoWindow(title, content.join("<br/>")),
+                offset: new AMap.Pixel(0, -50)
+            });
+        }
+
+
+        //关闭信息窗体
+        function closeInfoWindow() {
+            map.clearInfoWindow();
+        }
+
+        //构建自定义信息窗体
+        function createInfoWindow(title, content) {
+            var info = document.createElement("div");
+            info.className = "hlw-info";
+
+            // 定义顶部标题
+            var top = document.createElement("div");
+            var titleD = document.createElement("div");
+            var closeX = document.createElement("img");
+            top.className = "hlw-info-top";
+            titleD.innerHTML = title;
+            closeX.src = "images/hlw-x.png";
+            closeX.onclick = closeInfoWindow;
+
+            top.appendChild(titleD);
+            top.appendChild(closeX);
+            info.appendChild(top);
+
+            // 定义中部内容
+            var middle = document.createElement("div");
+            middle.className = "hlw-info-middle";
+            middle.innerHTML = content;
+            info.appendChild(middle);
+
+            // 定义底部内容
+            var bottom = document.createElement("div");
+            bottom.className = "hlw-info-bottom";
+            bottom.style.position = 'relative';
+            bottom.style.top = '0px';
+            bottom.style.margin = '0 auto';
+            var sharp = document.createElement("img");
+            sharp.src = "images/hlw-sj.png";
+            bottom.appendChild(sharp);
+            info.appendChild(bottom);
+            return info;
+        }
+
+        //刷新地图图标
+        function clearMapIcon() {
+            $.each(marker, function (i, v) {
+                v.setIcon(new AMap.Icon({
+                    size: new AMap.Size(18, 18),
+                    image: "images/hlwcyjqIcon.png"
+                }));
+            })
+        }
+
+        $.ajax({
+            type: 'post',
+            url: "jxecokey/findClusterNameAndJwd.do",
+            dataType: 'JSON',
+            success: function (data) {
+                // console.log(data)
+                map.panTo([120.737313, 30.777843]);//默认移到南湖区
+                $.each(data, function (i, v) {
+                    var realPos = wgs84togcj02(Number(v.JD), Number(v.WD));
+                    marker[i] = new AMap.Marker({
+                        map: map,
+                        contents: v,
+                        position: realPos,
+                        offset: new AMap.Pixel(-9, -9), //相对于基点的偏移位置
+                        icon: new AMap.Icon({
+                            size: new AMap.Size(18, 18),  //图标大小
+                            image: "images/hlwcyjqIcon.png"
+                        })
+                    });
+
+
+                })
+
+                $.each(marker, function (i, pos) {
+                    //鼠标点击marker弹出自定义的信息窗体
+                    AMap.event.addListener(pos, 'click', function (e) {
+
+                        var CLUSTER_LOCATION=e.target.F.contents.CLUSTER_LOCATION;
+                        var CLUSTER_NAME=e.target.F.contents.CLUSTER_NAME;
+                        var CLUSTER_TYPE=e.target.F.contents.CLUSTER_TYPE;
+                        var URL=jumpUrl+CLUSTER_NAME;
+                        // console.log(CLUSTER_LOCATION);
+                        // console.log(CLUSTER_NAME);
+                        // console.log(CLUSTER_TYPE);
+                        // console.log(URL);
+                        setInfoWin(CLUSTER_NAME,CLUSTER_TYPE,CLUSTER_LOCATION,URL);
+                        clearMapIcon();
+                        e.target.setIcon(new AMap.Icon({
+                            size: new AMap.Size(18, 18),
+                            image: "images/hlwcyjqIconP.png"
+                        }));
+
+                        infoWindow.open(map, e.target.getPosition());
+                        map.setCenter(e.target.getPosition());
+                    });
+                });
+
+                marker[6].emit('click', {target: marker[6]});
+            }
+        })
+    }
+}

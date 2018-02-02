@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.JxEcoIndustrialPlatform" >
+    <select id="queryindustrialplatform"  resultType="java.util.HashMap">
+        SELECT * from JX_ECO_INDUSTRIAL_PLATFORM order by id
+    </select>
+
+    <select id="queryindustrialplatformbyid"  resultType="java.util.HashMap" parameterType="java.lang.String">
+        SELECT * from JX_ECO_INDUSTRIAL_PLATFORM where id=#{id}
+    </select>
+    <select id="queryindustrialplatformsec"  resultType="java.util.HashMap" parameterType="java.lang.String">
+        SELECT * from JX_ECO_INDUSTRIAL_PLATFORMSEC where sjid=#{id}
+    </select>
+
+</mapper>

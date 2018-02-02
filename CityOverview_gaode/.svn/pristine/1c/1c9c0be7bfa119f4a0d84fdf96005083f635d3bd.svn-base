@@ -1,0 +1,125 @@
+package com.cetc28.EcoSuitableResidence.dao;
+import com.cetc28.EcoSuitableResidence.dto.WaterMacro;
+import com.cetc28.EcoSuitableResidence.model.*;
+import org.apache.ibatis.annotations.Param;
+
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by linyu on 2017/8/8.
+ */
+public interface IJxEnvirDao {
+    public List<JxEnvirAir> queryAllEnvirAir();
+
+    public abstract List<JxWaterInfo> selectEnvirInfo(String jcdbh);
+    //选取24小时内监测点的全部监测数据
+    public List<JxKqzljcdInfo> selectKqzljc24Hour(String bh);
+    //选取30天内监测点的全部监测数据
+    public List<JxKqzljcdInfo> selectKqzljc30Day(String bh);
+    //获取按日进行预测所得到的预测数据
+    public List<Map> queryOriginData(@Param("bh")String bh, @Param("gap")Integer gap, @Param("indexName") String indexName);
+    //获取当前时间的下一天
+    public String getNextDay(@Param("bh")String bh,@Param("prenum")Integer prenum);
+
+    //获取按小时进行预测所得到的预测数据
+    public List<Map> queryOriginDataBy24Hour(@Param("bh")String bh, @Param("gap")Integer gap, @Param("indexName") String indexName);
+    //获取当前时间的下一小时
+    public String getNextHour(@Param("bh")String bh,@Param("prenum")Integer prenum);
+
+    public Map selectZsJcdInfo(@Param("jcdbh") String jcdbh,  @Param("zstype") String zstype, @Param("time_start") String time_start, @Param("time_end") String time_end);
+
+    public List<JxEnvirAir>selectEnvirAirJcdInfo(String bh);
+
+    public List<JxEnvirAir> selectEnvirAirJcd(String qhbh);//得到该监测点最近时间的监测信息（作图用）0826
+
+    public JxEnvirAir getEnvirAirJcdInfo(@Param("bh") String bh, @Param("jcsj") String jcsj);//取出最近时间监测点编号（作图用）0826
+
+    // 选取30天内区县最近的全部监测数据
+    public List<JxKqzljcdInfo> selectAirQXMonitor(String bh);
+
+
+    /**
+     * 获取当前年份
+     * @return
+     */
+    public  Integer AirCurrentYear();
+
+    /**
+     * 获取年度总平均率，用于计算年度对比
+     * @return
+     */
+    public Double queryAirTotal(Integer year);
+
+    //计算空气，水，噪声指数
+    public List<JxEnvirMacroMonitor>  selectWaterEnvirLv( );
+
+    public List<JxEnvirMacroMonitor> selectAirQuality( );
+
+    public List<JxEnvirMacroMonitor> selectNoiseOverproof();
+
+    public List<JxEnvirMacroMonitor> selectCompanyEnvir();   //计算企事业单位环境公开率
+
+    public List<JxEnvirMacroMonitor> selectPolluteMonitor(); //计算污染源监测情况
+
+    public List<JxEnvirMacroMonitor> selectCityProblem();    //城市问题处置率
+
+    public List<JxEnvirWater> selectWaterMonitor30Day(String bh);  //饮用水水质监测点30天监测信息
+
+    //获取按日进行预测所得到的预测数据
+    public List<Map> queryWaterPre30Day(@Param("bh")String bh, @Param("gap")Integer gap, @Param("indexName") String indexName);
+    //获取饮用水最近监测时间的下一天
+    public String getWaterNextDay(@Param("bh")String bh,@Param("prenum")Integer prenum);
+
+    //获取按小时进行预测所得到的饮用水预测数据
+    public List<Map> queryWaterPre24Hour(@Param("bh")String bh, @Param("gap")Integer gap, @Param("indexName") String indexName);
+    //获取饮用水最近监测时间的下一小时
+    public String getWaterNextHour(@Param("bh")String bh,@Param("prenum")Integer prenum);
+
+    public List<JxEnvirWater> selectWaterMonitor24Hour(String bh); //饮用水水质监测点24小时监测信息
+
+    public List<JxEnvirWater> selectWaterMonitorQX(String bh);     //饮用水水质监测点区县监测信息
+
+    public List<JxEnvirWater> selectWaterMonitorJcd(String qhbh);  //饮用水水质监测点实时监测信息
+
+    public JxEnvirWater getWaterMonitorJcd(@Param("bh")String bh, @Param("jcsj")String jcsj);//获取数据
+
+    public List<JxEnvirWater> selectWaterDmsMonth(String bh); //断面水水质监测点月监测信息
+
+    //获取按月份进行预测所得到的断面水预测数据
+    public List<Map> queryDmsPre12Month(@Param("bh")String bh, @Param("gap")Integer gap, @Param("indexName") String indexName);
+    //获取断面水最近监测时间的下一个月份
+    public String getDmsNextMonth(@Param("bh")String bh,@Param("prenum")Integer prenum);
+
+    public List<JxEnvirWater> selectWaterDmsDay(String bh);   //断面水水质监测点日监测信息
+    //获取按日进行预测所得到的断面水预测数据
+    public List<Map> queryDmsPre30Day(@Param("bh")String bh, @Param("gap")Integer gap, @Param("indexName") String indexName);
+    //获取断面水最近监测时间的下一天
+    public String getDmsNextDay(@Param("bh")String bh,@Param("prenum")Integer prenum);
+
+    public List<JxEnvirWater> selectWaterDmsJcd(String qhbh);  //断面水水质监测点实时监测信息
+
+    public JxEnvirWater getWaterDmsJcd(@Param("bh")String bh, @Param("jcsj")String jcsj);//获取数据
+
+    public  List<WaterMacro> selectWaterMacro();
+
+    public  List<WaterMacro> selectWaterMacroByYear(Integer year);//年份后台取出来传到这个接口作为参数使用
+
+    public int selectMaxYear();
+
+    public List<JxNoise> selectNoiseMapJcd(String bh);//嘉兴首页噪声上图点位
+
+    public List<JxPollution> selectMapPollution();//嘉兴重点污染源微观监测侧边栏
+
+    public List<JxPollution> selectMapPollutionJcd(String type);//嘉兴重点污染源监测点上图
+
+    public List<JxPollution> selectPollutionHG();//嘉兴重点污染源微观侧边栏合格率
+
+    public JxWaterManage selectWaterManage();//河长
+
+    public List<JxPollution> selectPolluteDisplay();//污染源首页监测
+
+    public List<JxPollution> displayQYInfo(@Param("mc")String mc,@Param("type")int type);//污染源企业模糊查询
+
+}

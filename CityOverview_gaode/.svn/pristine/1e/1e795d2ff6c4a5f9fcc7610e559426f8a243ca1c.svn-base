@@ -1,0 +1,137 @@
+<%--
+  Create By FangYan On 2017/09/13
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>固定资产投资</title>
+    <link rel="stylesheet" href="../../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.gdzctz{
+            width: 100%;
+            height: 100%;
+        }
+        div#tblv{
+            height: 13%;
+            width: 100%;
+            padding: 1% 0 1% 8%;
+            padding-left: 55%;
+        }
+        div#gdzctz{
+            height: 75%;
+            width: 95%;
+        }
+        #tongbi{
+            margin-left: 3%;
+            display: inline-block;
+            text-align: center;
+            width: 38%;
+            height: 100%;
+            color: #FF6550;
+            border: 2px solid #812300;
+            background-color: rgba(55,15,0,0.5);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="gdzctz">
+    <p class="headerTitle">
+        固定资产投资
+    </p>
+    <div id="tblv">
+        <span id="tbtitle"></span><span id="tongbi"></span>
+    </div>
+    <div id="gdzctz">
+    </div>
+</div>
+<script src="../../../map/js/jquery-1.11.3.js"></script>
+<script src="../../../myjs/echarts-all.js"></script>
+<script src="../../../myjs/myEcharts.js"></script>
+<script>
+    function gdzctz(xAxisData,data1){
+        var mycharts = echarts.init(document.getElementById('gdzctz'));
+        var option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                x: '8%',
+                y: '11%',
+                x2: '8%',
+                y2: '8%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data: ['固定资产投资额(亿)'],  //实际增长率
+                show: false
+            },
+            xAxis: {
+                type: 'value',
+                splitLine: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                axisLabel: {show: false}
+            },
+            yAxis: {
+                type: 'category',
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: true},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            series: [
+                {
+                    name: '固定资产投资额(亿)',  //实际增长率
+                    type:'bar',
+                    barWidth: 18,
+                    itemStyle: {
+                        normal:{
+                            label: {
+                                show: true,
+                                position: 'right',
+                                textStyle: text_style,
+                                formatter:'{c}亿元'
+                        }
+                    }
+                    },
+                    data: data1
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //服务业生产指数
+    $.ajax({
+        type:"POST",
+        url:'../../../jxeco/hgjj/gdzctz.do',
+        dataType:'json',
+        data:{"monthSize":5},
+        success:function(data){
+            var xAxisData=[];
+            var data1=[];
+            var sj = String(data[data.length-1].sj);
+            var tbtitle=sj.substring(5)+"月同比增长率";
+            var tongbi=parseFloat(data[data.length-1].tbzz)+'%';
+            for(var i=0;i<data.length;i++) {
+                var sj = String(data[i].sj);
+                xAxisData.push(sj.substring(5)+"月");
+                data1.push(parseFloat(data[i].gdzctz));
+            }
+            $("#tbtitle").html(tbtitle);
+            $("#tongbi").html(tongbi);
+           /* xAxisData.reverse();
+            data1.reverse();*/
+            gdzctz(xAxisData,data1);
+        }
+    });
+</script>
+</body>
+</html>
+
+

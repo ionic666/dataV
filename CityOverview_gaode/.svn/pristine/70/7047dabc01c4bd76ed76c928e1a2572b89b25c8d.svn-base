@@ -1,0 +1,10 @@
+._headerImg{
+    position: absolute;
+    height: 10%;
+    width: 100%;
+    z-index: 10;
+    text-align: center;
+    margin: 0 auto;
+    padding-top:1.5%;
+    top:0;
+}

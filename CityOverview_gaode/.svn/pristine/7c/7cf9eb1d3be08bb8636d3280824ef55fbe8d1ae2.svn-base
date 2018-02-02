@@ -1,0 +1,122 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LinYu
+  Comments:学校无线网络覆盖率
+  Date: 2017/9/15
+  Time: 10:29
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>学校无线网络覆盖率</title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.internetCoverage{
+            width: 100%;
+            height: 100%;
+        }
+        div#internetCoverage{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="internetCoverage">
+    <p class="headerTitle">
+        无线网络覆盖率
+    </p>
+    <%--学校无线网络覆盖率--%>
+    <div id="internetCoverage">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function echartPlot (schoolType, data) {
+        var mycharts = echarts.init(document.getElementById('internetCoverage'));
+        option = {
+            tooltip : {
+                trigger: 'axis',
+                formatter: "{d} : {c}%"
+            },
+            polar : [
+                {
+                    indicator : schoolType,
+                    /*[
+                        {text: '小学', max: 100},
+                        {text: '中学', max: 100},
+                        {text: '职业院校', max: 100},
+                        {text: '高等院校', max: 100},
+                    ],*/
+                    name : {
+                        textStyle:text_style
+                    }
+                }
+            ],
+            calculable : false,
+            series : [
+                {
+                    name: '无线网络覆盖率',
+                    type: 'radar',
+                    data : [
+                        {
+                            value : data,
+                            name : '无线网络覆盖率',
+                            symbol: 'diamond',
+                            symbolSize: 5,
+                            itemStyle:{
+                                normal:{
+                                    color:'blue',
+                                    label:{
+                                        show:true,
+                                        textStyle:text_style,
+                                        formatter: '{c}%',
+                                        position:'inside'}
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    $.ajax({
+        type:"POST",
+        url:'../../jxedu/listSchoolStatisticInfo.do',
+        data:{"count":1},
+        dataType:'json',
+        success:function(data){
+            var schoolType = [];
+            var value = [];
+            $.each(data, function (i) {
+                schoolType.push({text:data[i].mc, max: 120});
+                value.push(data[i].info[0].wireless);
+
+            })
+            echartPlot(schoolType, value);
+        }
+    });
+
+
+
+
+   /* $.ajax({
+        type:"POST",
+        url:'../../jxedu/getEduResourceInfo.do',
+        data:{"qhbh":'003001'},
+        dataType:'json',
+        success:function(data){
+            resourceBearing(data.overNum, data.idleNum);
+        }
+    });*/
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.JxEduInformazation;
+import com.cetc28.idata.model.JxEduInformazationExample;
+import java.util.List;
+
+public interface JxEduInformazationMapper {
+    int insert(JxEduInformazation record);
+
+    int insertSelective(JxEduInformazation record);
+
+    List<JxEduInformazation> selectByExample(JxEduInformazationExample example);
+}

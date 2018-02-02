@@ -1,0 +1,259 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2016-04-18
+  Time: 8:41
+  To change this template use File | Settings | File Templates.
+--%>
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <base href="<%=basePath%>">
+  <title></title>
+  <style type="text/css">
+    #pollutionSourceWindow .modal-dialog{
+      margin-right: 10px;
+      width:500px;
+    }
+    #pollutionSourceWindow .modal-content{
+      height: 400px;
+      /*background: url("map/images/economicModel/bgw(1).png") no-repeat;
+      background-position: -7px 0;
+      background-size: 102% 101%;*/
+    }
+    #pollutionSourceWindow .modal-header{
+      background-size: 103% 100%;
+      background-position: -6px 0;
+    }
+    #pollutionSourceWindow .modal-title{
+      margin-top: -5px;
+    }
+    #pollutionSourceWindow .modal-body{
+      padding: 0px;
+    }
+    #pollutionSourceWindow .modal-header .nav li{
+      width: 130px;
+      height: 32px;
+        line-height: 32px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .lisoft{
+        color: white;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      background-image: url("map/images/Layer24.png");
+    }
+
+    .actsoft{
+        color: #000000;
+      background-image: url("map/images/Layer24copy2.png");
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+
+
+    #pollutionSourceWindow div .nav{
+      height:32px;
+        margin-top: -10px;
+    }
+    #pollutionSourceWindow .nav li a:hover{
+      color: #000;
+      text-decoration: none;
+    }
+    #pollutionSourceWindow{
+      color: #000000;
+      background-color:white ;
+    }
+
+    /*#evidata1 td{*/
+        /*height: 10px;line-height: 10px;*/
+    /*}*/
+
+  </style>
+</head>
+<body>
+<div class="modal fade" style="overflow: hidden;width: 520px;height: 400px;top: 10px;left: 70px;background-color: transparent" id="pollutionSourceWindow" tabindex="-1" role="dialog" aria-hidden="true"
+     aria-labelledby="infoModalLabel" data-backdrop="static">
+  <div class="modal-dialog" style="width: 520px">
+    <div class="modal-content" style="height: 380px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+          <img src="map/images/economicModel/close.png">
+        </button>
+          <h5 class="modal-title">重点污染源列表</h5>
+        <div class="nav" style="margin-top: -11px;">
+          <ul class="list-group" style="margin-top: 5px">
+            <%--<li onclick="toUrl(this,'#pollutionSource2')"  class="list-unstyled act_2" style="width:165px;" value="2"><div class="stext" style="padding-right:10px;text-align: right;">重点污染源列表</div></li>--%>
+            <%--<li onclick="topollutionSourceWindow(this,'2')"  class="list-unstyled lisoft">区域统计</li>--%>
+            <%--&lt;%&ndash;<li onclick="topollutionSourceWindow(this,'3')"  class="list-unstyled lisoft">污水处理</li>&ndash;%&gt;--%>
+            <%--&lt;%&ndash;<li onclick="topollutionSourceWindow(this,'4')"  class="list-unstyled lisoft">危险废物</li>&ndash;%&gt;--%>
+          </ul>
+        </div>
+        <%--<h4 class="modal-title ecoWindowTitle" id="infoModalLabel">社会经济</h4>--%>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content" style="border: none">
+          <%--<div id="pollutionSource1" class="tab-pane active"><!--第一页产品规模这个图表-->--%>
+            <%--<div style="height:290px;width:500px;overflow-y: auto;margin-top: 3px">--%>
+                <%--<table id="pollutionSourcedata1" class="table table-striped table-bordered table-hover">--%>
+
+                <%--</table>--%>
+            <%--</div>--%>
+          <%--</div>--%>
+          <div id="pollutionSource2" class="tab-pane active" ><!--z这是第二页的饼图-->
+              <div class="tabbable">
+                  <!-- Nav tabs -->
+                  <ul class="nav nav-tabs" role="tablist" style="height: 40px">
+                      <li class=""><a href="#pSourcetab_0" role="tab" data-toggle="tab">废水</a></li>
+                      <li><a href="#pSourcetab_0" role="tab" data-toggle="tab">废气</a></li>
+                      <li><a href="#pSourcetab_0" role="tab" data-toggle="tab">污水处理厂</a></li>
+                      <li><a href="#pSourcetab_0" role="tab" data-toggle="tab">危险废物</a></li>
+                  </ul>
+
+                  <!-- Tab panes -->
+                  <div class="tab-content" style="">
+                      <div class="tab-pane active " id="pSourcetab_0" style="width: 480px;height: 220px;">
+                          <table id="pollutionSourcedata1" class="table table-striped table-bordered table-hover">
+
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <%--<div id="pollutionSource3" class="tab-pane "><!--z这是第三页的条形图-->--%>
+            <%--<div style="height:330px;width:480px;" id="pollutionSourcedata3">--%>
+
+            <%--</div>--%>
+          <%--</div>--%>
+          <%--<div id="pollutionSource4" class="tab-pane "><!--z这是第三页的条形图-->--%>
+            <%--<div style="height:330px;width:480px;" id="pollutionSourcedata4">--%>
+
+            <%--</div>--%>
+          <%--</div>--%>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  <%--弹出页面数据初始化--%>
+  $("#pollutionSource2 li").click(function(){
+      var text=$(this).children().text();
+      var index=$(this).index();
+      var url="icom/Sthj_listSthjZdwryByType.action?type="+text;
+      pollutionLayer.clear();
+      initPollutionSource1(url,pollutionLayer,"map/images/wushui.png");
+  })
+
+  function topollutionSourceWindow(evt,index){
+    $(evt).addClass("actsoft").removeClass("lisoft");
+    $(evt).siblings().addClass("lisoft").removeClass("actsoft");
+    $("#pollutionSource"+index).addClass("active");
+    $("#pollutionSource"+index).siblings().removeClass("active");
+  }
+    function initPollutionSource1(url,layer,img){
+        $.ajax({
+            type:'post',
+            url:url,
+            dataType:'JSON',
+            success:function(data){
+                if(data){
+//                    console.log(data);
+                    $("#pollutionSourcedata1").html("");
+                    var str="<thead><tr><td>行政区域</td><td>企业名称</td><td>主要排放污染物</td></tr></thead><tbody>";
+                    for(var i=0;i<data.length;i++){
+                        str+='<tr><td style="width: 80px">'+data[i].xzqh+'<input type="hidden" value=\"'+data[i].jd+'\"/><input type="hidden" value=\"'+data[i].wd+'\"/></td><td style="width: 260px">'+data[i].mc+'</td><td>'+data[i].zypfwrw+'</td></tr>';
+                    }
+                    str+="</tbody>";
+                    $("#pollutionSourcedata1").append(str);
+                    $("#pollutionSourcedata1 tr").click(function(){
+                        var jd=$($(this).find("input")[0]).val();
+                        var wd=$($(this).find("input")[1]).val();
+                        mapToCenter(jd,wd);
+                    });
+                    showLayers(data,layer,img);
+                }
+            }
+        })
+    }
+  function initPollutionSource2(url,id){
+      $.ajax({
+          type:'post',
+          url:url,
+          dataType:'JSON',
+          success:function(data){
+              if(data){
+//                  console.log(data);
+                  var xdata=new Array();
+                  var ydata=new Array();
+
+                  for(var i=0;i<data.length;i++){
+                      xdata.push()
+                  }
+
+                  initPollutionEnvirChart(xdata,ydata,id);
+//                  showLayers(data,id);
+              }
+          }
+      })
+  }
+    function initPollutionEnvirChart(xdata,ydata,id){
+        var myechart = echarts.init(document.getElementById(id));
+
+        option = {
+//            title : {
+//                text: '各区污水设计规模和实际处理量'
+//            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:[
+                  name
+                ],
+                x:'right'
+            },
+            calculable : true,
+            grid: {y: 70, y2:40, x2:20},
+            xAxis : [
+                {
+                    type : 'category',
+                    data : xdata
+                },
+                {
+                    type : 'category',
+                    axisLine: {show:false},
+                    axisTick: {show:false},
+                    axisLabel: {show:false},
+                    splitArea: {show:false},
+                    splitLine: {show:false},
+                    data : xdata
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel:{formatter:'{value}'}
+                }
+            ],
+            series : [
+                {
+                    name:name,
+                    type:'line',
+                    itemStyle: {normal: {color:'rgba(252,206,16,1)', label:{show:true}}},
+                    data:ydata
+                }
+            ]
+        };
+        myechart.setOption(option);
+    }
+</script>
+</body>
+</html>

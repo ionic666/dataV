@@ -1,0 +1,17 @@
+package com.cetc28.PeopleBenefitService.service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jianglulu on 2017/11/18.
+ */
+public interface IJxEcoKeycomsjService {
+    /**
+     * 查询嘉兴市重点企业基本数据
+     * @return
+     */
+    Map queryKeycomData();
+    Map queryComByCondition(String id,String bhValue);
+    List serchKeycom(String name);
+}

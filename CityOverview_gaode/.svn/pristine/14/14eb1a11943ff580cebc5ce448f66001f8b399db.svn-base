@@ -1,0 +1,148 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/4
+  Time: 13:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.cshjwtczl{
+            width: 100%;
+            height: 100%;
+        }
+        p.headerTitle{
+            width: 250px;
+        }
+        div#cshjwtczl{
+            height: 85%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="cshjwtczl">
+    <p class="headerTitle">
+        环境问题处置率
+        <%--<img src="../../images/environment/deal.png" alt=""/>--%>
+    </p>
+    <%--城市环境问题处置率柱状图--%>
+    <div id="cshjwtczl"></div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    var myChart = echarts.init(document.getElementById("cshjwtczl"));
+    function cshjwtczl(xAxisData,informCount,dealCount) {
+        var option = {
+            color: ['#1296DB', '#E3CD55'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['环境事件举报数', '环境事件处置数'],
+                x: 'right',
+                y: 'top',
+                textStyle: text_style
+            },
+            grid: {
+                x: '5%',
+                y: '12%',
+                x2: '5%',
+                y2: '15%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: {
+                type: 'category',
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: false},
+                axisLabel: {show: true, textStyle: text_style, interval: 0},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                axisLabel: {show: false}
+            },
+            series: [
+                {
+                    name: '环境事件举报数',
+                    type: 'bar',
+                    barWidth: 25,
+                    barGap: '0',
+                    stack: '总数',
+                    barCategoryGap: '37%',
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                formatter: '{c}',
+                                position: 'inside',
+                                textStyle: {
+                                    color: '#fff'
+                                }
+                            }
+                        }
+                    },
+                    data: informCount
+                },
+                {
+                    name: '环境事件处置数',
+                    type: 'bar',
+                    barWidth: 25,
+                    barCategoryGap: '36%',
+                    stack: '总数',
+                    barGap: '0',
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                formatter: '{c}',
+                                position: 'inside',
+                                textStyle: {
+                                    color: '#fff'
+                                }
+                            }
+                        }
+                    },
+                    data: dealCount
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    $.ajax({
+        type:"POST",
+        url:'../../jxenvir/CityProblem.do',
+        dataType:'json',
+        success:function(data){
+            var len=data.length;
+            var xAxisData=[];
+            var informCount=[];
+            var dealCount=[];
+            for(var i=0;i<len;i++){
+                xAxisData.push(data[i].year+"年");
+                informCount.push(data[i].city_PROBLEM_JB_NM);
+                dealCount.push(data[i].city_PROBLEM_CZ_NM);
+            }
+            cshjwtczl(xAxisData,informCount,dealCount);
+        }
+    });
+</script>
+</body>
+</html>

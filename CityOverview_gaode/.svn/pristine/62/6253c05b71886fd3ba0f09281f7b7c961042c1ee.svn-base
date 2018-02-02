@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cetc28.idata.dao.IJxModuleDao">
+    <select id="queryModuleInfo" parameterType="Integer" resultType="com.cetc28.idata.model.Module">
+          SELECT  * from JX_MANAGE_MODULE
+    </select>
+
+    <select id="queryModuleName" resultType="String">
+        SELECT modulename FROM JX_MANAGE_MODULE
+    </select>
+</mapper>

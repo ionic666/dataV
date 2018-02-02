@@ -1,0 +1,156 @@
+package com.cetc28.PeopleBenefitService.controller;
+
+import com.cetc28.PeopleBenefitService.dto.JxEcoManufactureCpDto;
+import com.cetc28.PeopleBenefitService.model.JxEcoOpenDevelopment;
+import com.cetc28.PeopleBenefitService.service.JxEcoManufactureCompreService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.*;
+
+/**
+ * Created by jianglulu on 2017/9/21.
+ */
+@Controller
+@RequestMapping("/jxecomanufacture")
+public class JxEcoManufactureController {
+
+    @Autowired
+    private JxEcoManufactureCompreService jxEcoManufactureCompreService;
+
+    /**
+     * 查询综合实力
+     * @param year
+     * @param fromMonth
+     * @param toMonth
+     * @return
+     */
+    @RequestMapping("/queryManufacture.do")
+    @ResponseBody
+    public JxEcoManufactureCpDto queryManufacture(Integer year, Integer fromMonth, Integer toMonth){
+        Map<String ,Integer> map=new HashMap<String, Integer>();
+        map.put("year" ,year);
+        map.put("fromMonth",fromMonth);
+        map.put("toMonth",toMonth);
+        return jxEcoManufactureCompreService.queryManufacture(map);
+    }
+
+
+    /************added by linyu*****/
+    /**
+     * 查询千亿产业的产值及同比增长率
+     * @param year 年份
+     * @param month 终止月份
+     * @return
+     */
+    @RequestMapping("/queryBillionIndustry.do")
+    @ResponseBody
+    public Map queryBillionIndustry(Integer year, Integer month){
+        return jxEcoManufactureCompreService.queryBillionIndustry(year, month);
+    }
+
+    /**
+     * 查询制造业创新信息
+     * @param year
+     * @param month
+     * @return
+     */
+    @RequestMapping("/queryInnovationInfo.do")
+    @ResponseBody
+    public Map queryInnovationInfo(Integer year, Integer month){
+        return jxEcoManufactureCompreService.queryInnovationInfo(year, month);
+    }
+
+    /**
+     * 查询制作业能源消耗信息
+     * @param year
+     * @param month
+     * @return
+     */
+    @RequestMapping("/queryEnergyConsumption.do")
+    @ResponseBody
+    public Map queryEnergyConsumption(Integer year, Integer month){
+        return jxEcoManufactureCompreService.queryEnergyConsumption(year, month);
+    }
+
+
+    /**
+     * 查询本年的开放发展情况
+     * @return
+     */
+    @RequestMapping("/queryCuYearOpenDev.do")
+    @ResponseBody
+    public JxEcoOpenDevelopment queryCuYearOpenDev(){
+        String year=String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        return jxEcoManufactureCompreService.queryCuYearOpenDev(year);
+    }
+
+    @RequestMapping("/queryBrandBuild.do")
+    @ResponseBody
+    public Map queryBrandBuild(Integer fromYear, Integer toYear){
+        return jxEcoManufactureCompreService.queryBrandBuild(fromYear,toYear);
+    }
+
+    @RequestMapping("/queryYeas.do")
+    @ResponseBody
+    public List queryYeas(){
+        return jxEcoManufactureCompreService.queryMaxYear();
+    }
+
+    @RequestMapping("/queryMaxMonth.do")
+    @ResponseBody
+    public List queryMaxMonth(Integer year){
+        return jxEcoManufactureCompreService.queryMonth(year);
+    }
+
+    @RequestMapping("/queryJxEcoManS.do")
+    @ResponseBody
+    public Map queryJxEcoManS(Integer year, Integer month){
+        Map<String,Integer> map=new HashMap<String, Integer>();
+        map.put("year",year);
+        map.put("month",month);
+        return jxEcoManufactureCompreService.queryJxEcoManS(map);
+    }
+
+
+    /**
+     * djh1
+     * 查询该制造业在嘉兴市各个区的规模地位，以及位置（经纬度）
+     * @param
+     * @return
+     */
+    @RequestMapping("/queryEcoManuInfo.do")
+    @ResponseBody
+    public List queryEcoSubIndex(){
+        List list = new ArrayList();
+        list = jxEcoManufactureCompreService.queryEcoManuInfo();
+        return list;
+    }
+    /**
+     * djh2
+     * 获取嘉兴市行政区划信息
+     * @param sjbh 市编号
+     * @return
+     */
+    @RequestMapping("/queryListJxXzqh.do")
+    @ResponseBody
+    public List queryListJxXzqh(String sjbh){
+        List list = new ArrayList();
+        list = jxEcoManufactureCompreService.queryListJxXzqh(sjbh);
+        return list;
+    }
+
+    /**
+     * 根据年份获取境内外上市公司数量和企业数
+     * @param year
+     * @return
+     */
+    @RequestMapping("/getConditionConpany.do")
+    @ResponseBody
+    public List getConditionConpany(String year){
+       /* System.out.println(year);*/
+        return jxEcoManufactureCompreService.getConditionConpany(year);
+    }
+}

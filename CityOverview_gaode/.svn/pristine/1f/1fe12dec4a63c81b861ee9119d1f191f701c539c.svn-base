@@ -1,0 +1,169 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/5
+  Time: 14:21
+  To change this template use File | Settings | File Templates.
+  后台系统管理
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="../map/css/bootstrap.css"/>
+	<link rel="stylesheet" href="../myCss/manager.css"/>
+</head>
+<body>
+<%--头部--%>
+    <header>
+	    <img src="../images/manager/setting.png" alt=""/>
+	    <span class="setting">系统设置</span>
+		<a href="../main.jsp" id="GoBack">返回</a>
+    </header>
+<%--主体部分--%>
+    <div id="main">
+		<%--左侧导航--%>
+	    <div id="left">
+		    <%--导航--%>
+	        <div id="mainNav">
+		        <ul id="managerNav">
+			        <li class="active" onclick="zbzsFrame()">
+				        <img src="../images/manager/zbzs.png" alt=""/>
+				        <span>指标展示管理</span>
+			        </li>
+                    <shiro:hasPermission name="zbgl">
+			        <li onclick="zbsjFrame()">
+				        <img src="../images/manager/zbsj.png" alt=""/>
+				        <span>指标数据管理</span>
+			        </li>
+                    </shiro:hasPermission>
+                    <shiro:hasPermission name="yhgl">
+			        <li onclick="yhFrame()">
+				        <img src="../images/manager/yhqx.png" alt=""/>
+				        <span>用户管理</span>
+			        </li>
+                    </shiro:hasPermission>
+                    <shiro:hasPermission name="jsgl">
+                        <li onclick="jsFrame()">
+                            <img src="../images/manager/jsgl.png" alt=""/>
+                            <span>角色管理</span>
+                        </li>
+                    </shiro:hasPermission>
+                    <shiro:hasPermission name="mkgl">
+                        <li onclick="mkFrame()">
+                            <img src="../images/manager/yhqx.png" alt=""/>
+                            <span>模块管理</span>
+                        </li>
+                    </shiro:hasPermission>
+                    <shiro:hasPermission name="dlrz">
+                    <li onclick="dlrzFrame()">
+                        <img src="../images/manager/rz.png" alt=""/>
+                        <span>用户登录日志</span>
+                    </li>
+                    </shiro:hasPermission>
+                    <shiro:hasPermission name="czrz">
+			        <li onclick="czrzFrame()">
+				        <img src="../images/manager/czrz.png" alt=""/>
+				        <span>用户操作日志</span>
+			        </li>
+                    </shiro:hasPermission>
+                   <%-- <shiro:hasPermission name="jbgl">
+                        <li onclick="jbglFrame()">
+                            <img src="../images/manager/jbgl.png" alt=""/>
+                            <span>简报管理</span>
+                        </li>
+                    </shiro:hasPermission>--%>
+		        </ul>
+	        </div>
+	    </div>
+<%--右侧内容切换--%>
+	    <div id="right">
+		    <iframe id="content" frameborder="0"></iframe>
+	    </div>
+    </div>
+    <script src="../map/js/jquery-2.2.1.js"></script>
+    <script src="../map/js/bootstrap.js"></script>
+<script>
+
+	/**
+	 * 导航链接配置
+	 *
+	 */
+    $(function () {
+        $("#content").attr("src","zbzs.jsp");
+    })
+	/**
+	 * 指标展示管理
+	 *
+	 */
+    function zbzsFrame(flag) {
+        $("#content").attr("src","zbzs.jsp");
+    }
+	/**
+	 * 指标数据管理模块
+	 *
+	 */
+    function zbsjFrame() {
+        $("#content").attr("src","zbsj.jsp");
+    }
+	/**
+	 *用户管理模块
+	 *
+	 */
+    function yhFrame() {
+        $("#content").attr("src","yhqx.jsp");
+    }
+
+	/**
+	 * 角色管理模块
+	 *
+	 */
+    function jsFrame() {
+        $("#content").attr("src","jsqx.jsp");
+    }
+
+	/**
+	 * 模块管理
+	 *
+	 */
+    function mkFrame() {
+        $("#content").attr("src","mkqx.jsp");
+    }
+
+	/**
+	 * 用户登录日志模块
+	 *
+	 */
+    function dlrzFrame(){
+        $("#content").attr("src","dlrz.jsp");
+    }
+
+	/**
+	 * 用户操作日志模块
+	 *
+	 */
+    function czrzFrame() {
+        $("#content").attr("src","czrz.jsp");
+    }
+
+	/**
+	 *  简报管理模块
+	 *
+	 */
+    function jbglFrame(){
+        $("#content").attr("src","jbgl.jsp");
+    }
+
+	/**
+	 * 点击左侧按钮显示高亮状态
+	 *
+	 */
+    $("#managerNav").delegate('li','click',function(){
+        $(this).siblings().removeClass("active");
+        $(this).addClass("active");
+    })
+</script>
+
+</body>
+</html>

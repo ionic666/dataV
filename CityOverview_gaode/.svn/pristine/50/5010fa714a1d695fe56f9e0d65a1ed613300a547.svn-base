@@ -1,0 +1,64 @@
+//function showLayers(data,layer,img){
+//    var pointSymobol=new Array(data.length);
+//    var pointGraphic=new Array(data.length);
+//    //var textGpraphic =new Array(3);
+//    var imageSoure =img;
+//	for(var j=0;j<data.length;j++){
+//        pointSymobol[j]=new esri.symbol.PictureMarkerSymbol(imageSoure,32,32);
+//        var planePoint =new esri.geometry.Point(data[j].jd,data[j].wd,map.spatialReference);
+//        pointGraphic[j]=new esri.Graphic(planePoint,pointSymobol[j]);
+//        pointGraphic[j].attributes=data[j];
+//        console.log("777777777777777")
+//        console.log(data[j])
+//        layer.add(pointGraphic[j]);
+//        layer.refresh();
+//	}
+//}
+
+function showTuxingLayers(data,layer){
+    var pointSymobol=new Array(data.length);
+    var pointGraphic=new Array(data.length);
+    var textGpraphic =new Array(data.length);
+    var color ;
+    for(var j=0;j<data.length;j++){
+        if(data[j].zldj=="优"){
+            pointSymobol[j]=new esri.symbol.SimpleMarkerSymbol("STYLE_CIRCLE", 20, new esri.symbol. SimpleFillSymbol().STYLE_NULL, new dojo.Color("#32f43e"));
+        }
+        if(data[j].zldj=="良"){
+            pointSymobol[j]=new esri.symbol.SimpleMarkerSymbol("STYLE_CIRCLE", 20, new esri.symbol. SimpleFillSymbol().STYLE_NULL, new dojo.Color("#e4f33e"));
+        }
+        if(data[j].zldj=="轻度污染"){
+            pointSymobol[j]=new esri.symbol.SimpleMarkerSymbol("STYLE_CIRCLE", 20, new esri.symbol. SimpleFillSymbol().STYLE_NULL, new dojo.Color("#e4993c"));
+        }
+        if(data[j].zldj=="中度污染"){
+            pointSymobol[j]=new esri.symbol.SimpleMarkerSymbol("STYLE_CIRCLE", 20, new esri.symbol. SimpleFillSymbol().STYLE_NULL, new dojo.Color("#f60003"));
+        }
+        if(data[j].zldj=="重度污染"){
+            pointSymobol[j]=new esri.symbol.SimpleMarkerSymbol("STYLE_CIRCLE", 20, new esri.symbol. SimpleFillSymbol().STYLE_NULL, new dojo.Color("#9f034c"));
+        }
+        if(data[j].zldj=="严重污染"){
+            pointSymobol[j]=new esri.symbol.SimpleMarkerSymbol("STYLE_CIRCLE", 20, new esri.symbol. SimpleFillSymbol().STYLE_NULL, new dojo.Color("#800025"));
+        }
+        var planePoint =new esri.geometry.Point(data[j].jd,data[j].wd,map.spatialReference);
+        pointGraphic[j]=new esri.Graphic(planePoint,pointSymobol[j]);
+        pointGraphic[j].attributes=data[j];
+        var textSymbol=new esri.symbol.TextSymbol(data[j].mc);
+        textSymbol.xoffset=0;
+        textSymbol.yoffset=10;
+        textSymbol.setColor(new esri.Color([0,0,0]));
+        textGpraphic[j]=new esri.Graphic(planePoint,textSymbol);
+        textGpraphic[j].setGeometry(planePoint);
+        layer.add(pointGraphic[j]);
+        layer.add(textGpraphic[j]) ;
+        layer.refresh();
+    }
+}
+
+function mapToCenter(x,y){
+    map.centerAt(new esri.geometry.Point(x,y,map.spatialReference));
+}
+
+
+
+
+

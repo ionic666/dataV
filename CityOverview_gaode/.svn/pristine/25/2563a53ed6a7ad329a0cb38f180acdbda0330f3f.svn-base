@@ -1,0 +1,74 @@
+package com.cetc28.idata.service.impl;
+
+import com.cetc28.idata.dao.IJxReportDao;
+import com.cetc28.idata.dto.ReportDto;
+import com.cetc28.idata.model.PageResult;
+import com.cetc28.idata.model.User;
+import com.cetc28.idata.service.IJxReportService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/11/9.
+ */
+@Service
+public class IJxReportServiceImpl implements IJxReportService {
+    @Autowired
+    private IJxReportDao iJxReportDao;
+
+   /* @Override
+    public PageResult queryReportList(Integer pageNumber, Integer pageSize, String startTime, String endTime) {
+        PageHelper.startPage(pageNumber,pageSize);
+        List<ReportDto> list = iJxReportDao.queryReportList(startTime, endTime);
+        PageInfo<ReportDto> pageInfo = new PageInfo<ReportDto>(list);
+        PageResult result = new PageResult();
+        result.setRows(list);
+        result.setTotal(pageInfo.getTotal());
+        return result;
+    }*/
+
+    @Override
+    public PageResult queryReportList(Integer pageNumber, Integer pageSize, String startTime, String endTime, String rModule) {
+        PageHelper.startPage(pageNumber,pageSize);
+        List<ReportDto> list = iJxReportDao.queryReportList(startTime, endTime,rModule);
+        PageInfo<ReportDto> pageInfo = new PageInfo<ReportDto>(list);
+        PageResult result = new PageResult();
+        result.setRows(list);
+        result.setTotal(pageInfo.getTotal());
+        return result;
+    }
+
+    @Override
+    public void addReport(ReportDto reportDto) {
+        iJxReportDao.addReport(reportDto);
+    }
+
+    @Override
+    public boolean checkTitle(String title) {
+        if(iJxReportDao.checkTitle(title)>0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public ReportDto queryReportByid(Integer rid) {
+        return iJxReportDao.queryReportByid(rid);
+    }
+
+    @Override
+    public void updateReportTime(ReportDto reportDto) {
+        iJxReportDao.updateReportTime(reportDto);
+    }
+
+    @Override
+    public List queryRmodule() {
+        return iJxReportDao.queryRmodule();
+    }
+
+
+}

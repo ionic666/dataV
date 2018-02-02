@@ -1,0 +1,64 @@
+package com.cetc28.idata.dto;
+
+import java.util.Date;
+
+/**
+ * Created by Fang on 2017/8/25.
+ * 人口流入流出
+ */
+public class RkqrqcDto {
+    private  String name;    //姓名
+    private  String cardid; //身份证号码
+    private String yzd;     //原住地
+    private  String qrd;    //迁入地
+    private Date qrsj;      //迁入时间
+    private  Integer num;  //总人数
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCardid() {
+        return cardid;
+    }
+
+    public void setCardid(String cardid) {
+        this.cardid = cardid;
+    }
+
+    public String getYzd() {
+        return yzd;
+    }
+
+    public void setYzd(String yzd) {
+        this.yzd = yzd;
+    }
+
+    public String getQrd() {
+        return qrd;
+    }
+
+    public void setQrd(String qrd) {
+        this.qrd = qrd;
+    }
+
+    public Date getQrsj() {
+        return qrsj;
+    }
+
+    public void setQrsj(Date qrsj) {
+        this.qrsj = qrsj;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+}

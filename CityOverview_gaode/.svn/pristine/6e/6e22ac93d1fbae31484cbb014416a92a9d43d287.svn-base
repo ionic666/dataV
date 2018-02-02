@@ -1,0 +1,83 @@
+package com.cetc28.idata.controller;
+
+import com.cetc28.idata.model.JxMapService;
+import com.cetc28.idata.service.IJxMapService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * *************************************************************
+ * Copyright(C):中国电子科技集团公司第二十八研究所十三部
+ * 项目名称：CityOverview
+ * 设计人员：linyu
+ * 创建日期：2017/9/24 16:36
+ * 描述信息：地图图层管理接口
+ * ***************************************************************
+ */
+@Controller
+@RequestMapping("/jxmap")
+public class JxMapController {
+
+    @Autowired
+    private IJxMapService jxMapService;
+
+
+    /**
+     * 查询基础图层信息
+     * @return
+     */
+    @RequestMapping("queryBaseMapService.do")
+    @ResponseBody
+    List queryBaseMapService(Integer maptype){
+        List list = new ArrayList();
+        list = jxMapService.queryBaseMapService(maptype);
+        return list;
+    }
+
+    /**
+     * 根据监测指标标号获取业务图层服务信息
+     * @return
+     */
+    @RequestMapping("queryMapServiceByIndicator.do")
+    @ResponseBody
+    List queryMapServiceByIndicator(Integer maptype){
+        List list = new ArrayList();
+        list = jxMapService.queryMapServiceByIndicator(maptype);
+        return list;
+    }
+
+    /**
+     * 根据图层id号获取图层服务信息
+     * @param mapId 图层ID号
+     * @return
+     */
+    @RequestMapping("getMapInfoById.do")
+    @ResponseBody
+    JxMapService getMapInfoById(String mapId){
+        JxMapService result = new JxMapService();
+        result = jxMapService.getMapInfoById(mapId);
+        return result;
+    }
+
+    /**
+     * 更新地图图层信息
+     * @param mapServiceInfo 地图服务信息
+     * @return
+     */
+    @RequestMapping("updateMapInfoService.do")
+    @ResponseBody
+    public String updateMapInfoService(String mapServiceInfo){
+        JSONObject object = JSONObject.fromObject(mapServiceInfo);
+        JxMapService mapService = (JxMapService)JSONObject.toBean(object, JxMapService.class);
+        String result = jxMapService.updateMapInfoService(mapService);
+        return result;
+    }
+}

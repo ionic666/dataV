@@ -1,0 +1,96 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.dto.JxeduTerSchDto;
+import com.cetc28.idata.dto.SchoolResourceDto;
+import com.cetc28.idata.model.JxEduMediaEdu;
+import com.cetc28.idata.model.JxSchoolInfo;
+import com.cetc28.idata.model.JxSchoolInfoExample;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import org.w3c.dom.ls.LSException;
+
+public interface IJxEduDao {
+    int deleteByExample(JxSchoolInfoExample example);
+
+    int deleteByPrimaryKey(String schoolCode);
+
+    int insert(JxSchoolInfo record);
+
+    int insertSelective(JxSchoolInfo record);
+
+    List<JxSchoolInfo> selectByExample(JxSchoolInfoExample example);
+
+    JxSchoolInfo selectByPrimaryKey(String schoolCode);
+
+    int updateByExampleSelective(@Param("record") JxSchoolInfo record, @Param("example") JxSchoolInfoExample example);
+
+    int updateByExample(@Param("record") JxSchoolInfo record, @Param("example") JxSchoolInfoExample example);
+
+    int updateByPrimaryKeySelective(JxSchoolInfo record);
+
+    int updateByPrimaryKey(JxSchoolInfo record);
+
+    /**
+     * 获取学校类型列表
+     * @param qhbh 区划编号
+     * @return
+     */
+    List listSchooType(String qhbh);
+
+    /**
+     *获取小学超载、空载表的最新记录年份
+     * @return
+     */
+     String queryMaxYear();
+
+    /**
+     * 查询超载、空载学校信息
+      * @param qhbh 区划编号
+     * @param year 年份
+     * @param flag 超载--0， 空载--1
+     * @return
+     */
+    List<SchoolResourceDto> listOverloadSchoolInfo(@Param("qhbh")String qhbh, @Param("year")String year, @Param("flag") int flag);
+
+    /**
+     * 获取多媒体教室普及率
+     * @param count 年份数
+     * @return
+     */
+    public List<JxEduMediaEdu> selectJxEduMediaRoom(Integer count);
+
+    /**
+     * 获取多媒体教室普及率
+     * @param count 年份数
+     * @return
+     */
+    public List<JxEduMediaEdu> selectJxEduNetworkLearn(Integer count);
+
+    public List<JxEduMediaEdu> selectJxEduWireless();
+
+    /**
+     * 获取数据统计学校类型
+     * @return
+     */
+    public List listSchoolType();
+
+    /**
+     * 获取指定类型学校的统计数据
+     * @param type 学校类型
+     * @param count 统计年份数
+     * @return
+     */
+    public List<JxEduMediaEdu> listSchoolStatisticInfo(String type, Integer count);
+
+    /**
+     * 查询城市基础教育信息
+     * @return
+     */
+    public Map queryBasicEduInfo();
+    public JxeduTerSchDto queryJunTSInfo();
+    public JxeduTerSchDto queryPriTSInfo();
+    public JxeduTerSchDto querySenTSInfo();
+}

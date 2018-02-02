@@ -1,0 +1,63 @@
+package com.cetc28.PeopleBenefitService.controller;
+
+import com.cetc28.PeopleBenefitService.service.IJxEcoCoreInformationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+
+/**
+ * Created by jianglulu on 2017/9/30.
+ */
+@Controller
+@RequestMapping("/jxecocore")
+public class JxEcoCoreInformationController {
+
+    @Autowired
+    private IJxEcoCoreInformationService jxEcoCoreInformationService;
+
+    /**
+     * 查询一级指标
+     * @return
+     */
+    @RequestMapping("/queryFirstIndex.do")
+    @ResponseBody
+    public List queryFirstIndex(){
+        return jxEcoCoreInformationService.queryFirstIndex();
+    }
+
+    /**
+     * 查询二级指标
+     * @return
+     */
+    @RequestMapping("/querySecondIndex.do")
+    @ResponseBody
+    public List querySecondIndex(){
+        return jxEcoCoreInformationService.querySecondIndex();
+    }
+
+
+    /**
+     * 查询信息经济核心产业数据
+     * @param year
+     * @return
+     */
+    @RequestMapping("/queryCoreData.do")
+    @ResponseBody
+    public List queryCoreData(String year){
+        return jxEcoCoreInformationService.queryCoreData(year);
+    }
+
+    /**
+     * 查询最近几年信息经济核心产业工业总产值累计和增速
+     * @return
+     */
+    @RequestMapping("/queryCoreTotalValue.do")
+    @ResponseBody
+    public List queryCoreTotalValue(){
+        return jxEcoCoreInformationService.queryCoreTotalValue();
+    }
+
+}

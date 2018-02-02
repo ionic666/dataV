@@ -1,0 +1,1303 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: zhoujun
+  Date: 2017/9/21
+  Time: 10:27
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.cetc28.util.Web_srcUtil" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title>市民卡持卡人群</title>
+	<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/tundra/tundra.css">
+	<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/esri/css/esri.css" />
+	<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dojox/layout/resources/ExpandoPane.css" />
+	<link rel="stylesheet" type="text/css" href="../../map/arcgis_js/dijit/themes/soria/soria.css" />
+
+	<style>
+		html,body{
+			width:100%;
+			height:99.5%;
+			margin:0;
+			padding:0;
+			box-sizing: border-box;
+		}
+		body{
+			background-color: rgba(0,0,0,9);
+		}
+		ul{
+			list-style: none;
+		}
+		ul,li,p{
+			margin: 0;
+		}
+		.header{
+			height:9%;
+		}
+		.content{
+			width:100%;
+			height:89%;
+			/*margin-top:1%;*/
+		}
+		#bigLogo{
+			position: absolute;
+		}
+		#bigLogo #cetc{
+			float: left;
+			width: 190px;
+		}
+		#bigLogo #logo{
+			float: left;
+			/*width: 250px;*/
+			width: 100%;
+		}
+
+		#bigLogo{
+			/*width:510px;*/
+			position: absolute;
+			left:0px;
+			top:0px;
+			/*height:20px;*/
+			width: 22%;
+			height:9%;
+			border-left: 0.3em solid #0CDAF5;
+			padding-left: 0.4em;
+			margin-left: 1em;
+			z-index:66;
+		}
+		div#right{
+			float: left;
+			/*width: 250px;*/
+			width: 100%;
+			height: 100%;
+			padding-top: 10px;
+			padding-left: 10px;
+		}
+		.timer{
+			position: absolute;
+			height: 30px;
+			line-height: 30px;
+			/*width: 250px;*/
+			width: 100%;
+			background-color: #0CDAF5;
+			color: #02282D;
+			margin-top: 1em;
+			padding-left: 10px;
+			top: 35px;
+			z-index: 77;
+			font-size: 1.2em;
+		}
+		.contentRbox{
+			display: inline-block;
+			height:100%;
+			width:28%
+		}
+		.contentMbox{
+			float: left;
+			height:100%;
+			width:42%;
+			margin:0% 1%;
+		}
+		.contentLbox{
+			float: left;
+			height:100%;
+			width:28%
+		}
+
+		.content .contentBox{
+			/*background: rgba(0,0,0,0.2);*/
+			/*background-color: #062E5F;*/
+		}
+
+		.content .contentBox_sm{
+			margin-top:1%;
+			width:100%;
+			height:30%;
+		}
+		.content .contentBox_m{
+			margin-top:1%;
+			width:100%;
+			height:49%;
+		}
+		.content .contentBox_bg{
+			margin-top:1%;
+			width:100%;
+			height:68%;
+		}
+		.littleIcon{
+			width: 24px;
+			height: 24px;
+			margin-right: 10px;
+			float: left;
+		}
+
+		#map_zoom_slider{
+			display: none;
+		}
+		.modal-backdrop.in{
+			display:none ;
+		}
+		.esriPopupWrapper{
+			border-radius: 0;
+			border:2px solid #4C96C5;
+			background-color: #244C66;
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		.esriPopup .titlePane{
+			background-color: #245273;
+			padding-left: 10px;
+			border-radius: 0;
+		}
+		.esriPopup .title{
+			color: #3EA7F8;
+			font-size: 14px;
+		}
+		.esriPopup .contentPane{
+			background-color: #244C66;
+			margin: 0;
+			padding: 10px 5px 0 10px;
+		}
+		.esriPopup .actionsPane{
+			padding: 0;
+		}
+
+		.mapDetails{
+			color: #fff;
+			background-color: #244C66;
+		}
+		.mapDetails p{
+			margin: 0;
+			padding: 0;
+			padding-bottom: 5px;
+			border-bottom: 1px dotted #3A79A5;
+			font-size: 14px;
+		}
+		.mapDetails p:last-child{
+			border-bottom: 0;
+		}
+		.mapDetails p span{
+			color: red;
+			margin-left: 5px;
+		}
+		.esriPopup .titleButton.maximize{
+			display: none;
+		}
+		.esriPopup .outerPointer.left{
+			background-color: #244C66;
+			border:2px solid #4C96C5;
+			left: 9px;
+		}
+
+		/*市民卡*/
+		.progress {
+			height: 10px;
+			margin-top: 6px;
+			margin-bottom: 20px;
+			overflow: hidden;
+			background-color: #0A4A76;
+			border-radius: 4px;
+			-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+			box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+		}
+		.progress-bar{
+			height: 10px;
+			background: #CC9949;
+		}
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0,0,0,0);
+			border: 0;
+		}
+		.main-left-top-a{
+			width: 95%;
+			height: 20%;
+		}
+		.main-left-top-b{
+			width: 55%;
+			height: 20%;
+			margin-left: 14%;
+		}
+		.main-left-top-a{
+			padding-top: 6%;
+		}
+		.main-left-top-a span{
+			color: #42DEFF;
+			font-size: 28px;
+			font-weight: bold;
+		}
+		.main-left-top-b{
+			/*padding-top: 3%;*/
+		}
+		.main-left-top-c{
+			width: 90%;
+			height: 40%;
+		}
+		.main-left-top-a p,.main-left-top-b p{
+			color: #fff;
+			/*font-size: 16px;*/
+			line-height: 26px;
+			vertical-align: middle;
+			text-align: left;
+		}
+		.main-left-top-a>ul>li{
+			float: left;
+			color: #fff;
+			font-size: 14px;
+			width: 40%;
+		}
+		.main-left-top-b span{
+			font-size:20px;
+			margin-left: 5%;
+		}
+		#bdhj,#wdhj{
+			display: inline-block;
+		}
+		.main-left>div{
+			/*background-color: #062E5F;*/
+		}
+
+		/*人群年龄分布*/
+		.main-left-bottom-a,.main-middle-bottom-a,.main-right-top-a,.main-right-bottom-a{
+			width: 95%;
+			height: 10%;
+			padding-top: 2%;
+			line-height: 26px;
+			color: #fff;
+		}
+		.main-left-bottom-b{
+			width: 90%;
+			height: 10%;
+			margin-left: 5%;
+		}
+		.peopleIcon{
+			/*width: 40px;*/
+			/*height: 40px;*/
+
+		}
+
+		.cb-icon{
+			width:6em;
+			color: #fff;
+			text-align: center;
+			float: left;
+		}
+		.main-left-bottom-b div.tool{
+			width:calc(100% - 12em);
+			width:-moz-calc(100% - 38px);
+			height:100%;
+			float:left;
+		}
+
+
+		.main-left-bottom-b .tool-man{
+			width:60%;
+			height:100%;
+			float:left;
+			background: url(../../images/m-1.png) repeat-x;
+		}
+
+		.main-left-bottom-b div.tool .tool-woman{
+			width:40%;
+			height:100%;
+			float:left;
+			background: url(../../images/m-4.png) repeat-x;
+		}
+		.main-left-bottom-b>.icon{
+			float: left;
+			text-align: center;
+		}
+		.main-left-bottom-b>.icon>p{
+			color: #fff;
+			padding: 2px;
+		}
+		.main-left-bottom-c{
+			height: 80%;
+		}
+
+		/*//五个模块背景图片*/
+		.main-left-top{
+			background-image: url(../../images/cityPeopleCard/border1.png);-moz-background-size: 100% 100%;background-size: 100% 100%;background-repeat: no-repeat;
+		}
+		.main-left-bottom{
+			background-image: url(../../images/cityPeopleCard/border2.png);-moz-background-size: 100% 100%;background-size: 100% 100%;background-repeat: no-repeat;
+		}
+		.main-middle-bottom{
+			background-image: url(../../images/cityPeopleCard/border3.png);-moz-background-size: 100% 100%;background-size: 100% 100%;background-repeat: no-repeat;
+		}
+		.main-right-top,.main-right-bottom{
+			background-image: url(../../images/cityPeopleCard/border4.png);-moz-background-size: 100% 100%;background-size: 100% 100%;background-repeat: no-repeat;
+		}
+		/*高德地图样式表*/
+		.amap-toolbar{
+			display:none;
+		}
+		.info {
+			border: solid 1px #7A9095 !important;
+			border-radius: 5px;
+		}
+		div.info-top {
+			position: relative;
+			background-color:rgba(0,29,36,0.8);
+			border-bottom: 1px solid #7A9095;
+			border-radius: 5px 5px 0 0;
+		}
+		div.info-top div {
+			display: inline-block;
+			color: #333333;
+			font-size: 14px;
+			font-weight: bold;
+			line-height: 31px;
+			padding: 0 10px;
+		}
+		div.info-top img {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			transition-duration: 0.25s;
+		}
+		div.info-top img:hover {
+			box-shadow: 0px 0px 5px #000;
+		}
+		div.info-middle {
+			font-size: 14px;
+			padding: 6px;
+			line-height: 20px;
+			background-color:rgba(0,29,36,0.8) !important;
+		}
+		div.info-bottom {
+			height: 0px;
+			width: 100%;
+			clear: both;
+			text-align: center;
+		}
+		div.info-bottom img {
+			position: relative;
+			z-index: 104;
+		}
+		.info span {
+			margin-left: 5px;
+			font-size: 11px;
+		}
+		.info-middle img {
+			float: left;
+			margin-right: 6px;
+		}
+		.amap-icon img{
+			width:100%;
+			height:100%;
+		}
+		.echartsMap{
+			width: 100px;
+			height: 100px;
+			/*background-color: rgba(255,255,255,0.5);*/
+		}
+		.headerTitle{
+			font-size: 1.2em;
+		}
+	</style>
+	<script>
+		var qhbh='<%=Web_srcUtil.getString("qybh")%>';
+		var cityId='<%=Web_srcUtil.getString("cityId")%>';
+		var mapHost='<%=Web_srcUtil.getString("mapHost")%>';
+		var mapPort='<%=Web_srcUtil.getString("mapPort")%>';
+		var arcgisServiceUrl='<%=Web_srcUtil.getString("arcgisServiceUrl")%>';
+		var jiaxingJtSslkServiceUrl='<%=Web_srcUtil.getString("jiaxingJtSslkServiceUrl")%>';
+		var mapServiceTpye='<%=Web_srcUtil.getString("mapServiceTpye")%>';
+		var xmax=121.11625,xmin=120.4570703125,ymax=30.927933502197263,ymin=30.591820526123044;
+		var hostUrl = mapHost+":"+mapPort+"/CityOverview/map";
+		var url = location.search;
+		if (url.indexOf("?") != -1) {
+			var str = url.substr(1);
+			var strs = new Array();
+			strs = str.split('&');
+//      model = strs[0].slice(strs[0].indexOf("=")+1);
+			mainWin = strs[0].slice(strs[0].indexOf("=")+1);
+			console.log(mainWin)
+		}
+		function returnMainPage(){
+			location.href = "http://"+ mapHost+":" +mapPort+ "/CityOverview/main.jsp?bh="+mainWin;
+		}
+	</script>
+</head>
+<body>
+<%--返回上一页--%>
+<a href="#" onclick="returnMainPage()" style="max-width:3%;position: fixed;left:97%;top: 2%;"><img src="../../images/returnUp.png" alt=""></a>
+
+<div class="header">
+	<div id="bigLogo">
+		<%--<img src="../../images/cetc.png" alt="" id="cetc"/>--%>
+		<div id="right">
+			<img src="../../images/logo.png" alt="" id="logo"/>
+			<div class="timer">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="content main">
+	<div class="contentLbox main-left">
+		<div class="contentBox contentBox_sm main-left-top">
+			<div class="main-left-top-a">
+				<ul>
+					<li><img class="littleIcon" src="../../images/cityPeopleCard/1.png" alt=""/><p class="headerTitle" style="font-size: 1.4em;">市民卡持卡人数</p></li>
+					<li><p><span id="cardHolderSum"></span>万人</p></li>
+				</ul>
+
+			</div>
+			<div class="main-left-top-b">
+				<p>占参保人数:<span id="cardHolderRatio"></span></p>
+				<div class="progress">
+					<div class="progress-bar" id="progressCK">
+					</div>
+
+				</div>
+			</div>
+			<div class="main-left-top-c">
+				<div id="bdhj" style="width: 45%;height: 95%;"></div>
+				<div id="wdhj" style="width: 45%;height: 95%;"></div>
+			</div>
+		</div>
+		<div class="contentBox contentBox_bg main-left-bottom">
+			<div class="main-left-bottom-a">
+				<ul>
+					<li><img class="littleIcon" src="../../images/cityPeopleCard/2.png" alt=""/><p class="headerTitle">人群年龄分布</p></li>
+				</ul>
+
+			</div>
+			<div class="main-left-bottom-b">
+				<div class="cb-icon">
+					<%--<span class="man"></span>--%>
+					<img src="../../images/nan.png" alt="" class="man">
+					<p id="chMaleRatio"></p>
+				</div>
+				<div class="tool">
+					<div class="tool-man"></div>
+					<div class="tool-woman"></div>
+				</div>
+				<div class="cb-icon">
+					<%--<span class="woman"></span>--%>
+					<img src="../../images/nv.png" alt="" class="man">
+					<p id="chFemaleRatio"></p>
+				</div>
+			</div>
+			<div class="main-left-bottom-c">
+				<div id="rqnl" style="width: 95%;height: 95%;"></div>
+			</div>
+		</div>
+
+	</div>
+	<div class="contentMbox main-middle">
+		<div id="map" class="contentBox contentBox_bg main-middle-top">
+
+		</div>
+		<div class="contentBox contentBox_sm main-middle-bottom">
+			<div class="main-middle-bottom-a">
+				<ul>
+					<li><img class="littleIcon" src="../../images/cityPeopleCard/3.png" alt=""/><p class="headerTitle">市民卡持卡人数走势</p></li>
+				</ul>
+
+			</div>
+			<div id="rszs" style="width: 95%;height: 80%;"></div>
+		</div>
+	</div>
+	<div class="contentRbox main-right">
+		<div class="contentBox contentBox_m main-right-top">
+			<div class="main-right-top-a">
+				<ul>
+					<li><img class="littleIcon" src="../../images/cityPeopleCard/4.png" alt=""/><p class="headerTitle">人员学历占比</p></li>
+				</ul>
+			</div>
+			<div id="xlzb" style="width: 95%;height: 80%;"></div>
+		</div>
+		<div class="contentBox contentBox_m main-right-bottom">
+			<div class="main-right-bottom-a">
+				<ul>
+					<li><img class="littleIcon" src="../../images/cityPeopleCard/5.png" alt=""/><p class="headerTitle">人员民族排行</p></li>
+				</ul>
+
+			</div>
+			<div id="mzph2" style="width: 100%;height: 80%;display: inline-block"></div>
+			<%--<div id="mzph1" style="width: 49%;height: 80%;display: inline-block"></div>--%>
+		</div>
+	</div>
+</div>
+
+
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="../../map/js/bootstrap.js"></script>
+<%--<script type="text/javascript" src="../../map/js/jquery.dataTables.js"></script>--%>
+<%--<script type="text/javascript" src="../../map/js/jquery.easyui.min.js"></script>--%>
+<%--<script type="text/javascript" src="../../map/js/jquery-ui.js"></script>--%>
+<script type="text/javascript" src="../../map/js/echarts-all.js"></script>
+<%--<script type="text/javascript" src="../../map/arcgis_js/init.js"></script>--%>
+<script type="text/javascript" src="../../myjs/index.js"></script>
+<script type="text/javascript" src="../../myjs/myEcharts.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.1&key=608d75903d29ad471362f8c58c550daf"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+<%--<script type="text/javascript" src="../../myjs/loadMapService2.js"></script>--%>
+<%--<script type="text/javascript" src="../../map/arcgis_js/dojo/dojo.js" diConfig="parseOnLoad:true" ></script>--%>
+
+
+//创建地图
+<script>
+var map = new AMap.Map('map', {
+	mapStyle: 'amap://styles/dark',//样式URL
+	zoom: 10
+});
+//高德地图---开始
+function specificCorpLeftAjax(){
+	$.ajax({
+		type:"POST",
+		url:'../../jxSocialSecurity/getCardStatisticsTooltipData.do',
+		dataType:'json',
+		data:{"regionCode":qhbh},
+		success: function (data) {
+			AMapUI.loadUI(['overlay/SimpleMarker'], function (SimpleMarker) {
+
+				var len=data.cardStatisticsTooltipDtoList.length;
+
+				for(var i=0;i<len;i++){
+					var myId="echartsMap"+i;
+//					console.log(myId)
+					var jwd = wgs84togcj02(parseFloat(data.cardStatisticsTooltipDtoList[i].longitude),parseFloat(data.cardStatisticsTooltipDtoList[i].latitude));//经纬度纠偏
+					addPoint(jwd,data.cardStatisticsTooltipDtoList[i],myId);//添加自定义元素
+
+//					new SimpleMarker({
+//
+//						//设置节点属性
+//						iconLabel: {
+//							//普通文本
+//							innerHTML: txt+"万",
+//							//设置样式
+//							style: {
+//								color: '#fff',
+//								fontSize: '80%',
+//								marginTop: '40%'
+//							}
+//						},
+//
+//						iconStyle: '../../images/cityPeopleCard-circle.png',
+//						map: map,
+//						position: jwd
+//					});
+				}
+
+
+//				infoWindow(data.cardStatisticsTooltipDtoList[0]);
+//				for(var i=0;i<arr.length;i++){
+//					new SimpleMarker({
+//
+//						//设置节点属性
+//						iconLabel: {
+//							//普通文本
+//							innerHTML: '40.36545万',
+//							//设置样式
+//							style: {
+//								color: '#fff',
+//								fontSize: '80%',
+//								marginTop: '40%'
+//							}
+//						},
+//
+//						iconStyle: '../../images/cityPeopleCard-circle.png',
+//						map: map,
+//						position: arr[i]
+//					});
+//				}
+
+			});
+
+
+		}
+	})
+}
+function closeInfoWindow(){
+	map.clearInfoWindow();//清除信息窗口
+}
+//构建自定义信息窗体
+function createInfoWindow(title, content) {
+	var info = document.createElement("div");
+	info.className = "info";
+
+	//可以通过下面的方式修改自定义窗体的宽高
+	info.style.width = "240px";
+	// 定义顶部标题
+	var top = document.createElement("div");
+	var titleD = document.createElement("div");
+	var closeX = document.createElement("img");
+	top.className = "info-top";
+	titleD.innerHTML = title;
+	closeX.src = "../../images/gaode-close.png";
+	closeX.onclick = closeInfoWindow;
+
+	top.appendChild(titleD);
+	top.appendChild(closeX);
+	info.appendChild(top);
+
+	// 定义中部内容
+	var middle = document.createElement("div");
+	middle.className = "info-middle";
+	middle.style.backgroundColor = 'white';
+	middle.innerHTML = content;
+	info.appendChild(middle);
+
+	// 定义底部内容   //下方的小箭头
+	var bottom = document.createElement("div");
+	bottom.className = "info-bottom";
+	bottom.style.position = 'relative';
+	bottom.style.top = '0px';
+	bottom.style.margin = '0 auto';
+	var sharp = document.createElement("img");
+	sharp.src = "../../images/gaode-sharp.png";
+	bottom.appendChild(sharp);
+	info.appendChild(bottom);
+	return info;
+}
+function infoWindow(details){
+	var title = '<span style="font-size:14px;color:#0CDAF5;">'+details.regionName+'</span>';
+	var content = [];
+	content.push("<p style='color:#fff;'>持卡人员总数："+details.cardHolderSum+"万人</p>");
+	content.push("<p style='color:#fff;'>参保人员总数："+details.insuredSum+"万人</p>");
+	content.push("<p style='color:#fff;'>持卡人员占参保人员比例："+details.insuredPercent+"%</p>");
+	var infoWindow = new AMap.InfoWindow({
+		isCustom: true,  //使用自定义窗体
+		content: createInfoWindow(title, content.join("")),
+		offset: new AMap.Pixel(15, -35)
+	});
+	infoWindow.open(map, wgs84togcj02(parseFloat(details.longitude),parseFloat(details.latitude)));
+	setTimeout(function(){
+		map.setCenter(wgs84togcj02(parseFloat(details.longitude),parseFloat(details.latitude)));
+	},500)
+}
+function echartsMap(id,data1,data2){//info窗口中需要显示的柱形图
+	setTimeout(function(){
+		var myChart = echarts.init(document.getElementById(id));
+		var option = {
+			tooltip: {
+				show: false
+			},
+			color:['#FAFF75','#3176A9'],
+			grid: {
+				x: '10%',
+				y: '25%',
+				x2: '3%',
+				y2: '16%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			xAxis : [
+				{
+					show : false,
+					splitLine: {show: false},
+					type : 'category',
+					data : ["2017"]
+				}
+			],
+			yAxis : [
+				{
+					show : false,
+					splitLine: {show: false},
+					type : 'value'
+				}
+			],
+			series : [
+				{
+					"barWidth":15,
+					"barCategoryGap":"54",
+					"name":"持卡人员总数",
+					"type":"bar",
+					itemStyle: {
+						normal: {
+							label: {
+								show: false,
+//								formatter: '{c}',
+								position: 'top',
+								textStyle: text_style
+							}
+						}
+					},
+					"data":data1
+				},
+				{
+					"barWidth":15,
+					"barCategoryGap":"54",
+					"name":"参保人员总数",
+					"type":"bar",
+
+					"data":data1
+		}
+			]
+		};
+		myChart.setOption(option);
+	},1000)//延时1S执行，否则获取不到id
+}
+
+function addPoint(jwd,details,myId){//jwd =[经度,纬度]；details=详细数据（数组）；myId=echarts--id
+	/**
+	 * 自定义覆盖物dom元素
+	 */
+	var __content=document.createElement("div");//自定义元素
+	__content.className="echartsMap";
+	__content.id=myId;//echarts所需id
+	var data1=[details.cardHolderSum];//持卡人员总数
+	var data2=[details.insuredSum];//参保人员总数
+	var _marker = new AMap.Marker({
+		content: __content,
+		position: jwd,
+		offset: new AMap.Pixel(-50,-70),
+		map: map
+	});
+	map.setCenter(_marker.getPosition());
+	echartsMap(myId,data1,data2);//添加图表
+	AMap.event.addListener(_marker,'click',function(e){
+		infoWindow(details)
+	});
+
+}
+specificCorpLeftAjax();
+
+//  高德地图---结束
+
+
+
+</script>
+
+<%--市民卡--%>
+<script>
+	//图表1
+	function hjbl(nativeInsureRatio,ruralInsureRatio){
+		var myChart1 = echarts.init(document.getElementById("bdhj")),
+				myChart2 = echarts.init(document.getElementById("wdhj"));
+
+		var option1 = {
+			title: {
+				text: '本地户籍',
+				subtext: ''+nativeInsureRatio+'%',
+				x: 'center',
+				y: 'center',
+				itemGap: 5,
+				textStyle : text_style,
+				subtextStyle:text_style
+			},
+			calculable : false,
+			color:['#FAFF75','#3176A9'],
+			series : [
+				{
+					name:'本地户籍',
+					type:'pie',
+					radius : ['70%', '90%'],
+					itemStyle : {
+						normal : {
+							label : {
+								show : false
+							},
+							labelLine : {
+								show : false
+							}
+						},
+						emphasis : {
+							label : {
+								show : true,
+								position : 'center',
+								textStyle : text_style
+							}
+						}
+					},
+					data:[
+						{value:nativeInsureRatio},
+						{value:ruralInsureRatio}
+					]
+				}
+			]
+		};
+		option2= {
+			title: {
+				text: '外地户籍',
+				subtext: ruralInsureRatio+'%',
+				x: 'center',
+				y: 'center',
+				itemGap: 5,
+				textStyle : text_style,
+				subtextStyle:text_style
+			},
+			color:['#FDB140','#3176A9'],
+			calculable : false,
+			series : [
+				{
+					name:'外地户籍',
+					type:'pie',
+					radius : ['70%', '90%'],
+					itemStyle : {
+						normal : {
+							label : {
+								show : false
+							},
+							labelLine : {
+								show : false
+							}
+						},
+						emphasis : {
+							label : {
+								show : true,
+								position : 'center',
+								textStyle : text_style
+							}
+						}
+					},
+					data:[
+						{value:ruralInsureRatio},
+						{value:nativeInsureRatio}
+					]
+				}
+			]
+		};
+		myChart1.setOption(option1);
+		myChart2.setOption(option2);
+	}
+
+
+	<%--人群年龄分布--%>
+
+	//图表2
+	function rqnl(chAgeMaleData,chAgeFemaleData){
+		console.log(chAgeMaleData)
+		console.log(chAgeFemaleData)
+		var myChart_rqnl = echarts.init(document.getElementById("rqnl"));
+		var option_rqnl = {
+			color:['#29B7C9','#0C6AC3'],
+			calculable : false,
+			grid: {
+				y:'5%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			tooltip : {
+				trigger: 'axis',
+				formatter: function (params,ticket,callback) {
+					var res = '人群年龄分布('+params[0].name+')';
+					for (var i = 0, l = params.length; i < l; i++) {
+						if(params[i].value<0){
+							params[i].value = -params[i].value;
+						}
+						res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%';
+					}
+					setTimeout(function (){
+						// 仅为了模拟异步回调
+						callback(ticket, res);
+					}, 100)
+				}
+			},
+			xAxis : [
+				{
+					type : 'value',
+					splitLine: {show: false},
+					axisLine: {show: false},
+					axisTick: {show: false},
+					axisLabel: {
+						show: true,
+						textStyle: text_style,
+						formatter:function (value){
+							if(value<0){
+								return (-value+"%");
+							}else{
+								return (value+'%');
+							}
+						}
+					}
+				}
+			],
+			yAxis : [
+				{
+					type: 'category',
+					splitLine: {show: false},
+					axisLine: {show: false},
+					axisLabel: {show: true, textStyle: text_style},
+					axisTick : {show: false},
+					data : ['0-18岁','18-30岁','30-50岁','50-65岁','65+岁']
+				}
+			],
+			series : [
+
+				{
+					name:'女性',
+					type:'bar',
+					stack: '总量',
+					barWidth : 15,
+					itemStyle: {normal: {
+						label : {show: false
+						}
+					}},
+					data:chAgeFemaleData
+				},
+				{
+					name:'男性',
+					type:'bar',
+					stack: '总量',
+					barWidth : 15,
+//					itemStyle: {normal: {
+//						label : {show: false,
+//								formatter: function(value){
+//									if(value.data<0){
+//										return (-value.data)*100+"%";
+//									}else{
+//										return (value.data)*100+"%";
+//									}
+//								}
+//						}
+//					}},
+					data:chAgeMaleData
+				}
+			]
+		};
+		myChart_rqnl.setOption(option_rqnl);
+	}
+
+
+
+	<%--人员学历占比--%>
+	//图表3
+	function ryxl(edu){
+		var myChart_xlzb = echarts.init(document.getElementById("xlzb"));
+		var option_xlzb = {
+			tooltip : {
+				trigger: 'item',
+				formatter: "{a} <br/>{b} : {c} ({d}%)"
+			},
+			calculable : true,
+			color:['#E8E999','#F5CB6F','#F66F70','#F5AFDE','#4E9AD6','#3761B3','#60DDF9','#79F6CA'],
+			series : [
+				{
+					name:'学历结构（万人）',
+					type:'pie',
+					radius : [30, 110],
+					center : ['50%','45%' ],
+					roseType : 'area',
+					x: '50%',               // for funnel
+					max: 100,                // for funnel
+					sort : 'ascending',     // for funnel
+					itemStyle : {
+						normal : {
+							label : {
+								show : true,
+								textStyle:text_style
+							}
+						}
+					},
+					data:[
+						{value:edu[7], name:'小学'},
+						{value:edu[6], name:'初中'},
+						{value:edu[5], name:'高中'},
+						{value:edu[4], name:'专科'},
+						{value:edu[3], name:'本科'},
+						{value:edu[2], name:'硕士研究生'},
+						{value:edu[1], name:'博士研究生'},
+						{value:edu[0], name:'其它'}
+					]
+				}
+			]
+		};
+		myChart_xlzb.setOption(option_xlzb);
+	}
+
+
+
+	<%--人员民族排行--%>
+
+	function nationalityRank(xArea,yRate,nationality){
+		var myChart_mzph1 = echarts.init(document.getElementById("mzph2"));
+//		var myChart_mzph2 = echarts.init(document.getElementById("mzph1"));
+		var option_mzph1 = {
+			color: ['#2BBECE','#0C6AC3'],
+			tooltip: {
+				trigger: 'axis'
+			},
+			calculable: false,
+			grid: {
+				x: '5%',
+				y: '20%',
+				x2: '5%',
+				y2: '18%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			legend: {
+				data:['其他民族人数排行（万人）'],
+				x:15,
+				textStyle: text_style
+			},
+			xAxis: [
+				{
+					type: 'category',
+					splitLine: {show: false},
+					axisLine: {
+						show: true,
+						lineStyle:{
+							color: '#8D8C8C',
+							width: 1
+						}
+					},
+					axisTick: {show: false},
+					axisLabel: {show: true,interval:0,rotate:40, textStyle: text_style},
+					data: xArea
+				}
+			],
+			yAxis: [
+				{
+					type: 'value',
+					splitLine: {show: false},
+					axisLine: {show: false},
+					axisTick: {show: false},
+					axisLabel: {show: false}
+				}
+			],
+			series: [
+				{
+					name: '其他民族人数排行（万人）',
+					type: 'bar',
+					barWidth: 15,
+					barGap: '0',
+					barCategoryGap:'37%',
+					tooltip : {trigger: 'item'},
+					itemStyle:{
+						normal: {
+							label: {
+								show: true,
+								position: 'top',
+								textStyle: text_style
+							}
+						}
+					},
+					data: yRate
+				},
+				{
+					name:'民族占比（万人）',
+					type:'pie',
+					radius : '30%',
+					tooltip : {
+						trigger: 'item',
+						formatter: '{b} : {c}(万人)<br/>占比：{d}%'
+					},
+					itemStyle:{
+						normal: {
+							label: {
+								show: true,
+                                formatter:'{b}{d}%',
+								position: 'top',
+								textStyle: text_style
+							}
+						}
+					},
+					center: ['75%', '25%'],
+					data:nationality
+				}
+			]
+		};
+
+		myChart_mzph1.setOption(option_mzph1);
+		//	myChart_mzph2.setOption(option_mzph2);
+	}
+	$.ajax({
+		type:"POST",
+		url:'../../jxSocialSecurity/getCardHolderAnalysisData.do',
+		dataType:'json',
+		success:function(data){
+			var cardHolderSum = data.cardHolderSum,//市民卡持卡人总数（万）
+					insuredSum =data.insuredSum, //参保人数（万）
+					cardHolderRatio = ((cardHolderSum/insuredSum)*100).toFixed(2)+"%",
+					nativeInsuredSum = data.nativeInsuredSum,//本地户籍人数（万）
+					nativeInsureRatio = ((nativeInsuredSum/cardHolderSum)*100).toFixed(2),本地户籍占持卡人数比例
+			ruralInsuredSum = data.ruralInsuredSum,//外地户籍人数（万）
+					ruralInsureRatio = ((ruralInsuredSum/cardHolderSum)*100).toFixed(2)	//外地户籍占持卡人数比例
+			chMaleSum = data.chMaleSum, //持卡男性（万）
+					chMaleRatio = ((chMaleSum/cardHolderSum)*100).toFixed(2)+"%", //比例
+					chFemaleSum = data.chFemaleSum, //持卡女性（万)
+					chFemaleRatio = ((chFemaleSum/cardHolderSum)*100).toFixed(2)+"%",
+					chAgeMaleData = data.chAgeMaleData,//持卡人男性年龄分布
+					chAgeFemaleData = data.chAgeFemaleData;//持卡人女性年龄分布
+			var edu = [];//学历分布
+			var nationalityRankName = [],nationalityRankData = [],nationality=[];otherNationality=0;//民族名称和占比数据
+			$("#cardHolderSum").text(cardHolderSum);//市民卡持卡人总数
+			$("#cardHolderRatio").text(cardHolderRatio);//参保人数比例
+			$("#progressCK").css("width",cardHolderRatio);//参保人数比例条形图宽度
+			$("#progressMan").css("width",chMaleRatio);//
+			$("#chMaleRatio").text(chMaleRatio);//持卡男性比例
+			$("#chFemaleRatio").text(chFemaleRatio);//持卡女性比例
+
+			$.each(data.educationData,function(i){
+				edu.push(data.educationData[i]);
+			});
+			$.each(data.nationalityRankNameList,function(i){
+				if(i>0){
+					nationalityRankName.push(data.nationalityRankNameList[i]);
+				}
+
+			});
+			$.each(data.nationalityRankData,function(i){
+				if(i>0){
+					nationalityRankData.push(data.nationalityRankData[i]);
+				}
+
+			});
+			for(var i=0;i<data.educationData.length;i++){
+				if(i>0){
+					otherNationality=otherNationality+nationalityRankData[i];
+
+				}
+//				else{
+//					nationality.push({name:"汉族", value:data.nationalityRankData[0]});
+//				}
+			}
+			nationality.push({name:"其他民族", value:otherNationality});
+			nationality.push({name:"汉族", value:data.nationalityRankData[0]});
+			console.log(otherNationality);
+			hjbl(nativeInsureRatio,ruralInsureRatio);//图表1--市民卡持卡人数
+			ryxl(edu);//图表3--人员学历占比
+			nationalityRank(nationalityRankName,nationalityRankData,nationality);//图表4--人员民族排行
+			//将人群年龄分布男性数据加负号
+			$.each(chAgeMaleData,function(i,n){
+				chAgeMaleData[i]=-chAgeMaleData[i];
+			})
+			rqnl(chAgeMaleData,chAgeFemaleData);//人群年龄分布
+		}
+	});
+</script>
+
+
+<%--<script src="../../myjs/echarts3.4.0.min.js"></script>--%>
+<script>
+
+	function cardHolderSum(xAxisYear,cardHolderSumData){
+		var myChart_rszs = echarts.init(document.getElementById("rszs"));
+		var option_rszs = {
+			color: ['#3784A0'],
+			tooltip : {
+				trigger: 'axis',
+				formatter: "{a} <br/>{b} : {c} 万人"
+			},
+			legend: {
+				data: ['持卡人数'],
+				x: 'right',
+				y: 'top',
+				textStyle: text_style
+			},
+			grid: {
+				x: '15%',
+				y: '15%',
+				x2: '5%',
+				y2: '15%',
+				containLabel: true,
+				borderWidth: 0
+			},
+			calculable : false,
+			xAxis : [
+				{
+					type: 'category',
+					boundaryGap: false,
+					splitLine: {show: false},
+					axisLine: {show: true,lineStyle:{color:'#fff'}},
+					axisTick: {show: false},
+					axisLabel: {show: true, textStyle: text_style},
+					data : xAxisYear
+				}
+			],
+			yAxis : [
+				{
+					type: 'value',
+					splitLine: {show: false},
+					name:'人数（万人）',
+					axisLine: {show: true,lineStyle:{color:'#fff'}},
+					axisTick: {show: false},
+					axisLabel: {show: true, textStyle: text_style}
+
+				}
+			],
+			series : [
+
+				{
+					name:'持卡人数',
+					type:'line',
+					smooth:true,
+					itemStyle: {normal: {areaStyle: {type: 'default'}}},
+					data:cardHolderSumData
+				}
+			]
+		};
+
+		myChart_rszs.setOption(option_rszs);
+	}
+	$.ajax({
+		type:"POST",
+		url:'../../jxSocialSecurity/getCardHolderAnalysisData.do',
+		dataType:'json',
+		success:function(data){
+			var xAxisYear=[];
+			var cardHolderSumData=[];
+			$.each(data.xAxisYear,function(i){
+				xAxisYear.push(data.xAxisYear[i]+"年");
+			});
+			$.each(data.cardHolderSumData,function(i){
+				cardHolderSumData.push(data.cardHolderSumData[i]);
+			});
+			cardHolderSum(xAxisYear,cardHolderSumData);
+		}
+	});
+</script>
+
+<script>
+
+
+
+
+
+	var timer={
+		date:"",
+		timeAjax:function(){
+//			console.log($(".timer").height())
+			$(".timer").css("lineHeight",$(".timer").height()+"px")
+			var me=this;
+			$.ajax({
+				url:'../../jxsys/getCurrentTime.do',
+				type:'POST',
+				dataType:'json',
+				success:function(date) {
+					me.date=date;
+					me.showCurDate();
+				}
+			});
+			return this
+		},
+		showCurDate:function(){
+			var me=this;
+			function changeNumber(num){
+				if(num<10){
+					return '0'+num;
+				}else{
+					return ''+num;
+				}
+			}
+			setInterval(function(){
+				var T=new Date(me.date)
+				newDate = changeNumber(T.getFullYear())+"年"+
+						changeNumber((parseInt(T.getMonth())+1))+"月"+
+						changeNumber(T.getDate())+"日  "+
+						changeNumber(T.getHours())+":"+
+						changeNumber(T.getMinutes())+":"+
+						changeNumber(T.getSeconds())+""
+				me.date+=1000;
+				$(".timer").html(newDate)
+			},1000)
+			return this
+		}
+	}
+	timer.timeAjax();
+</script>
+</body>
+</html>

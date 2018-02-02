@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+ 
+ 	<!-- class annotation related... start -->
+	<context:component-scan base-package="com.cetc28.PeopleBenefitService.controller" />
+	<context:component-scan base-package="com.cetc28.IntelligentInfrastructure.controller" />
+	<context:component-scan base-package="com.cetc28.EcoSuitableResidence.controller" />
+	<context:component-scan base-package="com.cetc28.ConfigurationManagement.controller" />
+	<context:component-scan base-package="com.cetc28.system.controller" />
+	<context:component-scan base-package="com.cetc28.importExcel.controller" />
+
+ 	<!-- jsp page related... start -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- jsp page related... end -->
+	
+	<!-- rest json related... start -->
+	<bean id="mappingJacksonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="mappingJacksonHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+    <!-- rest json related... end -->
+
+	<!-- 配置文件上传的支持 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 最大上传100M （-1为无限制） -->
+		<property name="maxUploadSize" value="102400000" />
+		<!--resolveLazily属性启用是为了推迟文件解析，以便在UploadAction 中捕获文件大小异常-->
+		<property name="resolveLazily" value="true" />
+		<!-- 最大内存大小(4096) -->
+		<property name="maxInMemorySize" value="4096" />
+		<!-- 默认编码(ISO-8859-1) -->
+		<property name="defaultEncoding" value="UTF-8"/>
+	</bean>
+
+</beans>

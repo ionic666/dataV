@@ -1,0 +1,65 @@
+
+#hdt_box{
+	position: fixed;
+	border: 1px solid #ccc;
+	background-color: rgba(131,131,131,.7);
+	left: 320px;
+	top: 10px;
+	padding: 5px;
+	color: #fff;
+}
+#hdt_box .glyphicon{
+	line-height: 28px;
+}
+#hdt_box>div{
+	float: left;
+}
+#hdt_box ul{
+	margin-bottom: 0px;
+}
+#hdt_box p{
+	margin: 0px;
+}
+#hdt_box .tool_box{
+	height: 30px;
+	width: 30px;
+	border-radius: 15px;
+	background-color: #00ADFF;
+	border: 1px solid #ccc;
+	text-align: center;
+	line-height: 28px;
+	color: #fff;
+	cursor: pointer;
+}
+#hdt_box .year{
+	margin: 0px;
+}
+#hdt_box .year li{
+	width: 60px;
+	height: 20px;
+	text-align: center;
+	cursor: pointer;
+	font-family: "微软雅黑";
+}
+#hdt_box .huadong li{
+	height: 10px;
+	margin-top: 1px;
+	position: relative;
+}
+#hdt_box .huadong{
+	width: 100%;
+	margin: 0px;
+}
+#hdt_box .xian{
+	border: 2px solid #DEDEDE;
+	margin: 0px 30px;
+}
+#hdt_box .yuan{
+	height: 10px;
+	width: 10px;
+	border-radius: 5px;
+	background-color: #ccc;
+	position: absolute;
+	top: -3px;
+	left: 20px;
+}

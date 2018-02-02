@@ -1,0 +1,19 @@
+package com.cetc28.idata.dao;
+
+import com.cetc28.idata.model.Log;
+import com.cetc28.idata.model.UserLoginList;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * Created by FangYan on 2017/9/21.
+ */
+public interface IJxLogDao {
+
+    List<UserLoginList> queryLogInoByTime(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    List<Log> queryOperInoByTime(@Param("startTime")String startTime, @Param("endTime") String endTime);
+
+    void add(Log log);
+}

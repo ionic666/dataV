@@ -1,0 +1,61 @@
+package com.cetc28.idata.model;
+
+/**
+ * Created by wangxw on 2017/8/18.
+ */
+public class JjHgjjTl {
+    private int id; // 主键ID
+    private String  bh; //指标编号，VARCHAR2(10)
+    private int jb; //级别，级别，1、2、3、4、5等
+    private String color; //颜色，VARCHAR2(20)
+    private String ksz; //开始值，VARCHAR2(20)
+    private String jsz; //结束值，VARCHAR2(20)
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
+    public int getJb() {
+        return jb;
+    }
+
+    public void setJb(int jb) {
+        this.jb = jb;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getKsz() {
+        return ksz;
+    }
+
+    public void setKsz(String ksz) {
+        this.ksz = ksz;
+    }
+
+    public String getJsz() {
+        return jsz;
+    }
+
+    public void setJsz(String jsz) {
+        this.jsz = jsz;
+    }
+}

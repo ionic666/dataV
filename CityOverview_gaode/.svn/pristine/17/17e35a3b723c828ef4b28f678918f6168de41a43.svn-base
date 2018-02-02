@@ -1,0 +1,49 @@
+package com.cetc28.EcoSuitableResidence.model;
+
+import java.util.PriorityQueue;
+
+/**
+ * Created by LYLYC on 2017/9/29.
+ */
+public class JxWaterManage {
+    private int TOTALHZ;
+    private int TOTALHD;
+    private int TOTALHDPOLLUTE;
+    private int TOTALHDPWK;
+
+
+
+    public int getTOTALHZ() {
+        return TOTALHZ;
+    }
+
+    public void setTOTALHZ(int TOTALHZ) {
+        this.TOTALHZ = TOTALHZ;
+    }
+
+    public int getTOTALHD() {
+        return TOTALHD;
+    }
+
+    public void setTOTALHD(int TOTALHD) {
+        this.TOTALHD = TOTALHD;
+    }
+
+    public int getTOTALHDPOLLUTE() {
+        return TOTALHDPOLLUTE;
+    }
+
+    public void setTOTALHDPOLLUTE(int TOTALHDPOLLUTE) {
+        this.TOTALHDPOLLUTE = TOTALHDPOLLUTE;
+    }
+
+    public int getTOTALHDPWK() {
+        return TOTALHDPWK;
+    }
+
+    public void setTOTALHDPWK(int TOTALHDPWK) {
+        this.TOTALHDPWK = TOTALHDPWK;
+    }
+
+
+}

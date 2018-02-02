@@ -1,0 +1,183 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: LiBin
+  Date: 2017/9/4
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.rksl{
+            width: 100%;
+            height: 100%;
+        }
+        div.rkslText{
+            height: 20%;
+        }
+        div.rksl ul{
+            padding-top: 10px;
+            padding-left: 10px;
+            height: 100%;
+        }
+        div.rksl ul li{
+            width: 50%;
+            float: left;
+        }
+        div#rksl{
+            height: 63%;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+<div class="rksl">
+    <p class="headerTitle">
+        人口数量
+    </p>
+    <div class="rkslText">
+        <ul>
+            <li>
+                <span class="addBold">常住人口：</span><span class="addYellow counter" id="czrk"></span><span class="addYellow">万</span>
+            </li>
+            <li>
+                <span class="addBold">户籍人口:</span><span class="addYellow counter" id="hjrk"></span><span class="addYellow">万</span>
+            </li>
+            <li>
+                <span class="addBold">农业人口:</span><span class="addYellow counter" id="nyrk"></span><span class="addYellow">万</span>
+            </li>
+        </ul>
+    </div>
+    <%--城市人口统计柱状图--%>
+    <div id="rksl">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../map/js/jquery.waypoints.min.js"></script>
+<script src="../../map/js/jquery.countup.js"></script>
+<script>
+    var font_color = '#BFBFBF', font_family = '微软雅黑', font_size = 7;
+    var font_color_y = '#BFBFBF';
+    var text_style={
+        color:font_color,
+        fontSize:font_size,
+        fontFamily:font_family
+    };
+    function csrktj(xAxisData,zrkBar,nyrkBar){
+        var mycharts = echarts.init(document.getElementById('rksl'));
+        var option = {
+            color: ['#5B9BD5', '#ED7D31'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['总人口', '农业人口'],
+                x: 'left',
+                y: 'center',
+                orient: 'vertical',
+                itemWidth: 8,
+                itemHeight: 8,
+                textStyle: text_style
+            },
+            grid: {
+                x: '15%',
+                y: '15%',
+                x2: '5%',
+                y2: '13%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            xAxis: {
+                type: 'category',
+                axisLine: {lineStyle: {color: '#BFBFBF'}},
+                axisTick: {show: false},
+                axisLabel: {show: true, textStyle: text_style,interval:0},
+                splitLine: {show: false},
+                data: xAxisData
+            },
+            yAxis: {
+                show: false
+            },
+            series: [
+                {
+                    name: '总人口',
+                    type: 'bar',
+                    barWidth: 20,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                position: 'top',
+                                textStyle: text_style
+                            }
+                        }
+                    },
+                    data: zrkBar
+                },
+                {
+                    name: '农业人口',
+                    type: 'bar',
+                    barWidth: 20,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                position: 'top',
+                                textStyle: text_style
+                            }
+                        }
+                    },
+                    data: nyrkBar
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+    //城市人口统计
+    $.ajax({
+        type:'post',
+        url:'../../jxpop/queryCsrk.do',
+        dataType:'json',
+        success:function(data) {
+//                console.log("*******");
+//                console.log(data);
+            var czrk=data.Csrk.czrk;
+            var hjrk=data.Csrk.hjrk;
+            var nyrk=data.Csrk.nyrk;
+            $("#czrk").append(czrk);
+            $("#hjrk").append(hjrk);
+            $("#nyrk").append(nyrk);
+            var len=data.Qyrk.length;
+            var xAxisData=[];
+            var zrkBar=[];
+            var nyrkBar=[];
+            for(var i=0;i<len;i++){
+                xAxisData.push(data.Qyrk[i].mc);
+                zrkBar.push(data.Qyrk[i].zrk);
+                nyrkBar.push(data.Qyrk[i].nyrk);
+            }
+            //调用，生成人口统计图
+            csrktj(xAxisData,zrkBar,nyrkBar);
+            $('.counter').countUp({
+                delay: 2,
+                time: 200
+            });
+        }
+    });
+
+//    $(".headerTitle").click(function(){
+//        window.open("http://localhost:8080/CityOverview/index.jsp?ac=006")
+//    })
+</script>
+</body>
+</html>

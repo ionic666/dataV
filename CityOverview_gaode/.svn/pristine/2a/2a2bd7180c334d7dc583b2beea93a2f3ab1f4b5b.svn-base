@@ -1,0 +1,143 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Wangxw
+  Date: 2017/9/15
+  Time: 14:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../../myCss/iframe.css"/>
+    <style type="text/css">
+        body{
+            padding: 10px 0 0 10px;
+        }
+        div.corporation{
+            width: 100%;
+            height: 100%;
+        }
+        div#corporationLineBar{
+            height: 85%;
+            width: 98%;
+        }
+    </style>
+</head>
+<body>
+<div class="corporation">
+    <p class="headerTitle">
+        企业参保情况
+    </p>
+    <%--企业参保情况折柱混搭图--%>
+    <div id="corporationLineBar">
+    </div>
+</div>
+<script src="../../map/js/jquery-1.11.3.js"></script>
+<script src="../../myjs/echarts-all.js"></script>
+<script src="../../myjs/myEcharts.js"></script>
+<script>
+    function CreatSsServiceChart(xAxisYear,corpInsuredSumData,averageInsuredAgeData){
+        var mycharts = echarts.init(document.getElementById('corporationLineBar'));
+        var option = {
+            color: ['#E88535','#1C82FF'],
+            tooltip : {
+                trigger: 'axis',
+                formatter:'{b}<br/>{a}:{c}<br/>{a1}:{c1}'
+            },
+            grid: {
+                x: '10%',
+                y: '25%',
+                x2: '8%',
+                y2: '13%',
+                containLabel: true,
+                borderWidth: 0
+            },
+            legend: {
+                data:['企业参保人数(万人)','参保人平均年龄(岁)'],
+                textStyle: text_style,
+                itemWidth: 15,
+                itemHeight:10,
+                itemGap:40,
+                y:'10%'
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    splitLine:false,
+                    axisLine: {
+                        lineStyle: {
+                        color: '#8D8C8C'
+                         }
+                    },
+                    axisLabel: {show: true, textStyle: text_style,formatter: '{value} 年'},
+                    data : xAxisYear
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    max:250,
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#8D8C8C'],
+                            width: 1,
+                            type: 'dotted'}},
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: '{value} '
+                    }
+                },
+                {
+                    type : 'value',
+                    max:45,
+                    axisLine: { lineStyle: {
+                        color: '#8D8C8C'
+                    }},
+                    splitLine:false,
+                    axisLabel: {
+                        show: true,
+                        textStyle: text_style,
+                        formatter: '{value} '}
+                }
+            ],
+            series : [
+                {
+                    name:'企业参保人数(万人)',
+                    type:'bar',
+                    barWidth:30,
+                    data:corpInsuredSumData
+                },
+                {
+                    name:'参保人平均年龄(岁)',
+                    type:'line',
+                    symbol:'rectangle',
+                    yAxisIndex: 1,
+                    data:averageInsuredAgeData
+                }
+            ]
+        };
+        mycharts.setOption(option);
+    }
+
+    //查询嘉兴市企业参保情况近3年的数据
+    $.ajax({
+        type:"POST",
+        url:'../../jxSocialSecurity/getSsCorporationInThreeY.do',
+        dataType:'json',
+        success:function(data){
+            var xAxisYear=data.xAxisYear;
+            var corpInsuredSumData=data.corpInsuredSumData;
+            var averageInsuredAgeData=data.averageInsuredAgeData;
+            CreatSsServiceChart(xAxisYear,corpInsuredSumData,averageInsuredAgeData);
+        }
+    });
+
+</script>
+</body>
+</html>

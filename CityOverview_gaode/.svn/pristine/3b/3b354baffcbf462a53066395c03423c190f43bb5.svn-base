@@ -1,0 +1,98 @@
+package com.cetc28.idata.model;
+
+/**
+ * Created by jianglulu on 2017/9/21.
+ * 开放发展实体表
+ */
+public class JxEcoOpenDevelopment {
+    private Integer id;
+    private String year;
+    private String countryzone;     //国家级开发区
+    private String provincezone;        //省级开发区
+    private String townzone;        //市镇级开发区
+    private String countryzonearea;     //国家级开发区累计面积
+    private String provincezonearea;        //省级开发区累计面积
+    private String townzonearea;        //市镇级开发区累计面积
+    private String foreigncapitalnum;       //外资企业数量
+    private String foreigncapital;      //外资
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getCountryzone() {
+        return countryzone;
+    }
+
+    public void setCountryzone(String countryzone) {
+        this.countryzone = countryzone;
+    }
+
+    public String getProvincezone() {
+        return provincezone;
+    }
+
+    public void setProvincezone(String provincezone) {
+        this.provincezone = provincezone;
+    }
+
+    public String getTownzone() {
+        return townzone;
+    }
+
+    public void setTownzone(String townzone) {
+        this.townzone = townzone;
+    }
+
+    public String getCountryzonearea() {
+        return countryzonearea;
+    }
+
+    public void setCountryzonearea(String countryzonearea) {
+        this.countryzonearea = countryzonearea;
+    }
+
+    public String getProvincezonearea() {
+        return provincezonearea;
+    }
+
+    public void setProvincezonearea(String provincezonearea) {
+        this.provincezonearea = provincezonearea;
+    }
+
+    public String getTownzonearea() {
+        return townzonearea;
+    }
+
+    public void setTownzonearea(String townzonearea) {
+        this.townzonearea = townzonearea;
+    }
+
+    public String getForeigncapitalnum() {
+        return foreigncapitalnum;
+    }
+
+    public void setForeigncapitalnum(String foreigncapitalnum) {
+        this.foreigncapitalnum = foreigncapitalnum;
+    }
+
+    public String getForeigncapital() {
+        return foreigncapital;
+    }
+
+    public void setForeigncapital(String foreigncapital) {
+        this.foreigncapital = foreigncapital;
+    }
+}
